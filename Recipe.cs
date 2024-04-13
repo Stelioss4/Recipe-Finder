@@ -18,7 +18,6 @@
 			set { _videolink = value; }
 		}
 
-
 		private TimeSpan _cookingTime;
 
 		public TimeSpan CookingTime

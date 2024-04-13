@@ -27,6 +27,15 @@
                 get { return _password; }
                 set { _password = value; }
             }
+
+            private Address _address;
+
+            public Address Address
+            {
+                get { return _address; }
+                set { _address = value; }
+            }
+
         }
     }
 }
