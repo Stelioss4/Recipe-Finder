@@ -10,6 +10,15 @@
 			set { _cookingInstructions = value; }
 		}
 
+		private string _videolink;
+
+		public string Videolink
+		{
+			get { return _videolink; }
+			set { _videolink = value; }
+		}
+
+
 		private TimeSpan _cookingTime;
 
 		public TimeSpan CookingTime
