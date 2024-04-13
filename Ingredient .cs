@@ -48,9 +48,9 @@ namespace Recipe_Finder
             set { _protein = value; }
         }
 
-        private double _amount;    // Represents the amount of the ingredient, typically measured in units such as grams, milliliters, etc.
+        private IngredientAmount _amount; 
 
-        public double Amount
+        public IngredientAmount Amount
         {
             get { return _amount; }
             set { _amount = value; }
