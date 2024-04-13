@@ -24,7 +24,7 @@ namespace Recipe_Finder
             set { _calories = value; }
         }
 
-        private int _fat;
+        private int _fat;   // Represents the amount of fat in grams per serving.
 
         public int Fat
         {
@@ -32,23 +32,23 @@ namespace Recipe_Finder
             set { _fat = value; }
         }
 
-        private int _carbohydrate;
+        private int _carbohydrate;   // Represents the amount of carbohydrates in grams per serving.
 
-        public int Carbohydrate
+        public int Carbohydrate  
         {
             get { return _carbohydrate; }
             set { _carbohydrate = value; }
         }
 
-        private int _protein;
+        private int _protein;   // Represents the amount of protein in grams per serving.
 
-        public int Protein
+        public int Protein      
         {
             get { return _protein; }
             set { _protein = value; }
         }
 
-        private double _amount;
+        private double _amount;    // Represents the amount of the ingredient, typically measured in units such as grams, milliliters, etc.
 
         public double Amount
         {
