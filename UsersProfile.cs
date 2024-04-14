@@ -52,6 +52,21 @@
                 set { _paymentMethods = value; }
             }
 
+            private int _ratings;
+
+            public int Ratings
+            {
+                get { return _ratings; }
+                set { _ratings = value; }
+            }
+
+            private string _reviews;
+
+            public string Reviews
+            {
+                get { return  _reviews; }
+                set {  _reviews = value; }
+            }
 
         }
     }
