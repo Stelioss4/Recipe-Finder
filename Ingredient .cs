@@ -10,33 +10,33 @@
             set { _name = value; }
         }
 
-        private int _calories;
+        private decimal _calories;
 
-        public int Calories
+        public decimal Calories
         {
             get { return _calories; }
             set { _calories = value; }
         }
 
-        private int _fat;   // Represents the amount of fat in grams per serving.
+        private decimal _fat;   // Represents the amount of fat in grams per serving.
 
-        public int Fat
+        public decimal Fat
         {
             get { return _fat; }
             set { _fat = value; }
         }
 
-        private int _carbohydrate;   // Represents the amount of carbohydrates in grams per serving.
+        private decimal _carbohydrate;   // Represents the amount of carbohydrates in grams per serving.
 
-        public int Carbohydrate  
+        public decimal Carbohydrate  
         {
             get { return _carbohydrate; }
             set { _carbohydrate = value; }
         }
 
-        private int _protein;   // Represents the amount of protein in grams per serving.
+        private decimal _protein;   // Represents the amount of protein in grams per serving.
 
-        public int Protein      
+        public decimal Protein      
         {
             get { return _protein; }
             set { _protein = value; }
