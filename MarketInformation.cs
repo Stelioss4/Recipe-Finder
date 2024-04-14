@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Recipe_Finder
+﻿namespace Recipe_Finder
 {
     public class MarketInformation
     {
@@ -31,6 +25,15 @@ namespace Recipe_Finder
 			get { return _priceOfIngredients; }
 			set { _priceOfIngredients = value; }
 		}
+
+		private PaymentMethods _paymentMethods;
+
+		public PaymentMethods PaymentMethods
+        {
+			get { return _paymentMethods; }
+			set { _paymentMethods = value; }
+		}
+
 
 	}
 }

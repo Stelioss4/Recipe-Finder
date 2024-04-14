@@ -44,6 +44,15 @@
                 set { _favoriteRecipes = value; }
             }
 
+            private PaymentMethods _paymentMethods;
+
+            public PaymentMethods PaymentMethods
+            {
+                get { return _paymentMethods; }
+                set { _paymentMethods = value; }
+            }
+
+
         }
     }
 }
