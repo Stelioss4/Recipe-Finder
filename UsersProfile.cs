@@ -68,6 +68,14 @@
                 set {  _reviews = value; }
             }
 
+            private List<Recipe> _weeklyPlan;
+
+            public List<Recipe> WeeklyPlan
+            {
+                get { return _weeklyPlan; }
+                set { _weeklyPlan = value; }
+            }
+
         }
     }
 }
