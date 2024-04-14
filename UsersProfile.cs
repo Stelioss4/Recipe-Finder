@@ -36,6 +36,14 @@
                 set { _address = value; }
             }
 
+            private List<Recipe> _favoriteRecipes;
+
+            public List<Recipe> FavoriteRecipes
+            {
+                get { return _favoriteRecipes; }
+                set { _favoriteRecipes = value; }
+            }
+
         }
     }
 }

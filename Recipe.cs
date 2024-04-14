@@ -1,6 +1,6 @@
 ﻿namespace Recipe_Finder
 {
-    internal class Recipe
+    public class Recipe
     {
 		private string _cookingInstructions;
 
