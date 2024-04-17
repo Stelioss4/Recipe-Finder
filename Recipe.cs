@@ -52,9 +52,9 @@
 
         public List<Ingredient> ListofIngredients { get; set; }
 
-        private List<string> _linksForDrinkPairing;
+        private string _linksForDrinkPairing;
 
-        public List<string> LinksForDrinkPairing
+        public string LinksForDrinkPairing
         {
             get { return _linksForDrinkPairing; }
             set { _linksForDrinkPairing = value; }

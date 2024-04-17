@@ -34,6 +34,12 @@
 			set { _paymentMethods = value; }
 		}
 
+		private string _marketLink;
 
+		public string MarketLink
+        {
+			get { return _marketLink; }
+			set { _marketLink = value; }
+		}
 	}
 }

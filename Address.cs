@@ -26,9 +26,9 @@
 			set { _city = value; }
 		}
 
-		private int _postalCode;
+		private string _postalCode;
 
-		public int PostalCode
+		public string PostalCode
 		{
 			get { return _postalCode; }
 			set { _postalCode = value; }
