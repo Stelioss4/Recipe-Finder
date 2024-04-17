@@ -7,6 +7,8 @@
             testData.RecipeList();
 
             testData.UserProfil();
+
+            testData.MarketInformation();
         }
     }
 }

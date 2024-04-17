@@ -140,6 +140,56 @@
 
         }
 
+        public static MarketInformation MarketInformation()
+        {
+            MarketInformation marketInformation = new MarketInformation();
+
+            List<Ingredient> ingList = new List<Ingredient>();
+
+            Ingredient ing1 = new Ingredient();
+
+            ing1.Name = "egg";
+            ing1.Protein = 12.9m;
+            ing1.Fat = 50;
+            ing1.Carbohydrate = 280.5m;
+            ing1.Calories = 200;
+            ing1.Amount = IngredientAmount.pieces;
+
+            Ingredient ing2 = new Ingredient();
+
+            ing2.Name = "water";
+            ing2.Protein = 0m;
+            ing2.Fat = 0;
+            ing2.Carbohydrate = 0;
+            ing2.Calories = 0;
+            ing2.Amount = IngredientAmount.cups;
+
+            ingList.Add(ing1);
+            ingList.Add(ing2);
+
+            PaymentMethods paymentMethods = new PaymentMethods();
+            paymentMethods.AcountEmail = "jack@email.strom";
+            paymentMethods.Acountpasword = "acountpassword";
+
+            marketInformation.AvailableProduct = ingList;
+            marketInformation.PaymentMethods = paymentMethods;
+            marketInformation.NumberOfServings = 4;
+            marketInformation.PriceOfIngredients = 30;
+            marketInformation.MarketLink = "www.market.com";
+
+            foreach (Ingredient ing in marketInformation.AvailableProduct)
+            {
+                Console.WriteLine(ing.Name);
+            }
+            Console.WriteLine(marketInformation.PaymentMethods.AcountEmail + " " + marketInformation.PaymentMethods.Acountpasword);
+            Console.WriteLine(marketInformation.NumberOfServings);
+            Console.WriteLine(marketInformation.PriceOfIngredients);
+            Console.WriteLine(marketInformation.MarketLink);
+            Console.WriteLine();
+
+            return marketInformation;
+
+        }
 
     }
 }
