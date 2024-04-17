@@ -101,5 +101,45 @@
             return result;
         }
 
+        public static UsersProfile UserProfil()
+        {
+            Address address = new Address();
+
+            address.StreetsName = "onstreet";
+            address.Housenumber = "11";
+            address.City = "Genk";
+            address.PostalCode = "12312";
+
+            PaymentMethods paymentMethods = new PaymentMethods();
+            paymentMethods.AcountEmail = "jack@email.strom";
+            paymentMethods.Acountpasword = "acountpassword";
+
+            UsersProfile user1 = new UsersProfile();
+
+            user1.Name = "Jack";
+            user1.Email = "jack@email.strom";
+            user1.Password = "Password";
+            user1.Address = address;
+            user1.PaymentMethods = paymentMethods;
+            //user1.WeeklyPlan = RecipeList();
+            //user1.FavoriteRecipes = RecipeList();
+            user1.Reviews = "good";
+            user1.Ratings = 4;
+
+            Console.WriteLine(user1.Name);
+            Console.WriteLine(user1.Email);
+            Console.WriteLine(user1.Password);
+            Console.WriteLine($"{user1.Address.StreetsName} {user1.Address.Housenumber} {user1.Address.PostalCode} {user1.Address.City}");
+            Console.WriteLine(user1.PaymentMethods.AcountEmail + "\n" + user1.PaymentMethods.Acountpasword);
+            //Console.WriteLine(user1.WeeklyPlan);
+            //Console.WriteLine(user1.FavoriteRecipes);
+            Console.WriteLine(user1.Reviews);
+            Console.WriteLine(user1.Ratings);
+            Console.WriteLine();
+            return user1;
+
+        }
+
+
     }
 }
