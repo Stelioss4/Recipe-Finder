@@ -2,10 +2,10 @@
 {
     public enum OccasionTags
     {
-        breakfast,
-        brunch,
-        lunch,
-        dinner,
-        other
+        Breakfast,
+        Brunch,
+        Lunch,
+        Dinner,
+        Other
     }
 }

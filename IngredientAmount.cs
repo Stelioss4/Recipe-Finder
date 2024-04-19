@@ -3,10 +3,10 @@
     public enum IngredientAmount
     {
         Grams,
-        milliliters,
-        teaspoons,
-        tablespoons,
-        cups,
-        pieces
+        Milliliters,
+        Teaspoons,
+        Tablespoons,
+        Cups,
+        Pieces
     }
 }
