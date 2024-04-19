@@ -76,5 +76,13 @@
 			}
 		}
 
+		private List<Review> _reviews;
+
+		public List<Review> Reviews
+        {
+			get { return _reviews; }
+			set { _reviews = value; }
+		}
+
 	}
 }

@@ -15,7 +15,7 @@
             ing1.Fat = 50;
             ing1.Carbohydrate = 280.5m;
             ing1.Calories = 200;
-            ing1.Amount = IngredientAmount.pieces;
+            ing1.Amount = IngredientAmount.Pieces;
 
             Ingredient ing2 = new Ingredient();
 
@@ -24,7 +24,7 @@
             ing2.Fat = 0;
             ing2.Carbohydrate = 0;
             ing2.Calories = 0;
-            ing2.Amount = IngredientAmount.cups;
+            ing2.Amount = IngredientAmount.Cups;
 
 
             ingList.Add(ing1);
@@ -39,7 +39,7 @@
             recipe.CookingTime = TimeSpan.FromMinutes(14);
             recipe.CuisineType = "global";
             recipe.LinksForDrinkPairing = "www.drinkwithfood.com";
-            recipe.OccasionTags = OccasionTags.brunch;
+            recipe.OccasionTags = OccasionTags.Brunch;
 
             Console.WriteLine(ingList[0].Name);
             Console.WriteLine(ingList[1].Name);
@@ -57,7 +57,7 @@
             ing1.Fat = 50;
             ing1.Carbohydrate = 280.5m;
             ing1.Calories = 200;
-            ing1.Amount = IngredientAmount.pieces;
+            ing1.Amount = IngredientAmount.Pieces;
 
             ingList.Add(ing1);
 
@@ -66,7 +66,7 @@
             ing2.Fat = 0;
             ing2.Carbohydrate = 0;
             ing2.Calories = 0;
-            ing2.Amount = IngredientAmount.cups;
+            ing2.Amount = IngredientAmount.Cups;
 
 
             ingList.Add(ing2);
@@ -80,7 +80,7 @@
             recipe2.CookingTime = TimeSpan.FromMinutes(10);
             recipe2.CuisineType = "italian";
             recipe2.LinksForDrinkPairing = "www.drinkwithfood.com";
-            recipe2.OccasionTags = OccasionTags.lunch;
+            recipe2.OccasionTags = OccasionTags.Lunch;
 
             result.Add(recipe);
             result.Add(recipe2);
@@ -123,8 +123,7 @@
             user1.PaymentMethods = paymentMethods;
             //user1.WeeklyPlan = RecipeList();
             //user1.FavoriteRecipes = RecipeList();
-            user1.Reviews = "good";
-            user1.Ratings = 4;
+           
 
             Console.WriteLine(user1.Name);
             Console.WriteLine(user1.Email);
@@ -133,8 +132,7 @@
             Console.WriteLine(user1.PaymentMethods.AcountEmail + "\n" + user1.PaymentMethods.Acountpasword);
             //Console.WriteLine(user1.WeeklyPlan);
             //Console.WriteLine(user1.FavoriteRecipes);
-            Console.WriteLine(user1.Reviews);
-            Console.WriteLine(user1.Ratings);
+           
             Console.WriteLine();
             return user1;
 
@@ -142,7 +140,7 @@
 
         public static ProductInformation MarketInformation()
         {
-            ProductInformation marketInformation = new ProductInformation();
+            ProductInformation productInformation = new ProductInformation();
 
             List<Ingredient> Ingrediants = new List<Ingredient>();
 
@@ -153,7 +151,7 @@
             ing1.Fat = 50;
             ing1.Carbohydrate = 280.5m;
             ing1.Calories = 200;
-            ing1.Amount = IngredientAmount.pieces;
+            ing1.Amount = IngredientAmount.Pieces;
 
             Ingredient ing2 = new Ingredient();
 
@@ -162,7 +160,7 @@
             ing2.Fat = 0;
             ing2.Carbohydrate = 0;
             ing2.Calories = 0;
-            ing2.Amount = IngredientAmount.cups;
+            ing2.Amount = IngredientAmount.Cups;
 
             Ingrediants.Add(ing1);
             Ingrediants.Add(ing2);
@@ -171,23 +169,23 @@
             paymentMethods.AcountEmail = "jack@email.strom";
             paymentMethods.Acountpasword = "acountpassword";
 
-            marketInformation.AvailableProduct = Ingrediants;
-            marketInformation.PaymentMethods = paymentMethods;
-            marketInformation.NumberOfServings = 4;
-            marketInformation.PriceOfIngredients = 30;
-            marketInformation.MarketLink = "www.market.com";
+            productInformation.AvailableProduct = Ingrediants;
+            productInformation.PaymentMethods = paymentMethods;
+            productInformation.NumberOfServings = 4;
+            productInformation.Price = 30;
+            productInformation.MarketLink = "www.market.com";
 
-            foreach (Ingredient ing in marketInformation.AvailableProduct)
+            foreach (Ingredient ing in productInformation.AvailableProduct)
             {
                 Console.WriteLine(ing.Name);
             }
-            Console.WriteLine(marketInformation.PaymentMethods.AcountEmail + " " + marketInformation.PaymentMethods.Acountpasword);
-            Console.WriteLine(marketInformation.NumberOfServings);
-            Console.WriteLine(marketInformation.PriceOfIngredients);
-            Console.WriteLine(marketInformation.MarketLink);
+            Console.WriteLine(productInformation.PaymentMethods.AcountEmail + " " + productInformation.PaymentMethods.Acountpasword);
+            Console.WriteLine(productInformation.NumberOfServings);
+            Console.WriteLine(productInformation.Price);
+            Console.WriteLine(productInformation.MarketLink);
             Console.WriteLine();
 
-            return marketInformation;
+            return productInformation;
 
         }
 
