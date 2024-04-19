@@ -1,6 +1,6 @@
 ﻿namespace Recipe_Finder
 {
-    public class PaymentMethods
+    public class PaymentMethod
     {
 		private string _acountemail;
 

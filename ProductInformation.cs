@@ -1,6 +1,6 @@
 ﻿namespace Recipe_Finder
 {
-    public class MarketInformation
+    public class ProductInformation
     {
 		private List<Ingredient> _availableProduct;
 
@@ -18,17 +18,17 @@
 			set { _numberOfServings = value; }
 		}
 
-		private double _priceOfIngredients;
+		private double _price;
 
-		public double PriceOfIngredients
+		public double Price
         {
-			get { return _priceOfIngredients; }
-			set { _priceOfIngredients = value; }
+			get { return _price; }
+			set { _price = value; }
 		}
 
-		private PaymentMethods _paymentMethods;
+		private PaymentMethod _paymentMethods;
 
-		public PaymentMethods PaymentMethods
+		public PaymentMethod PaymentMethods
         {
 			get { return _paymentMethods; }
 			set { _paymentMethods = value; }

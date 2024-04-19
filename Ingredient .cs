@@ -11,22 +11,23 @@
         }
 
         private decimal _calories;
-
         public decimal Calories
         {
             get { return _calories; }
             set { _calories = value; }
         }
 
-        private decimal _fat;   // Represents the amount of fat in grams per serving.
-
+        private decimal _fat;
+        /// <summary>
+        /// Represents the amount of fat in grams per grams per 100g
+        /// </summary>
         public decimal Fat
         {
             get { return _fat; }
             set { _fat = value; }
         }
 
-        private decimal _carbohydrate;   // Represents the amount of carbohydrates in grams per serving.
+        private decimal _carbohydrate;   // Represents the amount of carbohydrates in grams per 100g
 
         public decimal Carbohydrate  
         {
@@ -34,7 +35,7 @@
             set { _carbohydrate = value; }
         }
 
-        private decimal _protein;   // Represents the amount of protein in grams per serving.
+        private decimal _protein;   // Represents the amount of protein in grams grams per 100g
 
         public decimal Protein      
         {

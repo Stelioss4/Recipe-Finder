@@ -2,7 +2,7 @@
 {
     public enum IngredientAmount
     {
-        grams,
+        Grams,
         milliliters,
         teaspoons,
         tablespoons,

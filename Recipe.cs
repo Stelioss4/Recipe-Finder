@@ -60,5 +60,21 @@
             set { _linksForDrinkPairing = value; }
         }
 
-    }
+		private List<Rating> _ratings;
+
+		public List<Rating> Ratings
+        {
+			get { return _ratings; }
+			set { _ratings = value; }
+		}
+
+		public double Rating
+		{
+			get
+			{
+				return Ratings.Average( r => r.Value);
+			}
+		}
+
+	}
 }

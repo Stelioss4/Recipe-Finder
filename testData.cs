@@ -1,6 +1,6 @@
 ﻿namespace Recipe_Finder
 {
-    public static class testData
+    public static class TestData
     {
         public static List<Recipe> RecipeList()
         {
@@ -110,7 +110,7 @@
             address.City = "Genk";
             address.PostalCode = "12312";
 
-            PaymentMethods paymentMethods = new PaymentMethods();
+            PaymentMethod paymentMethods = new PaymentMethod();
             paymentMethods.AcountEmail = "jack@email.strom";
             paymentMethods.Acountpasword = "acountpassword";
 
@@ -140,11 +140,11 @@
 
         }
 
-        public static MarketInformation MarketInformation()
+        public static ProductInformation MarketInformation()
         {
-            MarketInformation marketInformation = new MarketInformation();
+            ProductInformation marketInformation = new ProductInformation();
 
-            List<Ingredient> ingList = new List<Ingredient>();
+            List<Ingredient> Ingrediants = new List<Ingredient>();
 
             Ingredient ing1 = new Ingredient();
 
@@ -164,14 +164,14 @@
             ing2.Calories = 0;
             ing2.Amount = IngredientAmount.cups;
 
-            ingList.Add(ing1);
-            ingList.Add(ing2);
+            Ingrediants.Add(ing1);
+            Ingrediants.Add(ing2);
 
-            PaymentMethods paymentMethods = new PaymentMethods();
+            PaymentMethod paymentMethods = new PaymentMethod();
             paymentMethods.AcountEmail = "jack@email.strom";
             paymentMethods.Acountpasword = "acountpassword";
 
-            marketInformation.AvailableProduct = ingList;
+            marketInformation.AvailableProduct = Ingrediants;
             marketInformation.PaymentMethods = paymentMethods;
             marketInformation.NumberOfServings = 4;
             marketInformation.PriceOfIngredients = 30;
