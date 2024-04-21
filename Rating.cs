@@ -3,9 +3,9 @@
     public class Rating
     {
 
-        private int _value;
+        private double _value;
 
-        public int Value
+        public double Value
         {
             get { return _value; }
             set { _value = value; }

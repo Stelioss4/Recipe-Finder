@@ -68,21 +68,31 @@
 			set { _ratings = value; }
 		}
 
-		public double Rating
-		{
-			get
-			{
-				return Ratings.Average( r => r.Value);
-			}
-		}
-
-		private List<Review> _reviews;
-
-		public List<Review> Reviews
+        public double Rating
         {
-			get { return _reviews; }
-			set { _reviews = value; }
-		}
+            get
+            {
+                if (Ratings != null && Ratings.Count > 0)
+                {
+                    return Ratings.Average(r => r.Value);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            set { }
+        }
 
-	}
+
+
+        private List<Review> _reviews;
+
+        public List<Review> Reviews
+        {
+            get { return _reviews; }
+            set { _reviews = value; }
+        }
+
+    }
 }

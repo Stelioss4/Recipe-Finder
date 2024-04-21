@@ -6,89 +6,191 @@
         {
             List<Recipe> result = new List<Recipe>();
 
-            List<Ingredient> ingList = new List<Ingredient>();
+            List<Ingredient> ingredients = new List<Ingredient>();
 
-            Ingredient ing1 = new Ingredient();
+            List<Rating> ratings = new List<Rating>();
 
-            ing1.Name = "egg";
-            ing1.Protein = 12.9m;
-            ing1.Fat = 50;
-            ing1.Carbohydrate = 280.5m;
-            ing1.Calories = 200;
-            ing1.Amount = IngredientAmount.Pieces;
+            List<UsersProfile> users = UserProfil();        
 
-            Ingredient ing2 = new Ingredient();
+            Rating rating = new Rating();
+            Rating rating1 = new Rating();
+            Rating rating2 = new Rating();
 
-            ing2.Name = "water";
-            ing2.Protein = 0m;
-            ing2.Fat = 0;
-            ing2.Carbohydrate = 0;
-            ing2.Calories = 0;
-            ing2.Amount = IngredientAmount.Cups;
+            Review review = new Review();
+            Review review1 = new Review();
+            Review review2 = new Review();
 
+            review.ReviewText = "very good and easy";
+            review.TimeStam = rating.TimeStam;
+            review.Profile = rating.Profile;
+            rating.Value = 4.8;
+            rating.TimeStam = new DateTime(2024, 4, 11, 12, 30, 0);
+            rating.Profile = users[0];
 
-            ingList.Add(ing1);
-            ingList.Add(ing2);
+            review1.ReviewText = "Nice and easy";
+            review1.TimeStam = rating1.TimeStam;
+            review1.Profile = rating1.Profile;
+            rating1.Value = 4.2;
+            rating1.TimeStam = new DateTime(2024, 4, 15, 18, 28, 0);
+            rating1.Profile = users[1];
+
+            review2.ReviewText = "easy for everyone to do, but not so good";
+            review2.TimeStam = rating2.TimeStam;
+            review2.Profile = rating2.Profile;
+            rating2.Value = 3.9;
+            rating2.TimeStam = new DateTime(2024, 2, 19, 17, 30, 0);
+            rating2.Profile = users[2];
+
+            Ingredient ingredient = new Ingredient();
+
+            ingredient.Name = "egg";
+            ingredient.Protein = 12.9m;
+            ingredient.Fat = 50;
+            ingredient.Carbohydrate = 280.5m;
+            ingredient.Calories = 200;
+            ingredient.Unit = 1;
+            ingredient.Amount = IngredientAmount.Pieces;
+
+            Ingredient ingredient1 = new Ingredient();
+
+            ingredient1.Name = "water";
+            ingredient1.Protein = 0m;
+            ingredient1.Fat = 0;
+            ingredient1.Carbohydrate = 0;
+            ingredient1.Calories = 0;
+            ingredient1.Unit = 2;
+            ingredient1.Amount = IngredientAmount.Cups;
+
+            Ingredient ingredient2 = new Ingredient();
+
+            ingredient2.Name = "salt";
+            ingredient2.Protein = 0m;
+            ingredient2.Fat = 0;
+            ingredient2.Carbohydrate = 0;
+            ingredient2.Calories = 0;
+            ingredient2.Unit = 1 / 2;
+            ingredient2.Amount = IngredientAmount.Teaspoons;
+
+            ingredients.Add(ingredient);
+            ingredients.Add(ingredient1);
+            ingredients.Add(ingredient2);
 
             Recipe recipe = new Recipe();
+
+            ratings.Add(rating);
+            ratings.Add(rating1);
+            ratings.Add(rating2);
 
             recipe.CookingInstructions = "boil an egg";
             recipe.Videolink = "www.howtoBoilanEgg.com";
             recipe.DifficultyLevel = "easy";
-            recipe.ListofIngredients = ingList;
+            recipe.ListofIngredients = ingredients;
             recipe.CookingTime = TimeSpan.FromMinutes(14);
             recipe.CuisineType = "global";
             recipe.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe.OccasionTags = OccasionTags.Brunch;
 
-            Console.WriteLine(ingList[0].Name);
-            Console.WriteLine(ingList[1].Name);
+            Console.WriteLine(ingredients[0].Name);
+            Console.WriteLine(ingredients[1].Name);
+            Console.WriteLine(ingredients[2].Name);
             Console.WriteLine(recipe.CookingInstructions);
             Console.WriteLine(recipe.CookingTime);
             Console.WriteLine(recipe.Videolink);
             Console.WriteLine(recipe.CuisineType);
             Console.WriteLine(recipe.DifficultyLevel);
             Console.WriteLine(recipe.LinksForDrinkPairing);
+            Console.WriteLine(ratings[0].Value);
+            Console.WriteLine(review.ReviewText);
+            Console.WriteLine(ratings[1].Value);
+            Console.WriteLine(review1.ReviewText);
+            Console.WriteLine(ratings[2].Value);
+            Console.WriteLine(review2.ReviewText);
 
+            ingredient.Name = "nudles";
+            ingredient.Protein = 12.9m;
+            ingredient.Fat = 50;
+            ingredient.Carbohydrate = 280.5m;
+            ingredient.Calories = 200;
+            ingredient.Unit = 500;
+            ingredient.Amount = IngredientAmount.Grams;
 
+            ingredient1.Name = "water";
+            ingredient1.Protein = 0m;
+            ingredient1.Fat = 0;
+            ingredient1.Carbohydrate = 0;
+            ingredient1.Calories = 0;
+            ingredient1.Unit = 2000;
+            ingredient1.Amount = IngredientAmount.Milliliters;
 
-            ing1.Name = "nudles";
-            ing1.Protein = 12.9m;
-            ing1.Fat = 50;
-            ing1.Carbohydrate = 280.5m;
-            ing1.Calories = 200;
-            ing1.Amount = IngredientAmount.Pieces;
+            ingredient2.Name = "salt";
+            ingredient2.Protein = 0m;
+            ingredient2.Fat = 0;
+            ingredient2.Carbohydrate = 0;
+            ingredient2.Calories = 0;
+            ingredient2.Unit = 2;
+            ingredient2.Amount = IngredientAmount.Teaspoons;
 
-            ingList.Add(ing1);
+            Ingredient ingredient3 = new Ingredient();
 
-            ing2.Name = "water";
-            ing2.Protein = 0m;
-            ing2.Fat = 0;
-            ing2.Carbohydrate = 0;
-            ing2.Calories = 0;
-            ing2.Amount = IngredientAmount.Cups;
+            ingredient3.Name = "Tomato sauce";
+            ingredient3.Protein = 11;
+            ingredient3.Fat = 5;
+            ingredient3.Carbohydrate = 97;
+            ingredient3.Calories = 450;
+            ingredient3.Unit = 500;
+            ingredient3.Amount = IngredientAmount.Milliliters;
 
+            Ingredient ingredient4 = new Ingredient();
 
-            ingList.Add(ing2);
+            ingredient4.Name = "Olive oil";
+            ingredient4.Protein = 0;
+            ingredient4.Fat = 9;
+            ingredient4.Carbohydrate = 0;
+            ingredient4.Calories = 9;
+            ingredient4.Unit = 2;
+            ingredient4.Amount = IngredientAmount.Tablespoons;
+
+            Ingredient ingredient5 = new Ingredient();
+
+            ingredient5.Name = "onion";
+            ingredient5.Protein = 1;    
+            ingredient5.Fat = 1;    
+            ingredient5.Carbohydrate =  
+            ingredient5.Calories = 1;
+            ingredient5.Unit = 1;
+            ingredient5.Amount = IngredientAmount.Pieces;
+
+            ingredients.Clear();
+            ingredients.Add(ingredient);
+            ingredients.Add(ingredient1);
+            ingredients.Add(ingredient2);
+            ingredients.Add(ingredient3);
+            ingredients.Add(ingredient4);
+            ingredients.Add(ingredient5);
 
             Recipe recipe2 = new Recipe();
 
             recipe2.CookingInstructions = "boil nudles";
             recipe2.Videolink = "www.howtocooknudles.com";
             recipe2.DifficultyLevel = "easy";
-            recipe2.ListofIngredients = ingList;
+            recipe2.ListofIngredients = ingredients;
             recipe2.CookingTime = TimeSpan.FromMinutes(10);
             recipe2.CuisineType = "italian";
             recipe2.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe2.OccasionTags = OccasionTags.Lunch;
+            recipe2.Rating = 4.6;
 
             result.Add(recipe);
             result.Add(recipe2);
 
             Console.WriteLine();
 
-            Console.WriteLine(ingList[0].Name);
-            Console.WriteLine(ingList[1].Name);
+            Console.WriteLine(ingredients[0].Name);
+            Console.WriteLine(ingredients[1].Name);
+            Console.WriteLine(ingredients[2].Name);
+            Console.WriteLine(ingredients[3].Name);
+            Console.WriteLine(ingredients[4].Name);
+            Console.WriteLine(ingredients[5].Name);
             Console.WriteLine(recipe2.CookingInstructions);
             Console.WriteLine(recipe2.CookingTime);
             Console.WriteLine(recipe2.Videolink);
@@ -101,41 +203,70 @@
             return result;
         }
 
-        public static UsersProfile UserProfil()
+        public static List<UsersProfile> UserProfil()
         {
+            List<UsersProfile> users = new List<UsersProfile>();   
+
             Address address = new Address();
+            Address address1 = new Address();
+            Address address2 = new Address();
 
             address.StreetsName = "onstreet";
             address.Housenumber = "11";
             address.City = "Genk";
             address.PostalCode = "12312";
 
+            address1.StreetsName = "outsidestreet";
+            address1.Housenumber = "32B";
+            address1.City = "NY city";
+            address1.PostalCode = "56430";
+
+            address2.StreetsName = "insidethestreet";
+            address2.Housenumber = "100";
+            address2.City = "Athens";
+            address2.PostalCode = "10000";
+
             PaymentMethod paymentMethods = new PaymentMethod();
-            paymentMethods.AcountEmail = "jack@email.strom";
+            PaymentMethod paymentMethods1 = new PaymentMethod();
+            PaymentMethod paymentMethods2 = new PaymentMethod();
+
+            paymentMethods.AcountEmail = "john@email.ccm";
             paymentMethods.Acountpasword = "acountpassword";
 
+            paymentMethods1.AcountEmail = "jack@email.strom";
+            paymentMethods1.Acountpasword = "ountpassword";
+
+            paymentMethods2.AcountEmail = "maria.mar@email.de";
+            paymentMethods2.Acountpasword = "passsssssword";
+
+            UsersProfile user = new UsersProfile();
             UsersProfile user1 = new UsersProfile();
+            UsersProfile user2 = new UsersProfile();
+
+            user.Name = "John";
+            user.Email = "john@email.ccm";
+            user.Password = "password";
+            user.Address = address1;
+            user.PaymentMethods = paymentMethods;
+
 
             user1.Name = "Jack";
             user1.Email = "jack@email.strom";
             user1.Password = "Password";
             user1.Address = address;
-            user1.PaymentMethods = paymentMethods;
-            //user1.WeeklyPlan = RecipeList();
-            //user1.FavoriteRecipes = RecipeList();
-           
+            user1.PaymentMethods = paymentMethods1;
 
-            Console.WriteLine(user1.Name);
-            Console.WriteLine(user1.Email);
-            Console.WriteLine(user1.Password);
-            Console.WriteLine($"{user1.Address.StreetsName} {user1.Address.Housenumber} {user1.Address.PostalCode} {user1.Address.City}");
-            Console.WriteLine(user1.PaymentMethods.AcountEmail + "\n" + user1.PaymentMethods.Acountpasword);
-            //Console.WriteLine(user1.WeeklyPlan);
-            //Console.WriteLine(user1.FavoriteRecipes);
-           
-            Console.WriteLine();
-            return user1;
+            user2.Name = "Maria";
+            user2.Email = "maria.mar@email.de";
+            user2.Password = "password";    
+            user2.Address = address2;
+            user2.PaymentMethods = paymentMethods2;
 
+            users.Add(user);
+            users.Add(user1);
+            users.Add(user2);
+
+            return users;
         }
 
         public static ProductInformation MarketInformation()
