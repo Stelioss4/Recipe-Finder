@@ -6,7 +6,7 @@
         {
             const int RECIPE_INGREDIENTS = 3;
 
-            List<Recipe> result = new List<Recipe>();
+            List<Recipe> recipes = new List<Recipe>();
 
             List<Ingredient> ingredients = new List<Ingredient>();
 
@@ -167,10 +167,20 @@
             ingredient5.Name = "onion";
             ingredient5.Protein = 1;
             ingredient5.Fat = 1;
-            ingredient5.Carbohydrate =
+            ingredient5.Carbohydrate = 12;
             ingredient5.Calories = 1;
             ingredient5.Unit = 1;
             ingredient5.Amount = IngredientAmount.Pieces;
+
+            Ingredient ingredient6 = new Ingredient();
+
+            ingredient6.Name = "Garlic";
+            ingredient6.Protein = 2;
+            ingredient6.Fat = 2;
+            ingredient6.Carbohydrate = 12;
+            ingredient6.Calories = 1;
+            ingredient6.Unit = 2;
+            ingredient6.Amount = IngredientAmount.Pieces;
 
             ingredients.Clear();
             ingredients.Add(ingredient);
@@ -179,6 +189,7 @@
             ingredients.Add(ingredient3);
             ingredients.Add(ingredient4);
             ingredients.Add(ingredient5);
+            ingredients.Add(ingredient6);
 
             Recipe recipe2 = new Recipe();
 
@@ -192,8 +203,8 @@
             recipe2.OccasionTags = OccasionTags.Lunch;
             recipe2.Rating = 4.6;
 
-            result.Add(recipe);
-            result.Add(recipe2);
+            recipes.Add(recipe);
+            recipes.Add(recipe2);
 
             Console.WriteLine();
 
@@ -210,7 +221,7 @@
 
             Console.WriteLine();
 
-            return result;
+            return recipes;
         }
 
         public static List<UsersProfile> UserProfil()
