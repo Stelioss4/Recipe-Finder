@@ -4,13 +4,17 @@
     {
         public static List<Recipe> RecipeList()
         {
+            const int RECIPE_INGREDIENTS = 3;
+
             List<Recipe> result = new List<Recipe>();
 
             List<Ingredient> ingredients = new List<Ingredient>();
 
             List<Rating> ratings = new List<Rating>();
 
-            List<UsersProfile> users = UserProfil();        
+            List<Review> reviews = new List<Review>();
+
+            List<UsersProfile> users = UserProfil();
 
             Rating rating = new Rating();
             Rating rating1 = new Rating();
@@ -23,6 +27,7 @@
             review.ReviewText = "very good and easy";
             review.TimeStam = rating.TimeStam;
             review.Profile = rating.Profile;
+
             rating.Value = 4.8;
             rating.TimeStam = new DateTime(2024, 4, 11, 12, 30, 0);
             rating.Profile = users[0];
@@ -30,6 +35,7 @@
             review1.ReviewText = "Nice and easy";
             review1.TimeStam = rating1.TimeStam;
             review1.Profile = rating1.Profile;
+
             rating1.Value = 4.2;
             rating1.TimeStam = new DateTime(2024, 4, 15, 18, 28, 0);
             rating1.Profile = users[1];
@@ -37,6 +43,7 @@
             review2.ReviewText = "easy for everyone to do, but not so good";
             review2.TimeStam = rating2.TimeStam;
             review2.Profile = rating2.Profile;
+
             rating2.Value = 3.9;
             rating2.TimeStam = new DateTime(2024, 2, 19, 17, 30, 0);
             rating2.Profile = users[2];
@@ -81,6 +88,10 @@
             ratings.Add(rating1);
             ratings.Add(rating2);
 
+            reviews.Add(review);
+            reviews.Add(review1);
+            reviews.Add(review2);
+
             recipe.CookingInstructions = "boil an egg";
             recipe.Videolink = "www.howtoBoilanEgg.com";
             recipe.DifficultyLevel = "easy";
@@ -90,21 +101,22 @@
             recipe.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe.OccasionTags = OccasionTags.Brunch;
 
-            Console.WriteLine(ingredients[0].Name);
-            Console.WriteLine(ingredients[1].Name);
-            Console.WriteLine(ingredients[2].Name);
+            for (int i = 0; i < RECIPE_INGREDIENTS; i++)
+            {
+                Console.WriteLine(ingredients[i].Name);
+            }
             Console.WriteLine(recipe.CookingInstructions);
             Console.WriteLine(recipe.CookingTime);
             Console.WriteLine(recipe.Videolink);
             Console.WriteLine(recipe.CuisineType);
             Console.WriteLine(recipe.DifficultyLevel);
             Console.WriteLine(recipe.LinksForDrinkPairing);
-            Console.WriteLine(ratings[0].Value);
-            Console.WriteLine(review.ReviewText);
-            Console.WriteLine(ratings[1].Value);
-            Console.WriteLine(review1.ReviewText);
-            Console.WriteLine(ratings[2].Value);
-            Console.WriteLine(review2.ReviewText);
+            for (int i = 0; i < reviews.Count; i++)
+            {
+                Console.WriteLine(ratings[i].Value);
+                Console.WriteLine(reviews[i].ReviewText);
+            }
+            
 
             ingredient.Name = "nudles";
             ingredient.Protein = 12.9m;
@@ -153,9 +165,9 @@
             Ingredient ingredient5 = new Ingredient();
 
             ingredient5.Name = "onion";
-            ingredient5.Protein = 1;    
-            ingredient5.Fat = 1;    
-            ingredient5.Carbohydrate =  
+            ingredient5.Protein = 1;
+            ingredient5.Fat = 1;
+            ingredient5.Carbohydrate =
             ingredient5.Calories = 1;
             ingredient5.Unit = 1;
             ingredient5.Amount = IngredientAmount.Pieces;
@@ -185,12 +197,10 @@
 
             Console.WriteLine();
 
-            Console.WriteLine(ingredients[0].Name);
-            Console.WriteLine(ingredients[1].Name);
-            Console.WriteLine(ingredients[2].Name);
-            Console.WriteLine(ingredients[3].Name);
-            Console.WriteLine(ingredients[4].Name);
-            Console.WriteLine(ingredients[5].Name);
+            for (int i = 0; i < ingredients.Count; i++)
+            {
+                Console.WriteLine(ingredients[i].Name);
+            }
             Console.WriteLine(recipe2.CookingInstructions);
             Console.WriteLine(recipe2.CookingTime);
             Console.WriteLine(recipe2.Videolink);
@@ -205,7 +215,7 @@
 
         public static List<UsersProfile> UserProfil()
         {
-            List<UsersProfile> users = new List<UsersProfile>();   
+            List<UsersProfile> users = new List<UsersProfile>();
 
             Address address = new Address();
             Address address1 = new Address();
@@ -258,7 +268,7 @@
 
             user2.Name = "Maria";
             user2.Email = "maria.mar@email.de";
-            user2.Password = "password";    
+            user2.Password = "password";
             user2.Address = address2;
             user2.PaymentMethods = paymentMethods2;
 
