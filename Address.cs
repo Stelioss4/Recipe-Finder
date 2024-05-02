@@ -1,5 +1,8 @@
-﻿namespace Recipe_Finder
+﻿using System.ComponentModel;
+
+namespace Recipe_Finder
 {
+    [TypeConverter(typeof(Address))]
     public class Address
     {
 		private string _streetsname;

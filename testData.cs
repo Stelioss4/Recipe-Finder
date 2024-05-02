@@ -193,36 +193,36 @@
 
             Recipe recipe2 = new Recipe();
 
-            rating.Value = 4.7;
-            rating.TimeStam = new DateTime(2024, 2, 28, 16, 32, 0);
-            rating.Profile = users[0];
-            review.ReviewText = "very nice easy and delicius!!";
-            review.TimeStam = rating.TimeStam;
-            review.Profile = users[0];
+            //rating.Value = 4.7;
+            //rating.TimeStam = new DateTime(2024, 2, 28, 16, 32, 0);
+            //rating.Profile = users[0];
+            //review.ReviewText = "very nice easy and delicius!!";
+            //review.TimeStam = rating.TimeStam;
+            //review.Profile = users[0];
 
-            rating1.Value = 3.8;
-            rating1.TimeStam = new DateTime(2024, 4, 8, 09, 26, 0);
-            rating1.Profile = users[1];
-            review1.ReviewText = "very easy, not so good description.";
-            review1.TimeStam = rating1.TimeStam;
-            rating1.Profile = users[1];
+            //rating1.Value = 3.8;
+            //rating1.TimeStam = new DateTime(2024, 4, 8, 09, 26, 0);
+            //rating1.Profile = users[1];
+            //review1.ReviewText = "very easy, not so good description.";
+            //review1.TimeStam = rating1.TimeStam;
+            //rating1.Profile = users[1];
 
-            rating2.Value = 5;
-            rating2.TimeStam = new DateTime(2024, 1, 19, 19, 34, 0);
-            rating2.Profile = users[2];
-            review2.ReviewText = "amazing recipe! super easy and tasty!";
-            review2.TimeStam = rating2.TimeStam;
-            rating2.Profile = users[2];
+            //rating2.Value = 5;
+            //rating2.TimeStam = new DateTime(2024, 1, 19, 19, 34, 0);
+            //rating2.Profile = users[2];
+            //review2.ReviewText = "amazing recipe! super easy and tasty!";
+            //review2.TimeStam = rating2.TimeStam;
+            //rating2.Profile = users[2];
 
-            reviews.Clear();
-            reviews.Add(review);
-            reviews.Add(review1);
-            reviews.Add(review2);
+            //reviews.Clear();
+            //reviews.Add(review);
+            //reviews.Add(review1);
+            //reviews.Add(review2);
 
-            ratings.Clear();
-            ratings.Add(rating);
-            ratings.Add(rating1);
-            ratings.Add(rating2);
+            //ratings.Clear();
+            //ratings.Add(rating);
+            //ratings.Add(rating1);
+            //ratings.Add(rating2);
 
             recipe2.CookingInstructions = "boil nudles";
             recipe2.Videolink = "www.howtocooknudles.com";
@@ -249,11 +249,12 @@
             Console.WriteLine(recipe2.CuisineType);
             Console.WriteLine(recipe2.DifficultyLevel);
             Console.WriteLine(recipe2.LinksForDrinkPairing);
-            for (int i = 0; i < ingredients.Count; i++)
-            {
-                Console.WriteLine(ratings[i]);
-                Console.WriteLine(reviews[i]);
-            }
+            //for (int i = 0; i < ingredients.Count; i++)
+            //{
+            //    Console.WriteLine(ratings[i]);
+            //    Console.WriteLine(reviews[i]);
+            //}
+            UIMethods.RatingAndReview();
 
             Console.WriteLine();
 

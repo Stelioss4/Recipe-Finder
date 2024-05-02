@@ -1,8 +1,11 @@
-﻿namespace Recipe_Finder
+﻿using System.ComponentModel;
+
+namespace Recipe_Finder
 {
+    [TypeConverter(typeof(UsersProfile))]
+
     public class UsersProfile
     {
-
         private string _name;
 
         public string Name

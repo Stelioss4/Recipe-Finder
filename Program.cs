@@ -4,11 +4,13 @@
     {
         static void Main(string[] args)
         {
-            TestData.RecipeList();
-
             TestData.UserProfil();
 
             TestData.MarketInformation();
+
+            TestData.RecipeList();
+
+
         }
     }
 }

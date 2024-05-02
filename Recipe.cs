@@ -84,8 +84,6 @@
             set { }
         }
 
-
-
         private List<Review> _reviews;
 
         public List<Review> Reviews
