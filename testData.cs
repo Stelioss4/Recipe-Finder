@@ -362,7 +362,13 @@
             productInformation.PaymentMethods = paymentMethods;
             productInformation.NumberOfServings = 4;
             productInformation.Price = 30;
-            productInformation.MarketLink = "www.market.com";
+
+            string marketLink = "www.market.com";
+            string marketLink1 = "www.market2.com";
+            string marketLink2 = "www.market3.com";
+
+
+            productInformation.MarketLinks.Add(marketLink);
 
             foreach (Ingredient ing in productInformation.AvailableProduct)
             {
@@ -371,11 +377,15 @@
             Console.WriteLine(productInformation.PaymentMethods.AcountEmail + " " + productInformation.PaymentMethods.Acountpasword);
             Console.WriteLine(productInformation.NumberOfServings);
             Console.WriteLine(productInformation.Price);
-            Console.WriteLine(productInformation.MarketLink);
+            for (int i = 0; i < productInformation.MarketLinks.Count; i++)
+            { 
+               Console.WriteLine(productInformation.MarketLinks[i]);
+            }
+
             Console.WriteLine();
 
             return productInformation;
-
+        
         }
 
     }

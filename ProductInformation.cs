@@ -2,7 +2,7 @@
 {
     public class ProductInformation
     {
-		private List<Ingredient> _availableProduct;
+        private List<Ingredient>? _availableProduct;
 
 		public List<Ingredient> AvailableProduct
         {
@@ -26,7 +26,7 @@
 			set { _price = value; }
 		}
 
-		private PaymentMethod _paymentMethods;
+		private PaymentMethod? _paymentMethods;
 
 		public PaymentMethod PaymentMethods
         {
@@ -34,12 +34,12 @@
 			set { _paymentMethods = value; }
 		}
 
-		private string _marketLink;
+		private List<string>? _marketLinks;
 
-		public string MarketLink
+		public List<string> MarketLinks
         {
-			get { return _marketLink; }
-			set { _marketLink = value; }
+            get { return _marketLinks; }
+			set { _marketLinks = value; }
 		}
 	}
 }
