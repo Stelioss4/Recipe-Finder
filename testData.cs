@@ -363,12 +363,11 @@
             productInformation.NumberOfServings = 4;
             productInformation.Price = 30;
 
-            string marketLink = "www.market.com";
-            string marketLink1 = "www.market2.com";
-            string marketLink2 = "www.market3.com";
+            productInformation.MarketLinks = new List<string>();
 
-
-            productInformation.MarketLinks.Add(marketLink);
+            productInformation.MarketLinks.Add("www.market.com");
+            productInformation.MarketLinks.Add("www.market2.com");
+            productInformation.MarketLinks.Add("www.market3.com");
 
             foreach (Ingredient ing in productInformation.AvailableProduct)
             {
