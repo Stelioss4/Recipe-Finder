@@ -70,7 +70,6 @@ namespace Recipe_Finder
         public static void SaveUser(List<UsersProfile> users)
         {
 
-            string json = JsonConvert.SerializeObject(users);
             XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
             using (FileStream file = File.Create(PATH))
             {
