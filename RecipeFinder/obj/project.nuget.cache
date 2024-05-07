@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "MQXPfc+94MuJ1U6Qh4bdb9Y4GlC1xIxlsNFhRZxv3JDNnh9Z70CxJ247pf0uA45gH6T4lCNG+DJTDxZoQb9Inw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\RecipeFinder.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.components.webassembly.server\\8.0.4\\microsoft.aspnetcore.components.webassembly.server.8.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}
