@@ -1,0 +1,49 @@
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.csproj.AssemblyReference.cache
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.AssemblyInfoInputs.cache
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.AssemblyInfo.cs
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.csproj.CoreCompileInputs.cache
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.sourcelink.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\BrowserDebugHost.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\BrowserDebugHost.runtimeconfig.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\BrowserDebugProxy.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.CodeAnalysis.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.FileFormats.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.NET.WebAssembly.Webcil.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Microsoft.SymbolStore.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\BlazorDebugProxy\Newtonsoft.Json.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\appsettings.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\Recipe Finder.deps.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\Recipe Finder.runtimeconfig.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\Recipe Finder.exe
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\RecipeFinder WebApp.staticwebassets.runtime.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\RecipeFinder WebApp.exe
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\RecipeFinder WebApp.deps.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\RecipeFinder WebApp.runtimeconfig.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\RecipeFinder WebApp.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\RecipeFinder WebApp.pdb
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\Microsoft.AspNetCore.Components.WebAssembly.Server.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\Recipe Finder.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\bin\Debug\net8.0\Recipe Finder.pdb
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\staticwebassets\msbuild.RecipeFinder WebApp.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\staticwebassets\msbuild.build.RecipeFinder WebApp.props
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.RecipeFinder WebApp.props
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.RecipeFinder WebApp.props
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\scopedcss\bundle\RecipeFinder WebApp.styles.css
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\scopedcss\projectbundle\RecipeFinder WebApp.bundle.scp.css
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.csproj.CopyComplete
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\refint\RecipeFinder WebApp.dll
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.pdb
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\RecipeFinder WebApp.genruntimeconfig.cache
+C:\Users\PC\source\repos\Recipe Finder\RecipeFinder\obj\Debug\net8.0\ref\RecipeFinder WebApp.dll

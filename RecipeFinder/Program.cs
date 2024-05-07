@@ -1,4 +1,4 @@
-using RecipeFinder.Components;
+using RecipeFinder_WebApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

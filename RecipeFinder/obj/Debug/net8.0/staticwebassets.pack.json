@@ -1,8 +1,8 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\RecipeFinder.bundle.scp.css",
-      "PackagePath": "staticwebassets\\RecipeFinder.bundle.scp.css"
+      "Id": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\RecipeFinder WebApp.bundle.scp.css",
+      "PackagePath": "staticwebassets\\RecipeFinder WebApp.bundle.scp.css"
     },
     {
       "Id": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\wwwroot\\app.css",
@@ -21,20 +21,20 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.RecipeFinder.Microsoft.AspNetCore.StaticWebAssets.props",
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.RecipeFinder WebApp.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.RecipeFinder.props",
-      "PackagePath": "build\\RecipeFinder.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.RecipeFinder WebApp.props",
+      "PackagePath": "build\\RecipeFinder WebApp.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.RecipeFinder.props",
-      "PackagePath": "buildMultiTargeting\\RecipeFinder.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.RecipeFinder WebApp.props",
+      "PackagePath": "buildMultiTargeting\\RecipeFinder WebApp.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.RecipeFinder.props",
-      "PackagePath": "buildTransitive\\RecipeFinder.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.RecipeFinder WebApp.props",
+      "PackagePath": "buildTransitive\\RecipeFinder WebApp.props"
     }
   ],
   "ElementsToRemove": []
