@@ -1,5 +1,3 @@
-
-
 using RecipeFinder.Components;
 
 var builder = WebApplication.CreateBuilder(args);
