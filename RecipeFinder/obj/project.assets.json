@@ -82,9 +82,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\RecipeFinder.csproj",
-      "projectName": "RecipeFinder",
-      "projectPath": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\RecipeFinder.csproj",
+      "projectUniqueName": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\RecipeFinder WebApp.csproj",
+      "projectName": "RecipeFinder WebApp",
+      "projectPath": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\RecipeFinder WebApp.csproj",
       "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\RecipeFinder\\obj\\",
       "projectStyle": "PackageReference",
