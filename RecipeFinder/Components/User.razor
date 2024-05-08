@@ -1,6 +1,7 @@
 ﻿@using Recipe_Finder
 @using System.Xml.Serialization
 @using System.IO
+@inject DataService userData
 
 
 <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
@@ -50,7 +51,7 @@
     {
         List<UsersProfile> users = new List<UsersProfile>();
         users.Add(UserProfile);
-        UsersProfile.SaveUser(users);
+        DataService.SaveUser(users);
         Console.WriteLine("User saved successfully.");
     }
 }
