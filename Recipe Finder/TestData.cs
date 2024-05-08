@@ -94,7 +94,7 @@
 
             recipe.CookingInstructions = "boil an egg";
             recipe.Videolink = "www.howtoBoilanEgg.com";
-            recipe.DifficultyLevel = "easy";
+            recipe.DifficultyLevel = DifficultyLevel.Easy;
             recipe.ListofIngredients = ingredients;
             recipe.CookingTime = TimeSpan.FromMinutes(14);
             recipe.CuisineType = "global";
@@ -226,7 +226,7 @@
 
             recipe2.CookingInstructions = "boil nudles";
             recipe2.Videolink = "www.howtocooknudles.com";
-            recipe2.DifficultyLevel = "easy";
+            recipe2.DifficultyLevel = DifficultyLevel.Easy;
             recipe2.ListofIngredients = ingredients;
             recipe2.CookingTime = TimeSpan.FromMinutes(10);
             recipe2.CuisineType = "italian";
