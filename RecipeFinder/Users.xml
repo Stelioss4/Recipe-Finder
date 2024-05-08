@@ -3,5 +3,11 @@
   <UsersProfile>
     <Name>Stelios Bou</Name>
     <Email>ste.bou@gmail.dom</Email>
+    <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <Name>stelios Bou</Name>
+    <Email>ste.bou@gmail.com</Email>
   </UsersProfile>
 </ArrayOfUsersProfile>

@@ -49,9 +49,21 @@
 
     private void SaveUser()
     {
-        List<UsersProfile> users = new List<UsersProfile>();
-        users.Add(UserProfile);
-        DataService.SaveUser(users);
-        Console.WriteLine("User saved successfully.");
+        List<UsersProfile> users = DataService.LoadUser(); // Load existing users
+
+        // Check if the user already exists
+        bool userExists = users.Any(u => u.Name == UserProfile.Name && u.Email == UserProfile.Email);
+
+        if (!userExists)
+        {
+            users.Add(UserProfile); // Add the new user
+
+            DataService.SaveUser(users); // Save the updated list of users
+            Console.WriteLine("User saved successfully.");
+        }
+        else
+        {
+            Console.WriteLine("User already exists."); // Notify that the user already exists
+        }
     }
 }

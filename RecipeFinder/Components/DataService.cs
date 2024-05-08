@@ -41,6 +41,15 @@ namespace RecipeFinder_WebApp.Components
             return users;
         }
 
+
+        public static void UserExist()
+        {
+            bool userExist = true;
+            if(userExist)
+            {
+                LoadUser();
+            }
+        }
         
     }
 }
