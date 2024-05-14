@@ -297,28 +297,40 @@
             paymentMethods2.AcountEmail = "maria.mar@email.de";
             paymentMethods2.Acountpasword = "passsssssword";
 
+
+
             UsersProfile user = new UsersProfile();
             UsersProfile user1 = new UsersProfile();
             UsersProfile user2 = new UsersProfile();
 
-            user.Name = "John";
+
+
+            user.FirstName = "Jack";
+            user.LastName = "Black";
             user.Email = "john@email.ccm";
             user.Password = "password";
             user.Address = address1;
             user.PaymentMethods = paymentMethods;
 
-
-            user1.Name = "Jack";
+            user1.FirstName = "John";
+            user1.LastName = "Johnson";
             user1.Email = "jack@email.strom";
             user1.Password = "Password";
             user1.Address = address;
             user1.PaymentMethods = paymentMethods1;
 
-            user2.Name = "Maria";
+
+            user2.FirstName = "Xrysa";
+            user2.LastName = "Bragkatzi";
             user2.Email = "maria.mar@email.de";
             user2.Password = "password";
             user2.Address = address2;
             user2.PaymentMethods = paymentMethods2;
+
+            Console.WriteLine(user.FirstName + " " + user.LastName);
+            Console.WriteLine(user1.FirstName  + " " + user1.LastName);
+            Console.WriteLine(user2.FirstName + " " + user2.LastName);
+            Console.WriteLine();
 
             users.Add(user);
             users.Add(user1);
@@ -377,14 +389,14 @@
             Console.WriteLine(productInformation.NumberOfServings);
             Console.WriteLine(productInformation.Price);
             for (int i = 0; i < productInformation.MarketLinks.Count; i++)
-            { 
-               Console.WriteLine(productInformation.MarketLinks[i]);
+            {
+                Console.WriteLine(productInformation.MarketLinks[i]);
             }
 
             Console.WriteLine();
 
             return productInformation;
-        
+
         }
 
     }

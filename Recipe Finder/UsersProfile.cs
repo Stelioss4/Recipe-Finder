@@ -4,15 +4,24 @@ namespace Recipe_Finder
 {
     public class UsersProfile
     {
-        private string _name;
+        private string _firstname;
 
-        public string Name
+        public string FirstName
         {
-            get { return _name; }
-            set { _name = value; }
+            get { return _firstname; }
+            set { _firstname = value; }
         }
 
-        private string _email;
+        private string _lastName;
+
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+
+        private string? _email;
 
         public string Email
         {

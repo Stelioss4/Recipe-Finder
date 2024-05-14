@@ -6,9 +6,9 @@
         {
             TestData.UserProfil();
 
-            TestData.MarketInformation();
+            //TestData.MarketInformation();
 
-            TestData.RecipeList();
+            //TestData.RecipeList();
         }
     }
 }
