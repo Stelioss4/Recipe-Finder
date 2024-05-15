@@ -29,7 +29,7 @@
             review.Profile = rating.Profile;
 
             rating.Value = 4.8;
-            rating.TimeStam = new DateTime(2024, 4, 11, 12, 30, 0);
+            rating.TimeStam = DateTime.Now; //new DateTime(2024, 4, 11, 12, 30, 0);
             rating.Profile = users[0];
 
             review1.ReviewText = "Nice and easy";
@@ -113,8 +113,10 @@
             Console.WriteLine(recipe.LinksForDrinkPairing);
             for (int i = 0; i < reviews.Count; i++)
             {
-                Console.WriteLine(ratings[i].Value);
-                Console.WriteLine(reviews[i].ReviewText);
+                Console.WriteLine(ratings[i].Profile.FirstName + " " + ratings[i].Profile.LastName);
+                Console.WriteLine("Rating : " + ratings[i].Value);
+                Console.WriteLine("Review : " + reviews[i].ReviewText);
+                Console.WriteLine("Date & Time : " + ratings[i].TimeStam);
             }
 
 
@@ -307,34 +309,34 @@
 
             user.FirstName = "Jack";
             user.LastName = "Black";
-            user.Email = "john@email.ccm";
+            user.Email = "jack@email.strom";
             user.Password = "password";
             user.Address = address1;
             user.PaymentMethods = paymentMethods;
 
             user1.FirstName = "John";
             user1.LastName = "Johnson";
-            user1.Email = "jack@email.strom";
+            user1.Email = "john@email.ccm";
             user1.Password = "Password";
             user1.Address = address;
             user1.PaymentMethods = paymentMethods1;
 
 
-            user2.FirstName = "Xrysa";
-            user2.LastName = "Bragkatzi";
+            user2.FirstName = "Allh";
+            user2.LastName = "Brazi";
             user2.Email = "maria.mar@email.de";
             user2.Password = "password";
             user2.Address = address2;
             user2.PaymentMethods = paymentMethods2;
 
-            Console.WriteLine(user.FirstName + " " + user.LastName);
-            Console.WriteLine(user1.FirstName  + " " + user1.LastName);
-            Console.WriteLine(user2.FirstName + " " + user2.LastName);
-            Console.WriteLine();
-
             users.Add(user);
             users.Add(user1);
             users.Add(user2);
+
+            Console.WriteLine(user.FirstName + " " + user.LastName);
+            Console.WriteLine(user1.FirstName + " " + user1.LastName);
+            Console.WriteLine(user2.FirstName + " " + user2.LastName);
+            Console.WriteLine();
 
             return users;
         }
@@ -386,8 +388,8 @@
                 Console.WriteLine(ing.Name);
             }
             Console.WriteLine(productInformation.PaymentMethods.AcountEmail + " " + productInformation.PaymentMethods.Acountpasword);
-            Console.WriteLine(productInformation.NumberOfServings);
-            Console.WriteLine(productInformation.Price);
+            Console.WriteLine("Number of servings : " + productInformation.NumberOfServings);
+            Console.WriteLine("Price : " + productInformation.Price);
             for (int i = 0; i < productInformation.MarketLinks.Count; i++)
             {
                 Console.WriteLine(productInformation.MarketLinks[i]);

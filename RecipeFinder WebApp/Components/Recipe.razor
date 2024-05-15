@@ -1,14 +1,107 @@
-﻿<h3>Recipe</h3>
-<h2>Please search your recipes here...</h2>
+﻿
+@page "/search"
 
-<div>
-    <label for="searchInput">Search:</label>
-    <input type="text" id="searchInput" placeholder="Enter keywords...">
-    <button class="btn btn-primary" onclick="search()">Search</button>
+@using Recipe_Finder
+@using System.IO
+@using System.Net.Http
+@using System.Net.Http.Json
+
+<div class="search-container">
+    <h3>Recipe</h3>
+    <h2>Please search your recipes here...</h2><br />
+    <input type="text" @bind="searchQuery" placeholder="Search Recipe..." />
+    <button class="btn btn-primary" @onclick="Search">Search</button><br />
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+
+    @if (searchResults != null)
+    {
+        <div class="search-results">
+            <h3>Search Results</h3>
+            @foreach (var result in searchResults)
+            {
+                <div>
+                    <a href="@($"https://www.youtube.com/watch?v={result.VideoId}")" target="_blank">
+                        <img src="@result.ThumbnailUrl" alt="@result.Title" />
+                        <p>@result.Title</p>
+                    </a>
+                </div>
+            }
+        </div>
+    }
 </div>
 
+@code {
+    [Parameter]
+    public string Title { get; set; }
 
-@code{
+    private string searchQuery;
+    private List<YouTubeVideo> searchResults;
 
+    private async Task Search()
+    {
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            var apiKey = "https://developers.google.com/youtube/v3/docs/?apix=true#calling-the-api";
+            var httpClient = new HttpClient();
 
+            // Prepare the request to the YouTube Data API
+            var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&part=snippet&q={searchQuery}&type=video";
+            var response = await httpClient.GetFromJsonAsync<YouTubeSearchResponse>(url);
+
+            // Extract relevant information from the API response
+            if (response != null && response.Items != null)
+            {
+                searchResults = response.Items.Select(item => new YouTubeVideo
+                    {
+                        VideoId = item.Id.VideoId,
+                        Title = item.Snippet.Title,
+                        ThumbnailUrl = item.Snippet.Thumbnails.Default.Url
+                    }).ToList();
+            }
+            else
+            {
+                searchResults = new List<YouTubeVideo>();
+            }
+        }
+    }
+
+    public class YouTubeSearchResponse
+    {
+        public List<YouTubeVideoItem> Items { get; set; }
+    }
+
+    public class YouTubeVideoItem
+    {
+        public YouTubeVideoId Id { get; set; }
+        public YouTubeVideoSnippet Snippet { get; set; }
+    }
+
+    public class YouTubeVideoId
+    {
+        public string VideoId { get; set; }
+    }
+
+    public class YouTubeVideoSnippet
+    {
+        public string Title { get; set; }
+        public YouTubeVideoThumbnail Thumbnails { get; set; }
+    }
+
+    public class YouTubeVideoThumbnail
+    {
+        public YouTubeVideoThumbnailDefault Default { get; set; }
+    }
+
+    public class YouTubeVideoThumbnailDefault
+    {
+        public string Url { get; set; }
+    }
+
+    public class YouTubeVideo
+    {
+        public string VideoId { get; set; }
+        public string Title { get; set; }
+        public string ThumbnailUrl { get; set; }
+    }
 }

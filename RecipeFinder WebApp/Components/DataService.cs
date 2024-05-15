@@ -51,6 +51,11 @@ namespace RecipeFinder_WebApp.Components
                 LoadUser();
             }
         }
+
+        public static void SearchRecipe()
+        {
+
+        }
         
     }
 }
