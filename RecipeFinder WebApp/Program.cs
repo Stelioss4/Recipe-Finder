@@ -1,3 +1,4 @@
+using Recipe_Finder;
 using RecipeFinder_WebApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<DataService>()
-    .AddSingleton<User>();
+    .AddSingleton<User>()
+    .AddSingleton<Recipe>();
 
 var app = builder.Build();
 

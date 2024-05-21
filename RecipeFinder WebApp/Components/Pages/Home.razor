@@ -4,9 +4,15 @@
 
 <h1>Please fill in your details below...</h1>
 <User></User>
+<button class="btn btn-primary" @onclick="RedirectToRecipe">Click to search your recipe</button>
 
 @code {
-   
+    private void RedirectToRecipe()
+    {
+        NavigationManager.NavigateTo("https://www.allrecipes.com/", true);
+    }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
 }
-
-

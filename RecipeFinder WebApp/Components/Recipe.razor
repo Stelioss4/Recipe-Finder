@@ -22,7 +22,6 @@
             {
                 <div>
                     <a href="@($"https://www.youtube.com/watch?v={result.VideoId}")" target="_blank">
-                        <img src="@result.ThumbnailUrl" alt="@result.Title" />
                         <p>@result.Title</p>
                     </a>
                 </div>
@@ -35,73 +34,4 @@
     [Parameter]
     public string Title { get; set; }
 
-    private string searchQuery;
-    private List<YouTubeVideo> searchResults;
-
-    private async Task Search()
-    {
-        if (!string.IsNullOrEmpty(searchQuery))
-        {
-            var apiKey = "https://developers.google.com/youtube/v3/docs/?apix=true#calling-the-api";
-            var httpClient = new HttpClient();
-
-            // Prepare the request to the YouTube Data API
-            var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&part=snippet&q={searchQuery}&type=video";
-            var response = await httpClient.GetFromJsonAsync<YouTubeSearchResponse>(url);
-
-            // Extract relevant information from the API response
-            if (response != null && response.Items != null)
-            {
-                searchResults = response.Items.Select(item => new YouTubeVideo
-                    {
-                        VideoId = item.Id.VideoId,
-                        Title = item.Snippet.Title,
-                        ThumbnailUrl = item.Snippet.Thumbnails.Default.Url
-                    }).ToList();
-            }
-            else
-            {
-                searchResults = new List<YouTubeVideo>();
-            }
-        }
-    }
-
-    public class YouTubeSearchResponse
-    {
-        public List<YouTubeVideoItem> Items { get; set; }
-    }
-
-    public class YouTubeVideoItem
-    {
-        public YouTubeVideoId Id { get; set; }
-        public YouTubeVideoSnippet Snippet { get; set; }
-    }
-
-    public class YouTubeVideoId
-    {
-        public string VideoId { get; set; }
-    }
-
-    public class YouTubeVideoSnippet
-    {
-        public string Title { get; set; }
-        public YouTubeVideoThumbnail Thumbnails { get; set; }
-    }
-
-    public class YouTubeVideoThumbnail
-    {
-        public YouTubeVideoThumbnailDefault Default { get; set; }
-    }
-
-    public class YouTubeVideoThumbnailDefault
-    {
-        public string Url { get; set; }
-    }
-
-    public class YouTubeVideo
-    {
-        public string VideoId { get; set; }
-        public string Title { get; set; }
-        public string ThumbnailUrl { get; set; }
-    }
 }

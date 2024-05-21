@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\PC\\source\\repos\\Recipe Finder\\Recipe Finder\\Recipe Finder.csproj": {}
+    "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\Recipe Finder.csproj": {}
   },
   "projects": {
-    "C:\\Users\\PC\\source\\repos\\Recipe Finder\\Recipe Finder\\Recipe Finder.csproj": {
+    "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\Recipe Finder.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\Recipe Finder\\Recipe Finder.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\Recipe Finder.csproj",
         "projectName": "Recipe Finder",
-        "projectPath": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\Recipe Finder\\Recipe Finder.csproj",
+        "projectPath": "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\Recipe Finder.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PC\\source\\repos\\Recipe Finder\\Recipe Finder\\obj\\",
+        "outputPath": "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,12 +39,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "Microsoft.AspNetCore.Components.WebAssembly.Server": {
-              "target": "Package",
-              "version": "[8.0.4, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

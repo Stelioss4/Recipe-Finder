@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfUsersProfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <UsersProfile />
+  <UsersProfile>
+    <FirstName>Stelll</FirstName>
+    <LastName>Bourrrr</LastName>
+    <Email>stel.bour@gjail.som</Email>
+  </UsersProfile>
+  <UsersProfile>
+    <FirstName>Stelll</FirstName>
+    <LastName>Bourrrr</LastName>
+    <Email>stel.bour@gjail.som</Email>
+  </UsersProfile>
+  <UsersProfile>
+    <FirstName>Stelll</FirstName>
+    <LastName>Bourrrr</LastName>
+    <Email>stel.bour@gjail.som</Email>
+  </UsersProfile>
 </ArrayOfUsersProfile>
