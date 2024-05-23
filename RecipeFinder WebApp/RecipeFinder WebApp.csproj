@@ -23,6 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Components\Layout\RecipeFinder WebApp.styles.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Components\Recipe.razor" />
   </ItemGroup>
 
