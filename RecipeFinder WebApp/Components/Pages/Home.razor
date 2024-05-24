@@ -1,15 +1,31 @@
 ﻿@page "/"
-@inject DataService userData
+
 <PageTitle>Home</PageTitle>
 
-<h1>Please fill in your details below...</h1>
-<User></User>
-<button class="btn btn-primary" @onclick="RedirectToRecipe">Click to search your recipe</button>
+<button class="btn btn-primary" @onclick="RedirectToRecipe">Click to search for your recipe in English!</button>
+<br />
+<br />
+<button class="btn btn-primary" @onclick="RedirectToRecipe1">Click to search for your recipe in German!</button>
+<br />
+<br />
+<button class="btn btn-primary" @onclick="RedirectToRecipe2">Click to search for your recipe in Greek!</button>
+<br />
+<br />
 
 @code {
     private void RedirectToRecipe()
     {
-        NavigationManager.NavigateTo("https://www.allrecipes.com/", true);
+        NavigationManager.NavigateTo("https://www.allrecipes.com/");
+    }
+
+    private void RedirectToRecipe1()
+    {
+        NavigationManager.NavigateTo("https://www.chefkoch.de/");
+    }
+
+    private void RedirectToRecipe2()
+    {
+        NavigationManager.NavigateTo("https://akispetretzikis.com/en");
     }
 
     [Inject]

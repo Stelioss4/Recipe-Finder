@@ -9,7 +9,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<DataService>()
     .AddSingleton<User>()
-    .AddSingleton<Recipe>();
+    .AddSingleton<Recipe_Finder.Recipe>();
+
 
 var app = builder.Build();
 

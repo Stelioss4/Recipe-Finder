@@ -57,7 +57,7 @@
 
     private Address Address { get; set; } = new Address();
 
-    private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+    private List<UsersProfile> users { get; set; } = DataService.LoadUser();
 
     private void SaveUser()
     {

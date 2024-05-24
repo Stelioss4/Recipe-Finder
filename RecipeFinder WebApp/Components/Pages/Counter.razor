@@ -3,36 +3,20 @@
 
 <PageTitle>Counter</PageTitle>
 
-
-
 <h1>Counter</h1>
 
+<p role="status">Current count: @currentCount</p>
 
-
-@*<p role="status">Current count: @currentCount</p>
-
- <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
- *@
- <button class="btn btn-primary" @onclick="RedirectToRecipe">Click to search your recipe</button>
-
-@* @code {
-    private int currentCount;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-}
- *@
-
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
-    private void RedirectToRecipe()
+    private int currentCount = 10;
+    private void IncrementCount()
     {
-        NavigationManager.NavigateTo("https://www.allrecipes.com/", true);
+        currentCount = currentCount * 4;
+        ;
     }
-
-    [Inject]
-    private NavigationManager NavigationManager { get; set; }
-
 }
+
+
+
