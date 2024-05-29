@@ -7,23 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Components\Recipe.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Recipe Finder\Recipe Finder.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Components\Recipe.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Components\Recipe.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Components\Recipe.razor" />
   </ItemGroup>
 
 </Project>

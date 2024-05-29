@@ -2,6 +2,15 @@
 {
     public class Recipe
     {
+		private string _recipeName;
+
+		public string RecipeName
+		{
+			get { return _recipeName; }
+			set { _recipeName = value; }
+		}
+
+
 		private string _cookingInstructions;
 
 		public string CookingInstructions

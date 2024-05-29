@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\Recipe Finder.csproj",
+      "projectUniqueName": "C:\\Users\\PC\\Desktop\\RecipeFinder original\\Recipe Finder\\Recipe Finder.csproj",
       "projectName": "Recipe Finder",
-      "projectPath": "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\Recipe Finder.csproj",
+      "projectPath": "C:\\Users\\PC\\Desktop\\RecipeFinder original\\Recipe Finder\\Recipe Finder.csproj",
       "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\source\\repos\\Recipe-Finder\\Recipe Finder\\obj\\",
+      "outputPath": "C:\\Users\\PC\\Desktop\\RecipeFinder original\\Recipe Finder\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",

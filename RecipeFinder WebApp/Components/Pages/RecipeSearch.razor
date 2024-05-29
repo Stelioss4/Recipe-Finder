@@ -1,0 +1,41 @@
+﻿@page "/recipesearch"
+@using RecipeFinder_WebApp.Components
+
+<PageTitle>Recipe Search</PageTitle>
+
+<h1>Recipe Search</h1>
+
+<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+
+    <span class="text-nowrap">
+        <br />
+        <input type="text" @bind="recipe.RecipeName" placeholder="Search by Recipe Name..." />
+        <br />
+        <input type="text" @bind="recipe.CuisineType" placeholder="Search by Cuisine..." />
+        <br />
+        <input type="text" @bind="recipe.DifficultyLevel" placeholder="Search by Difficulty level..." />
+        <br />
+        <input type="text" @bind="recipe.CookingTime" placeholder="Search by Cooking Time..." />
+        <br />
+
+    </span>
+</div>
+
+<button class="btn btn-primary" @onclick="SearchForRecipe">Click To Search For Recipe! ! !</button>
+
+<SearchRecipe Recipes="searchResults"></SearchRecipe>
+
+@code {
+    private Recipe_Finder.Recipe recipe { get; set; } = new Recipe_Finder.Recipe();
+    private List<Recipe_Finder.Recipe> searchResults { get; set; } = new List<Recipe_Finder.Recipe>();
+
+    private void SearchForRecipe()
+    {
+        // Example search logic - replace with actual search implementation
+        searchResults = DataService.SearchRecipes(recipe);
+        StateHasChanged(); // Trigger a re-render
+    }
+
+
+}

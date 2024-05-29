@@ -1,4 +1,3 @@
-using Recipe_Finder;
 using RecipeFinder_WebApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,10 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+                .AddInteractiveServerComponents();
 builder.Services.AddSingleton<DataService>()
-    .AddSingleton<User>()
-    .AddSingleton<Recipe_Finder.Recipe>();
+                .AddSingleton<User>();
+
 
 
 var app = builder.Build();
