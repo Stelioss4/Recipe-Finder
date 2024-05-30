@@ -37,7 +37,7 @@ namespace Recipe_Finder
             set { _password = value; }
         }
 
-        private Address _address;
+        private Address _address = new Address();
 
         public Address Address
         {
@@ -45,7 +45,7 @@ namespace Recipe_Finder
             set { _address = value; }
         }
 
-        private List<Recipe> _favoriteRecipes;
+        private List<Recipe> _favoriteRecipes = new List<Recipe>();
 
         public List<Recipe> FavoriteRecipes
         {
