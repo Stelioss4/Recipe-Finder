@@ -5,7 +5,7 @@
 
 <h1>Recipe Search</h1>
 
-<div class="alert alert-secondary mt-4" style="border: thin solid red; margin: 5px">
+<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
 
     <span class="text-nowrap">
@@ -14,11 +14,27 @@
         <br />
         <input type="text" @bind="recipe.CuisineType" placeholder="Search by Cuisine..." />
         <br />
-        <input type="text" @bind="recipe.DifficultyLevel" placeholder="Search by Difficulty level..." />
+        <div>
+            <label>Difficulty Level:</label>
+            <InputSelect @bind-Value="recipe.DifficultyLevel" class="form-control">
+                @foreach (var level in Enum.GetValues(typeof(DifficultyLevel)))
+                {
+                    <option value="@level">@level</option>
+                }
+            </InputSelect>
+        </div>
         <br />
         <input type="text" @bind="recipe.CookingTime" placeholder="Search by Cooking Time..." />
         <br />
-        <input type="text" @bind="recipe.OccasionTags" placeholder="Search by Occasion Tags..." />
+        <div>
+            <label>Occasion Tags:</label>
+            <InputSelect @bind-Value="recipe.OccasionTags" class="form-control">
+                @foreach (var tag in Enum.GetValues(typeof(OccasionTags)))
+                {
+                    <option value="@tag">@tag</option>
+                }
+            </InputSelect>
+        </div>
         <br />
 
     </span>
