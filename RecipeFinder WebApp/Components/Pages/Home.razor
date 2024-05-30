@@ -1,7 +1,9 @@
 ﻿@page "/"
-
 <PageTitle>Home</PageTitle>
 
+<h1>Please fill in your details below...</h1>
+@* <User></User>
+ *@
 <button class="btn btn-primary" @onclick="RedirectToRecipe">Click to search for your recipe in English!</button>
 <br />
 <br />
@@ -11,7 +13,6 @@
 <button class="btn btn-primary" @onclick="RedirectToRecipe2">Click to search for your recipe in Greek!</button>
 <br />
 <br />
-
 @code {
     private void RedirectToRecipe()
     {

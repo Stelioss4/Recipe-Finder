@@ -1,8 +1,6 @@
-﻿@page "/user"
-@using Recipe_Finder
+﻿@using Recipe_Finder
 @using System.Xml.Serialization
 @using System.IO
-@inject DataService userData
 
 <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
@@ -44,6 +42,10 @@
         <br />
         <br />
 
+
+        <button class="btn btn-primary" @onclick="SaveUser">Save and Continue </button>
+
+
     </span>
 </div>
 
@@ -55,7 +57,8 @@
 
     private Address Address { get; set; } = new Address();
 
-    private List<UsersProfile> users { get; set; } = DataService.LoadUser();
+    private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+
 
     private void SaveUser()
     {

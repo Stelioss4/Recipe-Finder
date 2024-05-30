@@ -1,13 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Recipe Finder\Recipe Finder.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="Components\Recipe.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Recipe Finder\Recipe Finder.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Components\Recipe.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<_ContentIncludedByDefault Remove="Components\Recipe.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Components\Layout\MainLayout.razor" />
+		<None Include="Components\Layout\NavMenu.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AngleSharp" Version="1.1.2" />
+		<PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
+	</ItemGroup>
 
 </Project>

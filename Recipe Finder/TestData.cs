@@ -235,13 +235,9 @@
             paymentMethods2.AcountEmail = "maria.mar@email.de";
             paymentMethods2.Acountpasword = "passsssssword";
 
-
-
             UsersProfile user = new UsersProfile();
             UsersProfile user1 = new UsersProfile();
             UsersProfile user2 = new UsersProfile();
-
-
 
             user.FirstName = "Jack";
             user.LastName = "Black";
@@ -257,7 +253,6 @@
             user1.Address = address;
             user1.PaymentMethods = paymentMethods1;
 
-
             user2.FirstName = "Allh";
             user2.LastName = "Brazi";
             user2.Email = "maria.mar@email.de";
@@ -268,11 +263,6 @@
             users.Add(user);
             users.Add(user1);
             users.Add(user2);
-
-            Console.WriteLine(user.FirstName + " " + user.LastName);
-            Console.WriteLine(user1.FirstName + " " + user1.LastName);
-            Console.WriteLine(user2.FirstName + " " + user2.LastName);
-            Console.WriteLine();
 
             return users;
         }

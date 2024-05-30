@@ -5,7 +5,7 @@
 
 <h1>Recipe Search</h1>
 
-<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
+<div class="alert alert-secondary mt-4" style="border: thin solid red; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
 
     <span class="text-nowrap">
@@ -17,6 +17,8 @@
         <input type="text" @bind="recipe.DifficultyLevel" placeholder="Search by Difficulty level..." />
         <br />
         <input type="text" @bind="recipe.CookingTime" placeholder="Search by Cooking Time..." />
+        <br />
+        <input type="text" @bind="recipe.OccasionTags" placeholder="Search by Occasion Tags..." />
         <br />
 
     </span>
