@@ -1,11 +1,44 @@
 ﻿@page "/useraccount"
-@using RecipeFinder_WebApp.Components
+@using Recipe_Finder
 
+<PageTitle>User Account</PageTitle>
 
-<h3>UserAccount</h3>
+<div class="container">
+    <h1>User Account</h1>
+    <p>Fill in your details below:</p>
 
-<p>Please Fill your details down bellow!</p>
-<User Title="JOIhn"></User>
+    <div class="card">
+        <EditForm Model="UserProfile" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <User UserProfile="UserProfile" Title="User Details"></User>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
 @code {
+    private UsersProfile UserProfile { get; set; } = new UsersProfile();
 
+    [Inject]
+    private DataService DataService { get; set; }
+
+    private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+
+    protected override void OnInitialized()
+    {
+        users = DataService.LoadUser();
+    }
+
+    private void HandleValidSubmit()
+    {
+        if (UserProfile != null)
+        {
+            users.Add(UserProfile);
+            DataService.SaveUser(users);
+            Console.WriteLine("User saved successfully.");
+        }
+    }
 }

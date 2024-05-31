@@ -1,4 +1,4 @@
-﻿@using Recipe_Finder
+﻿@* @using Recipe_Finder
 @using System.Xml.Serialization
 @using System.IO
 
@@ -31,9 +31,12 @@
         <br />
         <input type="text" @bind="UserProfile.Password" />
         <br />
-        Please enter your Address
-        <br />
         -------------------------------------
+        <br />
+        Please enter your Address
+
+        -------------------------------------
+        <br />
         <br />
         Streets Name:
         <br />
@@ -79,5 +82,68 @@
             DataService.SaveUser(users);
             Console.WriteLine("User saved successfully.");
         }
+    }
+}
+ *@
+
+ @page "/user"
+@using Recipe_Finder
+@inject DataService userData
+
+<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+
+    <EditForm Model="UserProfile" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label>First Name:</label>
+            <input type="text" @bind="UserProfile.FirstName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Last Name:</label>
+            <input type="text" @bind="UserProfile.LastName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" @bind="UserProfile.Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" @bind="UserProfile.Password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Street Name:</label>
+            <input type="text" @bind="UserProfile.Address.StreetsName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>House Number:</label>
+            <input type="text" @bind="UserProfile.Address.Housenumber" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Postal Code:</label>
+            <input type="text" @bind="UserProfile.Address.PostalCode" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>City:</label>
+            <input type="text" @bind="UserProfile.Address.City" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public UsersProfile UserProfile { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "User Details";
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("Form submitted successfully.");
     }
 }

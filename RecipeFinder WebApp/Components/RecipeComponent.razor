@@ -1,0 +1,62 @@
+﻿@page "/recipecomponent"
+@using RecipeFinder_WebApp.Components
+
+<PageTitle>recipecomponent</PageTitle>
+
+<h1>Recipe Search</h1>
+
+<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+
+    <span class="text-nowrap">
+        <br />
+        <input type="text" @bind="recipe.RecipeName" placeholder="Search by Recipe Name..." />
+        <br />
+        <input type="text" @bind="recipe.CuisineType" placeholder="Search by Cuisine..." />
+        <br />
+        <div>
+            <label>Difficulty Level:</label>
+            <InputSelect @bind-Value="recipe.DifficultyLevel" class="form-control">
+                @foreach (var level in Enum.GetValues(typeof(DifficultyLevel)))
+                {
+                    <option value="@level">@level</option>
+                }
+            </InputSelect>
+        </div>
+        <br />
+        <input type="text" @bind="recipe.CookingTime" placeholder="Search by Cooking Time..." />
+        <br />
+        <div>
+            <label>Occasion Tags:</label>
+            <InputSelect @bind-Value="recipe.OccasionTags" class="form-control">
+                @foreach (var tag in Enum.GetValues(typeof(OccasionTags)))
+                {
+                    <option value="@tag">@tag</option>
+                }
+            </InputSelect>
+        </div>
+        <br />
+
+    </span>
+</div>
+
+<button class="btn btn-primary" @onclick="SearchForRecipe">Click To Search For Recipe! ! !</button>
+
+<SearchRecipe Recipes="searchResults"></SearchRecipe>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+    private Recipe_Finder.Recipe recipe { get; set; } = new Recipe_Finder.Recipe();
+    private List<Recipe_Finder.Recipe> searchResults { get; set; } = new List<Recipe_Finder.Recipe>();
+
+    private void SearchForRecipe()
+    {
+        // Example search logic - replace with actual search implementation
+        searchResults = DataService.SearchRecipes(recipe);
+        StateHasChanged(); // Trigger a re-render
+    }
+
+
+}

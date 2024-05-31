@@ -1,11 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace Recipe_Finder
 {
     public class UsersProfile
     {
         private string _firstname;
-
+        [Required(ErrorMessage = "First name is required.")]
         public string FirstName
         {
             get { return _firstname; }
@@ -13,7 +14,7 @@ namespace Recipe_Finder
         }
 
         private string _lastName;
-
+        [Required(ErrorMessage = "Last name is required.")]
         public string LastName
         {
             get { return _lastName; }
@@ -22,6 +23,7 @@ namespace Recipe_Finder
 
 
         private string? _email;
+        [Required(ErrorMessage = "Email is required.")]
 
         public string Email
         {
@@ -30,7 +32,7 @@ namespace Recipe_Finder
         }
 
         private string _password;
-
+        [Required(ErrorMessage = "Password is required.")]
         public string Password
         {
             get { return _password; }

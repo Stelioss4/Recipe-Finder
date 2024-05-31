@@ -29,7 +29,7 @@ namespace RecipeFinder_WebApp.Components
         public DataService()
         {
             Recipies = TestData.RecipeList();
-           // usersProfiles = TestData.UserProfil();
+            usersProfiles = TestData.UserProfil();
         }
 
         public static List<Recipe> SearchRecipes(Recipe recipe)
