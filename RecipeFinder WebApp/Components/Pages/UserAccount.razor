@@ -3,42 +3,46 @@
 
 <PageTitle>User Account</PageTitle>
 
+
+
+
 <div class="container">
     <h1>User Account</h1>
     <p>Fill in your details below:</p>
+    <User Title="User Details"></User>
+    <button type="submit" class="btn btn-primary">Submit</button>
 
-    <div class="card">
-        <EditForm Model="UserProfile" OnValidSubmit="HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div class="form-group">
-                <User UserProfile="UserProfile" Title="User Details"></User>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
+    @* <div class="card">
+    <EditForm Model="UserProfile" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+
     </div>
+    </EditForm>
+    </div>*@
 </div>
 
 @code {
-    private UsersProfile UserProfile { get; set; } = new UsersProfile();
+    //private UsersProfile UserProfile { get; set; } = new UsersProfile();
 
-    [Inject]
-    private DataService DataService { get; set; }
+    // [Inject]
+    // private DataService DataService { get; set; }
 
-    private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+    // private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
 
-    protected override void OnInitialized()
-    {
-        users = DataService.LoadUser();
+    // protected override void OnInitialized()
+    // {
+    //     users = DataService.LoadUser();
+    // }
+
+    // private void HandleValidSubmit()
+    // {
+    //     if (UserProfile != null)
+    //     {
+    //         users.Add(UserProfile);
+    //         DataService.SaveUser(users);
+    //         Console.WriteLine("User saved successfully.");
+    //     }
+    // }
     }
-
-    private void HandleValidSubmit()
-    {
-        if (UserProfile != null)
-        {
-            users.Add(UserProfile);
-            DataService.SaveUser(users);
-            Console.WriteLine("User saved successfully.");
-        }
-    }
-}

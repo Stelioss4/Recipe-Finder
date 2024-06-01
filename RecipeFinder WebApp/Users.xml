@@ -4,5 +4,35 @@
     <FirstName>bla</FirstName>
     <LastName>vlsl</LastName>
     <Email>asldkaskdö</Email>
+    <Address />
+    <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <Email>stelios.boursanidis@gmail.com</Email>
+    <Password>6984866579stE</Password>
+    <Address />
+    <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <Email>stelios.boursanidis@gmail.com</Email>
+    <Password>6984866579stE</Password>
+    <Address />
+    <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <Email>stelios.boursanidis@gmail.com</Email>
+    <Password>6984866579stE</Password>
+    <Address />
+    <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <Email>sdfhsjdfhj.@jhghsgdf.com</Email>
+    <Password>98789798798798a9s8d</Password>
+    <Address />
+    <FavoriteRecipes />
   </UsersProfile>
 </ArrayOfUsersProfile>

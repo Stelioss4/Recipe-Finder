@@ -1,10 +1,7 @@
-﻿@* @using Recipe_Finder
+﻿@using Recipe_Finder
 @using System.Xml.Serialization
 @using System.IO
 
-<EditForm>
-
-</EditForm>
 <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
@@ -25,18 +22,18 @@
         <br />
         Please enter a Password
         <br />
-        <input type="text" @bind="UserProfile.Password" />
+        <input type="password" @bind="UserProfile.Password" />
         <br />
         Please comfirm your Password
         <br />
-        <input type="text" @bind="UserProfile.Password" />
+        <input type="password" @bind="UserProfile.Password" />
         <br />
         -------------------------------------
         <br />
         Please enter your Address
 
-        -------------------------------------
         <br />
+        -------------------------------------
         <br />
         Streets Name:
         <br />
@@ -55,11 +52,6 @@
         <input type="text" @bind="UserProfile.Address.City" />
         <br />
         <br />
-
-
-        <button class="btn btn-primary" @onclick="SaveUser">Save and Continue </button>
-
-
     </span>
 </div>
 
@@ -84,9 +76,9 @@
         }
     }
 }
- *@
 
- @page "/user"
+
+@* @page "/user"
 @using Recipe_Finder
 @inject DataService userData
 
@@ -147,3 +139,4 @@
         Console.WriteLine("Form submitted successfully.");
     }
 }
+ *@

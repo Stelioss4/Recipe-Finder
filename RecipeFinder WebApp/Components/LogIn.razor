@@ -1,0 +1,46 @@
+﻿<h3>LogIn</h3>
+
+@using Recipe_Finder
+@using System.Xml.Serialization
+@using System.IO
+
+<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+
+    <span class="text-nowrap">
+        <br />
+        Please enter your Email:
+        <br />
+        <input type="email" @bind="UserProfile.Email" />
+        <br />
+        Please enter a Password
+        <br />
+        <input type="password" @bind="UserProfile.Password" />
+        <br />
+        <br />
+        <button type="submit" class="btn btn-primary" @onclick="SaveUser">Log In</button>
+
+    </span>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    private UsersProfile? UserProfile { get; set; } = new UsersProfile();
+
+    private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+
+    private void SaveUser()
+    {
+
+        if (UserProfile != null)
+        {
+            users = DataService.LoadUser();
+            users.Add(UserProfile);
+            DataService.SaveUser(users);
+            Console.WriteLine("User saved successfully.");
+        }
+    }
+}
