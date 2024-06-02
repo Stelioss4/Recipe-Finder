@@ -1,19 +1,90 @@
-﻿@page "/"
+﻿ @page "/"
 <PageTitle>Home</PageTitle>
 
-<h1>Please fill in your details below...</h1>
-@* <User></User>
- *@
-<button class="btn btn-primary" @onclick="RedirectToRecipe">Click to search for your recipe in English!</button>
-<br />
-<br />
-<button class="btn btn-primary" @onclick="RedirectToRecipe1">Click to search for your recipe in German!</button>
-<br />
-<br />
-<button class="btn btn-primary" @onclick="RedirectToRecipe2">Click to search for your recipe in Greek!</button>
-<br />
-<br />
+<h1>Recipe Finder! ! !</h1>
+
+<div>
+    <EditForm Model="searchModel" OnValidSubmit="SearchOnGoogle">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="searchQuery">Search any recipe here! :</label>
+            <br />
+            <InputText id="searchQuery" class="form-control" @bind-Value="searchModel.Query" placeholder="Search Recipe!!!" />
+        </div>
+        <br />
+
+        <button type="submit" class="btn btn-primary">Search</button>
+    </EditForm>
+</div>
+
 @code {
+    private SearchModel searchModel = new SearchModel();
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    private void SearchOnGoogle()
+    {
+        if (!string.IsNullOrEmpty(searchModel.Query))
+        {
+            var encodedQuery = Uri.EscapeDataString(searchModel.Query);
+            var googleSearchUrl = $"https://www.google.com/search?q={encodedQuery}";
+            NavigationManager.NavigateTo(googleSearchUrl);
+        }
+    }
+
+    public class SearchModel
+    {
+        public string Query { get; set; } = string.Empty;
+    }
+}
+
+@*<EditForm Model="recipe">
+
+    <label for="recipe">Search any recipe Here!!!</label>
+    <InputText id="recipe" @bind-Value="recipe.RecipeName"></InputText>
+    <button type="submit" class="btn btn-primary" @onclick="SearchOnGoogle" >Search</button>
+
+
+</EditForm>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+
+<button @onclick="RedirectToRecipe">Click to search for your recipe in English!</button>
+<br />
+<button @onclick="RedirectToRecipe1">Click to search for your recipe in German!</button>
+<br />
+<button @onclick="RedirectToRecipe2">Click to search for your recipe in Greek!</button>
+<br />
+
+@code {
+    private Recipe recipe = new Recipe();
+
+    private void SearchOnGoogle()
+    {
+        NavigationManager.NavigateTo("https://www.google.com/");
+    }
+
     private void RedirectToRecipe()
     {
         NavigationManager.NavigateTo("https://www.allrecipes.com/");
@@ -33,3 +104,4 @@
     private NavigationManager NavigationManager { get; set; }
 
 }
+ *@

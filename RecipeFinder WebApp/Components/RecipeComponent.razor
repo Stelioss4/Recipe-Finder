@@ -8,12 +8,17 @@
 <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
-
+    <EditForm Model="recipe">
     <span class="text-nowrap">
         <br />
-        <input type="text" @bind="recipe.RecipeName" placeholder="Search by Recipe Name..." />
+            <label for="RecipeName">Search recipe by Name : </label>
+            <InputText id="RecipeName" @bind-Value="recipe.RecipeName"></InputText>
+
         <br />
-        <input type="text" @bind="recipe.CuisineType" placeholder="Search by Cuisine..." />
+            <label for="CuisineType">Search recipe by Cuisine Type : </label>
+
+            <InputText id="CuisineType" @bind-Value="recipe.CuisineType"></InputText>
+
         <br />
         <div>
             <label>Difficulty Level:</label>
@@ -25,7 +30,6 @@
             </InputSelect>
         </div>
         <br />
-        <input type="text" @bind="recipe.CookingTime" placeholder="Search by Cooking Time..." />
         <br />
         <div>
             <label>Occasion Tags:</label>
@@ -37,8 +41,8 @@
             </InputSelect>
         </div>
         <br />
-
     </span>
+    </EditForm>
 </div>
 
 <button class="btn btn-primary" @onclick="SearchForRecipe">Click To Search For Recipe! ! !</button>

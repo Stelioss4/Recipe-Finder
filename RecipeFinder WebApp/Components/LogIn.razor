@@ -34,13 +34,13 @@
 
     private void SaveUser()
     {
-
-        if (UserProfile != null)
-        {
             users = DataService.LoadUser();
+
+        if (users != null && users.Count != 0)
+        {
             users.Add(UserProfile);
             DataService.SaveUser(users);
-            Console.WriteLine("User saved successfully.");
+            Console.WriteLine("User logged in successfully.");
         }
     }
 }
