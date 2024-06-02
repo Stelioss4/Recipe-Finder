@@ -9,39 +9,29 @@
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
     <EditForm Model="recipe">
-    <span class="text-nowrap">
-        <br />
-            <label for="RecipeName">Search recipe by Name : </label>
-            <InputText id="RecipeName" @bind-Value="recipe.RecipeName"></InputText>
-
-        <br />
-            <label for="CuisineType">Search recipe by Cuisine Type : </label>
-
-            <InputText id="CuisineType" @bind-Value="recipe.CuisineType"></InputText>
-
-        <br />
-        <div>
-            <label>Difficulty Level:</label>
+        <span class="text-nowrap">
+            <br />
+            <label for="RecipeName">Search recipe by Name : </label><br />
+            <InputText id="RecipeName" @bind-Value="recipe.RecipeName"></InputText><br />
+            <label for="CuisineType">Search recipe by Cuisine Type : </label><br />
+            <InputText id="CuisineType" @bind-Value="recipe.CuisineType"></InputText><br />
+            <br />
+            <label>Difficulty Level:</label><br />
             <InputSelect @bind-Value="recipe.DifficultyLevel" class="form-control">
                 @foreach (var level in Enum.GetValues(typeof(DifficultyLevel)))
                 {
                     <option value="@level">@level</option>
                 }
-            </InputSelect>
-        </div>
-        <br />
-        <br />
-        <div>
-            <label>Occasion Tags:</label>
+            </InputSelect><br />
+
+            <label>Occasion Tags:</label><br />
             <InputSelect @bind-Value="recipe.OccasionTags" class="form-control">
                 @foreach (var tag in Enum.GetValues(typeof(OccasionTags)))
                 {
                     <option value="@tag">@tag</option>
                 }
-            </InputSelect>
-        </div>
-        <br />
-    </span>
+            </InputSelect><br />
+        </span>
     </EditForm>
 </div>
 
@@ -57,7 +47,7 @@
 
     private void SearchForRecipe()
     {
-        
+
         searchResults = DataService.SearchRecipes(recipe);
         StateHasChanged();
     }
