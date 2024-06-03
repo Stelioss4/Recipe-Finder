@@ -5,7 +5,9 @@
 <div class="alert alert-secondary mt-4" style="border: thin solid red; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
 
-    <EditForm Model="@UserProfile">
+    <EditForm Model="UserProfile" OnSubmit="SaveUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
         <div class="alert alert-secondary mt-4" style="border: thin solid blue; margin: 5px">
             <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
@@ -16,10 +18,16 @@
             <InputText id="LastName" @bind-Value="UserProfile.LastName"></InputText><br />
 
             <label for="Email">Email : </label><br />
-            <InputText type="Email" @bind-Value="UserProfile.Email"></InputText><br />
+            <InputText type="Email" id="Email" @bind-Value="UserProfile.Email"></InputText><br />
 
             <label for="Email">Confirm Email : </label><br />
-            <InputText type="Email" @bind-Value="UserProfile.Email"></InputText><br /><br />
+            <InputText type="Email" id="Email" @bind-Value="UserProfile.Email"></InputText><br />
+
+            <label for="Password">Password : </label><br />
+            <InputText type="Password" id="Password" @bind-Value="UserProfile.Password"></InputText><br />
+
+            <label for="Password">Confirm Password : </label><br />
+            <InputText type="Password" id="Password" @bind-Value="UserProfile.Password"></InputText><br />
         </div>
         <div class="alert alert-secondary mt-4" style="border: thin solid green; margin: 5px">
             <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
@@ -37,9 +45,10 @@
             <label for="Address.City">City :</label><br />
             <InputText id="Address.City" @bind-Value="UserProfile.Address.City"></InputText><br /><br />
 
+            <button type="submit" class="btn btn-primary">Register</button>
         </div>
+
     </EditForm>
-    <button type="submit" class="btn btn-primary">Register</button>
 </div>
 
 
@@ -47,84 +56,29 @@
     [Parameter]
     public string Title { get; set; }
 
-    private UsersProfile? UserProfile { get; set; } = new UsersProfile();
+    private UsersProfile UserProfile { get; set; } = new UsersProfile();
 
-    private Address? Address { get; set; } = new Address();
 
     private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
 
+    protected override void OnInitialized()
+    {
+        users = DataService.LoadUser();
+    }
 
     private void SaveUser()
     {
-        if (UserProfile != null)
+        if (UserProfile == null)
         {
-            users.Add(UserProfile);
-            DataService.SaveUser(users);
-            Console.WriteLine("User saved successfully.");
+            Console.WriteLine("UserProfile is null. Cannot save user.");
+            return;
         }
+
+        users.Add(UserProfile);
+        DataService.SaveUser(users);
+        Console.WriteLine("User logged in successfully.");
+
+        // Clear the input after saving
+        UserProfile = new UsersProfile();
     }
 }
-
-    @*     <EditForm Model="UserProfile" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    private void HandleValidSubmit()
-    {
-    Console.WriteLine("Form submitted successfully.");
-    } *@
-
-
-    @* <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
-    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
-    <strong>@Title</strong>
-
-    <span class="text-nowrap">
-    <br />
-    Please enter your First Name:
-    <br />
-    <input type="text" @bind="UserProfile.FirstName" />
-    <br />
-    Please enter your Last Name:
-    <br />
-    <input type="text" @bind="UserProfile.LastName" />
-    <br />
-    Please enter your Email:
-    <br />
-    <input type="email" @bind="UserProfile.Email" />
-    <br />
-    Please enter a Password
-    <br />
-    <input type="password" @bind="UserProfile.Password" />
-    <br />
-    Please comfirm your Password
-    <br />
-    <input type="password" @bind="UserProfile.Password" />
-    <br />
-    -------------------------------------
-    <br />
-    Please enter your Address
-
-    <br />
-    -------------------------------------
-    <br />
-    Streets Name:
-    <br />
-    <input type="text" @bind="UserProfile.Address.StreetsName" />
-    <br />
-    House number:
-    <br />
-    <input type="text" @bind="UserProfile.Address.Housenumber" />
-    <br />
-    Postal code:
-    <br />
-    <input type="text" @bind="UserProfile.Address.PostalCode" />
-    <br />
-    City:
-    <br />
-    <input type="text" @bind="UserProfile.Address.City" />
-    <br />
-    <br />
-    </span>
-    </div>
-    *@

@@ -19,6 +19,7 @@
     </EditForm>
 </div>
 
+
 @code {
     private SearchModel searchModel = new SearchModel();
 
@@ -39,69 +40,8 @@
     {
         public string Query { get; set; } = string.Empty;
     }
-}
-
-@*<EditForm Model="recipe">
-
-    <label for="recipe">Search any recipe Here!!!</label>
-    <InputText id="recipe" @bind-Value="recipe.RecipeName"></InputText>
-    <button type="submit" class="btn btn-primary" @onclick="SearchOnGoogle" >Search</button>
 
 
-</EditForm>
-
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-
-
-
-<button @onclick="RedirectToRecipe">Click to search for your recipe in English!</button>
-<br />
-<button @onclick="RedirectToRecipe1">Click to search for your recipe in German!</button>
-<br />
-<button @onclick="RedirectToRecipe2">Click to search for your recipe in Greek!</button>
-<br />
-
-@code {
     private Recipe recipe = new Recipe();
 
-    private void SearchOnGoogle()
-    {
-        NavigationManager.NavigateTo("https://www.google.com/");
-    }
-
-    private void RedirectToRecipe()
-    {
-        NavigationManager.NavigateTo("https://www.allrecipes.com/");
-    }
-
-    private void RedirectToRecipe1()
-    {
-        NavigationManager.NavigateTo("https://www.chefkoch.de/");
-    }
-
-    private void RedirectToRecipe2()
-    {
-        NavigationManager.NavigateTo("https://akispetretzikis.com/el");
-    }
-
-    [Inject]
-    private NavigationManager NavigationManager { get; set; }
-
 }
- *@

@@ -6,7 +6,7 @@ namespace Recipe_Finder
     public class UsersProfile
     {
         private string _firstname;
-        [Required(ErrorMessage = "First name is required.")]
+        [Required]
         public string FirstName
         {
             get { return _firstname; }
@@ -14,7 +14,7 @@ namespace Recipe_Finder
         }
 
         private string _lastName;
-        [Required(ErrorMessage = "Last name is required.")]
+        [Required]
         public string LastName
         {
             get { return _lastName; }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfUsersProfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UsersProfile>
+    <Address />
+    <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <FirstName>asd</FirstName>
+    <LastName>qwdqdw</LastName>
+    <Email>qwd@assd.dew</Email>
+    <Password>asda</Password>
+    <Address>
+      <StreetsName>asd</StreetsName>
+      <Housenumber>qdq</Housenumber>
+      <City>qwdw</City>
+      <PostalCode>qwd</PostalCode>
+    </Address>
+    <FavoriteRecipes />
+  </UsersProfile>
+</ArrayOfUsersProfile>
