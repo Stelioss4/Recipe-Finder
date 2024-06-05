@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<Content Remove="Components\Recipe.razor" />
+		<Content Remove="Components\SearchRecipe.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -20,16 +21,22 @@
 
 	<ItemGroup>
 		<_ContentIncludedByDefault Remove="Components\Recipe.razor" />
+		<_ContentIncludedByDefault Remove="Components\SearchRecipe.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="Components\Layout\MainLayout.razor" />
 		<None Include="Components\Layout\NavMenu.razor" />
+		<None Include="Components\SearchRecipe.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AngleSharp" Version="1.1.2" />
 		<PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\SearchRecipe.razor" />
 	</ItemGroup>
 
 </Project>

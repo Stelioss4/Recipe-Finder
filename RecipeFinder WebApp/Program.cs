@@ -3,11 +3,20 @@ using RecipeFinder_WebApp.Components;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<DataService>()
     .AddSingleton<User>();
+
+// Read the API key from configuration
+var apiKey = builder.Configuration["Spoonacular:a1f6b23d83fb40ec877e2e2b9adcfe49"];
+
+// Register HttpClient with base address for Spoonacular API
+builder.Services.AddHttpClient("SpoonacularClient", client =>
+{
+    client.BaseAddress = new Uri("https://api.spoonacular.com/");
+    client.DefaultRequestHeaders.Add("a1f6b23d83fb40ec877e2e2b9adcfe49", apiKey); // Adding API key as a default header
+});
 
 var app = builder.Build();
 
@@ -20,7 +29,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
 

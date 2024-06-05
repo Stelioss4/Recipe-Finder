@@ -1,10 +1,13 @@
-﻿ @page "/"
+﻿@page "/"
+@using System.Text.Json
+@inject IHttpClientFactory ClientFactory
+
 <PageTitle>Home</PageTitle>
 
-<h1>Recipe Finder! ! !</h1>
+<h1>Recipe Finder!</h1>
 
 <div>
-    <EditForm Model="searchModel" OnValidSubmit="SearchOnGoogle">
+    <EditForm Model="searchModel" OnValidSubmit="SearchForRecipe">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -15,10 +18,24 @@
         </div>
         <br />
 
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button class="btn btn-outline-primary " @onclick="SearchForRecipe">Search For Recipe</button>
     </EditForm>
 </div>
-
+@if (recipes != null && recipes.Any())
+{
+    @foreach (var recipe in recipes)
+    {
+        <div>
+        <h4>@recipe.RecipeName</h4>
+           <img src="@recipe.Image" alt="Recipe Image" />
+           <p>@recipe.CookingInstructions</p>
+        </div>
+    }
+}
+else if (recipes != null)
+{
+    <p>No recipes found</p>
+}
 
 @code {
     private SearchModel searchModel = new SearchModel();
@@ -26,22 +43,64 @@
     [Inject]
     private NavigationManager NavigationManager { get; set; }
 
-    private void SearchOnGoogle()
-    {
-        if (!string.IsNullOrEmpty(searchModel.Query))
-        {
-            var encodedQuery = Uri.EscapeDataString(searchModel.Query);
-            var googleSearchUrl = $"https://www.google.com/search?q={encodedQuery}";
-            NavigationManager.NavigateTo(googleSearchUrl);
-        }
-    }
-
     public class SearchModel
     {
         public string Query { get; set; } = string.Empty;
     }
 
+    private Recipe recipe { get; set; } = new Recipe();
+    private List<Recipe> recipes { get; set; } = new List<Recipe>();
 
-    private Recipe recipe = new Recipe();
+    private async Task SearchForRecipe()
+    {
+        var client = ClientFactory.CreateClient("SpoonacularClient");
+        string apiKey = "a1f6b23d83fb40ec877e2e2b9adcfe49";
+        string query = searchModel.Query;
+        string requestUrl = $"https://api.spoonacular.com/recipes/complexSearch?query={Uri.EscapeDataString(query)}&apiKey={apiKey}";
+
+        try
+        {
+            var response = await client.GetAsync(requestUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                recipes = apiResponse.Results;
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode}");
+                recipes = new List<Recipe>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            recipes = new List<Recipe>();
+        }
+
+        StateHasChanged();
+    }
+
+    public class ApiResponse
+    {
+        public List<Recipe> Results { get; set; }
+    }
+
+  
+
+
+
+    // private void SearchOnGoogle()
+
+    // {
+    //     if (!string.IsNullOrEmpty(searchModel.Query))
+    //     {
+    //         var encodedQuery = Uri.EscapeDataString(searchModel.Query);
+    //         var googleSearchUrl = $"https://www.google.com/search?q={encodedQuery}";
+    //         NavigationManager.NavigateTo(googleSearchUrl);
+    //     }
+    // }
+
 
 }
