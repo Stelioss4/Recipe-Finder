@@ -103,7 +103,7 @@
             <label for="searchQuery">Search recipe by Name : </label><br />
             <InputText id="searchQuery" class="form-control" @bind-Value="recipe.RecipeName"></InputText><br />
             <label for="searchQuery">Search recipe by Cuisine Type : </label><br />
-            <InputText id="searchQuery" class="form-control" @bind-Value="recipe.CuisineType"></InputText><br />
+            <InputText id="cuisine" class="form-control" @bind-Value="recipe.CuisineType"></InputText><br />
             <br />
             <label>Difficulty Level:</label><br />
             <InputSelect @bind-Value="recipe.DifficultyLevel" class="form-control">
@@ -138,7 +138,7 @@
         </div>
     }
 }
-else if (searchResults != null)
+else if (searchResults == null)
 {
     <p>No recipes found</p>
 }
@@ -155,10 +155,10 @@ else if (searchResults != null)
     private async Task SearchForRecipe()
     {
         var client = HttpClientFactory.CreateClient("SpoonacularClient");
-        string apiKey = "YOUR_SPOONACULAR_API_KEY";
-        string query = recipe.RecipeName;
+        string apiKey = "a1f6b23d83fb40ec877e2e2b9adcfe49";
+        string searchQuery = recipe.RecipeName;
         string cuisine = recipe.CuisineType;
-        string requestUrl = $"https://api.spoonacular.com/recipes/complexSearch?query={Uri.EscapeDataString(query)}&cuisine={Uri.EscapeDataString(cuisine)}&apiKey={apiKey}";
+        string requestUrl = $"https://api.spoonacular.com/recipes/complexSearch?query={Uri.EscapeDataString(searchQuery)}&cuisine={Uri.EscapeDataString(cuisine)}&apiKey={apiKey}";
 
         try
         {

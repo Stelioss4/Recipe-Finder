@@ -1,74 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfUsersProfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <UsersProfile>
+    <FirstName>stelios</FirstName>
+    <LastName>boursssa</LastName>
+    <Email>stel.bo@gmail.com</Email>
+    <Password>123456654321</Password>
     <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <FirstName>asd</FirstName>
-    <LastName>qwdqdw</LastName>
-    <Email>qwd@assd.dew</Email>
-    <Password>asda</Password>
-    <Address>
-      <StreetsName>asd</StreetsName>
-      <Housenumber>qdq</Housenumber>
-      <City>qwdw</City>
-      <PostalCode>qwd</PostalCode>
-    </Address>
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <Email>qwd@assd.dew</Email>
-    <Password>98798798798dbdb</Password>
-    <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <Email>qwd@assd.dew</Email>
-    <Password>32132132131</Password>
-    <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <Address />
-    <FavoriteRecipes />
-    <WeeklyPlan />
-  </UsersProfile>
-  <UsersProfile>
-    <FirstName>asd</FirstName>
-    <LastName>qwdqdw</LastName>
-    <Email>ste@strim.com</Email>
-    <Password>kajsyhd</Password>
-    <Address>
-      <StreetsName>streetts</StreetsName>
-      <Housenumber>45</Housenumber>
-      <City>longtown</City>
-      <PostalCode>131213</PostalCode>
-    </Address>
     <FavoriteRecipes />
   </UsersProfile>
 </ArrayOfUsersProfile>

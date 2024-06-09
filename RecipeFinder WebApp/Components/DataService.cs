@@ -18,12 +18,12 @@ namespace RecipeFinder_WebApp.Components
         }
 
         public UsersProfile? UserProfile { get; set; } = new UsersProfile();
-        
+
         public Address Address { get; set; } = new Address();
-        
+
         public List<UsersProfile> users { get; set; } = new List<UsersProfile>();
 
-        public List<UsersProfile> usersProfiles { get; set; } 
+        public List<UsersProfile> usersProfiles { get; set; }
 
         public List<Recipe> Recipies { get; set; }
 
@@ -71,23 +71,6 @@ namespace RecipeFinder_WebApp.Components
         //}
 
 
-        public static void SaveUser(List<UsersProfile> users)
-        {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
-                using (FileStream file = File.Create(PATH))
-                {
-                    serializer.Serialize(file, users);
-                }
-                Console.WriteLine("Users saved successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while saving users: {ex.Message}");
-            }
-        }
-
         public static List<UsersProfile> LoadUser()
         {
             List<UsersProfile> users = new List<UsersProfile>();
@@ -113,6 +96,23 @@ namespace RecipeFinder_WebApp.Components
             }
 
             return users;
+        }
+
+        public static void SaveUser(List<UsersProfile> users)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
+                using (FileStream file = File.Create(PATH))
+                {
+                    serializer.Serialize(file, users);
+                }
+                Console.WriteLine("Users saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while saving users: {ex.Message}");
+            }
         }
 
 

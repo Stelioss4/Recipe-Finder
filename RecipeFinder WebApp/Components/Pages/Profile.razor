@@ -1,0 +1,19 @@
+﻿@page "/profile"
+<h3>User Profile</h3>
+
+<p>Welcome, @UserProfile.FirstName @UserProfile.LastName!</p>
+
+@code {
+    private List<UsersProfile> Users { get; set; } = DataService.LoadUser();
+
+    private UsersProfile UserProfile { get; set; } = new UsersProfile();
+
+    protected override void OnInitialized()
+    {
+        List<UsersProfile> Users = DataService.LoadUser();
+        if (Users != null && Users.Count > 0)
+        {
+            UserProfile = Users[0]; // Assign the first user profile or use logic to find the correct one
+        }
+    }
+}

@@ -32,7 +32,7 @@
         </div>
     }
 }
-else if (recipes != null)
+else if (recipes == null)
 {
     <p>No recipes found</p>
 }
@@ -55,8 +55,8 @@ else if (recipes != null)
     {
         var client = ClientFactory.CreateClient("SpoonacularClient");
         string apiKey = "a1f6b23d83fb40ec877e2e2b9adcfe49";
-        string query = searchModel.Query;
-        string requestUrl = $"https://api.spoonacular.com/recipes/complexSearch?query={Uri.EscapeDataString(query)}&apiKey={apiKey}";
+        string searchQuery = searchModel.Query;
+        string requestUrl = $"https://api.spoonacular.com/recipes/complexSearch?searchQuery={Uri.EscapeDataString(searchQuery)}&apiKey={apiKey}";
 
         try
         {

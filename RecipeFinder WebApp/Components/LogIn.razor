@@ -3,8 +3,9 @@
 @using Recipe_Finder
 @using System.Xml.Serialization
 @using System.IO
+@inject NavigationManager Navigation
 
-<EditForm Model="UserProfile" OnSubmit="SaveUser">
+<EditForm Model="UserProfile" OnSubmit="LogInUser">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
@@ -38,19 +39,18 @@
         users = DataService.LoadUser();
     }
 
-    private void SaveUser()
+    private void LogInUser()
     {
-        if (UserProfile == null)
+        var user = users.FirstOrDefault(u => u.Email == UserProfile.Email && u.Password == UserProfile.Password);
+        if (user != null)
         {
-            Console.WriteLine("UserProfile is null. Cannot save user.");
-            return;
+            Console.WriteLine("User logged in successfully.");
+            Navigation.NavigateTo("/profile"); // Redirect to profile page
         }
-
-        users.Add(UserProfile);
-        DataService.SaveUser(users);
-        Console.WriteLine("User logged in successfully.");
-
-        // Clear the input after saving
-        UserProfile = new UsersProfile();
+        else
+        {
+            Console.WriteLine("Invalid login credentials.");
+        }
     }
+
 }
