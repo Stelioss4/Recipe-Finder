@@ -3,17 +3,35 @@
 
 <p>Welcome, @UserProfile.FirstName @UserProfile.LastName!</p>
 
+<EditForm Model="UserProfile" OnInvalidSubmit="GotoThatSite">
+    <InputSelect @bind-Value="UserProfile.FavoriteRecipes">
+        @foreach(var recipe in recipes)
+        {
+            <option value="recipe.recipeName">@recipe.RecipeName</option>
+        }
+    </InputSelect>
+</EditForm>
+
 @code {
     private List<UsersProfile> Users { get; set; } = DataService.LoadUser();
 
     private UsersProfile UserProfile { get; set; } = new UsersProfile();
+
+    private Recipe recipe { get; set; } = new Recipe();
+
+    private List<Recipe> recipes { get; set; } = new List<Recipe>();
 
     protected override void OnInitialized()
     {
         List<UsersProfile> Users = DataService.LoadUser();
         if (Users != null && Users.Count > 0)
         {
-            UserProfile = Users[0]; // Assign the first user profile or use logic to find the correct one
+            UserProfile = Users[0];
         }
+    }
+
+    private void GotoThatSite()
+    {
+        
     }
 }

@@ -1,93 +1,8 @@
-﻿@* @page "/recipecomponent"
-@using RecipeFinder_WebApp.Components
-
-<PageTitle>recipecomponent</PageTitle>
-
-<h1>Recipe Search</h1>
-
-<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
-    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
-    <strong>@Title</strong>
-    <EditForm Model="recipe" OnValidSubmit="SearchOnGoogle">
-
-        <span class="text-nowrap">
-            <br />
-            <label for="searchQuery">Search recipe by Name : </label><br />
-            <InputText id="searchQuery" class="form-control" @bind-Value="recipe.RecipeName"></InputText><br />
-            <label for="searchQuery">Search recipe by Cuisine Type : </label><br />
-            <InputText id="searchQuery" class="form-control" @bind-Value="recipe.CuisineType"></InputText><br />
-            <br />
-            <label>Difficulty Level:</label><br />
-            <InputSelect @bind-Value="recipe.DifficultyLevel" class="form-control">
-                @foreach (var level in Enum.GetValues(typeof(DifficultyLevel)))
-                {
-                    <option value="@level">@level</option>
-                }
-            </InputSelect><br />
-
-            <label>Occasion Tags:</label><br />
-            <InputSelect @bind-Value="recipe.OccasionTags" class="form-control">
-                @foreach (var tag in Enum.GetValues(typeof(OccasionTags)))
-                {
-                    <option value="@tag">@tag</option>
-                }
-            </InputSelect><br />
-        </span>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </EditForm>
-</div>
-
-
-<SearchRecipe Recipes="searchResults"></SearchRecipe>
-
-@code {
-    [Parameter]
-    public string Title { get; set; }
-    private Recipe_Finder.Recipe recipe { get; set; } = new Recipe_Finder.Recipe();
-    private List<Recipe_Finder.Recipe> searchResults { get; set; } = new List<Recipe_Finder.Recipe>();
-
-    private SearchModel searchModel = new SearchModel();
-
-    [Inject]
-    private NavigationManager NavigationManager { get; set; }
-
-    private void SearchOnGoogle()
-    {
-        if (!string.IsNullOrEmpty(searchModel.Query))
-        {
-            var encodedQuery = Uri.EscapeDataString(searchModel.Query);
-            var googleSearchUrl = $"https://www.google.com/search?q={encodedQuery}";
-            NavigationManager.NavigateTo(googleSearchUrl);
-        }
-    }
-
-    public class SearchModel
-    {
-        public string Query { get; set; } = string.Empty;
-    }
-
-    private void SearchForRecipe()
-    {
-
-        searchResults = DataService.SearchRecipes(recipe);
-        StateHasChanged();
-    }
-
-
-}
-
-
- *@
-
-
-
-
-
-
-
-@page "/recipecomponent"
+﻿@page "/recipecomponent"
 @using System.Text.Json
+@using HtmlAgilityPack
 @using Recipe_Finder
+@using System.Diagnostics
 
 <PageTitle>Recipe Search</PageTitle>
 
@@ -148,46 +63,36 @@ else if (searchResults == null)
     public string Title { get; set; }
     private Recipe recipe { get; set; } = new Recipe();
     private List<Recipe> searchResults { get; set; } = new List<Recipe>();
-
-    [Inject]
-    private IHttpClientFactory HttpClientFactory { get; set; }
+    private string searchQuery = string.Empty;
 
     private async Task SearchForRecipe()
     {
-        var client = HttpClientFactory.CreateClient("SpoonacularClient");
-        string apiKey = "a1f6b23d83fb40ec877e2e2b9adcfe49";
-        string searchQuery = recipe.RecipeName;
-        string cuisine = recipe.CuisineType;
-        string requestUrl = $"https://api.spoonacular.com/recipes/complexSearch?query={Uri.EscapeDataString(searchQuery)}&cuisine={Uri.EscapeDataString(cuisine)}&apiKey={apiKey}";
+        HtmlWeb web = new HtmlWeb();
+        string searchUrl = $"https://www.allrecipes.com/search?q={Uri.EscapeDataString(searchQuery)}";
+        HtmlDocument document = await web.LoadFromWebAsync(searchUrl);
 
-        try
+        var nodes = document.DocumentNode.SelectNodes("//div[@class='card__detailsContainer-left']");
+        if (nodes != null)
         {
-            var response = await client.GetAsync(requestUrl);
-            if (response.IsSuccessStatusCode)
+            searchResults.Clear();
+            foreach (var node in nodes)
             {
-                var json = await response.Content.ReadAsStringAsync();
-                var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                searchResults = apiResponse.Results;
-            }
-            else
-            {
-                Console.WriteLine($"Error: {response.StatusCode}");
-                searchResults = new List<Recipe>();
+                var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
+                var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
+
+                if (titleNode != null && linkNode != null)
+                {
+                    var recipe = new Recipe
+                        {
+                            RecipeName = titleNode.InnerText.Trim(),
+                            Url = linkNode.GetAttributeValue("href", string.Empty)
+                        };
+                    searchResults.Add(recipe);
+                }
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            searchResults = new List<Recipe>();
-        }
-
-        StateHasChanged();
     }
 
-    public class ApiResponse
-    {
-        public List<Recipe> Results { get; set; }
-    }
 
-   
+
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using Recipe_Finder;
+using System.Text.Json;
 using System.Xml.Serialization;
 
 namespace RecipeFinder_WebApp.Components
@@ -26,6 +27,53 @@ namespace RecipeFinder_WebApp.Components
         public List<UsersProfile> usersProfiles { get; set; }
 
         public List<Recipe> Recipies { get; set; }
+
+        private readonly IHttpClientFactory _clientFactory;
+        private List<Recipe> _cachedRecipes;
+
+        public DataService(IHttpClientFactory clientFactory)
+        {
+            _clientFactory = clientFactory;
+        }
+
+        public async Task<List<Recipe>> SearchForRecipes(string query, string apiKey)
+        {
+            // Check if we have already fetched recipes
+            if (_cachedRecipes != null)
+            {
+                return _cachedRecipes;
+            }
+
+            var client = _clientFactory.CreateClient("SpoonacularClient");
+            string requestUrl = $"recipes/complexSearch?query={Uri.EscapeDataString(query)}&apiKey={apiKey}";
+
+            try
+            {
+                var response = await client.GetAsync(requestUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    _cachedRecipes = apiResponse.Results;
+                    return _cachedRecipes;
+                }
+                else
+                {
+                    Console.WriteLine($"Error: {response.StatusCode}");
+                    return new List<Recipe>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return new List<Recipe>();
+            }
+        }
+
+        public class ApiResponse
+        {
+            public List<Recipe> Results { get; set; }
+        }
 
         public DataService()
         {

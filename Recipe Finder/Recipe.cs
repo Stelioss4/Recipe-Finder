@@ -109,5 +109,14 @@
             set { _reviews = value; }
         }
 
-    }
+		private string _url;
+
+		public string Url
+		{
+			get { return  _url; }
+			set {  _url = value; }
+		}
+
+
+	}
 }

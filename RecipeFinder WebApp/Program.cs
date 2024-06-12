@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using RecipeFinder_WebApp;
 using RecipeFinder_WebApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,15 +10,13 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<DataService>()
     .AddSingleton<User>();
 
-// Read the API key from configuration
-var apiKey = builder.Configuration["Spoonacular:a1f6b23d83fb40ec877e2e2b9adcfe49"];
+// Register ApplicationDbContext with connection string from configuration
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register HttpClient with base address for Spoonacular API
-builder.Services.AddHttpClient("SpoonacularClient", client =>
-{
-    client.BaseAddress = new Uri("https://api.spoonacular.com/");
-    client.DefaultRequestHeaders.Add("a1f6b23d83fb40ec877e2e2b9adcfe49", apiKey); // Adding API key as a default header
-});
+// Register ApplicationDbContext as a scoped service
+builder.Services.AddScoped<ApplicationDbContext>();
+    
 
 var app = builder.Build();
 

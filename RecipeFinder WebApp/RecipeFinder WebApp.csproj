@@ -33,6 +33,11 @@
 	<ItemGroup>
 		<PackageReference Include="AngleSharp" Version="1.1.2" />
 		<PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
+		<PackageReference Include="EntityFrameworkCore.Triggered.Abstractions" Version="3.2.2" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
+		<PackageReference Include="Rayab.ApplicationDbContext" Version="1.2.4" />
 	</ItemGroup>
 
 	<ItemGroup>

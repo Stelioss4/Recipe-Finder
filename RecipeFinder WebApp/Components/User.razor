@@ -1,103 +1,93 @@
-﻿@using Recipe_Finder
-@using System.Xml.Serialization
+﻿@using RecipeFinder_WebApp
+@using Recipe_Finder
 @using System.IO
+@inject ApplicationDbContext DbContext
 @inject NavigationManager Navigation
 
 
-<div class="alert alert-secondary mt-4" style="border: thin solid red; margin: 5px">
-    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+<EditForm Model="UserProfile" OnValidSubmit="RegisterUser" FormName="RegisterForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-    <EditForm Model="UserProfile" OnSubmit="LogInUser">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+    <div>
+        <label for="FirstName">First Name:</label><br />
+        <InputText id="FirstName" @bind-Value="UserProfile.FirstName" />
+        <ValidationMessage For="@(() => UserProfile.FirstName)" />
+    </div>
 
-        <div class="alert alert-secondary mt-4" style="border: thin solid blue; margin: 5px">
-            <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
-            <label for="FirstName">First Name:</label><br />
-            <InputText id="FirstName" @bind-Value="UserProfile.FirstName"></InputText><br />
+    <div>
+        <label for="LastName">Last Name:</label><br />
+        <InputText id="LastName" @bind-Value="UserProfile.LastName"  />
+        <ValidationMessage For="@(() => UserProfile.LastName)" />
+    </div>
 
-            <label for="LastName">Last Name:</label><br />
-            <InputText id="LastName" @bind-Value="UserProfile.LastName"></InputText><br />
+    <div>
+        <label for="Email">Email:</label><br />
+        <InputText id="Email" @bind-Value="UserProfile.Email"/>
+        <ValidationMessage For="@(() => UserProfile.Email)" />
+    </div>
 
-            <label for="Email">Email:</label><br />
-            <InputText type="email" id="Email" @bind-Value="UserProfile.Email"></InputText><br />
+    <div>
+        <label for="Password">Password:</label><br />
+        <InputText type="password" id="Password" @bind-Value="UserProfile.Password" />
+        <ValidationMessage For="@(() => UserProfile.Password)" />
+    </div>
 
-            <label for="ConfirmEmail">Confirm Email:</label><br />
-            <InputText type="email" id="ConfirmEmail" @bind-Value="ConfirmEmail"></InputText><br />
+    <div>
+        <label for="ConfirmPassword">Confirm Password:</label><br />
+        <InputText type="Password" id="ConfirmPassword" @bind-Value="UserProfile.Password"  />
+        <ValidationMessage For="@(() => UserProfile.Password)" />
+    </div>
 
-            <label for="Password">Password:</label><br />
-            <InputText type="password" id="Password" @bind-Value="UserProfile.Password"></InputText><br />
+    <div>
+        <label for="StreetName">Street Name:</label><br />
+        <InputText id="StreetName" @bind-Value="UserProfile.Address.StreetsName" />
+        <ValidationMessage For="@(() => UserProfile.Address.StreetsName)" />
+    </div>
 
-            <label for="ConfirmPassword">Confirm Password:</label><br />
-            <InputText type="password" id="ConfirmPassword" @bind-Value="ConfirmPassword"></InputText><br />
-        </div>
+    <div>
+        <label for="HouseNumber">House Number:</label><br />
+        <InputText id="HouseNumber" @bind-Value="UserProfile.Address.Housenumber"/>
+        <ValidationMessage For="@(() => UserProfile.Address.Housenumber)" />
+    </div>
 
-        <label for="Address">Address:</label><br />
-        <div class="alert alert-secondary mt-4" style="border: thin solid green; margin: 5px">
-            <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <div>
+        <label for="PostalCode">Postal Code:</label><br />
+        <InputText id="PostalCode" @bind-Value="UserProfile.Address.PostalCode"/>
+        <ValidationMessage For="@(() => UserProfile.Address.PostalCode)" />
+    </div>
 
-            <label for="StreetsName">Street Name:</label><br />
-            <InputText id="StreetsName" @bind-Value="UserProfile.Address.StreetsName"></InputText><br />
+    <div>
+        <label for="City">City:</label><br />
+        <InputText id="City" @bind-Value="UserProfile.Address.City" />
+        <ValidationMessage For="@(() => UserProfile.Address.City)" />
+    </div>
 
-            <label for="Housenumber">House Number:</label><br />
-            <InputText id="Housenumber" @bind-Value="UserProfile.Address.Housenumber"></InputText><br />
-
-            <label for="PostalCode">Postal Code:</label><br />
-            <InputText id="PostalCode" @bind-Value="UserProfile.Address.PostalCode"></InputText><br />
-
-            <label for="City">City:</label><br />
-            <InputText id="City" @bind-Value="UserProfile.Address.City"></InputText><br /><br />
-
-            <button type="submit" class="btn btn-primary">Register</button>
-        </div>
-
-    </EditForm>
-</div>
-
+    <button type="submit">Register</button>
+</EditForm>
 @code {
     [Parameter]
     public string Title { get; set; }
 
     private UsersProfile UserProfile { get; set; } = new UsersProfile();
-    private string ConfirmEmail { get; set; }
-    private string ConfirmPassword { get; set; }
+    private Address Address { get; set; } = new Address();
+
 
     private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
 
-    protected override void OnInitialized()
+    private async Task RegisterUser()
     {
-        users = DataService.LoadUser();
-    }
+        // Add user to the database
+        DbContext.UsersProfiles.Add(UserProfile);
+        await DbContext.SaveChangesAsync();
 
-    private void LogInUser()
-    {
-        var user = users.FirstOrDefault(u => u.Email == UserProfile.Email && u.Password == UserProfile.Password);
-        if (user != null)
-        {
-            Console.WriteLine("User logged in successfully.");
-            Navigation.NavigateTo("/profile"); // Redirect to profile page
-        }
-        else
-        {
-            Console.WriteLine("Invalid login credentials.");
-        }
-    }
+        Navigation.NavigateTo("/profile");
 
-    private void SaveUser()
-    {
-        if (UserProfile == null || UserProfile.Email != ConfirmEmail || UserProfile.Password != ConfirmPassword)
-        {
-            Console.WriteLine("Validation failed. Cannot save user.");
-            return;
-        }
+        // Reset form
+        // UserProfile = new UsersProfile();
+        // Console.WriteLine("User registered successfully.");
 
-        users.Add(UserProfile);
-        DataService.SaveUser(users);
-        Console.WriteLine("User registered successfully.");
-
-        // Clear the input after saving
-        UserProfile = new UsersProfile();
-        ConfirmEmail = string.Empty;
-        ConfirmPassword = string.Empty;
     }
 }
+
+

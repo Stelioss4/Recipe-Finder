@@ -5,7 +5,7 @@
 @using System.IO
 @inject NavigationManager Navigation
 
-<EditForm Model="UserProfile" OnSubmit="LogInUser">
+<EditForm Model="UserProfile" OnValidSubmit="LogInUser" FormName="LogInForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
@@ -41,16 +41,16 @@
 
     private void LogInUser()
     {
-        var user = users.FirstOrDefault(u => u.Email == UserProfile.Email && u.Password == UserProfile.Password);
+        UsersProfile user = users.FirstOrDefault(u => u.Email == UserProfile.Email && u.Password == UserProfile.Password);
         if (user != null)
         {
             Console.WriteLine("User logged in successfully.");
-            Navigation.NavigateTo("/profile"); // Redirect to profile page
         }
         else
         {
             Console.WriteLine("Invalid login credentials.");
         }
+            Navigation.NavigateTo("/profile"); // Redirect to profile page
     }
 
 }
