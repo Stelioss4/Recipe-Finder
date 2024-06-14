@@ -3,7 +3,7 @@
 @using HtmlAgilityPack
 @using Recipe_Finder
 @using System.Diagnostics
-
+@inject ScrapperService Scrap
 <PageTitle>Recipe Search</PageTitle>
 
 <h1>Recipe Search</h1>
@@ -11,7 +11,7 @@
 <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
-    <EditForm Model="recipe" OnValidSubmit="SearchForRecipe">
+    <EditForm Model="recipe" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
 
         <span class="text-nowrap">
             <br />
@@ -40,9 +40,9 @@
     </EditForm>
 </div>
 
-@if (searchResults != null && searchResults.Any())
+@if (recipes != null && recipes.Any())
 {
-    @foreach (var result in searchResults)
+    @foreach (var result in recipes)
     {
         <div>
             <h4>@result.RecipeName</h4>
@@ -53,7 +53,7 @@
         </div>
     }
 }
-else if (searchResults == null)
+else if (recipes == null)
 {
     <p>No recipes found</p>
 }
@@ -62,35 +62,12 @@ else if (searchResults == null)
     [Parameter]
     public string Title { get; set; }
     private Recipe recipe { get; set; } = new Recipe();
-    private List<Recipe> searchResults { get; set; } = new List<Recipe>();
+    private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private string searchQuery = string.Empty;
 
-    private async Task SearchForRecipe()
+      private async Task SearchForRecipe()
     {
-        HtmlWeb web = new HtmlWeb();
-        string searchUrl = $"https://www.allrecipes.com/search?q={Uri.EscapeDataString(searchQuery)}";
-        HtmlDocument document = await web.LoadFromWebAsync(searchUrl);
-
-        var nodes = document.DocumentNode.SelectNodes("//div[@class='card__detailsContainer-left']");
-        if (nodes != null)
-        {
-            searchResults.Clear();
-            foreach (var node in nodes)
-            {
-                var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
-                var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
-
-                if (titleNode != null && linkNode != null)
-                {
-                    var recipe = new Recipe
-                        {
-                            RecipeName = titleNode.InnerText.Trim(),
-                            Url = linkNode.GetAttributeValue("href", string.Empty)
-                        };
-                    searchResults.Add(recipe);
-                }
-            }
-        }
+        recipes = await Scrap.Scrapping(searchQuery, html);
     }
 
 

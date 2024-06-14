@@ -1,4 +1,7 @@
-﻿namespace Recipe_Finder
+﻿using HtmlAgilityPack;
+
+
+namespace Recipe_Finder
 {
     internal class Program
     {

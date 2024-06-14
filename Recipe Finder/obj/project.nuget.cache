@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Ibubpi3Rzes=",
+  "dgSpecHash": "loFk96Bt3Oo=",
   "success": true,
   "projectFilePath": "C:\\Users\\PC\\Desktop\\RecipeFinder original\\Recipe Finder\\Recipe Finder.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\PC\\.nuget\\packages\\htmlagilitypack\\1.11.61\\htmlagilitypack.1.11.61.nupkg.sha512"
+  ],
   "logs": []
 }

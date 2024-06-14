@@ -9,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<DataService>()
     .AddSingleton<User>();
+builder.Services.AddSingleton<ScrapperService>();
 
 // Register ApplicationDbContext with connection string from configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
