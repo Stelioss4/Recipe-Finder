@@ -8,7 +8,7 @@ namespace RecipeFinder_WebApp.Components
 {
     public class ScrapperService
     {
-        public async Task<List<Recipe>> Scrapping(string searchQuery, HttpResponseMessage html)
+        public async Task<List<Recipe>> Scrapping(string searchQuery)
         {
             List<Recipe> recipes = new List<Recipe>();
 
@@ -17,7 +17,7 @@ namespace RecipeFinder_WebApp.Components
                 HtmlWeb web = new HtmlWeb();
                 string searchUrl = "https://www.allrecipes.com/";
                 var httpClient = new HttpClient();
-                html = await httpClient.GetAsync(searchUrl);
+                var html = await httpClient.GetStringAsync(searchUrl);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);

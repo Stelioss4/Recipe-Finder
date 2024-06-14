@@ -3,7 +3,9 @@
 @using HtmlAgilityPack
 @using Recipe_Finder
 @using System.Diagnostics
+@using RecipeFinder_WebApp.Components
 @inject ScrapperService Scrap
+
 <PageTitle>Recipe Search</PageTitle>
 
 <h1>Recipe Search</h1>
@@ -65,9 +67,16 @@ else if (recipes == null)
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private string searchQuery = string.Empty;
 
-      private async Task SearchForRecipe()
+    private async Task SearchForRecipe()
     {
-        recipes = await Scrap.Scrapping(searchQuery, html);
+        if (!string.IsNullOrEmpty(searchQuery))
+        {
+            recipes = await Scrap.Scrapping(searchQuery);
+            if (recipes != null && recipes.Count > 0)
+            {
+                recipe = recipes.First(); // Display the first recipe's image
+            }
+        }
     }
 
 
