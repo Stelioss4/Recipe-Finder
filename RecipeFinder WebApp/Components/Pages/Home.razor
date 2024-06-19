@@ -1,8 +1,6 @@
-﻿@page "/"
-@using System.Text.Json
+﻿@* @page "/"
 @using HtmlAgilityPack
 @using Recipe_Finder
-@using RecipeFinder_WebApp.Components
 @inject ScrapperService Scrap
 
 <PageTitle>Home</PageTitle>
@@ -15,7 +13,7 @@
 }
 
 <div>
-    <EditForm Model="@searchQuery" OnValidSubmit="@SearchForRecipe" FormName="RecipeForm">
+    <EditForm Model="searchQuery" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -47,17 +45,76 @@
 }
 else if (!string.IsNullOrEmpty(searchQuery))
 {
-    <p>No recipes found for "@searchQuery".</p>
+    <p>No results found for "@searchQuery".</p>
 }
 
 @code {
     private Recipe recipe { get; set; } = new Recipe();
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
-
     private string searchQuery = string.Empty;
 
     private async Task SearchForRecipe()
     {
         recipes = await Scrap.Scrapping(searchQuery);
+    }
+}
+ *@
+
+
+
+
+
+@page "/"
+@using HtmlAgilityPack
+@using Recipe_Finder
+@inject ScrapperService Scrap
+
+<PageTitle>Home</PageTitle>
+
+<h1>Recipe Finder!</h1>
+
+<div>
+    <EditForm Model="@searchQuery" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="RecipeName">Search any recipe here! :</label>
+            <br />
+            <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search Recipe!!!" />
+        </div>
+        <br />
+
+        <button class="btn btn-outline-primary" type="submit">Search For Recipe</button>
+    </EditForm>
+</div>
+
+@if (recipes.Count > 0)
+{
+    <ul>
+        @foreach (var rec in recipes)
+        {
+            <li>
+                <a href="@rec.Url" target="_blank">@rec.RecipeName</a>
+                @if (!string.IsNullOrEmpty(rec.Image))
+                {
+                    <img src="@rec.Image" alt="Recipe Image" style="width: 100px; height: 100px;" />
+                }
+            </li>
+        }
+    </ul>
+}
+else if (!string.IsNullOrEmpty(searchQuery))
+{
+    <p>No results found for "@searchQuery".</p>
+}
+
+@code {
+    private List<Recipe> recipes { get; set; } = new List<Recipe>();
+    private string searchQuery = string.Empty;
+
+    private async Task SearchForRecipe()
+    {
+        recipes = await Scrap.ScrappingOnChefKoch(searchQuery);
     }
 }

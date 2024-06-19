@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.EntityFrameworkCore;
 using RecipeFinder_WebApp;
 using RecipeFinder_WebApp.Components;
@@ -10,6 +11,10 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<DataService>()
     .AddSingleton<User>();
 builder.Services.AddSingleton<ScrapperService>();
+builder.Services.AddScoped<UserService>();
+
+//builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("UsersProfileDBConnection")));
 
 // Register ApplicationDbContext with connection string from configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -17,7 +22,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Register ApplicationDbContext as a scoped service
 builder.Services.AddScoped<ApplicationDbContext>();
-    
+
+builder.Services.Configure<CircuitOptions>(options =>
+{
+    options.DetailedErrors = builder.Configuration.GetValue<bool>("DetailedErrors");
+});
+
+
 
 var app = builder.Build();
 

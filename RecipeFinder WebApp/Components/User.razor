@@ -3,6 +3,7 @@
 @using System.IO
 @inject ApplicationDbContext DbContext
 @inject NavigationManager Navigation
+@inject UserService UserServ
 
 
 <EditForm Model="UserProfile" OnValidSubmit="RegisterUser" FormName="RegisterForm">
@@ -75,19 +76,39 @@
 
     private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
 
+    private string ConfirmPassword { get; set; }
+
     private async Task RegisterUser()
     {
-        // Add user to the database
-        DbContext.UsersProfiles.Add(UserProfile);
-        await DbContext.SaveChangesAsync();
+        // Check password confirmation
+        if (UserProfile.Password != ConfirmPassword)
+        {
+            Console.WriteLine("Passwords do not match.");
+            return;
+        }
 
-        Navigation.NavigateTo("/profile");
+        try
+        {
+            DbContext.UsersProfiles.Add(UserProfile);
+            await DbContext.SaveChangesAsync();
+
+            Navigation.NavigateTo("/profile");
+            Console.WriteLine("User registered successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
 
         // Reset form
-        // UserProfile = new UsersProfile();
-        // Console.WriteLine("User registered successfully.");
-
+        UserProfile = new UsersProfile
+            {
+                Address = new Address()
+            };
+        ConfirmPassword = string.Empty;
     }
 }
+
+
 
 

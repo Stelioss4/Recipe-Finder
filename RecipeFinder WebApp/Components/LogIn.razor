@@ -4,6 +4,8 @@
 @using System.Xml.Serialization
 @using System.IO
 @inject NavigationManager Navigation
+@inject ApplicationDbContext DbContext
+
 
 <EditForm Model="UserProfile" OnValidSubmit="LogInUser" FormName="LogInForm">
     <DataAnnotationsValidator />
@@ -34,10 +36,6 @@
 
     private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
 
-    protected override void OnInitialized()
-    {
-        users = DataService.LoadUser();
-    }
 
     private void LogInUser()
     {

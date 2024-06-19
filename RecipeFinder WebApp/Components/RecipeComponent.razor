@@ -71,7 +71,7 @@ else if (recipes == null)
     {
         if (!string.IsNullOrEmpty(searchQuery))
         {
-            recipes = await Scrap.Scrapping(searchQuery);
+            recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
             if (recipes != null && recipes.Count > 0)
             {
                 recipe = recipes.First(); // Display the first recipe's image

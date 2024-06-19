@@ -2,35 +2,38 @@
 using Recipe_Finder;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RecipeFinder_WebApp.Components
 {
     public class ScrapperService
     {
-        public async Task<List<Recipe>> Scrapping(string searchQuery)
+        public async Task<List<Recipe>> ScrappingOnAllRecipe(string searchQuery)
         {
             List<Recipe> recipes = new List<Recipe>();
 
             try
             {
                 HtmlWeb web = new HtmlWeb();
-                string searchUrl = "https://www.allrecipes.com/";
+                string searchUrl = $"https://www.allrecipes.com/search?q={Uri.EscapeDataString(searchQuery)}";
                 var httpClient = new HttpClient();
                 var html = await httpClient.GetStringAsync(searchUrl);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                // Select nodes containing recipe details
-                var nodes = document.DocumentNode.SelectNodes("//input[@class='mntl-search-form--open__search-input']");
-                if (nodes != null)
+                // Select nodes containing recipe details               
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"searchTemplate_1-0\"]/body");
+
+                var resultNodes = listNode.ChildNodes;
+                if (listNode != null)
                 {
-                    foreach (var node in nodes)
+                    foreach (var node in resultNodes)
                     {
-                        var titleNode = node.SelectSingleNode(".//span[@class='card__title-text']");
-                        var linkNode = node.SelectSingleNode(".//span[@class='link__wrapper']");
-                        var imageNode = node.SelectSingleNode(".//img");
+                        var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
+                        var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
+                        var imageNode = node.SelectSingleNode(".//img[@class='card__img']");
 
                         if (titleNode != null && linkNode != null)
                         {
@@ -53,4 +56,5 @@ namespace RecipeFinder_WebApp.Components
             return recipes;
         }
     }
+
 }
