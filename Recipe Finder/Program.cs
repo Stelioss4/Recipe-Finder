@@ -1,15 +1,12 @@
 ﻿using HtmlAgilityPack;
 
-
 namespace Recipe_Finder
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            TestData.RecipeList();
 
-            TestData.MarketInformation();
         }
     }
 }

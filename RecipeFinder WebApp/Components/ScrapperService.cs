@@ -4,9 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace RecipeFinder_WebApp.Components
+namespace RecipeFinder_WebApp
 {
     public class ScrapperService
     {
@@ -16,7 +15,6 @@ namespace RecipeFinder_WebApp.Components
 
             try
             {
-                HtmlWeb web = new HtmlWeb();
                 string searchUrl = $"https://www.allrecipes.com/search?q={Uri.EscapeDataString(searchQuery)}";
                 var httpClient = new HttpClient();
                 var html = await httpClient.GetStringAsync(searchUrl);
@@ -24,29 +22,44 @@ namespace RecipeFinder_WebApp.Components
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                // Select nodes containing recipe details               
-                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"searchTemplate_1-0\"]/body");
+                var listNode = document.DocumentNode.SelectSingleNode("//div[@id='mntl-search-results__content']");
 
-                var resultNodes = listNode.ChildNodes;
                 if (listNode != null)
                 {
-                    foreach (var node in resultNodes)
-                    {
-                        var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
-                        var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
-                        var imageNode = node.SelectSingleNode(".//img[@class='card__img']");
+                    var resultNodes = listNode.SelectNodes(".//div[contains(@class, 'card__detailsContainer')]");
 
-                        if (titleNode != null && linkNode != null)
+                    if (resultNodes != null)
+                    {
+                        foreach (var node in resultNodes)
                         {
-                            var recipe = new Recipe
+                            var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
+                            var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
+                            var imageNode = node.SelectSingleNode(".//img[@class='card__img']");
+
+                            if (titleNode != null && linkNode != null)
                             {
-                                RecipeName = titleNode.InnerText.Trim(),
-                                Url = linkNode.GetAttributeValue("href", string.Empty),
-                                Image = imageNode?.GetAttributeValue("src", string.Empty)
-                            };
-                            recipes.Add(recipe);
+                                var recipe = new Recipe
+                                {
+                                    RecipeName = titleNode.InnerText.Trim(),
+                                    Url = linkNode.GetAttributeValue("href", string.Empty),
+                                    Image = imageNode?.GetAttributeValue("src", string.Empty)
+                                };
+                                recipes.Add(recipe);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Title or link node is null for one of the recipes.");
+                            }
                         }
                     }
+                    else
+                    {
+                        Console.WriteLine("No result nodes found in the list node.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("List node is null. The structure of the page might have changed.");
                 }
             }
             catch (Exception ex)
@@ -57,43 +70,57 @@ namespace RecipeFinder_WebApp.Components
             return recipes;
         }
 
-        public async Task<List<Recipe>> ScrappingOnChefKoch(string searchQuery)
+        public async Task<List<Recipe>> ScrapeRecipesFromChefkoch(string searchQuery)
         {
             List<Recipe> recipes = new List<Recipe>();
 
             try
             {
-                HtmlWeb web = new HtmlWeb();
-                string searchUrl = $"https://www.chefkoch.de/rs/s0/{Uri.EscapeDataString(searchQuery)}";
+                string searchUrl = $"https://www.chefkoch.de/rs/s0/{Uri.EscapeDataString(searchQuery)}/Rezepte.html";
                 var httpClient = new HttpClient();
                 var html = await httpClient.GetStringAsync(searchUrl);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                // Select nodes containing recipe details               
-                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]/div/div[1]/main/section");
+                var listNode = document.DocumentNode.SelectSingleNode("//div[@class='search-list__results']");
 
-                var resultNodes = listNode.ChildNodes;
                 if (listNode != null)
                 {
-                    foreach (var node in resultNodes)
-                    {
-                        var titleNode = node.SelectSingleNode(".//h1[@class='card__title']");
-                        var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
-                        var imageNode = node.SelectSingleNode(".//img[@class='card__img']");
+                    var resultNodes = listNode.SelectNodes(".//article");
 
-                        if (titleNode != null && linkNode != null)
+                    if (resultNodes != null)
+                    {
+                        foreach (var node in resultNodes)
                         {
-                            var recipe = new Recipe
+                            var titleNode = node.SelectSingleNode(".//a[@class='search-list__headline']");
+                            var linkNode = node.SelectSingleNode(".//a[@class='search-list__headline']");
+                            var imageNode = node.SelectSingleNode(".//img[@class='search-list__image']");
+
+                            if (titleNode != null && linkNode != null)
                             {
-                                RecipeName = titleNode.InnerText.Trim(),
-                                Url = linkNode.GetAttributeValue("href", string.Empty),
-                                Image = imageNode?.GetAttributeValue("src", string.Empty)
-                            };
-                            recipes.Add(recipe);
+                                var recipe = new Recipe
+                                {
+                                    RecipeName = titleNode.InnerText.Trim(),
+                                    Url = linkNode.GetAttributeValue("href", string.Empty),
+                                    Image = imageNode?.GetAttributeValue("src", string.Empty)
+                                };
+                                recipes.Add(recipe);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Title or link node is null for one of the recipes.");
+                            }
                         }
                     }
+                    else
+                    {
+                        Console.WriteLine("No result nodes found in the list node.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("List node is null. The structure of the page might have changed.");
                 }
             }
             catch (Exception ex)
@@ -104,5 +131,4 @@ namespace RecipeFinder_WebApp.Components
             return recipes;
         }
     }
-
 }
