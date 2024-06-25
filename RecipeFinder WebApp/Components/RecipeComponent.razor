@@ -13,13 +13,14 @@
 <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
-    <EditForm Model="recipe" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
-
+    <EditForm Model="@recipe" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
         <span class="text-nowrap">
             <br />
             <label for="searchQuery">Search recipe by Name : </label><br />
             <InputText id="searchQuery" class="form-control" @bind-Value="recipe.RecipeName"></InputText><br />
-            <label for="searchQuery">Search recipe by Cuisine Type : </label><br />
+            <label for="cuisine">Search recipe by Cuisine Type : </label><br />
             <InputText id="cuisine" class="form-control" @bind-Value="recipe.CuisineType"></InputText><br />
             <br />
             <label>Difficulty Level:</label><br />
@@ -29,7 +30,6 @@
                     <option value="@level">@level</option>
                 }
             </InputSelect><br />
-
             <label>Occasion Tags:</label><br />
             <InputSelect @bind-Value="recipe.OccasionTags" class="form-control">
                 @foreach (var tag in Enum.GetValues(typeof(OccasionTags)))
@@ -65,20 +65,21 @@ else if (recipes == null)
     public string Title { get; set; }
     private Recipe recipe { get; set; } = new Recipe();
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
-    private string searchQuery = string.Empty;
 
     private async Task SearchForRecipe()
     {
+        var queryParameters = new List<string>();
+
+        if (!string.IsNullOrEmpty(recipe.RecipeName))
+            queryParameters.Add(recipe.RecipeName);
+        if (!string.IsNullOrEmpty(recipe.CuisineType))
+            queryParameters.Add(recipe.CuisineType);
+
+        var searchQuery = string.Join(" ", queryParameters);
+
         if (!string.IsNullOrEmpty(searchQuery))
         {
             recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
-            if (recipes != null && recipes.Count > 0)
-            {
-                recipe = recipes.First(); // Display the first recipe's image
-            }
         }
     }
-
-
-
 }
