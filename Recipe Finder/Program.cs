@@ -2,7 +2,7 @@
 
 namespace Recipe_Finder
 {
-    public class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
