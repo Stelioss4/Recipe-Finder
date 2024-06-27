@@ -35,9 +35,9 @@
 			set { _videolink = value; }
 		}
 
-		private TimeSpan _cookingTime;
+		private TimeSpan? _cookingTime;
 
-		public TimeSpan CookingTime
+		public TimeSpan? CookingTime
 		{
 			get { return _cookingTime; }
 			set { _cookingTime = value; }

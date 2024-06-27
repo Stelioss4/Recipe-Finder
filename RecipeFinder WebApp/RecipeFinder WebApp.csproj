@@ -39,6 +39,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
 		<PackageReference Include="PuppeteerSharp" Version="18.0.1" />
 		<PackageReference Include="Rayab.ApplicationDbContext" Version="1.2.4" />
+		<PackageReference Include="System.Text.Json" Version="4.7.2" />
 	</ItemGroup>
 
 	<ItemGroup>

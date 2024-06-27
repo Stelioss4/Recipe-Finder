@@ -1,6 +1,10 @@
 ﻿@page "/"
 @using HtmlAgilityPack
 @using Recipe_Finder
+@using System.Text.Json
+@inject IHttpClientFactory ClientFactory
+@inject APIClass API
+@inject NavigationManager NavigationManager
 @inject ScrapperService Scrap
 
 <PageTitle>Home</PageTitle>
@@ -8,49 +12,52 @@
 <h1>Recipe Finder!</h1>
 
 <div>
-    <EditForm Model="@searchQuery" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
+    <EditForm Model="searchModel" OnValidSubmit="SearchForRecipe">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="form-group">
-            <label for="RecipeName">Search any recipe here! :</label>
+            <label for="searchQuery">Search any recipe here! :</label>
             <br />
-            <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search Recipe!!!" />
+            <InputText id="searchQuery" class="form-control" @bind-Value="searchModel.Query" placeholder="Search Recipe!!!" />
         </div>
         <br />
+
         <button class="btn btn-outline-primary" type="submit">Search For Recipe</button>
     </EditForm>
 </div>
 
-@if (recipes.Count > 0)
+@if (recipes != null && recipes.Any())
 {
-    <ul>
-        @foreach (var rec in recipes)
-        {
-            <li>
-                <a href="@rec.Url" target="_blank">@rec.RecipeName</a>
-                @if (!string.IsNullOrEmpty(rec.Image))
-                {
-                    <img src="@rec.Image" alt="Recipe Image" style="width: 100px; height: 100px;" />
-                }
-            </li>
-        }
-    </ul>
+    @foreach (var recipe in recipes)
+    {
+        <div>
+            <h4>@recipe.RecipeName</h4>
+            <img src="@recipe.Image" alt="Recipe Image" />
+            <p>@recipe.CuisineType , @recipe.CookingTime , @recipe.DifficultyLevel , @recipe.OccasionTags</p>
+            <p>@recipe.ListofIngredients</p>
+            <p>@recipe.CookingInstructions</p>
+        </div>
+    }
 }
-else if (!string.IsNullOrEmpty(searchQuery) && !isSearching)
+else if (recipes != null)
 {
-    <p>No results found for "@searchQuery".</p>
+    <p>No recipes found</p>
 }
 
 @code {
-    private List<Recipe> recipes { get; set; } = new List<Recipe>();
-    private string searchQuery = string.Empty;
-    private bool isSearching = false;
+    private SearchModel searchModel = new SearchModel();
+    private List<Recipe> recipes = new List<Recipe>();
+
+    public class SearchModel
+    {
+        public string Query { get; set; } = string.Empty;
+    }
 
     private async Task SearchForRecipe()
     {
-        isSearching = true;
-        recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
-        isSearching = false;
+        recipes = await Scrap.ScrappingOnAllRecipe(searchModel.Query);
+
+        StateHasChanged();
     }
 }

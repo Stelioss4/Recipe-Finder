@@ -12,9 +12,9 @@ builder.Services.AddSingleton<DataService>()
     .AddSingleton<User>();
 builder.Services.AddSingleton<ScrapperService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<APIClass>();
 
-//builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("UsersProfileDBConnection")));
 
 // Register ApplicationDbContext with connection string from configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,7 +28,14 @@ builder.Services.Configure<CircuitOptions>(options =>
     options.DetailedErrors = builder.Configuration.GetValue<bool>("DetailedErrors");
 });
 
+var apiKey = builder.Configuration["1e20d608ccmsh8ca6ccbac500b8ep16ab54jsne0a8c87f1bb1"];
 
+builder.Services.AddHttpClient("RecipeClient", client =>
+{
+    client.BaseAddress = new Uri("https://tasty.p.rapidapi.com/recipes/list?from=0&size=20&tags=under_30_minutes");
+    client.DefaultRequestHeaders.Add("x-rapidapi-key", apiKey);
+    client.DefaultRequestHeaders.Add("x-rapidapi-host", "tasty.p.rapidapi.com");
+});
 
 var app = builder.Build();
 
