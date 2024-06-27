@@ -18,6 +18,7 @@
             <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search Recipe!!!" />
         </div>
         <br />
+        <button class="btn btn-outline-primary" type="submit">Search For Recipe</button><br />
         <button class="btn btn-outline-primary" type="submit">Search For Recipe</button>
     </EditForm>
 </div>
@@ -49,5 +50,10 @@ else if (!string.IsNullOrEmpty(searchQuery))
     private async Task SearchForRecipe()
     {
         recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
+    }
+
+    private async Task SearchForRecipeFromCK()
+    {
+        recipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
     }
 }

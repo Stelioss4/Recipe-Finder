@@ -1,6 +1,7 @@
 ﻿@page "/recipecomponent"
 @using System.Text.Json
 @using HtmlAgilityPack
+@using Microsoft.IdentityModel.Tokens
 @using Recipe_Finder
 @using System.Diagnostics
 @using RecipeFinder_WebApp.Components
@@ -71,20 +72,15 @@ else if (recipes == null)
     private Recipe recipe { get; set; } = new Recipe();
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
 
+    private string searchQuery { get; set; } = string.Empty;
+
     private async Task SearchForRecipe()
     {
-        var queryParameters = new List<string>();
+        recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
+    }
 
-        if (!string.IsNullOrEmpty(recipe.RecipeName))
-            queryParameters.Add(recipe.RecipeName);
-        if (!string.IsNullOrEmpty(recipe.CuisineType))
-            queryParameters.Add(recipe.CuisineType);
-
-        var searchQuery = string.Join(" ", queryParameters);
-
-        if (!string.IsNullOrEmpty(searchQuery))
-        {
-            recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
-        }
+    private async Task SearchForRecipeFromCK()
+    {
+        recipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
     }
 }

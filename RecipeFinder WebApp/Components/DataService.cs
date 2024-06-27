@@ -89,8 +89,8 @@ namespace RecipeFinder_WebApp.Components
 
             return allRecipes.Where(r =>
                 (string.IsNullOrEmpty(recipe.RecipeName) || r.RecipeName.Contains(recipe.RecipeName, StringComparison.OrdinalIgnoreCase)) &&
-                (string.IsNullOrEmpty(recipe.Videolink) || r.Videolink.Contains(recipe.Videolink, StringComparison.OrdinalIgnoreCase)) &&
-                (string.IsNullOrEmpty(recipe.CuisineType) || r.CuisineType.Contains(recipe.CuisineType, StringComparison.OrdinalIgnoreCase))
+                (string.IsNullOrEmpty(recipe.Videolink) || r.Videolink.Contains(recipe.Videolink, StringComparison.OrdinalIgnoreCase)) 
+            //    (string.IsNullOrEmpty(recipe.CuisineType) || r.CuisineType.Contains(recipe.CuisineType, StringComparison.OrdinalIgnoreCase))
             ).ToList();
         }
 

@@ -84,19 +84,19 @@ namespace RecipeFinder_WebApp
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//div[@class='search-list__results']");
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]/div/div[1]/main/section/div[5]/div");
 
                 if (listNode != null)
                 {
-                    var resultNodes = listNode.SelectNodes(".//article");
+                    var resultNodes = listNode.SelectNodes(".//h1");
 
                     if (resultNodes != null)
                     {
                         foreach (var node in resultNodes)
                         {
-                            var titleNode = node.SelectSingleNode(".//a[@class='search-list__headline']");
-                            var linkNode = node.SelectSingleNode(".//a[@class='search-list__headline']");
-                            var imageNode = node.SelectSingleNode(".//img[@class='search-list__image']");
+                            var titleNode = node.SelectSingleNode(".//h3");
+                            var linkNode = node.SelectSingleNode(".//a");
+                            var imageNode = node.SelectSingleNode(".//img");
 
                             if (titleNode != null && linkNode != null)
                             {

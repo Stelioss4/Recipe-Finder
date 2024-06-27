@@ -97,7 +97,7 @@
             recipe.DifficultyLevel = DifficultyLevel.Easy;
             recipe.ListofIngredients = ingredients;
             recipe.CookingTime = TimeSpan.FromMinutes(14);
-            recipe.CuisineType = "global";
+            recipe.CuisineType = CuisineType.Australian;
             recipe.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe.OccasionTags = OccasionTags.Brunch;
 
@@ -182,7 +182,7 @@
             recipe2.DifficultyLevel = DifficultyLevel.Easy;
             recipe2.ListofIngredients = ingredients;
             recipe2.CookingTime = TimeSpan.FromMinutes(10);
-            recipe2.CuisineType = "italian";
+            recipe2.CuisineType = CuisineType.Italian;
             recipe2.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe2.OccasionTags = OccasionTags.Lunch;
             recipe2.Rating = 4.6;
