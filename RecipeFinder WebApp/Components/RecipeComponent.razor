@@ -19,19 +19,24 @@
         <span class="text-nowrap">
             <br />
             <label for="searchQuery">Search recipe by Name : </label><br />
-            <InputText id="searchQuery" class="form-control" @bind-Value="recipe.RecipeName"></InputText><br />
+            <InputText id="searchQuery"  @bind-Value="recipe.RecipeName"></InputText><br />
             <label for="cuisine">Search recipe by Cuisine Type : </label><br />
-            <InputText id="cuisine" class="form-control" @bind-Value="recipe.CuisineType"></InputText><br />
-            <br />
+       
+            <InputSelect @bind-Value="recipe.CuisineType">
+                @foreach (var type in Enum.GetValues(typeof(CuisineType)))
+                {
+                    <option value="@type">@type</option>
+                }
+            </InputSelect><br />
             <label>Difficulty Level:</label><br />
-            <InputSelect @bind-Value="recipe.DifficultyLevel" class="form-control">
+            <InputSelect @bind-Value="recipe.DifficultyLevel" >
                 @foreach (var level in Enum.GetValues(typeof(DifficultyLevel)))
                 {
                     <option value="@level">@level</option>
                 }
             </InputSelect><br />
             <label>Occasion Tags:</label><br />
-            <InputSelect @bind-Value="recipe.OccasionTags" class="form-control">
+            <InputSelect @bind-Value="recipe.OccasionTags">
                 @foreach (var tag in Enum.GetValues(typeof(OccasionTags)))
                 {
                     <option value="@tag">@tag</option>

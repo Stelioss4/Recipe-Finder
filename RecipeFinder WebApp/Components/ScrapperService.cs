@@ -22,19 +22,20 @@ namespace RecipeFinder_WebApp
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//div[@id='mntl-search-results__content']");
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id='mntl-search-results__content_1-0']");
 
                 if (listNode != null)
                 {
-                    var resultNodes = listNode.SelectNodes(".//div[contains(@class, 'card__detailsContainer')]");
+                    var resultNodes = listNode.SelectNodes(".//div");
 
                     if (resultNodes != null)
                     {
                         foreach (var node in resultNodes)
                         {
-                            var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
+                   //         var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
+                            var titleNode = node.SelectSingleNode(".//span");
                             var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
-                            var imageNode = node.SelectSingleNode(".//img[@class='card__img']");
+                            var imageNode = node.SelectSingleNode(".//div");
 
                             if (titleNode != null && linkNode != null)
                             {

@@ -37,20 +37,17 @@
         }
     </ul>
 }
-else if (!string.IsNullOrEmpty(searchQuery) && !isSearching)
+else if (!string.IsNullOrEmpty(searchQuery))
 {
     <p>No results found for "@searchQuery".</p>
 }
 
 @code {
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
-    private string searchQuery = string.Empty;
-    private bool isSearching = false;
+    private string searchQuery { get; set; } = string.Empty;
 
     private async Task SearchForRecipe()
     {
-        isSearching = true;
         recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
-        isSearching = false;
     }
 }

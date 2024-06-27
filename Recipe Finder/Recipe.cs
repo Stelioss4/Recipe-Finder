@@ -43,9 +43,9 @@
 			set { _cookingTime = value; }
 		}
 
-		private string _cuisineType;
+		private CuisineType _cuisineType;
 
-		public string CuisineType
+		public CuisineType CuisineType
 		{
 			get { return _cuisineType; }
 			set { _cuisineType = value; }
