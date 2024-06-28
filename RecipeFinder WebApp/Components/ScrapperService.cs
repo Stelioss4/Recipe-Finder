@@ -22,7 +22,7 @@ namespace RecipeFinder_WebApp
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//*[@id='mntl-search-results__content_1-0']");
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mntl-search-results__content_1-0\"]");
 
                 if (listNode != null)
                 {
@@ -34,8 +34,8 @@ namespace RecipeFinder_WebApp
                         {
                    //         var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
                             var titleNode = node.SelectSingleNode(".//span");
-                            var linkNode = node.SelectSingleNode(".//a[@class='card__titleLink']");
-                            var imageNode = node.SelectSingleNode(".//div");
+                            var linkNode = node.SelectSingleNode(".//span");
+                            var imageNode = node.SelectSingleNode(".//img");
 
                             if (titleNode != null && linkNode != null)
                             {
@@ -84,11 +84,11 @@ namespace RecipeFinder_WebApp
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]/div/div[1]/main/section/div[5]/div");
+                var listNode = document.DocumentNode.SelectSingleNode("//div[@id=\"__layout\"]");
 
                 if (listNode != null)
                 {
-                    var resultNodes = listNode.SelectNodes(".//h1");
+                    var resultNodes = listNode.SelectNodes(".//div");
 
                     if (resultNodes != null)
                     {

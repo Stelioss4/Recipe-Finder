@@ -8,7 +8,7 @@
 <h1>Recipe Finder!</h1>
 
 <div>
-    <EditForm Model="@searchQuery" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
+    <EditForm Model="@searchQuery" FormName="RecipeForm">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -18,25 +18,26 @@
             <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search Recipe!!!" />
         </div>
         <br />
-        <button class="btn btn-outline-primary" type="submit">Search For Recipe</button><br />
-        <button class="btn btn-outline-primary" type="submit">Search For Recipe</button>
+        <button class="btn btn-outline-primary" @onclick="SearchForRecipe">Search For Recipe on AllRecipes</button><br />
+        <button class="btn btn-outline-primary" @onclick="SearchForRecipeFromCK">Search For Recipe on ChefKoch</button>
     </EditForm>
 </div>
 
 @if (recipes.Count > 0)
 {
-    <ul>
+    <ol>
         @foreach (var rec in recipes)
         {
             <li>
-                <a href="@rec.Url" target="_blank">@rec.RecipeName</a>
                 @if (!string.IsNullOrEmpty(rec.Image))
                 {
                     <img src="@rec.Image" alt="Recipe Image" style="width: 100px; height: 100px;" />
                 }
+                <br />
+                <a href="@rec.Url" target="_blank">@rec.RecipeName</a>
             </li>
         }
-    </ul>
+    </ol>
 }
 else if (!string.IsNullOrEmpty(searchQuery))
 {
