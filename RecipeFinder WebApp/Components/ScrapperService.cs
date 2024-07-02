@@ -161,8 +161,12 @@ namespace RecipeFinder_WebApp
 
             return recipes;
         }
+
+        public List<Recipe> GetRandomRecipes(List<Recipe> recipes, int count = 9)
+        {
+            var random = new Random();
+            return recipes.OrderBy(x => random.Next()).Take(count).ToList();
+        }
     }
-
-
 }
 

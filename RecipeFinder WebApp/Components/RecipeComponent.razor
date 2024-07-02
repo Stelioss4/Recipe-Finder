@@ -1,11 +1,14 @@
 ﻿@page "/recipecomponent"
 @using System.Text.Json
 @using HtmlAgilityPack
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using Microsoft.IdentityModel.Tokens
 @using Recipe_Finder
 @using System.Diagnostics
 @using RecipeFinder_WebApp.Components
 @inject ScrapperService Scrap
+@inject NavigationManager Navigation
+
 
 <PageTitle>Recipe Search</PageTitle>
 
@@ -54,23 +57,28 @@
     </EditForm>
 </div>
 
-@if (recipes != null && recipes.Any())
+@if (recipes.Count > 0)
 {
-    @foreach (var result in recipes)
-    {
-        <div>
-            <h4>@result.RecipeName</h4>
-            <h2>@result.CookingTime</h2>
-            <h2>@result.CuisineType</h2>
-            <img src="@result.Image" alt="Recipe Image" />
-            <p>@result.CookingInstructions</p>
-        </div>
-    }
+    <ol>
+        @foreach (var rec in recipes)
+        {
+            <li>
+                @if (!string.IsNullOrEmpty(rec.Image))
+                {
+                    <img src="@rec.Image" alt="Recipe Image" style="width: 100px; height: 100px;" />
+                }
+                <br />
+                <a href="@rec.Url" target="_blank">@rec.RecipeName</a><br />
+                <a @onclick="() => NavigateToRecipeDetails(rec.Url)" style="cursor: pointer;">@rec.RecipeName</a>
+            </li>
+        }
+    </ol>
 }
-else if (recipes == null)
+else if (!string.IsNullOrEmpty(searchQuery))
 {
-    <p>No recipes found</p>
+    <p>No results found for "@searchQuery".</p>
 }
+
 
 @code {
     [Parameter]
@@ -88,5 +96,10 @@ else if (recipes == null)
     private async Task SearchForRecipeFromCK()
     {
         recipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
+    }
+
+    private void NavigateToRecipeDetails(string recipeUrl)
+    {
+        Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 }

@@ -43,8 +43,9 @@
                 <option value="@tag">@tag</option>
             }
         </InputSelect><br />
-        <button class="btn btn-outline-primary" @onclick="SearchForRecipeOnAllRecipe">Search For Recipe on AllRecipes</button><br />
+        <button class="btn btn-outline-primary" @onclick="SearchForRecipeOnAllRecipe">Search For Recipe on AllRecipes</button>
         <button class="btn btn-outline-primary" @onclick="SearchForRecipeFromCK">Search For Recipe on ChefKoch</button>
+        <button class="btn btn-outline-primary" @onclick="SearchAndDisplayRandomRecipes">Search and Display Random Recipes</button>
     </EditForm>
 </div>
 
@@ -84,6 +85,13 @@ else if (!string.IsNullOrEmpty(searchQuery))
     {
         recipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
     }
+
+    private async Task SearchAndDisplayRandomRecipes()
+    {
+        var allRecipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
+        recipes = Scrap.GetRandomRecipes(allRecipes);
+    }
+
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {
