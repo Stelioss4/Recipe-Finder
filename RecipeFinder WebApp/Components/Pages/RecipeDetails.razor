@@ -1,0 +1,45 @@
+﻿@page "/recipedetails"
+@inject ScrapperService Scrap
+@inject NavigationManager Navigation
+
+<PageTitle>Recipe Details</PageTitle>
+
+<h3>Recipe Details</h3>
+
+@if (recipe != null)
+{
+    <div>
+        <h2>@recipe.RecipeName</h2>
+        @if (!string.IsNullOrEmpty(recipe.Image))
+        {
+            <img src="@recipe.Image" alt="Recipe Image" style="width: 300px; height: 300px;" />
+        }
+        @if (!string.IsNullOrEmpty(recipe.VideoUrl))
+        {
+            <div>
+                <h3>Recipe Video</h3>
+                <video width="320" height="240" controls>
+                    <source src="@recipe.VideoUrl" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        }
+        <p>@recipe.CookingInstructions</p>
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Recipe recipe;
+
+    protected override async Task OnInitializedAsync()
+    {
+        recipe = await Scrap.GetRecipeById(Id);
+    }
+}

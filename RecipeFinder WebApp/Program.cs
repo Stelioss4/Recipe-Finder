@@ -13,8 +13,8 @@ builder.Services.AddSingleton<DataService>()
 builder.Services.AddSingleton<ScrapperService>();
 builder.Services.AddScoped<UserService>();
 
-//builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("UsersProfileDBConnection")));
+// Register HttpClient for dependency injection
+builder.Services.AddHttpClient();
 
 // Register ApplicationDbContext with connection string from configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -27,8 +27,6 @@ builder.Services.Configure<CircuitOptions>(options =>
 {
     options.DetailedErrors = builder.Configuration.GetValue<bool>("DetailedErrors");
 });
-
-
 
 var app = builder.Build();
 

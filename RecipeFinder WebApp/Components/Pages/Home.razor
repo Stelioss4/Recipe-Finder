@@ -2,6 +2,8 @@
 @using HtmlAgilityPack
 @using Recipe_Finder
 @inject ScrapperService Scrap
+@inject NavigationManager Navigation
+
 
 <PageTitle>Home</PageTitle>
 
@@ -18,7 +20,7 @@
             <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search Recipe!!!" />
         </div>
         <br />
-        <button class="btn btn-outline-primary" @onclick="SearchForRecipe">Search For Recipe on AllRecipes</button><br />
+        <button class="btn btn-outline-primary" @onclick="SearchForRecipeOnAllRecipe">Search For Recipe on AllRecipes</button><br />
         <button class="btn btn-outline-primary" @onclick="SearchForRecipeFromCK">Search For Recipe on ChefKoch</button>
     </EditForm>
 </div>
@@ -35,6 +37,7 @@
                 }
                 <br />
                 <a href="@rec.Url" target="_blank">@rec.RecipeName</a>
+                <a @onclick="() => NavigateToRecipeDetails(rec.Url)" style="cursor: pointer;">@rec.RecipeName</a>
             </li>
         }
     </ol>
@@ -48,7 +51,7 @@ else if (!string.IsNullOrEmpty(searchQuery))
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private string searchQuery { get; set; } = string.Empty;
 
-    private async Task SearchForRecipe()
+    private async Task SearchForRecipeOnAllRecipe()
     {
         recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
     }
@@ -56,5 +59,10 @@ else if (!string.IsNullOrEmpty(searchQuery))
     private async Task SearchForRecipeFromCK()
     {
         recipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
+    }
+
+    private void NavigateToRecipeDetails(string recipeUrl)
+    {
+        Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 }

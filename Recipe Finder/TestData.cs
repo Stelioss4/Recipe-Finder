@@ -93,7 +93,7 @@
 
             recipe.RecipeName = "Boild egg";
             recipe.CookingInstructions = "boil an egg";
-            recipe.Videolink = "www.howtoBoilanEgg.com";
+            recipe.VideoUrl = "www.howtoBoilanEgg.com";
             recipe.DifficultyLevel = DifficultyLevel.Easy;
             recipe.ListofIngredients = ingredients;
             recipe.CookingTime = TimeSpan.FromMinutes(14);
@@ -178,7 +178,7 @@
 
             recipe2.RecipeName = "Nudles Pomodoro";
             recipe2.CookingInstructions = "boil nudles";
-            recipe2.Videolink = "www.howtocooknudles.com";
+            recipe2.VideoUrl = "www.howtocooknudles.com";
             recipe2.DifficultyLevel = DifficultyLevel.Easy;
             recipe2.ListofIngredients = ingredients;
             recipe2.CookingTime = TimeSpan.FromMinutes(10);

@@ -14,21 +14,24 @@
 <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
-    <EditForm Model="@recipe" OnValidSubmit="SearchForRecipe" FormName="RecipeForm">
+    <EditForm Model="@recipe" FormName="RecipeForm">
         <DataAnnotationsValidator />
         <ValidationSummary />
+
         <span class="text-nowrap">
+
             <br />
             <label for="searchQuery">Search recipe by Name : </label><br />
             <InputText id="searchQuery"  @bind-Value="recipe.RecipeName"></InputText><br />
+
             <label for="cuisine">Search recipe by Cuisine Type : </label><br />
-       
             <InputSelect @bind-Value="recipe.CuisineType">
                 @foreach (var type in Enum.GetValues(typeof(CuisineType)))
                 {
                     <option value="@type">@type</option>
                 }
             </InputSelect><br />
+
             <label>Difficulty Level:</label><br />
             <InputSelect @bind-Value="recipe.DifficultyLevel" >
                 @foreach (var level in Enum.GetValues(typeof(DifficultyLevel)))
@@ -36,6 +39,7 @@
                     <option value="@level">@level</option>
                 }
             </InputSelect><br />
+
             <label>Occasion Tags:</label><br />
             <InputSelect @bind-Value="recipe.OccasionTags">
                 @foreach (var tag in Enum.GetValues(typeof(OccasionTags)))
@@ -43,8 +47,10 @@
                     <option value="@tag">@tag</option>
                 }
             </InputSelect><br />
+
+        <button class="btn btn-outline-primary" @onclick="SearchForRecipe">Search For Recipe on AllRecipes</button><br />
+        <button class="btn btn-outline-primary" @onclick="SearchForRecipeFromCK">Search For Recipe on ChefKoch</button>
         </span>
-        <button type="submit" class="btn btn-primary">Search</button>
     </EditForm>
 </div>
 

@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Content Remove="Components\Pages\RecipeDetails.razor" />
 		<Content Remove="Components\Recipe.razor" />
 		<Content Remove="Components\SearchRecipe.razor" />
 	</ItemGroup>
@@ -20,6 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<_ContentIncludedByDefault Remove="Components\Pages\RecipeDetails.razor" />
 		<_ContentIncludedByDefault Remove="Components\Recipe.razor" />
 		<_ContentIncludedByDefault Remove="Components\SearchRecipe.razor" />
 	</ItemGroup>
@@ -27,6 +29,7 @@
 	<ItemGroup>
 		<None Include="Components\Layout\MainLayout.razor" />
 		<None Include="Components\Layout\NavMenu.razor" />
+		<None Include="Components\Pages\RecipeDetails.razor" />
 		<None Include="Components\SearchRecipe.razor" />
 	</ItemGroup>
 
@@ -43,6 +46,10 @@
 
 	<ItemGroup>
 	  <UpToDateCheckInput Remove="Components\SearchRecipe.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Components\Pages\RecipeDetails.razor" />
 	</ItemGroup>
 
 </Project>

@@ -9,6 +9,41 @@ namespace RecipeFinder_WebApp
 {
     public class ScrapperService
     {
+        private readonly HttpClient _httpClient;
+
+        public ScrapperService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
+        public async Task<Recipe> GetRecipeDetails(string recipeUrl)
+        {
+            var response = await _httpClient.GetAsync(recipeUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var pageContent = await response.Content.ReadAsStringAsync();
+                var htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(pageContent);
+
+                var recipe = new Recipe
+                {
+                    RecipeName = htmlDocument.DocumentNode.SelectSingleNode("//h1[@class='page-title']")?.InnerText,
+                    Image = htmlDocument.DocumentNode.SelectSingleNode("//img[@class='i-amphtml-fill-content i-amphtml-replaced-content']")?.GetAttributeValue("src", ""),
+                    CookingInstructions = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='ds-box ds-box--fixed ds-grid-float ds-col-12']")?.InnerHtml,
+                    VideoUrl = htmlDocument.DocumentNode.SelectSingleNode("//video/source")?.GetAttributeValue("src", "") // Adjust the XPath as needed
+                };
+
+                // Ensure to decode HTML entities in the extracted text
+                if (recipe != null)
+                {
+                    recipe.RecipeName = System.Net.WebUtility.HtmlDecode(recipe.RecipeName);
+                    recipe.CookingInstructions = System.Net.WebUtility.HtmlDecode(recipe.CookingInstructions);
+                }
+                return recipe;
+            }
+            return null;
+        }
+
         public async Task<List<Recipe>> ScrappingOnAllRecipe(string searchQuery)
         {
             List<Recipe> recipes = new List<Recipe>();
@@ -26,13 +61,13 @@ namespace RecipeFinder_WebApp
 
                 if (listNode != null)
                 {
-                    var resultNodes = listNode.SelectNodes(".//div");
+                    var resultNodes = listNode.SelectNodes(".//span");
 
                     if (resultNodes != null)
                     {
                         foreach (var node in resultNodes)
                         {
-                   //         var titleNode = node.SelectSingleNode(".//h3[@class='card__title']");
+
                             var titleNode = node.SelectSingleNode(".//span");
                             var linkNode = node.SelectSingleNode(".//span");
                             var imageNode = node.SelectSingleNode(".//img");
@@ -84,7 +119,7 @@ namespace RecipeFinder_WebApp
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//div[@id=\"__layout\"]");
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]");
 
                 if (listNode != null)
                 {
@@ -132,4 +167,7 @@ namespace RecipeFinder_WebApp
             return recipes;
         }
     }
+
+
 }
+
