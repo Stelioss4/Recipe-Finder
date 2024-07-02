@@ -16,9 +16,9 @@ namespace RecipeFinder_WebApp
             _httpClient = httpClient;
         }
 
-        public async Task<Recipe> GetRecipeDetails(string recipeUrl)
+        public async Task<Recipe> GetRecipeDetails(string url)
         {
-            var response = await _httpClient.GetAsync(recipeUrl);
+            var response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 var pageContent = await response.Content.ReadAsStringAsync();
@@ -27,22 +27,17 @@ namespace RecipeFinder_WebApp
 
                 var recipe = new Recipe
                 {
-                    RecipeName = htmlDocument.DocumentNode.SelectSingleNode("//h1[@class='page-title']")?.InnerText,
-                    Image = htmlDocument.DocumentNode.SelectSingleNode("//img[@class='i-amphtml-fill-content i-amphtml-replaced-content']")?.GetAttributeValue("src", ""),
-                    CookingInstructions = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='ds-box ds-box--fixed ds-grid-float ds-col-12']")?.InnerHtml,
-                    VideoUrl = htmlDocument.DocumentNode.SelectSingleNode("//video/source")?.GetAttributeValue("src", "") // Adjust the XPath as needed
-                };
+                    RecipeName = htmlDocument.DocumentNode.SelectSingleNode("//h1")?.InnerText,
+                    Image = htmlDocument.DocumentNode.SelectSingleNode("//img[@class='main-image']")?.GetAttributeValue("src", ""),
+                    CookingInstructions = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='instructions']")?.InnerHtml,
+                    VideoUrl = htmlDocument.DocumentNode.SelectSingleNode("//video/source")?.GetAttributeValue("src", ""),
 
-                // Ensure to decode HTML entities in the extracted text
-                if (recipe != null)
-                {
-                    recipe.RecipeName = System.Net.WebUtility.HtmlDecode(recipe.RecipeName);
-                    recipe.CookingInstructions = System.Net.WebUtility.HtmlDecode(recipe.CookingInstructions);
-                }
+                };
                 return recipe;
             }
             return null;
         }
+
 
         public async Task<List<Recipe>> ScrappingOnAllRecipe(string searchQuery)
         {

@@ -1,4 +1,8 @@
 ﻿@page "/recipedetails"
+@using Recipe_Finder
+@using HtmlAgilityPack
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
 
@@ -40,6 +44,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        recipe = await Scrap.GetRecipeById(Id);
+        if (!string.IsNullOrEmpty(Id))
+        {
+            recipe = await Scrap.GetRecipeById(Id);
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
     }
 }
