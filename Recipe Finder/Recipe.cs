@@ -67,7 +67,7 @@
 			set { _difficultyLevel = value; }
 		}
 
-        public List<Ingredient> ListofIngredients { get; set; }
+        public List<Ingredient>? ListofIngredients { get; set; } = new List<Ingredient>();
 
         private string _linksForDrinkPairing;
 

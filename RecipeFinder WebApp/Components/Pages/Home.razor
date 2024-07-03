@@ -83,18 +83,18 @@ else if (!string.IsNullOrEmpty(searchQuery))
 
     private async Task SearchForRecipeFromCK()
     {
-        recipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
+        recipes = await Scrap.ScrapeCKRecipies(searchQuery);
     }
 
     private async Task SearchAndDisplayRandomRecipes()
     {
-        var allRecipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
+        var allRecipes = await Scrap.ScrapeSearchResultsFromChefkoch(searchQuery);
         recipes = Scrap.GetRandomRecipes(allRecipes);
     }
 
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {
-        Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
+        Navigation.NavigateTo($"/recipedetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 }

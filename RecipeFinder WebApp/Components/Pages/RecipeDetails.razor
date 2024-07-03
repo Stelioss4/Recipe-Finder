@@ -8,8 +8,6 @@
 
 <PageTitle>Recipe Details</PageTitle>
 
-<h3>Recipe Details</h3>
-
 @if (recipe != null)
 {
     <div>
@@ -38,15 +36,19 @@ else
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public string Url { get; set; }
 
     private Recipe recipe;
 
     protected override async Task OnInitializedAsync()
     {
-        if (!string.IsNullOrEmpty(Id))
+        var uri = new Uri(Navigation.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        
+        if (query.TryGetValue("url", out var urlValue))
         {
-            recipe = await Scrap.GetRecipeById(Id);
+            var decodedUrl = Uri.UnescapeDataString(urlValue);
+            recipe = Scrap.scrapeCKDetails(decodedUrl);
         }
         else
         {

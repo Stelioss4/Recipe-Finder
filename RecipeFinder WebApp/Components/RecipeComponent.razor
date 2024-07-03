@@ -95,7 +95,7 @@ else if (!string.IsNullOrEmpty(searchQuery))
 
     private async Task SearchForRecipeFromCK()
     {
-        recipes = await Scrap.ScrapeRecipesFromChefkoch(searchQuery);
+        recipes = await Scrap.ScrapeSearchResultsFromChefkoch(searchQuery);
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)
