@@ -1,10 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Components;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace RecipeFinder_WebApp
 {
@@ -106,16 +102,20 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeCKRecipies(string searchQuery)
         {
-            var SearchResults = ScrapeSearchResultsFromChefkoch(searchQuery).Result;
-            foreach (var r in SearchResults)
+            var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
+
+            List<Recipe> detailedRecipes = new List<Recipe>();
+
+            foreach (var recipe in searchResults)
             {
-                var detail = scrapeCKDetails(r.Url);
+                var details = await ScrapeCKDetails(recipe.Url);
+                detailedRecipes.Add(details);
             }
 
-            //put all the results in _ds.Reciepies
-            return SearchResults;
-
+            _dataService.Recipies = detailedRecipes;
+            return detailedRecipes;
         }
+
 
         public async Task<List<Recipe>> ScrapeSearchResultsFromChefkoch(string searchQuery)
         {
@@ -178,14 +178,13 @@ namespace RecipeFinder_WebApp
             return recipies;
         }
 
-        public Recipe scrapeCKDetails(string url)
+        public async Task<Recipe> ScrapeCKDetails(string url)
         {
             Recipe recipe = new Recipe();
-            List<Ingredient> ingredients = new List<Ingredient>();
 
             try
             {
-                var html = _httpClient.GetStringAsync(url).Result;
+                var html = await _httpClient.GetStringAsync(url);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);

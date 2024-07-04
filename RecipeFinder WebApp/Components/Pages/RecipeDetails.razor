@@ -8,6 +8,8 @@
 
 <PageTitle>Recipe Details</PageTitle>
 
+<h3>Recipe Details</h3>
+
 @if (recipe != null)
 {
     <div>
@@ -44,11 +46,11 @@ else
     {
         var uri = new Uri(Navigation.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        
+
         if (query.TryGetValue("url", out var urlValue))
         {
             var decodedUrl = Uri.UnescapeDataString(urlValue);
-            recipe = Scrap.scrapeCKDetails(decodedUrl);
+            recipe = await Scrap.ScrapeCKDetails(decodedUrl);
         }
         else
         {
