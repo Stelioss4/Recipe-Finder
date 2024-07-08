@@ -1,5 +1,4 @@
-﻿@page "/recipedetails{Url}"
-@using Recipe_Finder
+﻿@using Recipe_Finder
 @using HtmlAgilityPack
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
@@ -26,6 +25,8 @@
                 </video>
             </div>
         }
+        <p>@recipe.DifficultyLevel</p>
+        <p>@recipe.ListofIngredients.ToString()</p>
         <p>@recipe.CookingInstructions</p>
     </div>
 }
@@ -42,16 +43,20 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("OnInitializedAsync called");
         var uri = new Uri(Navigation.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
         if (query.TryGetValue("url", out var urlValue))
         {
+            Console.WriteLine($"Found url parameter: {urlValue}");
             var decodedUrl = Uri.UnescapeDataString(urlValue);
-            recipe = await Scrap.ScrapeCKDetails(decodedUrl);
+            recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipie(new Recipe { Url = decodedUrl });
+            Console.WriteLine($"Scraped recipe: {recipe.RecipeName}");
         }
         else
         {
+            Console.WriteLine("url parameter not found, navigating to home");
             Navigation.NavigateTo("/");
         }
     }

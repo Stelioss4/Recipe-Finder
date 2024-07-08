@@ -1,7 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Components;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace RecipeFinder_WebApp
 {
@@ -124,7 +123,7 @@ namespace RecipeFinder_WebApp
 
             foreach (var recipe in searchResults)
             {
-                if (recipe?.Url != null) // Check if the recipe and its URL are not null
+                if (recipe?.Url != null) // Check if the searchResultRecipie and its URL are not null
                 {
                     Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipie(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -205,10 +204,8 @@ namespace RecipeFinder_WebApp
             return recipies;
         }
 
-        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipie(Recipe recipe)
+        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipie(Recipe searchResultRecipie)
         {
-
-
             try
             {
                 var html = await _httpClient.GetStringAsync(searchResultRecipie.Url);
@@ -217,59 +214,108 @@ namespace RecipeFinder_WebApp
                 document.LoadHtml(html);
 
                 // Parse Recipe Name
-                var recipeNameNode = document.DocumentNode.SelectSingleNode(".//h1");
-                searchResultRecipie.RecipeName = recipeNameNode?.InnerText.Trim();
+                var recipeNameNode = document.DocumentNode.SelectSingleNode("//h1");
+                if (recipeNameNode != null)
+                {
+                    searchResultRecipie.RecipeName = recipeNameNode.InnerText.Trim();
+                }
+                else
+                {
+                    Console.WriteLine("Recipe Name node is null");
+                }
 
                 // Parse Cooking Instructions
                 var instructionsNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[4]/div[1]");
-                searchResultRecipie.CookingInstructions = instructionsNode?.InnerHtml.Trim();
+                if (instructionsNode != null)
+                {
+                    searchResultRecipie.CookingInstructions = instructionsNode.InnerHtml.Trim();
+                }
+                else
+                {
+                    Console.WriteLine("Instructions node is null");
+                }
 
                 // Parse Video URL if available
                 var videoNode = document.DocumentNode.SelectSingleNode("//video/source");
-                searchResultRecipie.VideoUrl = videoNode?.GetAttributeValue("src", string.Empty);
+                if (videoNode != null)
+                {
+                    searchResultRecipie.VideoUrl = videoNode.GetAttributeValue("src", string.Empty);
+                }
+                else
+                {
+                    Console.WriteLine("Video node is null");
+                }
 
                 // Parse Cuisine Type
                 var cuisineTypeNode = document.DocumentNode.SelectSingleNode("//span[@class='cuisine-type']");
                 if (cuisineTypeNode != null)
                 {
-                    Enum.TryParse(cuisineTypeNode.InnerText.Trim(), true, out CuisineType cuisineType);
-                    searchResultRecipie.CuisineType = cuisineType;
+                    if (Enum.TryParse(cuisineTypeNode.InnerText.Trim(), true, out CuisineType cuisineType))
+                    {
+                        searchResultRecipie.CuisineType = cuisineType;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Cuisine Type node is null");
                 }
 
                 // Parse Difficulty Level
                 var difficultyLevelNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[1]/div/div[2]/small/span[2]");
                 if (difficultyLevelNode != null)
                 {
-                    Enum.TryParse(difficultyLevelNode.InnerText.Trim(), true, out DifficultyLevel difficultyLevel);
-                    searchResultRecipie.DifficultyLevel = difficultyLevel;
+                    if (Enum.TryParse(difficultyLevelNode.InnerText.Trim(), true, out DifficultyLevel difficultyLevel))
+                    {
+                        searchResultRecipie.DifficultyLevel = difficultyLevel;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Difficulty Level node is null");
                 }
 
                 // Parse Occasion Tags
                 var occasionTagsNode = document.DocumentNode.SelectSingleNode("//span[@class='occasion-tags']");
                 if (occasionTagsNode != null)
                 {
-                    Enum.TryParse(occasionTagsNode.InnerText.Trim(), true, out OccasionTags occasionTags);
-                    searchResultRecipie.OccasionTags = occasionTags;
+                    if (Enum.TryParse(occasionTagsNode.InnerText.Trim(), true, out OccasionTags occasionTags))
+                    {
+                        searchResultRecipie.OccasionTags = occasionTags;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Occasion Tags node is null");
                 }
 
                 // Parse List of Ingredients
                 var ingredientsNode = document.DocumentNode.SelectSingleNode("/html/body/main/article/table");
                 if (ingredientsNode != null)
                 {
-                    searchResultRecipie.ListofIngredients = ingredientsNode.SelectNodes(".//li")
-                        .Select(li => new Ingredient { Name = li.InnerText.Trim() })
-                        .ToList();
+                    var ingredientNodes = ingredientsNode.SelectNodes(".//li");
+                    if (ingredientNodes != null)
+                    {
+                        searchResultRecipie.ListofIngredients = ingredientNodes
+                            .Select(li => new Ingredient { Name = li.InnerText.Trim() })
+                            .ToList();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ingredient nodes are null");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ingredients node is null");
                 }
             }
             catch (Exception ex)
             {
-                // Handle or log the exception as needed
-                Console.WriteLine($"Error scraping recipe details: {ex.Message}");
+                Console.WriteLine($"Error scraping searchResultRecipie details: {ex.Message}");
             }
 
-             return searchResultRecipie;
+            return searchResultRecipie;
         }
-
         public List<Recipe> GetRandomRecipes(List<Recipe> recipes, int count = 7)
         {
             var random = new Random();

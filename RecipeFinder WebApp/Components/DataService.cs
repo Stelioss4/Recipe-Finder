@@ -36,62 +36,10 @@ namespace RecipeFinder_WebApp.Components
             _clientFactory = clientFactory;
         }
 
-        public async Task<List<Recipe>> SearchForRecipes(string query, string apiKey)
-        {
-            // Check if we have already fetched recipes
-            if (_cachedRecipes != null)
-            {
-                return _cachedRecipes;
-            }
-
-            var client = _clientFactory.CreateClient("SpoonacularClient");
-            string requestUrl = $"recipes/complexSearch?query={Uri.EscapeDataString(query)}&apiKey={apiKey}";
-
-            try
-            {
-                var response = await client.GetAsync(requestUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    _cachedRecipes = apiResponse.Results;
-                    return _cachedRecipes;
-                }
-                else
-                {
-                    Console.WriteLine($"Error: {response.StatusCode}");
-                    return new List<Recipe>();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception: {ex.Message}");
-                return new List<Recipe>();
-            }
-        }
-
-        public class ApiResponse
-        {
-            public List<Recipe> Results { get; set; }
-        }
-
         public DataService()
         {
             Recipies = TestData.RecipeList();
             usersProfiles = TestData.UserProfil();
-        }
-
-        public static List<Recipe> SearchRecipes(Recipe recipe)
-        {
-            List<Recipe> allRecipes = new List<Recipe>();
-            allRecipes.Add(recipe);
-            return allRecipes;
-
-            return allRecipes.Where(r =>
-                (string.IsNullOrEmpty(recipe.RecipeName) || r.RecipeName.Contains(recipe.RecipeName, StringComparison.OrdinalIgnoreCase)) &&
-                (string.IsNullOrEmpty(recipe.VideoUrl) || r.VideoUrl.Contains(recipe.VideoUrl, StringComparison.OrdinalIgnoreCase)) 
-            //    (string.IsNullOrEmpty(recipe.CuisineType) || r.CuisineType.Contains(recipe.CuisineType, StringComparison.OrdinalIgnoreCase))
-            ).ToList();
         }
 
         public static List<UsersProfile> LoadUser()
@@ -137,9 +85,6 @@ namespace RecipeFinder_WebApp.Components
                 Console.WriteLine($"An error occurred while saving users: {ex.Message}");
             }
         }
-
-
-
 
         public static void UserExist()
         {

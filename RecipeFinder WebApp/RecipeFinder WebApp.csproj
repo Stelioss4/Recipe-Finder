@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Remove="Components\Pages\RecipeDetails.razor" />
 		<Content Remove="Components\Recipe.razor" />
 	</ItemGroup>
 
@@ -20,14 +19,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<_ContentIncludedByDefault Remove="Components\Pages\RecipeDetails.razor" />
 		<_ContentIncludedByDefault Remove="Components\Recipe.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="Components\Layout\MainLayout.razor" />
 		<None Include="Components\Layout\NavMenu.razor" />
-		<None Include="Components\Pages\RecipeDetails.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -39,10 +36,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
 		<PackageReference Include="PuppeteerSharp" Version="18.0.1" />
 		<PackageReference Include="Rayab.ApplicationDbContext" Version="1.2.4" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Components\Pages\RecipeDetails.razor" />
 	</ItemGroup>
 
 </Project>

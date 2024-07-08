@@ -55,6 +55,6 @@ else if (!string.IsNullOrEmpty(searchQuery))
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {
-        Navigation.NavigateTo($"/recipedetails/{Uri.EscapeDataString(recipeUrl)}", true );
+        Navigation.NavigateTo($"/recipedetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 }
