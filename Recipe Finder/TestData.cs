@@ -49,7 +49,7 @@
 
             Ingredient ingredient = new Ingredient();
 
-            ingredient.Name = "egg";
+            ingredient.IngredientsName = "egg";
             ingredient.Protein = 12.9m;
             ingredient.Fat = 50;
             ingredient.Carbohydrate = 280.5m;
@@ -59,7 +59,7 @@
 
             Ingredient ingredient1 = new Ingredient();
 
-            ingredient1.Name = "water";
+            ingredient1.IngredientsName = "water";
             ingredient1.Protein = 0m;
             ingredient1.Fat = 0;
             ingredient1.Carbohydrate = 0;
@@ -69,7 +69,7 @@
 
             Ingredient ingredient2 = new Ingredient();
 
-            ingredient2.Name = "salt";
+            ingredient2.IngredientsName = "salt";
             ingredient2.Protein = 0m;
             ingredient2.Fat = 0;
             ingredient2.Carbohydrate = 0;
@@ -101,7 +101,7 @@
             recipe.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe.OccasionTags = OccasionTags.Brunch;
 
-            ingredient.Name = "nudles";
+            ingredient.IngredientsName = "nudles";
             ingredient.Protein = 12.9m;
             ingredient.Fat = 50;
             ingredient.Carbohydrate = 280.5m;
@@ -109,7 +109,7 @@
             ingredient.Unit = 500;
             ingredient.Amount = IngredientAmount.Grams;
 
-            ingredient1.Name = "water";
+            ingredient1.IngredientsName = "water";
             ingredient1.Protein = 0m;
             ingredient1.Fat = 0;
             ingredient1.Carbohydrate = 0;
@@ -117,7 +117,7 @@
             ingredient1.Unit = 2000;
             ingredient1.Amount = IngredientAmount.Milliliters;
 
-            ingredient2.Name = "salt";
+            ingredient2.IngredientsName = "salt";
             ingredient2.Protein = 0m;
             ingredient2.Fat = 0;
             ingredient2.Carbohydrate = 0;
@@ -127,7 +127,7 @@
 
             Ingredient ingredient3 = new Ingredient();
 
-            ingredient3.Name = "Tomato sauce";
+            ingredient3.IngredientsName = "Tomato sauce";
             ingredient3.Protein = 11;
             ingredient3.Fat = 5;
             ingredient3.Carbohydrate = 97;
@@ -137,7 +137,7 @@
 
             Ingredient ingredient4 = new Ingredient();
 
-            ingredient4.Name = "Olive oil";
+            ingredient4.IngredientsName = "Olive oil";
             ingredient4.Protein = 0;
             ingredient4.Fat = 9;
             ingredient4.Carbohydrate = 0;
@@ -147,7 +147,7 @@
 
             Ingredient ingredient5 = new Ingredient();
 
-            ingredient5.Name = "onion";
+            ingredient5.IngredientsName = "onion";
             ingredient5.Protein = 1;
             ingredient5.Fat = 1;
             ingredient5.Carbohydrate = 12;
@@ -157,7 +157,7 @@
 
             Ingredient ingredient6 = new Ingredient();
 
-            ingredient6.Name = "Garlic";
+            ingredient6.IngredientsName = "Garlic";
             ingredient6.Protein = 2;
             ingredient6.Fat = 2;
             ingredient6.Carbohydrate = 12;
@@ -275,7 +275,7 @@
 
             Ingredient ing1 = new Ingredient();
 
-            ing1.Name = "egg";
+            ing1.IngredientsName = "egg";
             ing1.Protein = 12.9m;
             ing1.Fat = 50;
             ing1.Carbohydrate = 280.5m;
@@ -284,7 +284,7 @@
 
             Ingredient ing2 = new Ingredient();
 
-            ing2.Name = "water";
+            ing2.IngredientsName = "water";
             ing2.Protein = 0m;
             ing2.Fat = 0;
             ing2.Carbohydrate = 0;
@@ -311,7 +311,7 @@
 
             foreach (Ingredient ing in productInformation.AvailableProduct)
             {
-                Console.WriteLine(ing.Name);
+                Console.WriteLine(ing.IngredientsName);
             }
             Console.WriteLine(productInformation.PaymentMethods.AcountEmail + " " + productInformation.PaymentMethods.Acountpasword);
             Console.WriteLine("Number of servings : " + productInformation.NumberOfServings);

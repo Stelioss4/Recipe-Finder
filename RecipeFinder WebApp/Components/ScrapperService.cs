@@ -221,7 +221,14 @@ namespace RecipeFinder_WebApp
                 }
                 else
                 {
-                    Console.WriteLine("Recipe Name node is null");
+                    Console.WriteLine("Recipe's Name node is null");
+                }
+
+                // Parse Image
+                var imageNode = document.DocumentNode.SelectSingleNode("//*[@id=\"i-amp-0\"]/img");
+                if (imageNode != null) 
+                {
+                    searchResultRecipie.Image = imageNode.GetAttributeValue("src", string.Empty);
                 }
 
                 // Parse Cooking Instructions
@@ -292,11 +299,11 @@ namespace RecipeFinder_WebApp
                 var ingredientsNode = document.DocumentNode.SelectSingleNode("/html/body/main/article/table");
                 if (ingredientsNode != null)
                 {
-                    var ingredientNodes = ingredientsNode.SelectNodes(".//li");
+                    var ingredientNodes = ingredientsNode.SelectNodes("/html/body/main/article[2]/table/tbody/tr");
                     if (ingredientNodes != null)
                     {
                         searchResultRecipie.ListofIngredients = ingredientNodes
-                            .Select(li => new Ingredient { Name = li.InnerText.Trim() })
+                            .Select(li => new Ingredient { IngredientsName = li.InnerText.Trim() })
                             .ToList();
                     }
                     else

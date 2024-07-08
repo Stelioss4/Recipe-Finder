@@ -2,12 +2,12 @@
 {
     public class Ingredient
     {
-        private string _name;
+        private string _ingredientsName;
 
-        public string Name
+        public string IngredientsName
         {
-            get { return _name; }
-            set { _name = value; }
+            get { return _ingredientsName; }
+            set { _ingredientsName = value; }
         }
 
         private decimal _calories;
