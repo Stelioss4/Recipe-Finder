@@ -205,7 +205,7 @@ namespace RecipeFinder_WebApp
             return recipies;
         }
 
-        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipie(Recipe searchResultRecipie)
+        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipie(Recipe recipe)
         {
 
 
