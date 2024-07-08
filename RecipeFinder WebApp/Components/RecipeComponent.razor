@@ -90,7 +90,7 @@ else if (!string.IsNullOrEmpty(searchQuery))
 
     private async Task SearchForRecipe()
     {
-        recipes = await Scrap.ScrappingOnAllRecipe(searchQuery);
+        recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
     }
 
     private async Task SearchForRecipeFromCK()
