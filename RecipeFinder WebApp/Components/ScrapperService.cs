@@ -68,19 +68,16 @@ namespace RecipeFinder_WebApp
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mntl-search-results_1-0\"]");
-
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mntl-search-results__content_1-0\"]");
                 if (listNode != null)
                 {
                     var resultNodes = listNode.SelectNodes(".//span");
-
                     if (resultNodes != null)
                     {
                         foreach (var node in resultNodes)
                         {
-
                             var titleNode = node.SelectSingleNode(".//span");
-                            var linkNode = node.SelectSingleNode("/html/body/main/div/div/div/a");
+                            var linkNode = node.SelectSingleNode(".//span");
                             var imageNode = node.SelectSingleNode("/html/body/main/div/div/div/a[1]/div[1]/div[1]");
 
                             if (titleNode != null && linkNode != null)
@@ -127,7 +124,7 @@ namespace RecipeFinder_WebApp
                 document.LoadHtml(html);
 
                 // Parse Recipe Name
-                var recipeNameNode = document.DocumentNode.SelectSingleNode("//*[@id=\"article-header--recipe_1-0\"]/h1");
+                var recipeNameNode = document.DocumentNode.SelectSingleNode("//h1");
                 if (recipeNameNode != null)
                 {
                     searchResultRecipie.RecipeName = recipeNameNode.InnerText.Trim();
@@ -464,14 +461,7 @@ namespace RecipeFinder_WebApp
             return searchResultRecipie;
         }
 
-
-        public List<Recipe> GetRandomRecipes(List<Recipe> recipes, int count = 7)
-        {
-            var random = new Random();
-            return recipes.OrderBy(x => random.Next()).Take(count).ToList();
-        }
-
-
+       
         public async Task<List<Recipe>> ScrapeCookpadRecipies(string searchQuery)
         {
             // Check in _dataService.Recipies if recipes are already there, if yes return them
@@ -646,25 +636,11 @@ namespace RecipeFinder_WebApp
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        public List<Recipe> GetRandomRecipes(List<Recipe> recipes, int count = 7)
+        {
+            var random = new Random();
+            return recipes.OrderBy(x => random.Next()).Take(count).ToList();
+        }
 
     }
 }
