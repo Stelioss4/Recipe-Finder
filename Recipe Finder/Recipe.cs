@@ -2,6 +2,29 @@
 {
     public class Recipe
     {
+
+		//list of search terms
+
+		//source of recipie
+
+		public string SourceDomain
+		{
+			get
+			{
+				Uri u = new(Url);
+				return u.Host;
+			}
+		}
+
+		private string _searchTerms;
+
+		public string SearchTerms
+        {
+			get { return _searchTerms; }
+			set { _searchTerms = value; }
+		}
+
+
 		private string _recipeName;
 
 		public string RecipeName

@@ -14,21 +14,21 @@
 
 <h1>Recipe Search</h1>
 
-<div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
+<div class="alert alert-secondary mt-4" style="border:  solid red; margin: 5px">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
     <EditForm Model="@recipe" FormName="RecipeForm">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <span class="text-nowrap">
-
+        <div class="form-group">
+            <label for="RecipeName">Search any recipe here! :</label>
             <br />
-            <label for="searchQuery">Search recipe by Name : </label><br />
-            <InputText id="searchQuery"  @bind-Value="recipe.RecipeName"></InputText><br />
+            <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search Recipe!!!" />
+        </div>
+        <br />
 
         <button class="btn btn-outline-primary" @onclick="SearchForRecipe">Search For Recipe on AllRecipes</button><br />
-        </span>
     </EditForm>
 </div>
 

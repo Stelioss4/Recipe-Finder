@@ -14,19 +14,27 @@ namespace RecipeFinder_WebApp
             _httpClient = httpClient;
             _dataService = ds;
         }
+        public List<Recipe> GetCachedRecipes(string searchTerms, string source)
+        {
+            var existingRecipes = _dataService.Recipies
+                .Where(r => r.SearchTerms != null &&
+                            r.SourceDomain != null &&
+                            r.SearchTerms.Equals(searchTerms, StringComparison.OrdinalIgnoreCase) &&
+                            r.SourceDomain.Equals(source, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return existingRecipes;
+        }
 
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
-            // Check in _dataService.Recipies if recipes are already there, if yes return them
-            var existingRecipes = _dataService.Recipies
-                .Where(r => r.RecipeName != null && r.RecipeName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
+            var existingRecipes = GetCachedRecipes(searchQuery, Constants.ALLRECIPE_URL);
             if (existingRecipes.Any())
             {
                 return existingRecipes;
             }
+
             // If not found, scrape new recipes
             var searchResults = await ScrapeSearchResultsFromAllRecipe(searchQuery);
             if (searchResults == null || !searchResults.Any())
@@ -78,7 +86,7 @@ namespace RecipeFinder_WebApp
                         {
                             var titleNode = node.SelectSingleNode(".//span");
                             var linkNode = node.SelectSingleNode(".//span");
-                            var imageNode = node.SelectSingleNode("/html/body/main/div/div/div/a[1]/div[1]/div[1]");
+                            var imageNode = node.SelectSingleNode("//noscript/img");
 
                             if (titleNode != null && linkNode != null)
                             {
@@ -241,11 +249,7 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeCKRecipies(string searchQuery)
         {
-            // Check in _dataService.Recipies if recipes are already there, if yes return them
-            var existingRecipes = _dataService.Recipies
-                .Where(r => r.RecipeName != null && r.RecipeName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
+            var existingRecipes = GetCachedRecipes(searchQuery, Constants.CHEFKOCH_URL);
             if (existingRecipes.Any())
             {
                 return existingRecipes;
@@ -472,11 +476,7 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeCookpadRecipies(string searchQuery)
         {
-            // Check in _dataService.Recipies if recipes are already there, if yes return them
-            var existingRecipes = _dataService.Recipies
-                .Where(r => r.RecipeName != null && r.RecipeName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
+            var existingRecipes = GetCachedRecipes(searchQuery, Constants.COOKPAD_URL);
             if (existingRecipes.Any())
             {
                 return existingRecipes;
