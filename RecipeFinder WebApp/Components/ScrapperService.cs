@@ -369,15 +369,23 @@ namespace RecipeFinder_WebApp
                 }
 
                 // Parse Cooking Instructions
-                var instructionsNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[4]/div[1]");
-                if (instructionsNode != null)
+                var instructionsNodes = new List<HtmlNode>
+        {
+            document.DocumentNode.SelectSingleNode("/html/body/main/article[3]/div[1]"),
+            document.DocumentNode.SelectSingleNode("/html/body/main/article[4]/div[1]")
+        };
+
+                HtmlNode correctInstructionsNode = instructionsNodes.FirstOrDefault(node => node != null && IsValidInstructionsNode(node));
+
+                if (correctInstructionsNode != null)
                 {
-                    searchResultRecipie.CookingInstructions = instructionsNode.InnerHtml.Trim();
+                    searchResultRecipie.CookingInstructions = correctInstructionsNode.InnerHtml.Trim();
                 }
                 else
                 {
-                    Console.WriteLine("Instructions node is null");
+                    Console.WriteLine("Valid instructions node not found");
                 }
+
 
                 // Parse Video URL if available
                 var videoNode = document.DocumentNode.SelectSingleNode("//video/source");
@@ -461,7 +469,7 @@ namespace RecipeFinder_WebApp
             return searchResultRecipie;
         }
 
-       
+
         public async Task<List<Recipe>> ScrapeCookpadRecipies(string searchQuery)
         {
             // Check in _dataService.Recipies if recipes are already there, if yes return them
@@ -642,6 +650,19 @@ namespace RecipeFinder_WebApp
             return recipes.OrderBy(x => random.Next()).Take(count).ToList();
         }
 
+
+        private bool IsValidInstructionsNode(HtmlNode node)
+        {
+            // Define the criteria for a valid instructions node
+            // For example, check if the node contains a specific class or id, or contains a certain amount of text
+            if (node != null)
+            {
+                // Example criteria: node must contain a minimum amount of text
+                return node.InnerText.Trim().Length > 150;
+            }
+
+            return false;
+        }
     }
 }
 
