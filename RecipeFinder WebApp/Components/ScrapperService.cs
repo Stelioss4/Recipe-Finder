@@ -126,13 +126,18 @@ namespace RecipeFinder_WebApp
         {
             try
             {
+                if (!Uri.IsWellFormedUriString(searchResultRecipie.Url, UriKind.Absolute))
+                {
+                    searchResultRecipie.Url = ($"https://www.allrecipes.com {searchResultRecipie.Url}");
+                }
+
                 var html = await _httpClient.GetStringAsync(searchResultRecipie.Url);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
                 // Parse Recipe Name
-                var recipeNameNode = document.DocumentNode.SelectSingleNode("//h1");
+                var recipeNameNode = document.DocumentNode.SelectSingleNode("//*[@id=\"article-header--recipe_1-0\"]/h1");
                 if (recipeNameNode != null)
                 {
                     searchResultRecipie.RecipeName = recipeNameNode.InnerText.Trim();
