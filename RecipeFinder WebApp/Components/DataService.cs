@@ -26,7 +26,7 @@ namespace RecipeFinder_WebApp.Components
 
         public List<UsersProfile> usersProfiles { get; set; }
 
-        public List<Recipe> Recipies { get; set; } = new List<Recipe>();
+        public List<Recipe> Recipes { get; set; } = new List<Recipe>();
 
         private readonly IHttpClientFactory _clientFactory;
         private List<Recipe> _cachedRecipes;
@@ -38,7 +38,7 @@ namespace RecipeFinder_WebApp.Components
 
         public DataService()
         {
-            Recipies = TestData.RecipeList();
+            Recipes = TestData.RecipeList();
             usersProfiles = TestData.UserProfil();
         }
 

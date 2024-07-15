@@ -20,7 +20,7 @@
         </div>
         <br />
         <button class="btn btn-outline-primary" @onclick="SearchForRecipeFromCK">Search For Recipe on ChefKoch</button>
-        <button class="btn btn-outline-primary" @onclick="SearchForRecipe">Search For Recipe on AllRecipes</button><br />
+        <button class="btn btn-outline-primary" @onclick="SearchForRecipeFromAR">Search For Recipe on AllRecipes</button><br />
 
     </EditForm>
 </div>
@@ -52,10 +52,10 @@ else if (!string.IsNullOrEmpty(searchQuery))
 
     private async Task SearchForRecipeFromCK()
     {
-        recipes = await Scrap.ScrapeCKRecipies(searchQuery);
+        recipes = await Scrap.ScrapeCKRecipes(searchQuery);
     } 
     
-    private async Task SearchForRecipe()
+    private async Task SearchForRecipeFromAR()
     {
         recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
     }

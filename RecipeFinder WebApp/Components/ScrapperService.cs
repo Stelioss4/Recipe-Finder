@@ -16,7 +16,7 @@ namespace RecipeFinder_WebApp
         }
         public List<Recipe> GetCachedRecipes(string searchTerms, string source)
         {
-            var existingRecipes = _dataService.Recipies
+            var existingRecipes = _dataService.Recipes
                 .Where(r => r.SearchTerms != null &&
                             r.SourceDomain != null &&
                             r.SearchTerms.Equals(searchTerms, StringComparison.OrdinalIgnoreCase) &&
@@ -57,7 +57,7 @@ namespace RecipeFinder_WebApp
 
             if (detailedRecipes.Any())
             {
-                _dataService.Recipies.AddRange(detailedRecipes);
+                _dataService.Recipes.AddRange(detailedRecipes);
             }
 
             return detailedRecipes;
@@ -100,7 +100,7 @@ namespace RecipeFinder_WebApp
                             }
                             else
                             {
-                                Console.WriteLine("Title or link node is null for one of the recipies.");
+                                Console.WriteLine("Title or link node is null for one of the recipes.");
                             }
                         }
                     }
@@ -252,7 +252,7 @@ namespace RecipeFinder_WebApp
         }
 
 
-        public async Task<List<Recipe>> ScrapeCKRecipies(string searchQuery)
+        public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
             var existingRecipes = GetCachedRecipes(searchQuery, Constants.CHEFKOCH_URL);
             if (existingRecipes.Any())
@@ -283,7 +283,7 @@ namespace RecipeFinder_WebApp
 
             if (detailedRecipes.Any())
             {
-                _dataService.Recipies.AddRange(detailedRecipes);
+                _dataService.Recipes.AddRange(detailedRecipes);
             }
 
             return detailedRecipes;
@@ -291,7 +291,7 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeSearchResultsFromChefkoch(string searchQuery)
         {
-            List<Recipe> recipies = new List<Recipe>();
+            List<Recipe> recipes = new List<Recipe>();
 
             try
             {
@@ -324,11 +324,11 @@ namespace RecipeFinder_WebApp
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = imageNode?.GetAttributeValue("src", string.Empty)
                                 };
-                                recipies.Add(recipe);
+                                recipes.Add(recipe);
                             }
                             else
                             {
-                                Console.WriteLine("Title or link node is null for one of the recipies.");
+                                Console.WriteLine("Title or link node is null for one of the recipes.");
                             }
                         }
                     }
@@ -347,7 +347,7 @@ namespace RecipeFinder_WebApp
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
 
-            return recipies;
+            return recipes;
         }
 
         public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipie(Recipe searchResultRecipie)
@@ -479,7 +479,7 @@ namespace RecipeFinder_WebApp
         }
 
 
-        public async Task<List<Recipe>> ScrapeCookpadRecipies(string searchQuery)
+        public async Task<List<Recipe>> ScrapeCookpadRecipes(string searchQuery)
         {
             var existingRecipes = GetCachedRecipes(searchQuery, Constants.COOKPAD_URL);
             if (existingRecipes.Any())
@@ -510,7 +510,7 @@ namespace RecipeFinder_WebApp
 
             if (detailedRecipes.Any())
             {
-                _dataService.Recipies.AddRange(detailedRecipes);
+                _dataService.Recipes.AddRange(detailedRecipes);
             }
 
             return detailedRecipes;
