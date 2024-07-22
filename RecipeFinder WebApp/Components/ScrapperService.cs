@@ -19,13 +19,16 @@ namespace RecipeFinder_WebApp
             searchTerms = searchTerms.Trim().ToLowerInvariant();
             source = source.Trim().ToLowerInvariant();
 
-            List<Recipe> existingRecipes = _dataService.Recipes
-          .Where(r =>
-              r.SourceDomain != null &&
-              r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
-              r.SearchTerms != null &&
-              r.SearchTerms.Trim().ToLowerInvariant().Equals(searchTerms, StringComparison.OrdinalIgnoreCase))
-          .ToList();
+            var existingRecipes = _dataService.Recipes
+                .Where(r => r.RecipeName != null &&
+                       r.RecipeName.Contains(searchTerms, StringComparison.OrdinalIgnoreCase) &&
+                       r.SourceDomain.Equals(source, StringComparison.OrdinalIgnoreCase))
+                       //r.SourceDomain != null &&
+                       //r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
+                       //r.SearchTerms != null &&
+                       //r.SearchTerms.Trim().ToLowerInvariant().Equals(searchTerms, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
             if (existingRecipes.Any())
             {
                 return existingRecipes;
@@ -35,6 +38,7 @@ namespace RecipeFinder_WebApp
                 return new List<Recipe>();
             }
         }
+
 
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
@@ -104,7 +108,8 @@ namespace RecipeFinder_WebApp
                                 {
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
-                                    Image = imageNode?.GetAttributeValue("src", string.Empty)
+                                    Image = imageNode?.GetAttributeValue("src", string.Empty),
+                                    SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
                                 recipes.Add(recipe);
                             }
@@ -271,7 +276,7 @@ namespace RecipeFinder_WebApp
             }
 
             // If not found, scrape new recipes
-           var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
+            var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
             if (searchResults == null || !searchResults.Any())
             {
                 return new List<Recipe>(); // Return an empty list if no search results are found
@@ -334,7 +339,8 @@ namespace RecipeFinder_WebApp
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = imageNode?.GetAttributeValue("src", string.Empty),
-                                    SearchTerms = searchQuery
+                                    SearchTerms = searchQuery,
+                                    SourceDomain = new Uri(Constants.CHEFKOCH_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
                                 recipes.Add(recipe);
                             }

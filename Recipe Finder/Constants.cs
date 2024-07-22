@@ -8,8 +8,8 @@ namespace Recipe_Finder
 {
     public class Constants
     {
-       public const string CHEFKOCH_URL = "chefkoch.de";
-       public const string ALLRECIPE_URL = "allrecipes.com";
+       public const string CHEFKOCH_URL = "https://www.chefkoch.de";
+       public const string ALLRECIPE_URL = "https://www.allrecipes.com";
        public const string COOKPAD_URL = "cookpad.com";
     }
 }

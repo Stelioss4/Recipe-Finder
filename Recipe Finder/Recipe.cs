@@ -3,92 +3,98 @@
     public class Recipe
     {
 
-		//list of search terms
+        //list of search terms
 
-		//source of recipie
+        //source of recipie
 
-		public string SourceDomain
-		{
-			get
-			{
-				Uri u = new(Url);
-				return u.Host;
-			}
-		}
+        private string _sourceDomain;
 
-		private string _searchTerms;
-
-		public string SearchTerms
+        public string SourceDomain
         {
-			get { return _searchTerms; }
-			set { _searchTerms = value; }
-		}
+            get
+            {
+                Uri u = new(Url);
+                return u.Host.ToLowerInvariant(); // Ensure consistency with case-insensitive comparison
+            }
+            set
+            {
+                _sourceDomain = value.ToLowerInvariant(); // Normalize the value being set
+            }
+        }
+
+        private string _searchTerms;
+
+        public string SearchTerms
+        {
+            get { return _searchTerms; }
+            set { _searchTerms = value; }
+        }
 
 
-		private string _recipeName;
+        private string _recipeName;
 
-		public string RecipeName
-		{
-			get { return _recipeName; }
-			set { _recipeName = value; }
-		}
+        public string RecipeName
+        {
+            get { return _recipeName; }
+            set { _recipeName = value; }
+        }
 
-		private string _image;
+        private string _image;
 
-		public string Image
-		{
-			get { return _image; }
-			set { _image = value; }
-		}
+        public string Image
+        {
+            get { return _image; }
+            set { _image = value; }
+        }
 
 
-		private string _cookingInstructions;
+        private string _cookingInstructions;
 
-		public string CookingInstructions
-		{
-			get { return _cookingInstructions; }
-			set { _cookingInstructions = value; }
-		}
+        public string CookingInstructions
+        {
+            get { return _cookingInstructions; }
+            set { _cookingInstructions = value; }
+        }
 
-		private string _videoUrl;
+        private string _videoUrl;
 
-		public string VideoUrl
-		{
-			get { return _videoUrl; }
-			set { _videoUrl = value; }
-		}
+        public string VideoUrl
+        {
+            get { return _videoUrl; }
+            set { _videoUrl = value; }
+        }
 
-		private TimeSpan _cookingTime;
+        private TimeSpan _cookingTime;
 
-		public TimeSpan CookingTime
-		{
-			get { return _cookingTime; }
-			set { _cookingTime = value; }
-		}
+        public TimeSpan CookingTime
+        {
+            get { return _cookingTime; }
+            set { _cookingTime = value; }
+        }
 
-		private CuisineType _cuisineType;
+        private CuisineType _cuisineType;
 
-		public CuisineType CuisineType
-		{
-			get { return _cuisineType; }
-			set { _cuisineType = value; }
-		}
+        public CuisineType CuisineType
+        {
+            get { return _cuisineType; }
+            set { _cuisineType = value; }
+        }
 
-		private OccasionTags _occasionTags;
+        private OccasionTags _occasionTags;
 
-		public OccasionTags OccasionTags
-		{
-			get { return _occasionTags; }
-			set { _occasionTags = value; }
-		}
+        public OccasionTags OccasionTags
+        {
+            get { return _occasionTags; }
+            set { _occasionTags = value; }
+        }
 
-		private DifficultyLevel _difficultyLevel;    //difficulty will be measured by easy, medium and hard.
+        private DifficultyLevel _difficultyLevel;    //difficulty will be measured by easy, medium and hard.
 
         public DifficultyLevel DifficultyLevel
         {
-			get { return _difficultyLevel; }
-			set { _difficultyLevel = value; }
-		}
+            get { return _difficultyLevel; }
+            set { _difficultyLevel = value; }
+        }
 
         public List<Ingredient>? ListofIngredients { get; set; } = new List<Ingredient>();
 
@@ -100,13 +106,13 @@
             set { _linksForDrinkPairing = value; }
         }
 
-		private List<Rating> _ratings;
+        private List<Rating> _ratings;
 
-		public List<Rating> Ratings
+        public List<Rating> Ratings
         {
-			get { return _ratings; }
-			set { _ratings = value; }
-		}
+            get { return _ratings; }
+            set { _ratings = value; }
+        }
 
         public double Rating
         {
@@ -132,14 +138,14 @@
             set { _reviews = value; }
         }
 
-		private string _url;
+        private string _url;
 
-		public string Url
-		{
-			get { return  _url; }
-			set {  _url = value; }
-		}
+        public string Url
+        {
+            get { return _url; }
+            set { _url = value; }
+        }
 
 
-	}
+    }
 }
