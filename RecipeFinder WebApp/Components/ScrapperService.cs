@@ -16,14 +16,24 @@ namespace RecipeFinder_WebApp
         }
         public List<Recipe> GetCachedRecipes(string searchTerms, string source)
         {
-            var existingRecipes = _dataService.Recipes
-                .Where(r => r.SearchTerms != null &&
-                            r.SourceDomain != null &&
-                            r.SearchTerms.Equals(searchTerms, StringComparison.OrdinalIgnoreCase) &&
-                            r.SourceDomain.Equals(source, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            searchTerms = searchTerms.Trim().ToLowerInvariant();
+            source = source.Trim().ToLowerInvariant();
 
-            return existingRecipes;
+            List<Recipe> existingRecipes = _dataService.Recipes
+          .Where(r =>
+              r.SourceDomain != null &&
+              r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
+              r.SearchTerms != null &&
+              r.SearchTerms.Trim().ToLowerInvariant().Equals(searchTerms, StringComparison.OrdinalIgnoreCase))
+          .ToList();
+            if (existingRecipes.Any())
+            {
+                return existingRecipes;
+            }
+            else
+            {
+                return new List<Recipe>();
+            }
         }
 
 
@@ -261,7 +271,7 @@ namespace RecipeFinder_WebApp
             }
 
             // If not found, scrape new recipes
-            var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
+           var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
             if (searchResults == null || !searchResults.Any())
             {
                 return new List<Recipe>(); // Return an empty list if no search results are found
@@ -271,9 +281,10 @@ namespace RecipeFinder_WebApp
 
             foreach (var recipe in searchResults)
             {
-                if (recipe?.Url != null) // Check if the searchResultRecipie and its URL are not null
+                if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipie(recipe);
+                    recipe.SearchTerms = searchQuery; // Set the search terms
+                    Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
                     {
                         detailedRecipes.Add(detailedRecipe);
@@ -322,7 +333,8 @@ namespace RecipeFinder_WebApp
                                 {
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
-                                    Image = imageNode?.GetAttributeValue("src", string.Empty)
+                                    Image = imageNode?.GetAttributeValue("src", string.Empty),
+                                    SearchTerms = searchQuery
                                 };
                                 recipes.Add(recipe);
                             }
@@ -350,7 +362,7 @@ namespace RecipeFinder_WebApp
             return recipes;
         }
 
-        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipie(Recipe searchResultRecipie)
+        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipe(Recipe searchResultRecipie)
         {
             try
             {

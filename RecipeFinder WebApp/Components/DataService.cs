@@ -29,7 +29,7 @@ namespace RecipeFinder_WebApp.Components
         public List<Recipe> Recipes { get; set; } = new List<Recipe>();
 
         private readonly IHttpClientFactory _clientFactory;
-        private List<Recipe> _cachedRecipes;
+       // private List<Recipe> _cachedRecipes { get; set; }
 
         public DataService(IHttpClientFactory clientFactory)
         {

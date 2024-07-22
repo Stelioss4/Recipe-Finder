@@ -80,7 +80,7 @@
         {
             Console.WriteLine($"Found url parameter: {urlValue}");
             var decodedUrl = Uri.UnescapeDataString(urlValue);
-            recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipie(new Recipe { Url = decodedUrl });
+            recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
             Console.WriteLine($"Scraped recipe: {recipe.RecipeName}");
         }
         else
