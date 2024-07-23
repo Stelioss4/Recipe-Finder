@@ -99,7 +99,7 @@ namespace RecipeFinder_WebApp
                         {
                             var titleNode = node.SelectSingleNode(".//span");
                             var linkNode = node.SelectSingleNode(".//span");
-                            var imageNode = node.SelectSingleNode("//noscript/img");
+                            var imageNode = node.SelectSingleNode("//img");
 
                             if (titleNode != null && linkNode != null)
                             {

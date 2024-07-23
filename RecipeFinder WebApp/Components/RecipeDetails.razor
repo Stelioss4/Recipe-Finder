@@ -80,7 +80,20 @@
         {
             Console.WriteLine($"Found url parameter: {urlValue}");
             var decodedUrl = Uri.UnescapeDataString(urlValue);
-            recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+
+            if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
+            {
+                recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+            }
+            else if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
+            {
+                recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipie(new Recipe { Url = decodedUrl });
+            }
+            else
+            {
+                Console.WriteLine("Unknown source domain");
+            }
+
             Console.WriteLine($"Scraped recipe: {recipe.RecipeName}");
         }
         else
