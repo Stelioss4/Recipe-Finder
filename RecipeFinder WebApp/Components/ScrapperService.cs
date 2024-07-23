@@ -23,7 +23,9 @@ namespace RecipeFinder_WebApp
                 .Where(r => r.RecipeName != null &&
                        r.RecipeName.Contains(searchTerms, StringComparison.OrdinalIgnoreCase) &&
                        r?.SourceDomain != null &&
-                       r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase))
+                       r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
+                       r.SearchTerms != null &&
+                       r.SearchTerms.Trim().ToLowerInvariant().Equals(searchTerms, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             if (existingRecipes.Any())
@@ -35,8 +37,6 @@ namespace RecipeFinder_WebApp
                 return new List<Recipe>();
             }
         }
-
-
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {

@@ -10,6 +10,6 @@ namespace Recipe_Finder
     {
        public const string CHEFKOCH_URL = "https://www.chefkoch.de";
        public const string ALLRECIPE_URL = "https://www.allrecipes.com";
-       public const string COOKPAD_URL = "cookpad.com";
+       public const string COOKPAD_URL = "https://www.cookpad.com";
     }
 }
