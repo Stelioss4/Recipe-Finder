@@ -22,11 +22,8 @@ namespace RecipeFinder_WebApp
             var existingRecipes = _dataService.Recipes
                 .Where(r => r.RecipeName != null &&
                        r.RecipeName.Contains(searchTerms, StringComparison.OrdinalIgnoreCase) &&
-                       r.SourceDomain.Equals(source, StringComparison.OrdinalIgnoreCase))
-                       //r.SourceDomain != null &&
-                       //r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
-                       //r.SearchTerms != null &&
-                       //r.SearchTerms.Trim().ToLowerInvariant().Equals(searchTerms, StringComparison.OrdinalIgnoreCase))
+                       r?.SourceDomain != null &&
+                       r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             if (existingRecipes.Any())
@@ -61,6 +58,8 @@ namespace RecipeFinder_WebApp
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipie and its URL are not null
                 {
+                    recipe.SearchTerms = searchQuery; // Set the search terms
+                    recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeAllRecipesDetailsAndUpdateRecipie(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
                     {
@@ -289,6 +288,7 @@ namespace RecipeFinder_WebApp
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
                     recipe.SearchTerms = searchQuery; // Set the search terms
+                    recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
                     {

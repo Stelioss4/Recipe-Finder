@@ -13,14 +13,15 @@
         {
             get
             {
-                Uri u = new(Url);
-                return u.Host.ToLowerInvariant(); // Ensure consistency with case-insensitive comparison
+                if (_sourceDomain == null && !string.IsNullOrEmpty(Url))
+                {
+                    Uri u = new Uri(Url);
+                    _sourceDomain = u.Host.ToLowerInvariant(); // Ensure consistency with case-insensitive comparison;
+                }
+                return _sourceDomain;
             }
-            set
-            {
-                _sourceDomain = value.ToLowerInvariant(); // Normalize the value being set
+            set { _sourceDomain = value.ToLowerInvariant(); } // Normalize the value being set; 
             }
-        }
 
         private string _searchTerms;
 
