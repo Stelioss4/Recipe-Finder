@@ -94,7 +94,7 @@
             recipe.RecipeName = "Boild egg";
             recipe.CookingInstructions = "boil an egg";
             recipe.VideoUrl = "www.howtoBoilanEgg.com";
-            recipe.DifficultyLevel = DifficultyLevel.Easy;
+            recipe.DifficultyLevel = "Easy";
             recipe.ListofIngredients = ingredients;
             recipe.CookingTime = TimeSpan.FromMinutes(14);
             recipe.CuisineType = CuisineType.Australian;
@@ -179,7 +179,7 @@
             recipe2.RecipeName = "Nudles Pomodoro";
             recipe2.CookingInstructions = "boil nudles";
             recipe2.VideoUrl = "www.howtocooknudles.com";
-            recipe2.DifficultyLevel = DifficultyLevel.Easy;
+            recipe2.DifficultyLevel = "Easy";
             recipe2.ListofIngredients = ingredients;
             recipe2.CookingTime = TimeSpan.FromMinutes(10);
             recipe2.CuisineType = CuisineType.Italian;

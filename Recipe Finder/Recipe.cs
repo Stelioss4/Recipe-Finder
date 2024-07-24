@@ -89,9 +89,9 @@
             set { _occasionTags = value; }
         }
 
-        private DifficultyLevel _difficultyLevel;    //difficulty will be measured by easy, medium and hard.
+        private string _difficultyLevel;    //difficulty will be measured by easy, medium and hard.
 
-        public DifficultyLevel DifficultyLevel
+        public string DifficultyLevel
         {
             get { return _difficultyLevel; }
             set { _difficultyLevel = value; }

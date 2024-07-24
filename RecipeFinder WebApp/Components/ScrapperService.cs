@@ -212,10 +212,9 @@ namespace RecipeFinder_WebApp
                 var difficultyLevelNode = document.DocumentNode.SelectSingleNode("//span[@class='recipe-difficulty']");
                 if (difficultyLevelNode != null)
                 {
-                    if (Enum.TryParse(difficultyLevelNode.InnerText.Trim(), true, out DifficultyLevel difficultyLevel))
-                    {
-                        searchResultRecipie.DifficultyLevel = difficultyLevel;
-                    }
+                    
+                   searchResultRecipie.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
+                        
                 }
                 else
                 {
@@ -318,7 +317,7 @@ namespace RecipeFinder_WebApp
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]");
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]/div/div[1]/main/section/div[5]/div");
 
                 if (listNode != null)
                 {
@@ -443,10 +442,7 @@ namespace RecipeFinder_WebApp
                 var difficultyLevelNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[1]/div/div[2]/small/span[2]");
                 if (difficultyLevelNode != null)
                 {
-                    if (Enum.TryParse(difficultyLevelNode.InnerText.Trim(), true, out DifficultyLevel difficultyLevel))
-                    {
-                        searchResultRecipie.DifficultyLevel = difficultyLevel;
-                    }
+                    searchResultRecipie.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
                 }
                 else
                 {
