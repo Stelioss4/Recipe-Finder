@@ -2,11 +2,6 @@
 {
     public class Recipe
     {
-
-        //list of search terms
-
-        //source of recipie
-
         private string _sourceDomain;
 
         public string SourceDomain
@@ -23,9 +18,9 @@
             set { _sourceDomain = value.ToLowerInvariant(); } // Normalize the value being set; 
             }
 
-        private string _searchTerms;
+        private List<string> _searchTerms;
 
-        public string SearchTerms
+        public List<string> SearchTerms
         {
             get { return _searchTerms; }
             set { _searchTerms = value; }

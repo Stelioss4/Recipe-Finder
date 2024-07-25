@@ -14,33 +14,26 @@ namespace RecipeFinder_WebApp
             _httpClient = httpClient;
             _dataService = ds;
         }
-        public List<Recipe> GetCachedRecipes(string searchTerms, string source)
+        public List<Recipe> GetCachedRecipes(List<string> searchTerms, string source)
         {
-            searchTerms = searchTerms.Trim().ToLowerInvariant();
+            var normalizedSearchTerms = searchTerms.Select(term => term.Trim().ToLowerInvariant()).ToList();
             source = source.Trim().ToLowerInvariant();
 
             var existingRecipes = _dataService.Recipes
                 .Where(r => r.RecipeName != null &&
-                       r.RecipeName.Contains(searchTerms, StringComparison.OrdinalIgnoreCase) &&
-                       r?.SourceDomain != null &&
-                       r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
-                       r.SearchTerms != null &&
-                       r.SearchTerms.Trim().ToLowerInvariant().Equals(searchTerms, StringComparison.OrdinalIgnoreCase))
+                            r.SourceDomain != null &&
+                            r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
+                            r.SearchTerms != null)
+                .Where(r => normalizedSearchTerms.Any(term => r.RecipeName.Contains(term, StringComparison.OrdinalIgnoreCase)) &&
+                            normalizedSearchTerms.Any(term => r.SearchTerms.Any(st => st.Trim().ToLowerInvariant().Equals(term, StringComparison.OrdinalIgnoreCase))))
                 .ToList();
 
-            if (existingRecipes.Any())
-            {
-                return existingRecipes;
-            }
-            else
-            {
-                return new List<Recipe>();
-            }
+            return existingRecipes;
         }
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
-            var existingRecipes = GetCachedRecipes(searchQuery, Constants.ALLRECIPE_URL);
+            var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.ALLRECIPE_URL);
             if (existingRecipes.Any())
             {
                 return existingRecipes;
@@ -58,7 +51,7 @@ namespace RecipeFinder_WebApp
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipie and its URL are not null
                 {
-                    recipe.SearchTerms = searchQuery; // Set the search terms
+                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
                     recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeAllRecipesDetailsAndUpdateRecipie(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -267,7 +260,7 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
-            var existingRecipes = GetCachedRecipes(searchQuery, Constants.CHEFKOCH_URL);
+            var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.CHEFKOCH_URL);
             if (existingRecipes.Any())
             {
                 return existingRecipes;
@@ -286,7 +279,7 @@ namespace RecipeFinder_WebApp
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    recipe.SearchTerms = searchQuery; // Set the search terms
+                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
                     recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -338,7 +331,7 @@ namespace RecipeFinder_WebApp
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = imageNode?.GetAttributeValue("src", string.Empty),
-                                    SearchTerms = searchQuery,
+                                    SearchTerms = new List<string> { searchQuery },
                                     SourceDomain = new Uri(Constants.CHEFKOCH_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
                                 recipes.Add(recipe);
@@ -506,7 +499,7 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeCookpadRecipes(string searchQuery)
         {
-            var existingRecipes = GetCachedRecipes(searchQuery, Constants.COOKPAD_URL);
+            var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.COOKPAD_URL);
             if (existingRecipes.Any())
             {
                 return existingRecipes;
@@ -673,13 +666,11 @@ namespace RecipeFinder_WebApp
             return searchResultRecipie;
         }
 
-
         public List<Recipe> GetRandomRecipes(List<Recipe> recipes, int count = 7)
         {
             var random = new Random();
             return recipes.OrderBy(x => random.Next()).Take(count).ToList();
         }
-
 
         private bool IsValidInstructionsNode(HtmlNode node)
         {
