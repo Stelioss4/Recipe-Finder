@@ -448,6 +448,17 @@ namespace RecipeFinder_WebApp
                 {
                     Console.WriteLine("Difficulty Level node is null");
                 }
+                // Parse Cooking Time
+                var cookingTimeNode = document.DocumentNode.SelectSingleNode("//div//div[3]/div/span");
+                if (cookingTimeNode != null)
+                {
+                    searchResultRecipie.Time = cookingTimeNode.InnerText.Trim();
+                }
+                else
+                {
+                    Console.WriteLine("Cooking time node is null");
+                }
+
 
                 // Parse Occasion Tags
                 var occasionTagsNode = document.DocumentNode.SelectSingleNode("//span[@class='occasion-tags']");

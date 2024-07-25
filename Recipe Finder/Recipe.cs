@@ -65,6 +65,14 @@
             set { _videoUrl = value; }
         }
 
+        private string _time;
+
+        public string Time
+        {
+            get { return _time; }
+            set { _time = value; }
+        }
+
         private TimeSpan _cookingTime;
 
         public TimeSpan CookingTime
