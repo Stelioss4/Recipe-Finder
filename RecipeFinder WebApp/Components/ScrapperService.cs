@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Components;
+using System.Xml.Serialization;
 
 namespace RecipeFinder_WebApp
 {
@@ -14,12 +15,49 @@ namespace RecipeFinder_WebApp
             _httpClient = httpClient;
             _dataService = ds;
         }
+        public void SaveRecipesToXmlFile(List<Recipe> recipes, string filePath)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Recipe>));
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    serializer.Serialize(writer, recipes);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving recipes to XML file: {ex.Message}");
+            }
+        }
+
+        public List<Recipe> LoadRecipesFromXmlFile(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Recipe>));
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        var recipes = (List<Recipe>)serializer.Deserialize(reader);
+                        return recipes ?? new List<Recipe>(); // Return an empty list if deserialization returns null
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading recipes from XML file: {ex.Message}");
+            }
+            return new List<Recipe>();
+        }
+
         public List<Recipe> GetCachedRecipes(List<string> searchTerms, string source)
         {
             var normalizedSearchTerms = searchTerms.Select(term => term.Trim().ToLowerInvariant()).ToList();
             source = source.Trim().ToLowerInvariant();
 
-            var existingRecipes = _dataService.Recipes
+            var existingRecipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH)
                 .Where(r => r.RecipeName != null &&
                             r.SourceDomain != null &&
                             r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
@@ -61,9 +99,10 @@ namespace RecipeFinder_WebApp
                 }
             }
 
-            if (detailedRecipes.Any())
+            if (detailedRecipes.Count > 0)
             {
                 _dataService.Recipes.AddRange(detailedRecipes);
+                SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
             }
 
             return detailedRecipes;
@@ -205,9 +244,9 @@ namespace RecipeFinder_WebApp
                 var difficultyLevelNode = document.DocumentNode.SelectSingleNode("//span[@class='recipe-difficulty']");
                 if (difficultyLevelNode != null)
                 {
-                    
-                   searchResultRecipie.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
-                        
+
+                    searchResultRecipie.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
+
                 }
                 else
                 {
@@ -261,7 +300,7 @@ namespace RecipeFinder_WebApp
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
             var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.CHEFKOCH_URL);
-            if (existingRecipes.Any())
+            if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
             }
@@ -289,11 +328,11 @@ namespace RecipeFinder_WebApp
                 }
             }
 
-            if (detailedRecipes.Any())
+            if (detailedRecipes.Count > 0)
             {
                 _dataService.Recipes.AddRange(detailedRecipes);
+                SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
             }
-
             return detailedRecipes;
         }
 
@@ -431,7 +470,7 @@ namespace RecipeFinder_WebApp
                     Console.WriteLine("Cuisine Type node is null");
                 }
 
-                // Parse Difficulty Level
+                // Parse Difficulty Level                                         
                 var difficultyLevelNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[1]/div/div[2]/small/span[2]");
                 if (difficultyLevelNode != null)
                 {
@@ -442,7 +481,7 @@ namespace RecipeFinder_WebApp
                     Console.WriteLine("Difficulty Level node is null");
                 }
                 // Parse Cooking Time
-                var cookingTimeNode = document.DocumentNode.SelectSingleNode("//div//div[3]/div/span");
+                var cookingTimeNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]//main/section/div[5]/div/div//div[3]/div");
                 if (cookingTimeNode != null)
                 {
                     searchResultRecipie.Time = cookingTimeNode.InnerText.Trim();
@@ -496,7 +535,6 @@ namespace RecipeFinder_WebApp
             return searchResultRecipie;
         }
 
-
         public async Task<List<Recipe>> ScrapeCookpadRecipes(string searchQuery)
         {
             var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.COOKPAD_URL);
@@ -526,11 +564,11 @@ namespace RecipeFinder_WebApp
                 }
             }
 
-            if (detailedRecipes.Any())
+            if (detailedRecipes.Count > 0)
             {
                 _dataService.Recipes.AddRange(detailedRecipes);
+                SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
             }
-
             return detailedRecipes;
         }
 
