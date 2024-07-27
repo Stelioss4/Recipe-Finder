@@ -7,24 +7,23 @@
 @inject ApplicationDbContext DbContext
 
 
-<EditForm Model="UserProfile" OnValidSubmit="LogInUser" FormName="LogInForm">
+<EditForm Model="UserProfile" OnValidSubmit="LogInUser">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div class="alert alert-secondary mt-4" style="border: thin solid black; margin: 5px">
-        <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
-        <strong>@Title</strong>
-        <br /> <label for="Email">Email : </label><br />
-        <InputText type="Email" @bind-Value="UserProfile.Email"></InputText><br />
 
-        <label for="Password">Password : </label><br />
-        <InputText type="Password" @bind-Value="UserProfile.Password"></InputText><br />
-
-        <button type="submit" class="btn btn-primary">Log in!</button>
-
-
-
-
+    <div>
+        <label for="Email">Email:</label><br />
+        <InputText id="Email" @bind-Value="UserProfile.Email" />
+        <ValidationMessage For="@(() => UserProfile.Email)" />
     </div>
+
+    <div>
+        <label for="Password">Password:</label><br />
+        <InputText type="password" id="Password" @bind-Value="UserProfile.Password" />
+        <ValidationMessage For="@(() => UserProfile.Password)" />
+    </div>
+
+    <button class="btn btn-secondary" type="submit">Log In</button>
 </EditForm>
 
 @code {
@@ -34,21 +33,33 @@
     private UsersProfile UserProfile { get; set; } = new UsersProfile();
 
 
-    private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+    private List<UsersProfile> users { get; set; } = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
 
 
     private void LogInUser()
     {
-        UsersProfile user = users.FirstOrDefault(u => u.Email == UserProfile.Email && u.Password == UserProfile.Password);
+        users = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
+
+        // Find the user by email
+        var user = users.FirstOrDefault(u => u.Email.Equals(UserProfile.Email, StringComparison.OrdinalIgnoreCase));
+
         if (user != null)
         {
-            Console.WriteLine("User logged in successfully.");
+            // Validate password
+            if (user.Password.Equals(UserProfile.Password))
+            {
+                Console.WriteLine("User logged in successfully.");
+                Navigation.NavigateTo("/profile"); // Redirect to profile page
+            }
+            else
+            {
+                Console.WriteLine("Invalid login credentials.");
+            }
         }
         else
         {
-            Console.WriteLine("Invalid login credentials.");
+            Console.WriteLine("User with this email does not exist.");
         }
-            Navigation.NavigateTo("/profile"); // Redirect to profile page
     }
 
 }

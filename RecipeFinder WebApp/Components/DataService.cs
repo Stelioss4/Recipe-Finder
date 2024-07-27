@@ -1,35 +1,26 @@
-﻿using Microsoft.VisualBasic;
-using Recipe_Finder;
-using System.Text.Json;
+﻿using Recipe_Finder;
+using System.IO;
 using System.Xml.Serialization;
+
 
 namespace RecipeFinder_WebApp.Components
 {
     public class DataService
     {
 
-        const string PATH = "Users.xml";
+        
 
-        private List<User> _users = new List<User>();
+       
 
-        public List<User> Users
-        {
-            get { return _users; }
-            set { _users = value; }
-        }
-
-        public UsersProfile? UserProfile { get; set; } = new UsersProfile();
+        private UsersProfile? user { get; set; } = new UsersProfile();
 
         public Address Address { get; set; } = new Address();
 
         public List<UsersProfile> users { get; set; } = new List<UsersProfile>();
 
-        public List<UsersProfile> usersProfiles { get; set; }
-
         public List<Recipe> Recipes { get; set; } = new List<Recipe>();
 
         private readonly IHttpClientFactory _clientFactory;
-       // private List<Recipe> _cachedRecipes { get; set; }
 
         public DataService(IHttpClientFactory clientFactory)
         {
@@ -39,19 +30,40 @@ namespace RecipeFinder_WebApp.Components
         public DataService()
         {
             Recipes = TestData.RecipeList();
-            usersProfiles = TestData.UserProfil();
+            users = TestData.UserProfil();
+        }
+        public bool UserExists(string email)
+        {
+            return users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
-        public static List<UsersProfile> LoadUser()
+        public static void SaveUsersToXmlFile(List<UsersProfile> users, string filePath)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
+                using (FileStream file = File.Create(Constants.XML_USER_PATH))
+                {
+                    serializer.Serialize(file, users);
+                }
+                Console.WriteLine("Users saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while saving users: {ex.Message}");
+            }
+        }
+
+        public static List<UsersProfile> LoadUsersFromXmlFile(string filePath)
         {
             List<UsersProfile> users = new List<UsersProfile>();
             XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
 
             try
             {
-                if (File.Exists(PATH))
+                if (File.Exists(Constants.XML_USER_PATH))
                 {
-                    using (FileStream file = File.OpenRead(PATH))
+                    using (FileStream file = File.OpenRead(Constants.XML_USER_PATH))
                     {
                         var loadedUsers = serializer.Deserialize(file) as List<UsersProfile>;
                         if (loadedUsers != null)
@@ -68,33 +80,5 @@ namespace RecipeFinder_WebApp.Components
 
             return users;
         }
-
-        public static void SaveUser(List<UsersProfile> users)
-        {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
-                using (FileStream file = File.Create(PATH))
-                {
-                    serializer.Serialize(file, users);
-                }
-                Console.WriteLine("Users saved successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while saving users: {ex.Message}");
-            }
-        }
-
-        public static void UserExist()
-        {
-            bool userExist = true;
-            if (userExist)
-            {
-                LoadUser();
-            }
-        }
-
-
     }
 }

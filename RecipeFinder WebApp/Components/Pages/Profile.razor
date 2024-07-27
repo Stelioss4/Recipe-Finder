@@ -13,7 +13,7 @@
 </EditForm>
 
 @code {
-    private List<UsersProfile> Users { get; set; } = DataService.LoadUser();
+    private List<UsersProfile> Users { get; set; } = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
 
     private UsersProfile UserProfile { get; set; } = new UsersProfile();
 
@@ -23,7 +23,7 @@
 
     protected override void OnInitialized()
     {
-        List<UsersProfile> Users = DataService.LoadUser();
+        Users = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
         if (Users != null && Users.Count > 0)
         {
             UserProfile = Users[0];

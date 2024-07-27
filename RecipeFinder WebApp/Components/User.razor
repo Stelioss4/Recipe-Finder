@@ -5,8 +5,7 @@
 @inject NavigationManager Navigation
 @inject UserService UserServ
 
-
-<EditForm Model="UserProfile" OnValidSubmit="RegisterUser" FormName="RegisterForm">
+<EditForm Model="UserProfile" OnValidSubmit="RegisterUser">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -18,13 +17,13 @@
 
     <div>
         <label for="LastName">Last Name:</label><br />
-        <InputText id="LastName" @bind-Value="UserProfile.LastName"  />
+        <InputText id="LastName" @bind-Value="UserProfile.LastName" />
         <ValidationMessage For="@(() => UserProfile.LastName)" />
     </div>
 
     <div>
         <label for="Email">Email:</label><br />
-        <InputText id="Email" @bind-Value="UserProfile.Email"/>
+        <InputText id="Email" @bind-Value="UserProfile.Email" />
         <ValidationMessage For="@(() => UserProfile.Email)" />
     </div>
 
@@ -36,8 +35,8 @@
 
     <div>
         <label for="ConfirmPassword">Confirm Password:</label><br />
-        <InputText type="Password" id="ConfirmPassword" @bind-Value="UserProfile.Password"  />
-        <ValidationMessage For="@(() => UserProfile.Password)" />
+        <InputText type="password" id="ConfirmPassword" @bind-Value="ConfirmPassword" />
+        <ValidationMessage For="@(() => ConfirmPassword)" />
     </div>
 
     <div>
@@ -48,13 +47,13 @@
 
     <div>
         <label for="HouseNumber">House Number:</label><br />
-        <InputText id="HouseNumber" @bind-Value="UserProfile.Address.Housenumber"/>
+        <InputText id="HouseNumber" @bind-Value="UserProfile.Address.Housenumber" />
         <ValidationMessage For="@(() => UserProfile.Address.Housenumber)" />
     </div>
 
     <div>
         <label for="PostalCode">Postal Code:</label><br />
-        <InputText id="PostalCode" @bind-Value="UserProfile.Address.PostalCode"/>
+        <InputText id="PostalCode" @bind-Value="UserProfile.Address.PostalCode" />
         <ValidationMessage For="@(() => UserProfile.Address.PostalCode)" />
     </div>
 
@@ -66,19 +65,21 @@
 
     <button type="submit">Register</button>
 </EditForm>
+
 @code {
     [Parameter]
     public string Title { get; set; }
 
-    private UsersProfile UserProfile { get; set; } = new UsersProfile();
-    private Address Address { get; set; } = new Address();
-
-
     private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+
+    private UsersProfile UserProfile { get; set; } = new UsersProfile
+        {
+            Address = new Address()
+        };
 
     private string ConfirmPassword { get; set; }
 
-    private async Task RegisterUser()
+    private void RegisterUser()
     {
         // Check password confirmation
         if (UserProfile.Password != ConfirmPassword)
@@ -89,8 +90,16 @@
 
         try
         {
-            DbContext.UsersProfiles.Add(UserProfile);
-            await DbContext.SaveChangesAsync();
+            users = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
+
+            if (users.Any(u => u.Email.Equals(UserProfile.Email, StringComparison.OrdinalIgnoreCase)))
+            {
+                Console.WriteLine("User with this email already exists.");
+                return;
+            }
+
+            users.Add(UserProfile);
+            DataService.SaveUsersToXmlFile(users, Constants.XML_USER_PATH);
 
             Navigation.NavigateTo("/profile");
             Console.WriteLine("User registered successfully.");
@@ -108,7 +117,3 @@
         ConfirmPassword = string.Empty;
     }
 }
-
-
-
-

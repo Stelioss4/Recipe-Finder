@@ -12,5 +12,6 @@ namespace Recipe_Finder
        public const string ALLRECIPE_URL = "https://www.allrecipes.com";
        public const string COOKPAD_URL = "https://www.cookpad.com";
        public const string XML_CACHE_PATH = "cached_recipes.xml";
+       public const string XML_USER_PATH = "Users.xml";
     }
 }

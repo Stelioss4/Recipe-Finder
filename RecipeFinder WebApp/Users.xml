@@ -7,5 +7,19 @@
     <Password>123456654321</Password>
     <Address />
     <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <FirstName>Stelios</FirstName>
+    <LastName>Boursanidis</LastName>
+    <Email>Stelios.bours@gmail.com</Email>
+    <Password>6984866579</Password>
+    <Address>
+      <StreetsName>street</StreetsName>
+      <Housenumber>145</Housenumber>
+      <City>longtown</City>
+      <PostalCode>80999</PostalCode>
+    </Address>
+    <FavoriteRecipes />
   </UsersProfile>
 </ArrayOfUsersProfile>
