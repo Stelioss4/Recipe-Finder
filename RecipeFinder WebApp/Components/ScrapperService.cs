@@ -15,7 +15,7 @@ namespace RecipeFinder_WebApp
             _httpClient = httpClient;
             _dataService = ds;
         }
-        public void SaveRecipesToXmlFile(List<Recipe> recipes, string filePath)
+        public static void SaveRecipesToXmlFile(List<Recipe> recipes, string filePath)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace RecipeFinder_WebApp
             }
         }
 
-        public List<Recipe> LoadRecipesFromXmlFile(string filePath)
+        public static List<Recipe> LoadRecipesFromXmlFile(string filePath)
         {
             try
             {

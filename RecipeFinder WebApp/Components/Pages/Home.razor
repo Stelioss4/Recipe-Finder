@@ -44,6 +44,7 @@
                         <div class="card-body">
                             <h5 class="card-title">@rec.RecipeName</h5>
                             <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
+                            <button class="btn btn-outline-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
                         </div>
                     </div>
                 </div>
@@ -59,6 +60,7 @@
 </div>
 @code {
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
+    private UsersProfile user { get; set; } = new UsersProfile();
     private string searchQuery { get; set; } = string.Empty;
 
     private async Task SearchForRecipeFromCK()
@@ -73,6 +75,16 @@
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {
-        Navigation.NavigateTo($"/recipedetails?url={Uri.EscapeDataString(recipeUrl)}");
+        Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
+    }
+    private void AddRecipeToFavorite(Recipe recipe)
+    {
+        if (user.FavoriteRecipes == null)
+        {
+            user.FavoriteRecipes = new List<Recipe>();
+        }
+
+        user.FavoriteRecipes.Add(recipe);
+        ScrapperService.SaveRecipesToXmlFile(user.FavoriteRecipes, Constants.XML_FAVORITE_REC_PATH);
     }
 }

@@ -13,5 +13,6 @@ namespace Recipe_Finder
        public const string COOKPAD_URL = "https://www.cookpad.com";
        public const string XML_CACHE_PATH = "cached_recipes.xml";
        public const string XML_USER_PATH = "Users.xml";
+       public const string XML_FAVORITE_REC_PATH = "Favorite_recipes.xml";
     }
 }

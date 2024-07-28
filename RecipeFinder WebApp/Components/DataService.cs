@@ -7,11 +7,6 @@ namespace RecipeFinder_WebApp.Components
 {
     public class DataService
     {
-
-        
-
-       
-
         private UsersProfile? user { get; set; } = new UsersProfile();
 
         public Address Address { get; set; } = new Address();
