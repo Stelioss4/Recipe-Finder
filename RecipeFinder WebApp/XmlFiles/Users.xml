@@ -35,5 +35,19 @@
       <PostalCode>80995</PostalCode>
     </Address>
     <FavoriteRecipes />
+    <WeeklyPlan />
+  </UsersProfile>
+  <UsersProfile>
+    <FirstName>stelios</FirstName>
+    <LastName>Boursanidis</LastName>
+    <Email>ste.bour@gmail.com</Email>
+    <Password>6984866579</Password>
+    <Address>
+      <StreetsName>Weitlstrasse</StreetsName>
+      <Housenumber>145</Housenumber>
+      <City>München</City>
+      <PostalCode>80995</PostalCode>
+    </Address>
+    <FavoriteRecipes />
   </UsersProfile>
 </ArrayOfUsersProfile>
