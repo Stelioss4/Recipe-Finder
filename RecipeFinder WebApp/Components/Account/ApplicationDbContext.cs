@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 
-namespace RecipeFinder_WebApp
+namespace RecipeFinder_WebApp.Components.Account
 {
     public class ApplicationDbContext : DbContext
     {
