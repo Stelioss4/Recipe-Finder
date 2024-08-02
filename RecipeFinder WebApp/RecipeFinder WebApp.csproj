@@ -49,4 +49,8 @@
 		<PackageReference Include="Rayab.ApplicationDbContext" Version="1.2.4" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="RecipeFinder_File_WebApp\Components\" />
+	</ItemGroup>
+
 </Project>

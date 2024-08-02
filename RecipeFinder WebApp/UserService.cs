@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
-using RecipeFinder_WebApp;
+using RecipeFinder_WebApp.Components.Account;
 using System.Threading.Tasks;
 
 namespace RecipeFinder_WebApp
