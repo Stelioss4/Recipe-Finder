@@ -5,8 +5,7 @@ namespace Recipe_Finder
     public class User
     {
         private string _firstname;
-        //[Required]
-        //[StringLength(100, MinimumLength = 2)]
+      
         public string FirstName
         {
             get { return _firstname; }
@@ -14,8 +13,7 @@ namespace Recipe_Finder
         }
 
         private string _lastName;
-        //[Required]
-        //[StringLength(100, MinimumLength = 2)]
+      
         public string LastName
         {
             get { return _lastName; }
@@ -41,7 +39,8 @@ namespace Recipe_Finder
             set { _password = value; }
         }
         private string _confirmPassword;
-
+        [Required]
+        [DataType(DataType.Password)]
         public string ConfirmPassword 
         {
             get { return _confirmPassword; }
