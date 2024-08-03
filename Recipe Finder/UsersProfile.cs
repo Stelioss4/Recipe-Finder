@@ -40,6 +40,14 @@ namespace Recipe_Finder
             get { return _password; }
             set { _password = value; }
         }
+        private string _confirmPassword;
+
+        public string ConfirmPassword 
+        {
+            get { return _confirmPassword; }
+            set { _confirmPassword = value; }
+        }
+
 
         private Address _address = new Address();
 
