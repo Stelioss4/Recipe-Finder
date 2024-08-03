@@ -18,9 +18,9 @@
             set { _timeStam = value; }
         }
 
-        private UsersProfile _profile;
+        private User _profile;
 
-        public UsersProfile Profile
+        public User Profile
         {
             get { return _profile; }
             set { _profile = value; }

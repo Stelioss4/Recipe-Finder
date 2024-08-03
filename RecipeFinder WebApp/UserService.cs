@@ -14,7 +14,7 @@ namespace RecipeFinder_WebApp
             _dbContext = dbContext;
         }
 
-        public async Task<UsersProfile> GetUserAsync(string username, string password)
+        public async Task<User> GetUserAsync(string username, string password)
         {
             return await _dbContext.UsersProfiles
                 .FirstOrDefaultAsync(u => u.Email == username && u.Password == password);

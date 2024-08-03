@@ -13,7 +13,7 @@
 
             List<Review> reviews = new List<Review>();
 
-            List<UsersProfile> users = UserProfil();
+            List<User> users = UserProfil();
 
             Rating rating = new Rating();
             Rating rating1 = new Rating();
@@ -199,9 +199,9 @@
             return recipes;
         }
 
-        public static List<UsersProfile> UserProfil()
+        public static List<User> UserProfil()
         {
-            List<UsersProfile> users = new List<UsersProfile>();
+            List<User> users = new List<User>();
 
             Address address = new Address();
             Address address1 = new Address();
@@ -235,9 +235,9 @@
             paymentMethods2.AcountEmail = "maria.mar@email.de";
             paymentMethods2.Acountpasword = "passsssssword";
 
-            UsersProfile user = new UsersProfile();
-            UsersProfile user1 = new UsersProfile();
-            UsersProfile user2 = new UsersProfile();
+            User user = new User();
+            User user1 = new User();
+            User user2 = new User();
 
             user.FirstName = "Jack";
             user.LastName = "Black";

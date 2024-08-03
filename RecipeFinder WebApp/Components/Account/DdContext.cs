@@ -10,6 +10,6 @@ namespace RecipeFinder_WebApp.Components.Account
         {
         }
 
-        public DbSet<UsersProfile> UsersProfiles { get; set; }
+        public DbSet<User> UsersProfiles { get; set; }
     }
 }

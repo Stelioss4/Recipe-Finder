@@ -2,11 +2,11 @@
 
 namespace Recipe_Finder
 {
-    public class UsersProfile
+    public class User
     {
         private string _firstname;
-        [Required]
-        [StringLength(100, MinimumLength = 2)]
+        //[Required]
+        //[StringLength(100, MinimumLength = 2)]
         public string FirstName
         {
             get { return _firstname; }
@@ -14,8 +14,8 @@ namespace Recipe_Finder
         }
 
         private string _lastName;
-        [Required]
-        [StringLength(100, MinimumLength = 2)]
+        //[Required]
+        //[StringLength(100, MinimumLength = 2)]
         public string LastName
         {
             get { return _lastName; }

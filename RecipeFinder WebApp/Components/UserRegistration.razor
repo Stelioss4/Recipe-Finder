@@ -1,4 +1,4 @@
-﻿@using RecipeFinder_WebApp
+﻿@* @using RecipeFinder_WebApp
 @using RecipeFinder_WebApp.Components.Account
 @using Recipe_Finder
 @using System.IO
@@ -6,62 +6,62 @@
 @inject NavigationManager Navigation
 @inject UserService UserServ
 
-<EditForm Model="UserProfile" OnValidSubmit="RegisterUser">
+<EditForm Model="user" OnValidSubmit="RegisterUser">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div>
         <label for="FirstName">First Name:</label><br />
-        <InputText id="FirstName" @bind-Value="UserProfile.FirstName" />
-        <ValidationMessage For="@(() => UserProfile.FirstName)" />
+        <InputText id="FirstName" @bind-Value="user.FirstName" />
+        <ValidationMessage For="@(() => user.FirstName)" />
     </div>
 
     <div>
         <label for="LastName">Last Name:</label><br />
-        <InputText id="LastName" @bind-Value="UserProfile.LastName" />
-        <ValidationMessage For="@(() => UserProfile.LastName)" />
+        <InputText id="LastName" @bind-Value="user.LastName" />
+        <ValidationMessage For="@(() => user.LastName)" />
     </div>
 
     <div>
         <label for="Email">Email:</label><br />
-        <InputText id="Email" @bind-Value="UserProfile.Email" />
-        <ValidationMessage For="@(() => UserProfile.Email)" />
+        <InputText id="Email" @bind-Value="user.Email" />
+        <ValidationMessage For="@(() => user.Email)" />
     </div>
 
     <div>
         <label for="Password">Password:</label><br />
-        <InputText type="password" id="Password" @bind-Value="UserProfile.Password" />
-        <ValidationMessage For="@(() => UserProfile.Password)" />
+        <InputText type="password" id="Password" @bind-Value="user.Password" />
+        <ValidationMessage For="@(() => user.Password)" />
     </div>
 
     <div>
         <label for="ConfirmPassword">Confirm Password:</label><br />
-        <InputText type="password" id="ConfirmPassword" @bind-Value="ConfirmPassword" />
-        <ValidationMessage For="@(() => ConfirmPassword)" />
+        <InputText type="password" id="ConfirmPassword" @bind-Value="user.ConfirmPassword" />
+        <ValidationMessage For="@(() => user.ConfirmPassword)" />
     </div>
 
     <div>
         <label for="StreetName">Street Name:</label><br />
-        <InputText id="StreetName" @bind-Value="UserProfile.Address.StreetsName" />
-        <ValidationMessage For="@(() => UserProfile.Address.StreetsName)" />
+        <InputText id="StreetName" @bind-Value="user.Address.StreetsName" />
+        <ValidationMessage For="@(() => user.Address.StreetsName)" />
     </div>
 
     <div>
         <label for="HouseNumber">House Number:</label><br />
-        <InputText id="HouseNumber" @bind-Value="UserProfile.Address.Housenumber" />
-        <ValidationMessage For="@(() => UserProfile.Address.Housenumber)" />
+        <InputText id="HouseNumber" @bind-Value="user.Address.Housenumber" />
+        <ValidationMessage For="@(() => user.Address.Housenumber)" />
     </div>
 
     <div>
         <label for="PostalCode">Postal Code:</label><br />
-        <InputText id="PostalCode" @bind-Value="UserProfile.Address.PostalCode" />
-        <ValidationMessage For="@(() => UserProfile.Address.PostalCode)" />
+        <InputText id="PostalCode" @bind-Value="user.Address.PostalCode" />
+        <ValidationMessage For="@(() => user.Address.PostalCode)" />
     </div>
 
     <div>
         <label for="City">City:</label><br />
-        <InputText id="City" @bind-Value="UserProfile.Address.City" />
-        <ValidationMessage For="@(() => UserProfile.Address.City)" />
+        <InputText id="City" @bind-Value="user.Address.City" />
+        <ValidationMessage For="@(() => user.Address.City)" />
     </div>
 
     <button type="submit">Register</button>
@@ -69,21 +69,19 @@
 
 @code {
     [Parameter]
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
-    private List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+    private List<User> users { get; set; } = new List<User>();
 
-    private UsersProfile UserProfile { get; set; } = new UsersProfile
+    private User user { get; set; } = new User
         {
             Address = new Address()
         };
 
-    private string ConfirmPassword { get; set; }
-
     private void RegisterUser()
     {
         // Check password confirmation
-        if (UserProfile.Password != ConfirmPassword)
+        if (user.Password != user.ConfirmPassword)
         {
             Console.WriteLine("Passwords do not match.");
             return;
@@ -93,13 +91,13 @@
         {
             users = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
 
-            if (users.Any(u => u.Email.Equals(UserProfile.Email, StringComparison.OrdinalIgnoreCase)))
+            if (users.Any(u => u.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase)))
             {
                 Console.WriteLine("User with this email already exists.");
                 Navigation.NavigateTo("/profile");
             }
 
-            users.Add(UserProfile);
+            users.Add(user);
             DataService.SaveUsersToXmlFile(users, Constants.XML_USER_PATH);
 
             Navigation.NavigateTo("/profile");
@@ -111,10 +109,146 @@
         }
 
         // Reset form
-        UserProfile = new UsersProfile
+        user = new User
             {
                 Address = new Address()
             };
-        ConfirmPassword = string.Empty;
+        user.ConfirmPassword = string.Empty;
+    }
+}
+ *@
+
+
+
+@page "/register"
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using RecipeFinder_WebApp.Data
+
+@inject UserManager<RecipeFinder_WebAppUser> UserManager
+@inject IUserStore<RecipeFinder_WebAppUser> UserStore
+@inject SignInManager<RecipeFinder_WebAppUser> SignInManager
+@inject IEmailSender<RecipeFinder_WebAppUser> EmailSender
+@inject ILogger<Register> Logger
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Register</PageTitle>
+
+<h1>Register</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <StatusMessage Message="@Message" />
+        <EditForm Model="user" OnValidSubmit="RegisterUser" FormName="register">
+            <DataAnnotationsValidator />
+            <h2>Create a new account.</h2>
+            <hr />
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="user.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="name" />
+                <label for="firstName">Name</label>
+                <ValidationMessage For="@(() => user.FirstName)" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="user.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label for="email">Email</label>
+                <ValidationMessage For="@(() => user.Email)" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="user.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label for="password">Password</label>
+                <ValidationMessage For="@(() => user.Password)" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="user.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="confirm password" />
+                <label for="confirm-password">Confirm Password</label>
+                <ValidationMessage For="@(() => user.ConfirmPassword)" class="text-danger" />
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+
+    private IEnumerable<IdentityError>? identityErrors;
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+    private User user { get; set; } = new User();
+
+    public async Task RegisterUser()
+    {
+        // Check if passwords match
+        if (user.Password != user.ConfirmPassword)
+        {
+            identityErrors = new IdentityError[] { new IdentityError { Description = "The password and confirmation password do not match." } };
+            return;
+        }
+
+        var userEntity = CreateUser();
+
+        await UserStore.SetUserNameAsync(userEntity, user.Email, CancellationToken.None);
+        var emailStore = GetEmailStore();
+        await emailStore.SetEmailAsync(userEntity, user.Email, CancellationToken.None);
+        var result = await UserManager.CreateAsync(userEntity, user.Password);
+
+        if (!result.Succeeded)
+        {
+            identityErrors = result.Errors;
+            return;
+        }
+
+        Logger.LogInformation("User created a new account with password.");
+
+        var userId = await UserManager.GetUserIdAsync(userEntity);
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(userEntity);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+
+        await EmailSender.SendConfirmationLinkAsync(userEntity, user.Email, HtmlEncoder.Default.Encode(callbackUrl));
+
+        if (UserManager.Options.SignIn.RequireConfirmedAccount)
+        {
+            RedirectManager.RedirectTo(
+                "Account/RegisterConfirmation",
+                new() { ["email"] = user.Email, ["returnUrl"] = ReturnUrl });
+        }
+
+        await SignInManager.SignInAsync(userEntity, isPersistent: false);
+        RedirectManager.RedirectTo(ReturnUrl);
+    }
+
+    private RecipeFinder_WebAppUser CreateUser()
+    {
+        try
+        {
+            return Activator.CreateInstance<RecipeFinder_WebAppUser>();
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(RecipeFinder_WebAppUser)}'. " +
+                $"Ensure that '{nameof(RecipeFinder_WebAppUser)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+
+    private IUserEmailStore<RecipeFinder_WebAppUser> GetEmailStore()
+    {
+        if (!UserManager.SupportsUserEmail)
+        {
+            throw new NotSupportedException("The default UI requires a user store with email support.");
+        }
+        return (IUserEmailStore<RecipeFinder_WebAppUser>)UserStore;
     }
 }

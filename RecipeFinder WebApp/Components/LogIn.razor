@@ -29,10 +29,10 @@
     [Parameter]
     public string Title { get; set; }
 
-    private UsersProfile UserProfile { get; set; } = new UsersProfile();
+    private User UserProfile { get; set; } = new User();
 
 
-    private List<UsersProfile> users { get; set; } = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
+    private List<User> users { get; set; } = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
 
 
     private void LogInUser()

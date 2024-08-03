@@ -7,11 +7,11 @@ namespace RecipeFinder_WebApp.Components
 {
     public class DataService
     {
-        private UsersProfile? user { get; set; } = new UsersProfile();
+        private User? user { get; set; } = new User();
 
         public Address Address { get; set; } = new Address();
 
-        public List<UsersProfile> users { get; set; } = new List<UsersProfile>();
+        public List<User> users { get; set; } = new List<User>();
 
         public List<Recipe> Recipes { get; set; } = new List<Recipe>();
 
@@ -32,11 +32,11 @@ namespace RecipeFinder_WebApp.Components
             return users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
-        public static void SaveUsersToXmlFile(List<UsersProfile> users, string filePath)
+        public static void SaveUsersToXmlFile(List<User> users, string filePath)
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
+                XmlSerializer serializer = new XmlSerializer(typeof(List<User>));
                 using (FileStream file = File.Create(Constants.XML_USER_PATH))
                 {
                     serializer.Serialize(file, users);
@@ -49,10 +49,10 @@ namespace RecipeFinder_WebApp.Components
             }
         }
 
-        public static List<UsersProfile> LoadUsersFromXmlFile(string filePath)
+        public static List<User> LoadUsersFromXmlFile(string filePath)
         {
-            List<UsersProfile> users = new List<UsersProfile>();
-            XmlSerializer serializer = new XmlSerializer(typeof(List<UsersProfile>));
+            List<User> users = new List<User>();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<User>));
 
             try
             {
@@ -60,7 +60,7 @@ namespace RecipeFinder_WebApp.Components
                 {
                     using (FileStream file = File.OpenRead(Constants.XML_USER_PATH))
                     {
-                        var loadedUsers = serializer.Deserialize(file) as List<UsersProfile>;
+                        var loadedUsers = serializer.Deserialize(file) as List<User>;
                         if (loadedUsers != null)
                         {
                             users = loadedUsers;

@@ -17,9 +17,9 @@
 </div>
 
 @code {
-    private List<UsersProfile> users { get; set; } = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
+    private List<User> users { get; set; } = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
 
-    private UsersProfile userProfile { get; set; } = new UsersProfile();
+    private User userProfile { get; set; } = new User();
 
     private Recipe recipe { get; set; } = new Recipe();
 
