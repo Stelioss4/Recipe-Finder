@@ -39,13 +39,21 @@ namespace Recipe_Finder
             set { _password = value; }
         }
         private string _confirmPassword;
-        [Required]
         [DataType(DataType.Password)]
         public string ConfirmPassword 
         {
             get { return _confirmPassword; }
             set { _confirmPassword = value; }
         }
+
+        private bool _rememberMe;
+        [Display(Name = "Remember me?")]
+        public bool RememberMe
+        {
+            get { return  _rememberMe; }
+            set {  _rememberMe = value; }
+        }
+
 
 
         private Address _address = new Address();
