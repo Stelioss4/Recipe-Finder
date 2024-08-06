@@ -1,10 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RecipeFinder_WebApp.Data;
+using Recipe_Finder;
 
-namespace RecipeFinder_WebApp.Data
+namespace RecipeFinder_WebApp.Data;
+
+public class RecipeFinder_WebAppContext : IdentityDbContext<RecipeFinder_WebAppUser>
 {
-    public class RecipeFinder_WebAppContext(DbContextOptions<RecipeFinder_WebAppContext> options) : IdentityDbContext<RecipeFinder_WebAppUser>(options)
+    public RecipeFinder_WebAppContext(DbContextOptions<RecipeFinder_WebAppContext> options)
+        : base(options)
     {
     }
+
+    public DbSet<Recipe> Recipes { get; set; }
+
+    //protected override void OnModelCreating(ModelBuilder builder)
+    //{
+    //    base.OnModelCreating(builder);
+
+    //    builder.Entity<RecipeFinder_WebAppUser>()
+    //        .HasMany(u => u.FavoriteRecipes)
+    //        .WithMany(r => r.UsersWhoFavorited)
+    //        .UsingEntity(j => j.ToTable("UserFavoriteRecipes"));
+    //}
 }

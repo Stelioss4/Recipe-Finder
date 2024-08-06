@@ -30,7 +30,7 @@ builder.Services.AddAuthentication(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<RecipeFinder_WebAppContext>(options => 
+builder.Services.AddDbContext<RecipeFinder_WebAppContext>(options =>
     options.UseSqlite(connectionString));
 
 builder.Services.AddIdentityCore<RecipeFinder_WebAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -39,19 +39,12 @@ builder.Services.AddIdentityCore<RecipeFinder_WebAppUser>(options => options.Sig
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<RecipeFinder_WebAppUser>, IdentityNoOpEmailSender>();
-builder.Services.AddSingleton<DataService>();
-   // .AddSingleton<User>();
-builder.Services.AddSingleton<ScrapperService>();
+builder.Services.AddScoped<DataService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ScrapperService>();
 
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();
-
-//// Register ApplicationDbContext with connection string from configuration
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-//// Register ApplicationDbContext as a scoped service
-//builder.Services.AddScoped<ApplicationDbContext>();
 
 builder.Services.Configure<CircuitOptions>(options =>
 {
@@ -75,6 +68,6 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.MapAdditionalIdentityEndpoints();;
+app.MapAdditionalIdentityEndpoints(); ;
 
 app.Run();

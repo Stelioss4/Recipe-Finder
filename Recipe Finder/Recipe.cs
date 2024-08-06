@@ -2,7 +2,7 @@
 {
     public class Recipe
     {
-        private string _sourceDomain;
+        private string? _sourceDomain;
 
         public string SourceDomain
         {
@@ -15,8 +15,8 @@
                 }
                 return _sourceDomain;
             }
-            set { _sourceDomain = value.ToLowerInvariant(); } // Normalize the value being set; 
-            }
+            set { _sourceDomain = value.ToLowerInvariant(); } // Normalize the value being set;
+        }
 
         private List<string> _searchTerms;
 
@@ -26,6 +26,7 @@
             set { _searchTerms = value; }
         }
 
+        public ICollection<Recipe> UsersWhoFavorited { get; set; } = new List<Recipe>();
 
         private string _recipeName;
 
@@ -42,7 +43,6 @@
             get { return _image; }
             set { _image = value; }
         }
-
 
         private string _cookingInstructions;
 
@@ -92,7 +92,7 @@
             set { _occasionTags = value; }
         }
 
-        private string _difficultyLevel;    //difficulty will be measured by easy, medium and hard.
+        private string _difficultyLevel; //difficulty will be measured by easy, medium and hard.
 
         public string DifficultyLevel
         {
@@ -149,7 +149,5 @@
             get { return _url; }
             set { _url = value; }
         }
-
-
     }
 }

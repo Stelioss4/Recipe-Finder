@@ -243,21 +243,21 @@
             user.LastName = "Black";
             user.Email = "jack@email.strom";
             user.Password = "password";
-            user.Address = address1;
+          //  user.Address = address1;
             user.PaymentMethods = paymentMethods;
 
             user1.FirstName = "John";
             user1.LastName = "Johnson";
             user1.Email = "john@email.ccm";
             user1.Password = "Password";
-            user1.Address = address;
+         //   user1.Address = address;
             user1.PaymentMethods = paymentMethods1;
 
             user2.FirstName = "Allh";
             user2.LastName = "Brazi";
             user2.Email = "maria.mar@email.de";
             user2.Password = "password";
-            user2.Address = address2;
+         //   user2.Address = address2;
             user2.PaymentMethods = paymentMethods2;
 
             users.Add(user);
