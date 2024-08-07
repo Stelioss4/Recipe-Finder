@@ -26,8 +26,6 @@
             set { _searchTerms = value; }
         }
 
-        //public ICollection<User> UsersWhoFavorited { get; set; } = new List<User>();
-
         private string _recipeName;
 
         public string RecipeName

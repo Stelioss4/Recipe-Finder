@@ -12,8 +12,11 @@ public class RecipeFinder_WebAppContext : IdentityDbContext<RecipeFinder_WebAppU
     }
 
     public DbSet<Recipe> Recipes { get; set; }
-
-    public DbSet<Address> Address { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<Ingredient> Ingredients { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<RecipeFinder_WebAppUser> Users { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -28,9 +31,9 @@ public class RecipeFinder_WebAppContext : IdentityDbContext<RecipeFinder_WebAppU
         builder.Entity<Recipe>()
                .HasKey(r => r.RecipeName);
         builder.Entity<User>()
-              .HasKey(u => u.FirstName);
+               .HasKey(u => u.FirstName);
         builder.Entity<Address>()
-               .HasKey(a => a.PostalCode); 
+               .HasKey(a => a.PostalCode);
         builder.Entity<Ingredient>()
                .HasKey(i => i.IngredientsName);
         builder.Entity<Rating>()
