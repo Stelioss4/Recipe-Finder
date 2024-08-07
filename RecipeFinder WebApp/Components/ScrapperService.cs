@@ -91,7 +91,7 @@ namespace RecipeFinder_WebApp
                 {
                     recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
                     recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
-                    Recipe detailedRecipe = await ScrapeAllRecipesDetailsAndUpdateRecipie(recipe);
+                    Recipe detailedRecipe = await ScrapeAllRecipesDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
                     {
                         detailedRecipes.Add(detailedRecipe);
@@ -168,7 +168,7 @@ namespace RecipeFinder_WebApp
             return recipes;
         }
 
-        public async Task<Recipe> ScrapeAllRecipesDetailsAndUpdateRecipie(Recipe searchResultRecipie)
+        public async Task<Recipe> ScrapeAllRecipesDetailsAndUpdateRecipe(Recipe searchResultRecipie)
         {
             try
             {

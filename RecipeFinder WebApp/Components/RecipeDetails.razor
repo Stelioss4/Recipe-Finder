@@ -99,7 +99,7 @@
                 }
                 else if (decodedUrl.Contains("allrecipes.com"))
                 {
-                    recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipie(new Recipe { Url = decodedUrl });
+                    recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                 }
                 else
                 {
