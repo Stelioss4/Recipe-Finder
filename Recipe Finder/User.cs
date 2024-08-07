@@ -72,13 +72,13 @@ namespace Recipe_Finder
             set { _favoriteRecipes = value; }
         }
 
-        private PaymentMethod _paymentMethods;
+        //private PaymentMethod _paymentMethods;
 
-        public PaymentMethod PaymentMethods
-        {
-            get { return _paymentMethods; }
-            set { _paymentMethods = value; }
-        }
+        //public PaymentMethod PaymentMethods
+        //{
+        //    get { return _paymentMethods; }
+        //    set { _paymentMethods = value; }
+        //}
 
         private List<Recipe> _weeklyPlan;
 
