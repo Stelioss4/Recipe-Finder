@@ -30,7 +30,7 @@ public class RecipeFinder_WebAppContext : IdentityDbContext<RecipeFinder_WebAppU
         builder.Entity<User>()
               .HasKey(u => u.FirstName);
         builder.Entity<Address>()
-               .HasKey(a => a.PostalCode); // Make sure AddressId is the primary key
+               .HasKey(a => a.PostalCode); 
         builder.Entity<Ingredient>()
                .HasKey(i => i.IngredientsName);
         builder.Entity<Rating>()
