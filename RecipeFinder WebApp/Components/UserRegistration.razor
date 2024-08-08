@@ -4,6 +4,7 @@
 @using System.Text.Encodings.Web
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
+@using RecipeFinder_WebApp.Components.Account.Shared
 @using RecipeFinder_WebApp.Data
 
 @inject UserManager<RecipeFinder_WebAppUser> UserManager
@@ -26,6 +27,19 @@
             <h2>Create a new account.</h2>
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
+            
+            @if (identityErrors != null && identityErrors.Any())
+            {
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach (var error in identityErrors)
+                        {
+                            <li>@error.Description</li>
+                        }
+                    </ul>
+                </div>
+            }
+
             <div class="form-floating mb-3">
                 <InputText @bind-Value="user.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="name" />
                 <label for="firstName">Name</label>
@@ -102,10 +116,12 @@
             RedirectManager.RedirectTo(
                 "Account/RegisterConfirmation",
                 new() { ["email"] = user.Email, ["returnUrl"] = ReturnUrl });
+            return;
         }
 
         await SignInManager.SignInAsync(userEntity, isPersistent: false);
-        RedirectManager.RedirectTo(ReturnUrl);
+
+        RedirectManager.RedirectTo(ReturnUrl ?? "/profile");
     }
 
     private RecipeFinder_WebAppUser CreateUser()
