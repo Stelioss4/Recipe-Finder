@@ -8,9 +8,17 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a><br/>
-            <button class="btn btn-primary" @onclick="NavigateToUserAccount">Register</button>
-            <button class="btn btn-secondary" @onclick="NavigateToLogIn">Log in</button>
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a><br />
+
+            <AuthorizeView>
+                <Authorized>
+                    <button class="btn btn-primary" @onclick="NavigateToProfile">Profile</button>
+                </Authorized>
+                <NotAuthorized>
+                    <button class="btn btn-primary" @onclick="NavigateToUserAccount">Register</button>
+                    <button class="btn btn-secondary" @onclick="NavigateToLogIn">Log in</button>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
 
         <article class="content px-4">
@@ -24,14 +32,20 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
-@code{
+
+@code {
     private void NavigateToUserAccount()
     {
         Navigation.NavigateTo("/userAccount");
     }
-    
+
     private void NavigateToLogIn()
     {
         Navigation.NavigateTo("/userLogIn");
+    }
+
+    private void NavigateToProfile()
+    {
+        Navigation.NavigateTo("/profile");
     }
 }
