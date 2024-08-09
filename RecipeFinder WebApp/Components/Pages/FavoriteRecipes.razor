@@ -1,0 +1,50 @@
+﻿@page "/favoriteRecipes"
+@inject FavoriteRecipeService FavoriteRecipeService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>Favorite Recipes</h3>
+
+@if (favoriteRecipes == null)
+{
+    <p>Loading...</p>
+}
+else if (!favoriteRecipes.Any())
+{
+    <p>You have no favorite recipes yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var recipe in favoriteRecipes)
+        {
+            <li>@recipe.RecipeName</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Recipe> favoriteRecipes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            // Assuming "UserId" is stored as a string claim
+            var userId = user.FindFirst("UserId")?.Value;
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                favoriteRecipes = await FavoriteRecipeService.GetFavoriteRecipesAsync(userId);
+            }
+            else
+            {
+                // Handle the case where UserId is not found or is null
+                // For example, log an error or redirect the user
+            }
+        }
+    }
+
+}

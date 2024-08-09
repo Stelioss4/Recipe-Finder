@@ -26,6 +26,12 @@
             set { _searchTerms = value; }
         }
 
+        public string UserId { get; set; }
+        public string RecipeId { get; set; }
+
+        public User User { get; set; }
+
+
         private string _recipeName;
 
         public string RecipeName

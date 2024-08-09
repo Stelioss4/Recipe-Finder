@@ -4,6 +4,23 @@ namespace Recipe_Finder
 {
     public class User
     {
+        private string _userId;
+
+        public string UserId
+        {
+            get { return _userId; }
+            set { _userId = value; }
+        }
+
+        private List<Recipe> _favoriteRecipes;
+
+        public List<Recipe> FavoriteRecipes
+        {
+            get { return _favoriteRecipes; }
+            set { _favoriteRecipes = value; }
+        }
+
+
         private string _firstname;
       
         public string FirstName
@@ -64,14 +81,6 @@ namespace Recipe_Finder
             set { _address = value; }
         }
 
-        private List<Recipe> _favoriteRecipes = new List<Recipe>();
-
-        public List<Recipe> FavoriteRecipes
-        {
-            get { return _favoriteRecipes; }
-            set { _favoriteRecipes = value; }
-        }
-
         //private PaymentMethod _paymentMethods;
 
         //public PaymentMethod PaymentMethods
@@ -87,6 +96,8 @@ namespace Recipe_Finder
             get { return _weeklyPlan; }
             set { _weeklyPlan = value; }
         }
+
+
     }
 }
 

@@ -29,9 +29,12 @@ public class RecipeFinder_WebAppContext : IdentityDbContext<RecipeFinder_WebAppU
                .UsingEntity(j => j.ToTable("UserFavoriteRecipes"));
 
         builder.Entity<Recipe>()
-               .HasKey(r => r.RecipeName);
+               .HasOne(r => r.User)
+               .WithMany(u => u.FavoriteRecipes)
+               .HasForeignKey(r => r.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
         builder.Entity<User>()
-               .HasKey(u => u.FirstName);
+               .HasKey(u => u.UserId);
         builder.Entity<Address>()
                .HasKey(a => a.PostalCode);
         builder.Entity<Ingredient>()

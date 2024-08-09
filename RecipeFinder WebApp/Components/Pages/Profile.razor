@@ -1,23 +1,33 @@
 ﻿@page "/profile"
+@using RecipeFinder_WebApp.Data
+@using Recipe_Finder
+
 <h3>User Profile</h3>
 
 <p>Welcome, @userProfile.FirstName!!</p>
+@if (userProfile.FavoriteRecipes.Count > 0)
+{
 
-<div class="mt-3 text-center">
-    <h3 class="text-secondary">Favorite Recipes</h3><br />
-    <ul class="list-group list-group-flush mx-auto" style="max-width: 400px;">
-        @foreach (var recipe in userProfile.FavoriteRecipes)
-        {
-            <li class="list-group-item">
-                <input type="checkbox" id="@recipe.RecipeName" class="mr-2">
-                <label for="@recipe.RecipeName">@recipe.RecipeName</label>
-            </li>
-        }
-    </ul>
-</div>
+    <div class="mt-3 text-center">
+        <h3 class="text-secondary">Favorite Recipes</h3><br />
+        <ul class="list-group list-group-flush mx-auto" style="max-width: 400px;">
+            @foreach (var recipe in userProfile.FavoriteRecipes)
+            {
+                <li class="list-group-item">
+                    <input type="checkbox" id="@recipe.RecipeName" class="mr-2">
+                    <label for="@recipe.RecipeName">@recipe.RecipeName</label>
+                </li>
+            }
 
+        </ul>
+    </div>
+}
 @code {
-    private List<User> users { get; set; } = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
+    [Inject]
+    private RecipeFinder_WebAppContext DbContext { get; set; } = default!;
+
+
+    private List<User> users { get; set; } = new List<User>(); //= DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
 
     private User userProfile { get; set; } = new User();
 
@@ -28,13 +38,21 @@
     private List<Recipe> AddRecipesToFavList()
     {
         userProfile.FavoriteRecipes = recipes;
-        return userProfile.FavoriteRecipes;
+        return userProfile.FavoriteRecipes.ToList();
     }
-
-
     protected override void OnInitialized()
     {
-        users = DataService.LoadUsersFromXmlFile(Constants.XML_USER_PATH);
+        // Load users from the SQLite database
+        users = DbContext.Users
+                         .Select(u => new User
+                             {
+                                 UserId = u.Id,
+                                 FirstName = u.UserName,
+                                 Email = u.Email,
+                                 // Map other properties accordingly
+                             })
+                         .ToList();
+
         if (users != null && users.Count > 0)
         {
             userProfile = users[0];
