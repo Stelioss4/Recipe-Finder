@@ -12,7 +12,7 @@ namespace RecipeFinder_WebApp
 
         public FavoriteRecipeService(RecipeFinder_WebAppContext context)
         {
-            _context = context;
+            _context = context; 
         }
 
         public async Task AddFavoriteRecipeAsync(string userId, string recipeId)

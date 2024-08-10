@@ -1,50 +1,104 @@
 ﻿@page "/favoriteRecipes"
+@using RecipeFinder_WebApp.Data
 @inject FavoriteRecipeService FavoriteRecipeService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
 
 <h3>Favorite Recipes</h3>
 
-@if (favoriteRecipes == null)
+@if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
 {
-    <p>Loading...</p>
-}
-else if (!favoriteRecipes.Any())
-{
-    <p>You have no favorite recipes yet.</p>
+    <div class="mt-3 text-center">
+        @foreach (var rec in recipes)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(rec.Image))
+                    {
+                        <img src="@rec.Image" class="card-img-top" alt="Recipe Image" style="height: 200px; object-fit: cover;" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@rec.RecipeName</h5>
+                        <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }
 else
 {
-    <ul>
-        @foreach (var recipe in favoriteRecipes)
-        {
-            <li>@recipe.RecipeName</li>
-        }
-    </ul>
+    <p>You don't have any favorite recipes yet.</p>
+    <button class="btn btn-outline-primary" @onclick="() => NavigateToHome()">Search recipes to Add!</button>
+}
+}
+else
+{
+<p>Loading user profile...</p>
 }
 
 @code {
-    private List<Recipe> favoriteRecipes;
+    [Inject]
+    private RecipeFinder_WebAppContext DbContext { get; set; } = default!;
 
-    protected override async Task OnInitializedAsync()
+    private List<User> users { get; set; } = new List<User>();
+    private User userProfile { get; set; } = new User();
+    private List<Recipe> recipes { get; set; } = ScrapperService.LoadRecipesFromXmlFile(Constants.XML_FAVORITE_REC_PATH);
+
+
+    private List<Recipe> favoriteRecipes { get; set; } = new List<Recipe>();
+
+    protected override void OnInitialized()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        // Load users from the SQLite database
+        users = DbContext.Users
+                         .Select(u => new User
+                             {
+                                 UserId = u.Id,
+                                 FirstName = u.UserName,
+                                 Email = u.Email,
+                                 FavoriteRecipes = new List<Recipe>() // Initialize to avoid null reference
+                             })
+                         .ToList();
 
-        if (user.Identity.IsAuthenticated)
+        if (users != null && users.Count > 0)
         {
-            // Assuming "UserId" is stored as a string claim
-            var userId = user.FindFirst("UserId")?.Value;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                favoriteRecipes = await FavoriteRecipeService.GetFavoriteRecipesAsync(userId);
-            }
-            else
-            {
-                // Handle the case where UserId is not found or is null
-                // For example, log an error or redirect the user
-            }
+            userProfile = users[0];
+            userProfile.FavoriteRecipes = recipes; // Assuming you want to load recipes here
         }
+    }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    //     var user = authState.User;
+
+    //     if (user.Identity.IsAuthenticated)
+    //     {
+    //         // Assuming "UserId" is stored as a string claim
+    //         var userId = user.FindFirst("UserId")?.Value;
+
+    //         if (!string.IsNullOrEmpty(userId))
+    //         {
+    //             favoriteRecipes = await FavoriteRecipeService.GetFavoriteRecipesAsync(userId);
+    //         }
+    //         else
+    //         {
+    //             // Handle the case where UserId is not found or is null
+    //             // For example, log an error or redirect the user
+    //         }
+    //     }
+    // }
+
+    private void NavigateToRecipeDetails(string recipeUrl)
+    {
+        Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
+    }
+
+
+    private void NavigateToHome()
+    {
+        Navigation.NavigateTo("/");
     }
 
 }

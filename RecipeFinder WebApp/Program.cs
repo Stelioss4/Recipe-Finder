@@ -42,6 +42,7 @@ builder.Services.AddSingleton<IEmailSender<RecipeFinder_WebAppUser>, IdentityNoO
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ScrapperService>();
+builder.Services.AddScoped<FavoriteRecipeService>();
 
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();
