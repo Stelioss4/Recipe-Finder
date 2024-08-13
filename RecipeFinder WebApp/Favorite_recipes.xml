@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfRecipe xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Knusprig dünne Pizza mit Chorizo und Mozzarella</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/889601194503872/bilder/982120/crop-360x240/knusprig-duenne-pizza-mit-chorizo-und-mozzarella.jpg</Image>
-    <CookingInstructions>Zunächst für den Pizzateig Mehl, Grieß und Salz gründlich vermengen. Die Hefe im warmen Wasser auflösen, 5 Minuten ruhen lassen und dann zur Mehlmischung geben. Die Zutaten so lange mit dem Knethaken des Handrührers, in der Küchenmaschine oder von Hand kneten, bis ein elastischer Teig entsteht, das dauert ungefähr 10 Minuten. Falls der Teig zu fest sein sollte einfach noch etwas warmes Wasser zugeben, wenn der Teig zu flüssig ist, etwas Mehl hinzugeben. Erst dann das Olivenöl unterkneten. &lt;br&gt;
+    <SourceDomain>www.chefkoch.de</SourceDomain>
+    <RecipeName>Crispy Chicken Burger</RecipeName>
+    <Image>https://img.chefkoch-cdn.de/rezepte/3329761494357421/bilder/1018367/crop-360x240/crispy-chicken-burger.jpg</Image>
+    <CookingInstructions>Für die knusprige Panade brauchen wir ungesüßte Cornflakes, die als erstes grob zerkleinert werden müssen. Man kann sie entweder in einem Frischhaltebeutel mit einem Nudelholz zerkleinern oder man nimmt dafür einen Mixer. Dann werden die Eier mit getrocknetem Knoblauch, Salz und Pfeffer verquirlt. Durch die Eier bleibt die Panade am Fleisch haften. &lt;br&gt;
 &lt;br&gt;
-Den Teig in Frischhaltefolie wickeln oder unter einem Geschirrtuch mindestens 30 Minuten gehen lassen. Der Teig lässt sich ebenfalls hervorragend im Hefeteig-Programm eines Brotbackautomaten zubereiten.&lt;br&gt;
+Dann wird das Fleisch paniert, dazu wälzt ihr es zunächst in Mehl, dann gebt ihr es in das verquirlte Ei und als letztes wälzt ihr es in den Cornflakes. Bei schwacher bis mittlerer Hitze werden die Schnitzel anschließend knusprig gebraten. Zum Braten könnt ihr Öl, Butterschmalz oder Margarine verwenden. &lt;br&gt;
 &lt;br&gt;
-In der Zwischenzeit die Roma-Tomaten quer halbieren und über einer feinen Reibe bis auf die Schale abreiben. Das überschüssige Wasser aus den Tomaten durch ein feines Sieb abgießen, so dass nur der Tomatensaft und das Innere der Tomaten übrig bleiben. Diese Tomaten nach Geschmack mit etwas Salz würzen.&lt;br&gt;
-&lt;br&gt;
-Ein Backblech ordentlich mit gutem, erhitzbarem Olivenöl bepinseln und den Ofen auf 250 °C Ober- und Unterhitze vorheizen. Den Teig nochmals von Hand durchkneten und auf einem bemehlten Brett etwa in Größe des Blechs von der Mitte nach außen ausrollen. Der Teig sollte dabei etwa 3 mm dick ausgerollt werden.&lt;br&gt;
-&lt;br&gt;
-Den ausgerollten Teig auf das Blech geben und nur hauchdünn (das ist wichtig!) mit den Tomaten bestreichen. Mit dem Oregano bestreuen. Die Chorizo in feine Stücke schneiden und auf der Pizza verteilen. Den Mozzarella von Hand in Stücke reißen und über die Pizza streuen.&lt;br&gt;
-&lt;br&gt;
-Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizzastein hat, kann sich das Backen auf dem Blech natürlich sparen und stattdessen zwei Runde Pizzen aus dem Teig formen.</CookingInstructions>
+Die Brötchen bzw. Buns werden aufgeschnitten und beide Hälften mit Mayonnaise oder Remoulade bestrichen. Anschließend kommen das Schnitzel, Tomatenschreiben und Salat darauf und fertig ist der Crispy Chicken Burger.</CookingInstructions>
     <CookingTime>PT0S</CookingTime>
     <CuisineType>African</CuisineType>
     <OccasionTags>Breakfast</OccasionTags>
@@ -25,9 +16,9 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
         normal</DifficultyLevel>
     <ListofIngredients>
       <Ingredient>
-        <IngredientsName>200                                g                            
+        <IngredientsName>2                                                            
                     
-                                                    Weizenmehl Type 550</IngredientsName>
+                                                    Ei(er)</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -36,9 +27,9 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>50                                g                            
+        <IngredientsName>n. B.                            
                     
-                                                    Hartweizengrieß</IngredientsName>
+                                                    Mehl</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -47,20 +38,9 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>¼                                Würfel                            
+        <IngredientsName>350                                g                            
                     
-                                                    Hefe (ca. 10 g)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>160                                ml                            
-                    
-                                                    Wasser, lauwarmes</IngredientsName>
+                                                    Cornflakes, ungesüßt</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -71,7 +51,7 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
       <Ingredient>
         <IngredientsName>1                                TL                            
                     
-                                                    Salz</IngredientsName>
+                                                    Knoblauchgranulat oder 1 Zehe Knoblauch, gepresst</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -80,9 +60,18 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>2                                EL                            
+        <IngredientsName>n. B.                            
                     
-                                                    Olivenöl</IngredientsName>
+                                                    Salz und Pfeffer</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>Öl, Butterschmalz oder Margarine</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -93,7 +82,7 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
       <Ingredient>
         <IngredientsName>4                                                            
                     
-                                                    Romatomate(n)</IngredientsName>
+                                                    Burgerbrötchen</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -102,9 +91,9 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>1                                TL                            
+        <IngredientsName>4                                                            
                     
-                                                    Oregano, getrockneter</IngredientsName>
+                                                    Hähnchenschnitzel</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -113,199 +102,9 @@ Auf der zweiten Einschubleiste von unten etwa 10 Minuten backen. Wer einen Pizza
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>70                                g                            
+        <IngredientsName>2                                                            
                     
-                                                    Chorizo am Stück</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Kugel                            
-                    
-                                                    Büffelmozzarella</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Rating>0</Rating>
-    <Url>https://www.chefkoch.de/rezepte/889601194503872/Knusprig-duenne-Pizza-mit-Chorizo-und-Mozzarella.html#eyJvYmplY3RJZCI6Ijg4OTYwMTE5NDUwMzg3MiIsInF1ZXJ5SWQiOiIzMWU5MWNmZDdjN2MxZGM5YjViZTRjMTcwNDBlMTUxZCIsInNlYXJjaE9yaWdpbiI6InJzZWxfcmVsZXZhbmNlIiwidGltZXN0YW1wIjoxNzIzMzIyODY2MTE5LCJ0eXBlIjoic2VhcmNoLXRyYWNraW5nIn0=</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Pizza Salami mit Zwiebeln und Paprika</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/3633451546696228/bilder/1322338/crop-360x240/pizza-salami-mit-zwiebeln-und-paprika.jpg</Image>
-    <CookingInstructions>Das Mehl in eine Schüssel geben und mit Salz, Kräutern und Paprikapulver gut vermischen. In der Mitte eine Mulde formen und das Olivenöl in die Mulde gießen. Die Hefe im Wasser auflösen und ebenfalls in die Mulde geben. Alles gut verkneten, bis ein schön elastischer Teig entsteht.&lt;br&gt;
-In warmer Umgebung den Teig zugedeckt mit einem feuchten Küchentuch ca. 45 - 60 Minuten gehen lassen.&lt;br&gt;
-&lt;br&gt;
-Während der Teig geht, alle Zutaten vorbereiten: die Salami in Scheiben, die Paprika in dünne Streifen, die Zwiebel in Ringe schneiden und den Knoblauch in ganz dünne Scheiben hobeln.&lt;br&gt;
-&lt;br&gt;
-Den Teig auf dem Backblech ausrollen und mit Tomatensugo bestreichen. Ein wenig getrockneten Oregano oder andere italienische Kräuter nach Geschmack darüber streuen, dann mit Salami, Paprikastreifen und Knoblauch belegen. Zum Schluss den Käse reiben und auf der Pizza verteilen. Alternativ kann der Käse auch auf die Tomatensauce gerieben und danach mit den Zutaten belegt werden, ich mag es aber lieber anders herum.&lt;br&gt;
-&lt;br&gt;
-Bei ca. 225 °C Ober-/Unterhitze auf der mittleren Schiene etwa 25 - 30 Minuten backen. Je nachdem, wie knusprig man den Boden haben möchte, kann die Zeit etwas weniger oder mehr sein. Einfach regelmäßig reinschauen und testen.&lt;br&gt;
-&lt;br&gt;
-Je nach Geschmack kannst Du den Teig auch ohne oder mit anderen Kräutern und/oder anderen Gewürzen aufpeppen. Auch bei der Salami kann man gut verschiedene Arten ausprobieren, ich mag z. B. gerne eine Mischung aus Fenchel- und schärferer Chorizosalami.&lt;br&gt;
-&lt;br&gt;
-Kann man übrigens auch hervorragend auf einem Pizzastein auf dem Grill zubereiten.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        simpel</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>400                                g                            
-                    
-                                                    Mehl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>250                                ml                            
-                    
-                                                    Wasser, lauwarmes</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Würfel                            
-                    
-                                                    Frischhefe</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                EL                            
-                    
-                                                    Olivenöl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>3                                EL, gehäuft                            
-                    
-                                                    Kräuter, italienische, getrocknet</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                TL, gehäuft                            
-                    
-                                                    Paprikapulver, edelsüßes</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>350                                ml                            
-                    
-                                                    Tomatensugo</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                große                            
-                    
-                                                    Paprikaschote(n), rote</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>150                                g                            
-                    
-                                                    Salami, ca. 12 - 15 Scheiben</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                große                            
-                    
-                                                    Zwiebel(n), rote</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                                            
-                    
-                                                    Knoblauchzehe(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>300                                g                            
-                    
-                                                    Käse</IngredientsName>
+                                                    Tomate(n), nach Belieben</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -316,242 +115,7 @@ Kann man übrigens auch hervorragend auf einem Pizzastein auf dem Grill zubereit
       <Ingredient>
         <IngredientsName>n. B.                            
                     
-                                                    Kräuter, italienische, getrocknet</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Rating>0</Rating>
-    <Url>https://www.chefkoch.de/rezepte/3633451546696228/Pizza-Salami-mit-Zwiebeln-und-Paprika.html#eyJvYmplY3RJZCI6IjM2MzM0NTE1NDY2OTYyMjgiLCJxdWVyeUlkIjoiMzFlOTFjZmQ3YzdjMWRjOWI1YmU0YzE3MDQwZTE1MWQiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzMyMjg2NjExOSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Lahmacun</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/1705971279297430/bilder/1307130/crop-360x240/lahmacun.jpg</Image>
-    <CookingInstructions>Für den Hefeteig Mehl und Hefe miteinander vermengen, mit Zucker, Salz, Olivenöl und Wasser zu einem Teig verarbeiten. Mit einem feuchten Tuch abgedeckt an einem warmen Ort ca. 30 Min. gehen lassen. Den Teig nochmals kneten und wieder 30 Min. gehen lassen.&lt;br&gt;
-&lt;br&gt;
-Für den Belag das Hackfleisch in eine Schüssel füllen. Zwiebeln und Tomaten klein würfeln, die Petersilie klein hacken. Mit den restlichen Zutaten zum Hack geben. Die Masse dann gut durchkneten, bis alle Zutaten gleichmäßig verteilt sind. &lt;br&gt;
-&lt;br&gt;
-Ein Backblech mit Backpapier auslegen. Mandarinengroße Teigstücke (ca. 80 - 100 g) auf einer bemehlten Arbeitsfläche zu 3 mm dicken Fladen ausrollen. Die Fladen auf das Backblech legen und 1,5 gehäufte EL Hackmasse darauf verteilen. &lt;br&gt;
-&lt;br&gt;
-Den Backofen auf 200 °C Ober-/Unterhitze vorheizen und jeweils ein Backblech ca. 10 - 20 Min. backen. Der Teig sollte wie Pizzateig aussehen.&lt;br&gt;
-&lt;br&gt;
-Die fertig gebackenen Fladen aus dem Ofen nehmen und belegen. Dafür Eisbergsalat, Schafskäse, Zwiebeln, Tomaten klein schneiden und auf dem gebackenen Fladen verteilen. &lt;br&gt;
-&lt;br&gt;
-Tipp: Wer mag, gibt auch Chilipulver und Tzatziki dazu. Einrollen und genießen.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        normal</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>500                                g                            
-                    
-                                                    Mehl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Pck.                            
-                    
-                                                    Trockenhefe</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                EL                            
-                    
-                                                    Olivenöl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Zucker</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Tasse                            
-                    
-                                                    Wasser, lauwarmes (ca. 290 ml)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Mehl für die Arbeitsfläche</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>500                                g                            
-                    
-                                                    Hackfleisch vom Rind, Lamm oder Geflügel</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                m.-große                            
-                    
-                                                    Zwiebel(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                EL                            
-                    
-                                                    Tomatenmark</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Bund                            
-                    
-                                                    Petersilie</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                EL                            
-                    
-                                                    Olivenöl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                Zehe/n                            
-                    
-                                                    Knoblauch</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                große                            
-                    
-                                                    Tomate(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Pfeffer</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                m.-große                            
-                    
-                                                    Tomate(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                m.-große                            
-                    
-                                                    Zwiebel(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Kopf                            
-                    
-                                                    Eisbergsalat</IngredientsName>
+                                                    Salat</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -562,7 +126,7 @@ Tipp: Wer mag, gibt auch Chilipulver und Tzatziki dazu. Einrollen und genießen.
       <Ingredient>
         <IngredientsName>n. B.                            
                     
-                                                    Schafskäse</IngredientsName>
+                                                    Mayonnaise</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -572,212 +136,6 @@ Tipp: Wer mag, gibt auch Chilipulver und Tzatziki dazu. Einrollen und genießen.
       </Ingredient>
     </ListofIngredients>
     <Rating>0</Rating>
-    <Url>https://www.chefkoch.de/rezepte/1705971279297430/Lahmacun.html#eyJvYmplY3RJZCI6IjE3MDU5NzEyNzkyOTc0MzAiLCJxdWVyeUlkIjoiMzFlOTFjZmQ3YzdjMWRjOWI1YmU0YzE3MDQwZTE1MWQiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzMyMjg2NjExOSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Superschnelle Pizzabrötchen</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/432351134416557/bilder/1331947/crop-360x240/superschnelle-pizzabroetchen.jpg</Image>
-    <CookingInstructions>Alle Zutaten in einer Schüssel mischen und auf den aufgeschnittenen Brötchenhälften verteilen. &lt;br&gt;
-&lt;br&gt;
-Bei 200 °C Ober-/Unterhitze circa 15 Minuten in den heißen Ofen geben und fertig sind die Pizzabrötchen.&lt;br&gt;
-&lt;br&gt;
-Tipps: Lässt sich gut vorbereiten. &lt;br&gt;
-Lecker mit grünem Salat und einem Gläschen Wein.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        simpel</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Kochschinken, gewürfelter</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Salami, gewürfelte</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Pilze, geschnittene</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Paprikaschote(n), rote (aus dem Glas)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Schlagsahne</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Käse, geriebener</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>n. B.                            
-                    
-                                                    Pizzagewürz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>n. B.                            
-                    
-                                                    Knoblauch</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>8                                kleine                            
-                    
-                                                    Brötchen zum Aufbacken, aufgeschnittene</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Rating>0</Rating>
-    <Url>https://www.chefkoch.de/rezepte/432351134416557/Superschnelle-Pizzabroetchen.html#eyJvYmplY3RJZCI6IjQzMjM1MTEzNDQxNjU1NyIsInF1ZXJ5SWQiOiIzMWU5MWNmZDdjN2MxZGM5YjViZTRjMTcwNDBlMTUxZCIsInNlYXJjaE9yaWdpbiI6InJzZWxfcmVsZXZhbmNlIiwidGltZXN0YW1wIjoxNzIzMzIyODY2MTE5LCJ0eXBlIjoic2VhcmNoLXRyYWNraW5nIn0=</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Pizzateig zum Selbermachen</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/2524071395750584/bilder/676936/crop-360x240/pizzateig-zum-selbermachen.jpg</Image>
-    <CookingInstructions>Mehl auf die Arbeitsfläche geben und eine Mulde eindrücken. Hefe in die Mulde bröseln und mit der lauwarmen Milch auffüllen. Alle Zutaten zu einem glatten Teig verarbeiten. Teig eine ¾ Stunde abgedeckt gehen lassen. Hefeteig dritteln und die Teile zu Kugeln rollen. Jeweils auf einer bemehlten Arbeitsfläche ausrollen und nach Wunsch belegen. Belegte Pizza bei höchster Temperatur für 5-6 Minuten in den Ofen geben.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        simpel</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>500                                g                            
-                    
-                                                    Mehl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>½                                Würfel                            
-                    
-                                                    Hefe</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                TL                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                ml                            
-                    
-                                                    Milch, lauwarme</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>20                                ml                            
-                    
-                                                    Bier</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>etwas                            
-                    
-                                                    Mehl, für die Arbeitsfläche</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Rating>0</Rating>
-    <Url>https://www.chefkoch.de/rezepte/2524071395750584/Pizzateig-zum-Selbermachen.html#eyJvYmplY3RJZCI6IjI1MjQwNzEzOTU3NTA1ODQiLCJxdWVyeUlkIjoiMzFlOTFjZmQ3YzdjMWRjOWI1YmU0YzE3MDQwZTE1MWQiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzMyMjg2NjEyMCwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
+    <Url>https://www.chefkoch.de/rezepte/3329761494357421/Crispy-Chicken-Burger.html#eyJvYmplY3RJZCI6IjMzMjk3NjE0OTQzNTc0MjEiLCJxdWVyeUlkIjoiMmY1NTQyM2UwMjgyNzM3YTRmNDdmODg5NzQ1NzU1MjgiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODgyMDUzNSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
   </Recipe>
 </ArrayOfRecipe>

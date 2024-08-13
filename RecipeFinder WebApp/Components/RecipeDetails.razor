@@ -70,6 +70,9 @@
     {
         <p class="text-muted text-center">Loading...</p>
     }
+    <br/>
+    <br/>
+    <button class="btn btn-outline-primary" @onclick="() => AddRecipeToFavorite(recipe)">Add to Fav!</button>
 </div>
 
 @code {
@@ -79,6 +82,8 @@
     private Recipe recipe { get; set; }
 
     private Ingredient ingredient { get; set; }
+
+    private User user { get; set; } = new User();
 
     protected override async Task OnInitializedAsync()
     {
@@ -125,5 +130,16 @@
             Console.WriteLine("url parameter not found, navigating to home");
             Navigation.NavigateTo("/");
         }
+    }
+
+    private void AddRecipeToFavorite(Recipe recipe)
+    {
+        if (user.FavoriteRecipes == null)
+        {
+            user.FavoriteRecipes = new List<Recipe>();
+        }
+
+        user.FavoriteRecipes.Add(recipe);
+        ScrapperService.SaveRecipesToXmlFile(user.FavoriteRecipes, Constants.XML_FAVORITE_REC_PATH);
     }
 }

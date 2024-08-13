@@ -26,8 +26,19 @@
             set { _searchTerms = value; }
         }
 
-        public string UserId { get; set; }
-        public string RecipeId { get; set; }
+        private string _userId;
+        public string UserId 
+        { 
+            get { return _userId; } 
+            set { _userId = value; } 
+        }
+
+        private string _recipeId;
+        public string RecipeId 
+        {
+            get { return _recipeId; }
+            set { _recipeId = value; } 
+        }
 
         public User User { get; set; }
 

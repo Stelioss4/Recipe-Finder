@@ -35,8 +35,7 @@ namespace RecipeFinder_WebApp
                 .ToListAsync();
 
             // Load recipes from XML
-            var allRecipes = ScrapperService.LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
-            var favoriteRecipes = allRecipes.Where(r => favoriteRecipeIds.Contains(r.RecipeId)).ToList();
+            var favoriteRecipes = ScrapperService.LoadRecipesFromXmlFile(Constants.XML_FAVORITE_REC_PATH);
 
             return favoriteRecipes;
 

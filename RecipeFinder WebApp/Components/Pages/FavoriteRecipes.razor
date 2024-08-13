@@ -1,5 +1,6 @@
 ﻿@page "/favoriteRecipes"
 @using RecipeFinder_WebApp.Data
+@using System.Security.Claims
 @inject FavoriteRecipeService FavoriteRecipeService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
@@ -52,21 +53,39 @@
 
         if (user.Identity.IsAuthenticated)
         {
-            // Assuming "UserId" is stored as a string claim
-            var userId = user.FindFirst("UserId")?.Value;
+            // Try to get UserId from different claims
+            var userId = user.FindFirst("UserId")?.Value ??
+                         user.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+                         user.FindFirst(ClaimTypes.Name)?.Value;
 
             if (!string.IsNullOrEmpty(userId))
             {
-                favoriteRecipes = await FavoriteRecipeService.GetFavoriteRecipesAsync(userId);
+                // Load users from the SQLite database
+                users = DbContext.Users
+                                 .Select(u => new User
+                                     {
+                                         UserId = u.Id,
+                                         FirstName = u.UserName,
+                                         Email = u.Email,
+                                         FavoriteRecipes = new List<Recipe>() // Initialize to avoid null reference
+                                     })
+                                 .ToList();
+
+                // Find the logged-in user from the list
+                userProfile = users.FirstOrDefault(u => u.UserId == userId);
+
+                if (userProfile != null)
+                {
+                    // Load the user's favorite recipes
+                    userProfile.FavoriteRecipes = recipes;
+                }
             }
             else
             {
-                // Handle the case where UserId is not found or is null
-                // For example, log an error or redirect the user
+                Console.WriteLine("UserId is null or empty.");
             }
         }
     }
-
     private void NavigateToRecipeDetails(string recipeUrl)
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
