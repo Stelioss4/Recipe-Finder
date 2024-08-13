@@ -89,7 +89,7 @@
 
         var userEntity = CreateUser();
 
-        await UserStore.SetUserNameAsync(userEntity, user.Email, CancellationToken.None);
+        await UserStore.SetUserNameAsync(userEntity, user.FirstName, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(userEntity, user.Email, CancellationToken.None);
         var result = await UserManager.CreateAsync(userEntity, user.Password);
