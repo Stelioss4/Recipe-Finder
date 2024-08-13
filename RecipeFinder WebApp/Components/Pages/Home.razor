@@ -23,6 +23,7 @@
 
                         <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
                         <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
+                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCookPad">Search CookPad</button>
                     </div>
 
                 </EditForm>
@@ -71,6 +72,10 @@
     private async Task SearchForRecipeFromAR()
     {
         recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
+    }
+    private async Task SearchForRecipeFromCookPad()
+    {
+        recipes = await Scrap.ScrapeCookPadRecipes(searchQuery);
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)

@@ -106,6 +106,10 @@
                 {
                     recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                 }
+                else if (decodedUrl.Contains(Constants.COOKPAD_URL))
+                {
+                    recipe = await Scrap.ScrapeCookPadDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                }
                 else
                 {
                     Console.WriteLine("Unknown source domain");
