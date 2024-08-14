@@ -5,398 +5,25 @@
     <SearchTerms>
       <string>pizza</string>
     </SearchTerms>
-    <RecipeName>Low Carb Pizza</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/2053471332003967/bilder/701519/crop-360x240/low-carb-pizza.jpg</Image>
-    <CookingInstructions>Zwei Eier in einer Schüssel gut verrühren. Den Thunfisch abtropfen lassen, zu den Eiern geben und alles gut durchmischen. Die Mischung auf ein Backblech mit Backpapier geben und rund formen. Der Boden sollte so ca. 0,4 - 0,6 cm dick sein. Den Thunfischboden im vorgeheizten Backofen 10 - 15 Min bei 180 °C Ober-/Unterhitze backen.&lt;br&gt;
+    <RecipeName>Italienischer Pizzateig</RecipeName>
+    <Image>https://img.chefkoch-cdn.de/rezepte/716331174378295/bilder/763994/crop-360x240/italienischer-pizzateig.jpg</Image>
+    <CookingInstructions>Im lauwarmen Wasser und dem Olivenöl die Hefe mit Salz und Zucker auflösen. Dann das Mehl hinzufügen und einen glatten Teig kneten. Den Teig eine halbe Stunde an einem warmen Ort gehen lassen, zusammenkneten und abgedeckt im Kühlschrank 2 Tage ruhen lassen.&lt;br&gt;
 &lt;br&gt;
-Danach aus dem Ofen nehmen, mit Tomatensauce bestreichen und mit Salz, Pfeffer und Oregano würzen. Die Schinkenscheiben klein reißen und die Pizza damit belegen. Mit Käse bestreuen, das dritte Ei aufschlagen und auf die Pizza geben.&lt;br&gt;
+Nun kann man vom Teig eine herrlich frische Pizza herstellen. &lt;br&gt;
 &lt;br&gt;
-Danach die Pizza wieder in den Ofen geben und ca. 20 Min backen, bis das Ei gar ist und der Käse eine schöne goldene Farbe hat.&lt;br&gt;
+Der Teig reicht für 6 runde Pizzen.&lt;br&gt;
 &lt;br&gt;
-Die Pizza kann nach Geschmack natürlich auch anders belegt werden.</CookingInstructions>
+Anmerkungen: Belegen kann man diese nach Belieben, natürlich sollten die Tomatensauce und der Käse nicht fehlen. Ich habe sie schon auf einem Blech sowie auf verschiedenen runden Pizzaformen gebacken. Sie wird immer supertoll und schmeckt original wie von meinem Lieblingsitaliener. Wenn man die Menge entsprechend reduzieren möchte, ist das auch kein Problem. Die Menge der Hefe habe ich jedoch immer bei 40 g gelassen.&lt;br&gt;
+&lt;br&gt;
+Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmöglichen Temperatur vorheizt!</CookingInstructions>
     <CookingTime>PT0S</CookingTime>
     <CuisineType>African</CuisineType>
     <OccasionTags>Breakfast</OccasionTags>
     <DifficultyLevel>
-        normal</DifficultyLevel>
+        simpel</DifficultyLevel>
     <ListofIngredients>
       <Ingredient>
-        <IngredientsName>1 ½                                Dose/n                            
-                    
-                                                    Thunfisch im eigenen Saft 
-                                                                            
-                                
-                                
-                                    z.B. Saupiquet Thunfisch-Filets Naturale – ohne Öl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>3                                                            
-                    
-                                                    Ei(er)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                Scheibe/n                            
-                    
-                                                    Kochschinken</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>80                                g                            
-                    
-                                                    Käse, geriebener, nach Wahl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Salz und Pfeffer</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Oregano</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Tomatensauce</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/2053471332003967/Low-Carb-Pizza.html#eyJvYmplY3RJZCI6IjIwNTM0NzEzMzIwMDM5NjciLCJxdWVyeUlkIjoiYTJiMjcwYzUxNDE0Njc4Yzk5ODA3ZWQwODAwODE3ZTIiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODc4MTI2NywidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Fladenbrot-Pizza</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/4316661720011670/bilder/1559765/crop-360x240/fladenbrot-pizza.jpg</Image>
-    <CookingInstructions>1. Den Ofen auf 220 Grad (Umluft 200 Grad) vorheizen. Tomaten in dünne Scheiben schneiden. Mozzarella trocken tupfen und grob zerzupfen. &lt;br&gt;
-&lt;br&gt;
-2. Gehäutete Paprikaschoten mit Paprikasud, Öl, edelsüßem Paprikapulver, Salz und Pfeffer in einem hohen Gefäß fein pürieren. Pitataschen waagerecht halbieren und mit der Paprikapaste bestreichen. Mit Tomaten, Käse und Salamischeiben belegen.&lt;br&gt;
-&lt;br&gt;
-3. Pizzen auf einem mit Backpapier belegten Blech im heißen Ofen im unteren Ofendrittel 15 Min. backen. Rauke waschen, trocken schleudern, hacken und über die Pizzen streuen.&lt;br&gt;
-&lt;br&gt;
-Pro Portion 23 g E, 32 g F, 33 g KH = 529 kcal (2214 kJ)</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/4316661720011670/Fladenbrot-Pizza.html?ck_source=search-recipe&amp;amp;ck_element=recipe_search_list#eyJvYmplY3RJZCI6IjQzMTY2NjE3MjAwMTE2NzAiLCJxdWVyeUlkIjoiYTJiMjcwYzUxNDE0Njc4Yzk5ODA3ZWQwODAwODE3ZTIiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODc4MTI2NywidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Sauerteig-Pizza mit Pesto, Raf-Tomaten und Burrata</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/4266431700039984/bilder/1531833/crop-360x240/sauerteig-pizza-mit-pesto-raf-tomaten-und-burrata.jpg</Image>
-    <CookingInstructions>Für die Zubereitung benötigte Küchenutensilien: Pizzastein (ersatzweise Backblech), Pizzaschieber, Teigschaber.&lt;br&gt;
-&lt;br&gt;
-Für den Pizzateig zwei Tage vorher Sauerteig-Anstellgut mit Roggenmehl und 320 g lauwarmem Wasser verkneten bzw. mit dem Holzlöffel sorgfältig verrühren. Sauerteig im Gefäß oder einer Box hinreichender Größe (vom Volumen mindestens 3-mal so groß) mit einem Deckel locker verschließen. 12—18 Stunden bei Zimmertemperatur (ca. 25 Grad) reifen lassen. Ergibt ca. 800 g Sauerteig (siehe Tipp).&lt;br&gt;
-&lt;br&gt;
-Am Vortag 400 g Sauerteig abwiegen und in einer großen Küchenmaschine mit Pizzamehl, Honig und 500 g Wasser auf kleinster Stufe 1 Minute verkneten. Salz zugeben, weitere 5 Minuten verkneten.&lt;br&gt;
-Teig in eine große Schüssel oder Box füllen, locker mit einem Tuch bedecken und im Backofen bei angeschalteter Lampe (ca. 28 Grad) 3 Stunden gehen bzw. reifen lassen. Teig in der Zeit 2- bis 3-mal falten: Teig dazu mit feuchten Händen oder einer Teigkarte von einem Rand her über die Mitte einschlagen bzw. falten. Vorgang mit den anderen 3 Seiten wiederholen. Sauerteig in einer Box mit locker verschließbarem Deckel 24 Stunden im Kühlschrank ruhen lassen.&lt;br&gt;
-&lt;br&gt;
-Am Tag danach Teig aus dem Kühlschrank nehmen und 3—4 Stunden bei Zimmertemperatur stehen lassen. Teig auf sehr gut bemehlter Arbeitsfläche in 5—6 Stücke à ca. 400 g teilen. Teigstücke auf gut bemehlter Arbeitsfläche mithilfe eines Teigschabers und einer Hand rund wirken. Stücke mit der glatten Seite nach oben auf ein mit doppelt gemahlenem Hartweizengrieß bestreutes Backblech legen. Mit einem Tuch locker bedecken, 2:30—3 Stunden bei Zimmertemperatur ruhen bzw. gehen lassen, bis sich ihr Volumen verdoppelt hat.&lt;br&gt;
-&lt;br&gt;
-Für die Tomatensauce Tomaten in einem Sieb abtropfen lassen, Stielansatz herausschneiden. Tomaten in eine Schüssel geben, mit den Fingern zerdrücken (mit Küchenhandschuhen arbeiten!) und mit Salz und Zucker würzen. Basilikumblätter von den Stielen ab-zupfen, grob schneiden und mit den zerdrückten Tomaten mischen. Sauce im Kühlschrank in einer Lock&amp;amp;lock-Box lagern.&lt;br&gt;
-&lt;br&gt;
-Für das Pesto Pinienkerne in einer Pfanne ohne Öl bei mittlerer Hitze 4 - 5 Minuten rösten. Basilikumblätter von den Stielen abzupfen. Basilikum, Pinienkerne, Parmesan, Knoblauch, Olivenöl, Salz und Pfeffer in einem Blitzhacker fein mixen. Pesto bis zum Gebrauch kalt stellen.&lt;br&gt;
-&lt;br&gt;
-Raf-Tomaten waschen, trocken tupfen und in 5 mm dicke Scheiben schneiden. Einen Teig mit den Händen auf der bemehlten Arbeitsfläche von innen nach außen zu dünnen, oval-runden Fladen drücken (ca. 30 - 35 cm Ø). Dabei entstehenden Rand nicht flach drücken. &lt;br&gt;
-&lt;br&gt;
-3 EL Tomatensauce bis zum Rand auf dem Pizzaboden verteilen, Pizza mit Tomatenscheiben belegen und mit Parmesan bestreuen. Im vorgeheizten Backofen bei 240 Grad (Umluft nicht empfehlenswert) auf einem Pizzastein auf der 2. Schiene von unten 10 Minuten hellbraun und knusprig backen. Alternativ im Pizzaofen (z. B. Bartscher) bei 300 Grad 7 Minuten backen.&lt;br&gt;
-&lt;br&gt;
-Inzwischen Rucola putzen, waschen und trocken schleudern. Burrata abtropfen lassen. Pizza aus dem Ofen nehmen, mit 1 Burrata und etwas Rucola belegen. Mit etwas Pesto und 1 EL Olivenöl beträufeln, mit Pfeffer bestreuen und servieren. &lt;br&gt;
-&lt;br&gt;
-Restlichen Teig mit restlichen Zutaten wie oben nacheinander zu weiteren 4 Pizzen verarbeiten.&lt;br&gt;
-Backzeit 35 - 50 Minuten (5 x 7 bzw. 5 x 10 Minuten)&lt;br&gt;
-&lt;br&gt;
-Pro Stück 53 g E, 62 g F, 204 g KH = 1651 kcal (6917 kJ)&lt;br&gt;
-&lt;br&gt;
-Tipps:&lt;br&gt;
-Der restliche Sauerteig lässt sich (bis zu 2 Monate) einfrieren. Restliche Rohlinge abgedeckt 1—2 Tage im Kühlschrank lagern oder einfrieren (bis zu 2 Monate). &lt;br&gt;
-Die Tomatensauce hält sich 2—3 Tage im Kühlschrank. Sie lässt sich einfrieren, ist aufgetaut aber etwas flüssiger. Der abgetropfte Tomatensaft kann eingefroren und später für Saucen verwendet werden.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/4266431700039984/Sauerteig-Pizza-mit-Pesto-Raf-Tomaten-und-Burrata.html?ck_source=search-recipe&amp;amp;ck_element=recipe_search_list#eyJvYmplY3RJZCI6IjQyNjY0MzE3MDAwMzk5ODQiLCJxdWVyeUlkIjoiYTJiMjcwYzUxNDE0Njc4Yzk5ODA3ZWQwODAwODE3ZTIiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODc4MTI2NywidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Pizza-Sticks</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/4181991670594712/bilder/1486676/crop-360x240/pizza-sticks.jpg</Image>
-    <CookingInstructions>1. Mozzarella abtropfen lassen. Die Kugeln 1 cm groß würfeln und zwischen Küchenpapier gut trocken tupfen. Salamischeiben halbieren.&lt;br&gt;
-&lt;br&gt;
-2. Basilikum und Knoblauch fein hacken, mit dem Öl verrühren. Tomatenmark und 2 EL Wasser glattrühren, leicht salzen und pfeffern. Den Ofen auf 240 Grad (Umluft 220 Grad) vorheizen. Ein Blech mit Backpapier belegen. &lt;br&gt;
-&lt;br&gt;
-3. Pizzateig entrollen. Längs halbieren und quer vierteln, sodass 8 gleich große Rechtecke entstehen. Tomatenmark mittig auf die Teigstücke streichen und mit Salamischeiben und Mozzarella belegen. Mit etwas Gewürzöl beträufeln. Teig jeweils längs über die Füllung legen und darüber aufrollen. Dabei vorsichtig auseinanderziehen und mit der Verschlusskante nach unten auf das Backblech legen. Die Enden gut zusammendrücken.&lt;br&gt;
-&lt;br&gt;
-4. Teigstangen mit restlichem Gewürzöl bestreichen. Im heißen Ofen im unteren Drittel 15 Minuten backen.&lt;br&gt;
-&lt;br&gt;
-5. Die Pizza-Sticks schmecken am besten heiß oder lauwarm. Bei Bedarf im heißen Ofen bei 200 Grad ca. 10 Minuten aufbacken. &lt;br&gt;
-&lt;br&gt;
-Pro Stück 11 g E, 17 g F, 22 g KH = 296 kcal (1239 kJ)</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/4181991670594712/Pizza-Sticks.html?ck_source=search-recipe&amp;amp;ck_element=recipe_search_list#eyJvYmplY3RJZCI6IjQxODE5OTE2NzA1OTQ3MTIiLCJxdWVyeUlkIjoiYTJiMjcwYzUxNDE0Njc4Yzk5ODA3ZWQwODAwODE3ZTIiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODc4MTI2NywidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Pizza-Bällchen</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/1247411229689036/bilder/967475/crop-360x240/pizza-baellchen.jpg</Image>
-    <CookingInstructions>Mehl, Quark, Backpulver, Milch, Öl, Salz und Zucker gut verkneten. Die übrigen Zutaten zum Teig geben. Noch mal durchkneten und kleine Bällchen formen. Auf ein Backblech mit Backpapier legen.&lt;br&gt;
-&lt;br&gt;
-Für 30 - 40 Min. bei 180 °C Ober-/Unterhitze in den heißen Ofen geben.&lt;br&gt;
-&lt;br&gt;
-Tipps: Für Feiern mache ich mindestens die doppelte Menge, kamen dort immer sehr gut an. Die Geschmackszutaten (Röstzwiebeln, Schinken, Käse) sind variabel, auf den Käse würde ich aber nicht verzichten!&lt;br&gt;
-Beim Backen muss man hin und wieder gucken, sie werden je nach Herd von unten auch sehr schnell dunkel, aber zu hell sollten sie auch nicht sein. Vorsicht, wenn sie noch warm sind, werden sie gerne stibitzt.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        normal</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>300                                g                            
-                    
-                                                    Mehl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>250                                g                            
-                    
-                                                    Quark</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Pck.                            
-                    
-                                                    Backpulver</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>8                                EL                            
-                    
-                                                    Milch</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>6                                EL                            
-                    
-                                                    Öl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                EL                            
-                    
-                                                    Zucker</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>100                                g                            
-                    
-                                                    Röstzwiebeln</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Käse, geriebener</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>100                                g                            
-                    
-                                                    Schinkenwürfel</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/1247411229689036/Pizza-Baellchen.html#eyJvYmplY3RJZCI6IjEyNDc0MTEyMjk2ODkwMzYiLCJxdWVyeUlkIjoiYTJiMjcwYzUxNDE0Njc4Yzk5ODA3ZWQwODAwODE3ZTIiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODc4MTI2NywidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Pizza mit Grünkohl &amp;amp; Schweinebacke</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/4194461674468657/bilder/1493008/crop-360x240/pizza-mit-gruenkohl-schweinebacke.jpg</Image>
-    <CookingInstructions>Pizzateig 30 Minuten vor Gebrauch aus dem Kühlschrank nehmen.&lt;br&gt;
-&lt;br&gt;
-Für das Pesto Grünkohl abspülen, gut trocken schütteln, die Blätter von den Mittelrippen zupfen. Pinienkerne in einer Pfanne ohne Fett leicht anrösten. Knoblauch grob hacken. Knoblauch, Salz, Pinienkerne, Grünkohl und Öl in einen hohen Rührbecher geben, mit dem Stabmixer zu einem Pesto mixen. Mit Salz und Pfeffer abschmecken. Falls das Pesto sehr fest ist, etwas mehr Öl oder Wasser unterrühren.&lt;br&gt;
-&lt;br&gt;
-Backofen auf 220 Grad (Umluft 200 Grad) vorheizen.&lt;br&gt;
-&lt;br&gt;
-Für die Senfsoße Schmand und Senf verrühren und mit Salz und Pfeffer abschmecken.&lt;br&gt;
-&lt;br&gt;
-Für den Belag Guanciale in dünne Scheiben schneiden.&lt;br&gt;
-&lt;br&gt;
-Pizzateig auf einer bemehlten Arbeitsfläche mit den Händen zu 2 runden Pizzen formen und je auf ein mit Backpapier belegtes Backblech legen. Mit Senfsoße, Grünkohlpesto und den Speckscheiben aus der Schweinebacke belegen.&lt;br&gt;
-&lt;br&gt;
-Pizzen nacheinander im heißen Ofen auf der mittleren Schiene in 10 - 12 Minuten knusprig backen. Nach der Hälfte der Backzeit die Pinienkerne über die beiden Pizzen streuen. &lt;br&gt;
-&lt;br&gt;
-1 - 2 Stängel Basilikum abspülen, trocken schütteln, Blätter abzupfen und darüberstreuen.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/4194461674468657/Pizza-mit-Gruenkohl-Schweinebacke.html?ck_source=search-recipe&amp;amp;ck_element=recipe_search_list#eyJvYmplY3RJZCI6IjQxOTQ0NjE2NzQ0Njg2NTciLCJxdWVyeUlkIjoiYTJiMjcwYzUxNDE0Njc4Yzk5ODA3ZWQwODAwODE3ZTIiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODc4MTI2NywidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>pizza</string>
-    </SearchTerms>
-    <RecipeName>Gefüllte Pizzabrötchen</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/1674611275463778/bilder/764829/crop-360x240/gefuellte-pizzabroetchen.jpg</Image>
-    <CookingInstructions>Das Mehl mit Salz und Zucker mischen. Die Hefe in das lauwarme Wasser bröckeln und verrühren. Dann das Wasser zum Mehl geben, die 2 EL Olivenöl dazugeben und alles zu einem geschmeidigen Teig verkneten (geht am besten von Hand oder mit dem Brotbackautomaten). Den Teig abdecken und an einer warmen Stelle ca. 30 Minuten gehen lassen. &lt;br&gt;
-&lt;br&gt;
-Danach den Teig in eine Wurstform rollen (ca. 4 - 5 cm dick), davon 2 - 3 cm dicke Scheiben abschneiden und jeweils ausrollen. Je einen Streifen Schinken und Käse darauf legen (man braucht keine ganze Scheibe). Die Teiglinge einrollen und die Enden andrücken und gut verschließen, damit der Käse beim Backen nicht auslaufen kann. &lt;br&gt;
-&lt;br&gt;
-Olivenöl mit Salz, Pfeffer, Basilikum, Oregano und Majoran gut vermischen. Dann die Mischung mit einem Pinsel auf die Oberseite der Rollen auftragen, so dass die Kräuter schön verteilt sind (frische eignen sich nicht, die würden verbrennen).&lt;br&gt;
-&lt;br&gt;
-Im heißen Backofen bei 250 °C Ober-/Unterhitze ca. 10 - 15 Minuten backen, je nach gewünschtem Bräunungsgrad. &lt;br&gt;
-&lt;br&gt;
-Kleine ungefüllte Pizzabrötchen brauchen nicht so lang und schmecken noch besser, wenn man sie mit etwas Parmesan bestreut.&lt;br&gt;
-&lt;br&gt;
-Das Rezept reicht für ca. 30 kleine Brötchen.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        normal</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>300                                g                            
-                    
-                                                    Mehl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>150                                ml                            
+        <IngredientsName>500                                ml                            
                     
                                                     Wasser, lauwarmes</IngredientsName>
         <Calories>0</Calories>
@@ -407,7 +34,7 @@ Das Rezept reicht für ca. 30 kleine Brötchen.</CookingInstructions>
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>2                                EL                            
+        <IngredientsName>25                                ml                            
                     
                                                     Olivenöl</IngredientsName>
         <Calories>0</Calories>
@@ -418,742 +45,9 @@ Das Rezept reicht für ca. 30 kleine Brötchen.</CookingInstructions>
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Prise(n)                            
-                    
-                                                    Zucker</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>20                                g                            
-                    
-                                                    Frischhefe</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>150                                g                            
-                    
-                                                    Kochschinken, dünn geschnittener</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Gouda, dünn geschnittener</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>n. B.                            
-                    
-                                                    Olivenöl, ca. 2 - 3 EL</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>n. B.                            
-                    
-                                                    Salz und Pfeffer, frisch gemahlener, je eine Prise</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Basilikum, gerebelter</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Majoran, gerebelter</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Oregano, gerebelter</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>evtl.                            
-                    
-                                                    Parmesan</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/1674611275463778/Gefuellte-Pizzabroetchen.html#eyJvYmplY3RJZCI6IjE2NzQ2MTEyNzU0NjM3NzgiLCJxdWVyeUlkIjoiYTJiMjcwYzUxNDE0Njc4Yzk5ODA3ZWQwODAwODE3ZTIiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODc4MTI2NywidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>burger</string>
-    </SearchTerms>
-    <RecipeName>Hamburger de luxe</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/660551167895456/bilder/993968/crop-360x240/hamburger-de-luxe.jpg</Image>
-    <CookingInstructions>Vorab, bei der Zubereitung von Hamburgern gibt es keine Dogmen, jeder kann und sollte nach seinem eigenen Geschmack die Zutaten variieren. Dies ist nur ein Vorschlag wie man es machen kann.&lt;br&gt;
-&lt;br&gt;
-Zunächst sollte man das Hackfleisch vorbereiten. Dazu zuerst die Speisezwiebel in feine Würfel schneiden und gut mit dem Hackfleisch verkneten. Anschließend nach eigenem Ermessen mit Salz, Pfeffer, Paprika, etc. kräftig würzen.&lt;br&gt;
-&lt;br&gt;
-In Amerika wird das Burgerfleisch, auch Patty genannt, eigentlich nicht gewürzt (oder sonst was drangetan) und die würzige Note erfolgt durch die Soßen, etc. Allerdings kann bei selbstgemachten Pattys, die nicht so dünn sind wie tiefgefrorene, das hinterher sehr fad schmecken. Daher lieber würzen.&lt;br&gt;
-&lt;br&gt;
-Anschließend das nun gut gewürzte Hackfleisch in zwei flache Pattys formen und mit Mehl auf beiden Seiten bestäuben.&lt;br&gt;
-&lt;br&gt;
-Als nächstes die weiteren Zutaten vorbereiten. Die roten Zwiebeln in feine Würfel hacken, Tomate und Gurke schneiden, Salat waschen, Käse und Bacon herauslegen. Nun eine beschichtete Pfanne ohne Fett auf mittlerer Stufe heiß werden lassen und die geschnittenen Brötchen dort mit den Innenseiten hineinlegen und toasten lassen, bis die Unterseiten karamellisiert sind, d. h. etwas braun (wer die Brötchen in den Backofen tut, um diese zuzubereiten macht es falsch). Die Brötchen nur zum Warmhalten bei 60° in den Backofen geben.&lt;br&gt;
-&lt;br&gt;
-Nun Butter in die Pfanne geben und die roten Zwiebeln bei mittlerer Hitze kurz anbraten. Eine Prise Zucker und Salz dazugeben und wer will, mit einem Schuss Sherry ablöschen. Die geschmorten Zwiebeln in den Backofen geben und warmhalten.&lt;br&gt;
-&lt;br&gt;
-Jetzt werden die Pattys bei hoher Hitze in die Pfanne mit etwas Sonnenblumenöl gegeben (bei hoher Hitze werden sie schnell fest und zerfallen nicht, was passieren kann bei sehr dünnen Pattys). Den Bacon an der Seite der Pfanne garen lassen.&lt;br&gt;
-&lt;br&gt;
-Sind die Pattys sogut wie gar, den Käse drauflegen und ein paar Sekunden anschmelzen lassen. Zu diesem Zeitpunkt sollte man das untere Bun (Brötchen) schon mit allem belegt haben, was unter das Fleisch kommt. (Tipp: Den Bacon mit etwas Küchenpapier von triefendem Fett befreien).&lt;br&gt;
-&lt;br&gt;
-Der Aufbau dieses Burgers gestaltet sich so (von unten nach oben lesen):&lt;br&gt;
-&lt;br&gt;
-Bun (top)&lt;br&gt;
-Hamburgersoße&lt;br&gt;
-Tomate&lt;br&gt;
-Salat&lt;br&gt;
-Bacon&lt;br&gt;
-Käse&lt;br&gt;
-Patty&lt;br&gt;
-Ketchup&lt;br&gt;
-Gurke&lt;br&gt;
-Schmorzwiebeln&lt;br&gt;
-Bun (bottom)&lt;br&gt;
-&lt;br&gt;
-Ein paar Tropfen Tabasco auf den Burger sind auch sehr zu empfehlen.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        normal</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>300                                g                            
-                    
-                                                    Rinderhackfleisch</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                große                            
-                    
-                                                    Brötchen, für Hamburger (Buns)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                                            
-                    
-                                                    Zwiebel(n), rot</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                                            
-                    
-                                                    Gemüsezwiebel(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                                            
-                    
-                                                    Gurke(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                                            
-                    
-                                                    Tomate(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                Scheibe/n                            
-                    
-                                                    Bacon</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                Scheibe/n                            
-                    
-                                                    Gouda</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                Blätter                            
-                    
-                                                    Eisbergsalat</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Ketchup</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Sauce für Hamburger</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Tabasco</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Salz und Pfeffer</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>evtl.                            
-                    
-                                                    Sherry</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Paprikapulver</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/660551167895456/Hamburger-de-luxe.html#eyJvYmplY3RJZCI6IjY2MDU1MTE2Nzg5NTQ1NiIsInF1ZXJ5SWQiOiIyZjU1NDIzZTAyODI3MzdhNGY0N2Y4ODk3NDU3NTUyOCIsInNlYXJjaE9yaWdpbiI6InJzZWxfcmVsZXZhbmNlIiwidGltZXN0YW1wIjoxNzIzNTM4ODIwNTM1LCJ0eXBlIjoic2VhcmNoLXRyYWNraW5nIn0=</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>burger</string>
-    </SearchTerms>
-    <RecipeName>Karamellisierte Zwiebeln - für Burger, Schnitzel und vieles mehr</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/3631291546354233/bilder/1367472/crop-360x240/karamellisierte-zwiebeln-fuer-burger-schnitzel-und-vieles-mehr.jpg</Image>
-    <CookingInstructions>Die Zwiebeln in Ringe schneiden und in der Pfanne mit etwas Öl anbraten. Wenn die Zwiebeln anfangen glasig zu werden, das Paprikapulver hinzugeben und vermischen damit sie eine schöne Farbe erhalten. Wenn die Zwiebeln den gewünschten Garpunkt haben, die Temperatur erhöhen und die Zwiebeln mit dem braunen Rohrzucker bestreuen und karamellisieren lassen. &lt;br&gt;
-&lt;br&gt;
-Die Zwiebeln nehmen wir gerne, wenn wir Burger machen, passen aber auch perfekt zu einem leckeren Schnitzel, Leber mit Kartoffelpüree und vielem anderen.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        simpel</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>8                                große                            
-                    
-                                                    Zwiebel(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>etwas                            
-                    
-                                                    Öl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>etwas                            
-                    
-                                                    Paprikapulver, edelsüßes</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Paprikapulver, rosenscharfes</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>etwas                            
-                    
-                                                    Rohrzucker, braun</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/3631291546354233/Karamellisierte-Zwiebeln-fuer-Burger-Schnitzel-und-vieles-mehr.html#eyJvYmplY3RJZCI6IjM2MzEyOTE1NDYzNTQyMzMiLCJxdWVyeUlkIjoiMmY1NTQyM2UwMjgyNzM3YTRmNDdmODg5NzQ1NzU1MjgiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODgyMDUzNSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
-  </Recipe>
-  <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>burger</string>
-    </SearchTerms>
-    <RecipeName>Chefkoch Kirsch-BBQ-Burger</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/3136331467103904/bilder/924893/crop-360x240/chefkoch-kirsch-bbq-burger.jpg</Image>
-    <CookingInstructions>8 Scheiben dünn aufgeschnittenen Bacon auf der Grillplatte von jeder Seite in 2 - 3 Minuten gut knusprig grillen.&lt;br&gt;
-&lt;br&gt;
-Für die karamellisierten Zwiebeln die Zwiebeln in Streifen schneiden, Butter in der Pfanne schmelzen und die Zwiebeln darin glasig dünsten, dann herausnehmen. Den Zucker mit in die Pfanne geben und goldbraun karamellisieren lassen, mit dem Balsamico ablöschen. Die Zwiebeln mit allen restlichen Zutaten in die Pfanne geben und zu einer marmeladeartigen Konsistenz einkochen. Anschließend das  Lorbeerblatt entfernen.&lt;br&gt;
-&lt;br&gt;
-Für die BBQ-Sauce die Kirschen mit Agavendicksaft, Kirschsaft, Limettensaft und Zesten, Worcestersauce und den Gewürzen ½ Stunde auf mittlerer Hitze einkochen, dann pürieren. 2 Stück Zartbitterschokolade hinzugeben und unterrühren. Mit Chili abschmecken.&lt;br&gt;
-&lt;br&gt;
-Für die Patties das Rinderhackfleisch in 4 Teile aufteilen, dann zu Kugeln formen. Jetzt entweder mit einer Burgerpresse oder einem 10 cm Durchmesser Ausstechring die Patties mit leichtem Pressen in Form drücken. Nicht zu fest drücken, das Fleisch soll noch schön locker im Inneren sein.&lt;br&gt;
-&lt;br&gt;
-Für 12 Brioche Buns die Hefe in der lauwarmen Milch auflösen und dann mit den restlichen Zutaten vermischen. 3 Min in der Küchenmaschine langsam kneten. 5 Min auf einer hohen Stufe kneten. Alternativ mit der Hand den Teig 10 Minuten gut durchkneten. Die Glutenstruktur muss gut ausgebildet sein und der Teig eine glatte Oberfläche haben. Mit einem feuchten Tuch bedeckt bei Zimmertemperatur 1 Stunde gehen lassen.&lt;br&gt;
-&lt;br&gt;
-In 12 Teiglinge teilen, schöne Kugeln daraus formen und wieder 1 Stunde gehen lassen. &lt;br&gt;
-&lt;br&gt;
-Danach mit geschmolzener Butter oder Ei bestreichen. Damit die Buns schön  gleichmäßig werden, kann man sie in einem eingefetteten Anrichtring mit 10 cm Durchmesser backen. 50 ml Wasser in einem feuerfesten Behälter auf den Ofenboden stellen.&lt;br&gt;
-&lt;br&gt;
-Die Buns im heißen Backofen bei 190 °C Ober-/Unterhitze ca. 15 - 18 Min. backen.&lt;br&gt;
-&lt;br&gt;
-Die überschüssigen Buns können auch eingefroren werden. Einfach aufgetaut wieder aufbacken.&lt;br&gt;
-&lt;br&gt;
-Zusammenbauen der Burger: &lt;br&gt;
-Die benötigten 4 Buns halbieren, die Schnittflächen buttern und auf dem Grillrost rösten. Anschließend die Unterseiten mit einer Handvoll Babyspinat belegen, darauf etwas Kirsch-Chili BBQ-Sauce träufeln. Die Patties von einer Seite 2 - 3 Min. grillen, mit Meersalz und gestoßenem Pfeffer gut würzen, dann wenden, wieder würzen und mit je 2 EL karamellisierten Zwiebeln, 2 Scheiben Bacon, 1 Spritzer BBQ Sauce und 1 Scheibe Cheddar belegen und nochmal ca. 2 Minuten grillen, bis der Cheddar geschmolzen ist. Die Bun-Deckel auflegen und die Burger mit je einem Spieß fixieren.</CookingInstructions>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        normal</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>100                                g                            
-                    
-                                                    Baby-Spinat</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                Scheibe/n                            
-                    
-                                                    Cheddarkäse (White Cheddar)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>8                                Scheibe/n                            
-                    
-                                                    Bacon, dünn aufgeschnittene</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>600                                g                            
-                    
-                                                    Rinderhackfleisch grob gewolftes, ca. 23% Fettgehalt, vom Metzger eures Vertrauens</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Meersalz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Pfeffer, grob gestoßener</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                große                            
-                    
-                                                    Zwiebel(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>20                                g                            
-                    
-                                                    Butter</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>30                                g                            
-                    
-                                                    Rohrzucker</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                EL                            
-                    
-                                                    Balsamico, dunkler</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                                            
-                    
-                                                    Lorbeerblatt</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                Prise(n)                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>500                                g                            
-                    
-                                                    Süßkirschen, entsteinte</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>100                                g                            
-                    
-                                                    Agavendicksaft</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>100                                ml                            
-                    
-                                                    Kirschsaft</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1 ½                                                            
-                    
-                                                    Limette(n), Saft davon</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>½                                                            
-                    
-                                                    Limette(n), Zesten davon</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                EL                            
-                    
-                                                    Worcestersauce</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                TL                            
-                    
-                                                    Chiliflocken</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>½                                TL                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                EL                            
-                    
-                                                    Paprikapulver, geräuchertes</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                Stück(e)                            
-                    
-                                                    Zartbitterschokolade</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>20                                g                            
-                    
-                                                    Frischhefe</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>10                                g                            
-                    
-                                                    Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>35                                g                            
-                    
-                                                    Zucker</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>500                                g                            
-                    
-                                                    Weizenmehl Type 550</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>250                                ml                            
-                    
-                                                    Milch, lauwarme</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
         <IngredientsName>40                                g                            
                     
-                                                    Butter, weiche</IngredientsName>
+                                                    Frischhefe</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -1162,9 +56,31 @@ Die benötigten 4 Buns halbieren, die Schnittflächen buttern und auf dem Grillr
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>1                                EL                            
+        <IngredientsName>20                                g                            
                     
-                                                    Butter, geschmolzene, alternativ aufgeschlagenes Ei zum Bestreichen der Buns vor dem Backen</IngredientsName>
+                                                    Salz</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>1                                Prise(n)                            
+                    
+                                                    Zucker</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>925                                g                            
+                    
+                                                    Mehl, glattes</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -1176,153 +92,73 @@ Die benötigten 4 Buns halbieren, die Schnittflächen buttern und auf dem Grillr
     <Ratings />
     <Rating>0</Rating>
     <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/3136331467103904/Chefkoch-Kirsch-BBQ-Burger.html#eyJvYmplY3RJZCI6IjMxMzYzMzE0NjcxMDM5MDQiLCJxdWVyeUlkIjoiMmY1NTQyM2UwMjgyNzM3YTRmNDdmODg5NzQ1NzU1MjgiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODgyMDUzNSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
+    <Url>https://www.chefkoch.de/rezepte/716331174378295/Italienischer-Pizzateig.html#eyJvYmplY3RJZCI6IjcxNjMzMTE3NDM3ODI5NSIsInF1ZXJ5SWQiOiIyNTdhOTNlNjg1M2VmZWJkZGVlZTFkMmZjY2RiZDljOSIsInNlYXJjaE9yaWdpbiI6InJzZWxfcmVsZXZhbmNlIiwidGltZXN0YW1wIjoxNzIzNTUyNzI5NTg3LCJ0eXBlIjoic2VhcmNoLXRyYWNraW5nIn0=</Url>
   </Recipe>
   <Recipe>
-    <SourceDomain>https://www.chefkoch.de</SourceDomain>
-    <SearchTerms>
-      <string>burger</string>
-    </SearchTerms>
-    <RecipeName>Doppelter Smashed Burger mit Käse</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/4253531694686318/bilder/1524128/crop-360x240/doppelter-smashed-burger-mit-kaese.jpg</Image>
-    <CookingInstructions>Essiggurke und Zwiebeln in feine Würfel schneiden. Käsescheiben bereit legen. Burger Buns halbieren. &lt;br&gt;
-Fleisch vorsichtig zu 2 Kugeln je 80- 100 g formen.&lt;br&gt;
-&lt;br&gt;
-Bei Patties mit wenig Fettanteil, ein wenig Öl in einer Pfanne erhitzen. Am besten eignen sich Gusseisen- oder Edelstahlpfannen. &lt;br&gt;
-Eine Hackkugel in die heiße Pfanne geben, ein Stück Backpapier darauf legen und mit einem kleinen Topf, Grillspachtel oder einem Pfannenwender, das Fleisch fest flach drücken. Die Fleischfläche sollte ein wenig größer sein als das Burgerbun.&lt;br&gt;
-Das gleiche mit dem zweiten Patty wiederholen.&lt;br&gt;
-&lt;br&gt;
-Fleisch nach dem Andrücken salzen. Patties so lange von einer Seite braten, bis die Unterseite braun und knusprig ist. &lt;br&gt;
-&lt;br&gt;
-Fleisch vorsichtig vom Pfannenboden lösen und wenden. Nun die andere Seite mit Salz und gemahlenem Pfeffer würzen. &lt;br&gt;
-Patties mit jeweils einer Scheibe Käse belegen. Ca. 1 Min. weiter braten und dann die Patties aufeinandersetzen und von der Hitze nehmen. &lt;br&gt;
-&lt;br&gt;
-Butter in eine beschichtete Pfanne geben und die Bun-Hälften darin, auf der Schnittseite leicht gold-braun anbraten. &lt;br&gt;
-&lt;br&gt;
-Die eine Bunhälfte mit Ketchup und die andere mit Senf bestreichen. Zwiebeln und Gurken darüber verteilen. Nun das doppelte Patty mit Käse auf die eine Bunhälfte geben und mit dem anderen Bun bedecken.</CookingInstructions>
+    <SearchTerms />
     <CookingTime>PT0S</CookingTime>
     <CuisineType>African</CuisineType>
     <OccasionTags>Breakfast</OccasionTags>
-    <DifficultyLevel>
-        simpel</DifficultyLevel>
-    <ListofIngredients>
-      <Ingredient>
-        <IngredientsName>200                                g                            
-                    
-                                                    Rinderhackfleisch mit hohem Fettanteil</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                                            
-                    
-                                                    Burger Bun (Brioche)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                Scheibe/n                            
-                    
-                                                    Cheddar (jung und alt)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                EL                            
-                    
-                                                    Öl</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                EL                            
-                    
-                                                    Butter</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>1                                                            
-                    
-                                                    Essiggurke(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>½                                                            
-                    
-                                                    Zwiebel(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Senf</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Ketchup</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Salz</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>Pfeffer</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-    </ListofIngredients>
+    <ListofIngredients />
     <Ratings />
     <Rating>0</Rating>
     <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/4253531694686318/Doppelter-Smashed-Burger-mit-Kaese.html#eyJvYmplY3RJZCI6IjQyNTM1MzE2OTQ2ODYzMTgiLCJxdWVyeUlkIjoiMmY1NTQyM2UwMjgyNzM3YTRmNDdmODg5NzQ1NzU1MjgiLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzUzODgyMDUzNSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
+  </Recipe>
+  <Recipe>
+    <SearchTerms />
+    <CookingTime>PT0S</CookingTime>
+    <CuisineType>African</CuisineType>
+    <OccasionTags>Breakfast</OccasionTags>
+    <ListofIngredients />
+    <Ratings />
+    <Rating>0</Rating>
+    <Reviews />
+  </Recipe>
+  <Recipe>
+    <SearchTerms />
+    <CookingTime>PT0S</CookingTime>
+    <CuisineType>African</CuisineType>
+    <OccasionTags>Breakfast</OccasionTags>
+    <ListofIngredients />
+    <Ratings />
+    <Rating>0</Rating>
+    <Reviews />
+  </Recipe>
+  <Recipe>
+    <SearchTerms />
+    <CookingTime>PT0S</CookingTime>
+    <CuisineType>African</CuisineType>
+    <OccasionTags>Breakfast</OccasionTags>
+    <ListofIngredients />
+    <Ratings />
+    <Rating>0</Rating>
+    <Reviews />
+  </Recipe>
+  <Recipe>
+    <SearchTerms />
+    <CookingTime>PT0S</CookingTime>
+    <CuisineType>African</CuisineType>
+    <OccasionTags>Breakfast</OccasionTags>
+    <ListofIngredients />
+    <Ratings />
+    <Rating>0</Rating>
+    <Reviews />
+  </Recipe>
+  <Recipe>
+    <SearchTerms />
+    <CookingTime>PT0S</CookingTime>
+    <CuisineType>African</CuisineType>
+    <OccasionTags>Breakfast</OccasionTags>
+    <ListofIngredients />
+    <Ratings />
+    <Rating>0</Rating>
+    <Reviews />
+  </Recipe>
+  <Recipe>
+    <CookingTime>PT0S</CookingTime>
+    <CuisineType>African</CuisineType>
+    <OccasionTags>Breakfast</OccasionTags>
+    <ListofIngredients />
+    <Rating>0</Rating>
   </Recipe>
 </ArrayOfRecipe>

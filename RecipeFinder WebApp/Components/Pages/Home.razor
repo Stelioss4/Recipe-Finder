@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using RecipeFinder_WebApp.Data
 @using Recipe_Finder
 @using HtmlAgilityPack
 @inject ScrapperService Scrap
@@ -82,14 +83,8 @@
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
-    private void AddRecipeToFavorite(Recipe recipe)
+    private async void AddRecipeToFavorite(Recipe recipe)
     {
-        if (user.FavoriteRecipes == null)
-        {
-            user.FavoriteRecipes = new List<Recipe>();
-        }
-
-        user.FavoriteRecipes.Add(recipe);
-        ScrapperService.SaveRecipesToXmlFile(user.FavoriteRecipes, Constants.XML_FAVORITE_REC_PATH);
+        await FavoriteRecipeService.AddFavoriteRecipeAsync(recipe.UserId, recipe.RecipeId);
     }
 }

@@ -42,7 +42,7 @@
 
     private List<User> users { get; set; } = new List<User>();
     private User userProfile { get; set; } = new User();
-    private List<Recipe> recipes { get; set; } = ScrapperService.LoadRecipesFromXmlFile(Constants.XML_FAVORITE_REC_PATH);
+    private List<Recipe> recipes { get; set; } = DataService.LoadRecipesFromXmlFile(Constants.XML_FAVORITE_REC_PATH);
 
     private List<Recipe> favoriteRecipes { get; set; } = new List<Recipe>();
 
@@ -77,7 +77,7 @@
                 if (userProfile != null)
                 {
                     // Load the user's favorite recipes
-                    userProfile.FavoriteRecipes = recipes;
+                    userProfile.FavoriteRecipes = await FavoriteRecipeService.GetFavoriteRecipesAsync(userId);
                 }
             }
             else

@@ -1,9 +1,8 @@
 ﻿using HtmlAgilityPack;
 using Recipe_Finder;
-using RecipeFinder_WebApp.Components;
 using System.Xml.Serialization;
 
-namespace RecipeFinder_WebApp
+namespace RecipeFinder_WebApp.Data
 {
     public class ScrapperService
     {
@@ -15,63 +14,10 @@ namespace RecipeFinder_WebApp
             _httpClient = httpClient;
             _dataService = ds;
         }
-        public static void SaveRecipesToXmlFile(List<Recipe> recipes, string filePath)
-        {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<Recipe>));
-                using (StreamWriter writer = new StreamWriter(filePath))
-                {
-                    serializer.Serialize(writer, recipes);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving recipes to XML file: {ex.Message}");
-            }
-        }
-
-        public static List<Recipe> LoadRecipesFromXmlFile(string filePath)
-        {
-            try
-            {
-                if (File.Exists(filePath))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<Recipe>));
-                    using (StreamReader reader = new StreamReader(filePath))
-                    {
-                        var recipes = (List<Recipe>)serializer.Deserialize(reader);
-                        return recipes ?? new List<Recipe>(); // Return an empty list if deserialization returns null
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading recipes from XML file: {ex.Message}");
-            }
-            return new List<Recipe>();
-        }
-
-        public List<Recipe> GetCachedRecipes(List<string> searchTerms, string source)
-        {
-            var normalizedSearchTerms = searchTerms.Select(term => term.Trim().ToLowerInvariant()).ToList();
-            source = source.Trim().ToLowerInvariant();
-
-            var existingRecipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH)
-                .Where(r => r.RecipeName != null &&
-                            r.SourceDomain != null &&
-                            r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
-                            r.SearchTerms != null)
-                .Where(r => normalizedSearchTerms.Any(term => r.RecipeName.Contains(term, StringComparison.OrdinalIgnoreCase)) &&
-                            normalizedSearchTerms.Any(term => r.SearchTerms.Any(st => st.Trim().ToLowerInvariant().Equals(term, StringComparison.OrdinalIgnoreCase))))
-                .ToList();
-
-            return existingRecipes;
-        }
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
-            var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.ALLRECIPE_URL);
+            var existingRecipes = _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.ALLRECIPE_URL);
             if (existingRecipes.Any())
             {
                 return existingRecipes;
@@ -102,7 +48,7 @@ namespace RecipeFinder_WebApp
             if (detailedRecipes.Count > 0)
             {
                 _dataService.Recipes.AddRange(detailedRecipes);
-                SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
+                DataService.SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
             }
 
             return detailedRecipes;
@@ -174,7 +120,7 @@ namespace RecipeFinder_WebApp
             {
                 if (!Uri.IsWellFormedUriString(searchResultRecipie.Url, UriKind.Absolute))
                 {
-                    searchResultRecipie.Url = ($"https://www.allrecipes.com {searchResultRecipie.Url}");
+                    searchResultRecipie.Url = $"https://www.allrecipes.com {searchResultRecipie.Url}";
                 }
 
                 var html = await _httpClient.GetStringAsync(searchResultRecipie.Url);
@@ -298,7 +244,7 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
-            var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.CHEFKOCH_URL);
+            var existingRecipes = _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.CHEFKOCH_URL);
             if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
@@ -330,7 +276,7 @@ namespace RecipeFinder_WebApp
             if (detailedRecipes.Count > 0)
             {
                 _dataService.Recipes.AddRange(detailedRecipes);
-                SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
+                DataService.SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
             }
             return detailedRecipes;
         }
@@ -536,7 +482,7 @@ namespace RecipeFinder_WebApp
 
         public async Task<List<Recipe>> ScrapeCookPadRecipes(string searchQuery)
         {
-            var existingRecipes = GetCachedRecipes(new List<string> { searchQuery }, Constants.COOKPAD_URL);
+            List<Recipe> existingRecipes = _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.COOKPAD_URL);
             if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
@@ -568,7 +514,7 @@ namespace RecipeFinder_WebApp
             if (detailedRecipes.Count > 0)
             {
                 _dataService.Recipes.AddRange(detailedRecipes);
-                SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
+                DataService.SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
             }
             return detailedRecipes;
         }

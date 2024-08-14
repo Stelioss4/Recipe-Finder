@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Recipe_Finder;
-using RecipeFinder_WebApp.Data;
 
-namespace RecipeFinder_WebApp
+namespace RecipeFinder_WebApp.Data
 {
     public class RecipesController : Controller
     {

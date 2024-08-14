@@ -1,5 +1,6 @@
 ﻿@page "/profile"
 @using RecipeFinder_WebApp.Data
+@using RecipeFinder_WebApp.Components.Account.Shared
 @using Recipe_Finder
 @using System.Security.Claims
 
@@ -13,8 +14,8 @@
     @if (userProfile != null)
     {
         <p>Welcome, @userProfile.FirstName!!</p>
-
-        @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
+ <div class="col-md-6 col-md-offset-2">
+    </div>        @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
         {
             <div class="row">
                 @foreach (var rec in userProfile.FavoriteRecipes)
@@ -52,7 +53,7 @@
 
     private List<User> users { get; set; }
     private User userProfile { get; set; }
-    private List<Recipe> recipes { get; set; } = ScrapperService.LoadRecipesFromXmlFile(Constants.XML_FAVORITE_REC_PATH);
+    private List<Recipe> recipes { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,7 +86,7 @@
                 if (userProfile != null)
                 {
                     // Load the user's favorite recipes
-                    userProfile.FavoriteRecipes = recipes;
+                    userProfile.FavoriteRecipes = await FavoriteRecipeService.GetFavoriteRecipesAsync(userId);
                 }
             }
             else

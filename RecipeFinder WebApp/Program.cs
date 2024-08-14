@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.EntityFrameworkCore;
-using RecipeFinder_WebApp;
 using RecipeFinder_WebApp.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
