@@ -3,19 +3,21 @@
   <Recipe>
     <SourceDomain>https://www.chefkoch.de</SourceDomain>
     <SearchTerms>
-      <string>pizza</string>
+      <string>burger</string>
     </SearchTerms>
-    <RecipeName>Italienischer Pizzateig</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/716331174378295/bilder/763994/crop-360x240/italienischer-pizzateig.jpg</Image>
-    <CookingInstructions>Im lauwarmen Wasser und dem Olivenöl die Hefe mit Salz und Zucker auflösen. Dann das Mehl hinzufügen und einen glatten Teig kneten. Den Teig eine halbe Stunde an einem warmen Ort gehen lassen, zusammenkneten und abgedeckt im Kühlschrank 2 Tage ruhen lassen.&lt;br&gt;
+    <RecipeName>All American Burger</RecipeName>
+    <Image>https://img.chefkoch-cdn.de/rezepte/452791137770019/bilder/1519646/crop-360x240/all-american-burger.jpg</Image>
+    <CookingInstructions>Die Zwiebel schälen, fein würfeln und mit dem Hackfleisch vermischen.&lt;br&gt;
 &lt;br&gt;
-Nun kann man vom Teig eine herrlich frische Pizza herstellen. &lt;br&gt;
+Das Rinderhack mit Worcestersauce, Salz und Pfeffer kräftig würzen und daraus 4 flache Burger formen. Das Öl in einer Pfanne erhitzen und die Burger darin kräftig anbraten, anschließend auf kleiner Flamme 6 Minuten durchbraten, einmal wenden. Kurz bevor die Burger gar sind, auf jeden 1 Scheibe Käse legen und schmelzen lassen. &lt;br&gt;
 &lt;br&gt;
-Der Teig reicht für 6 runde Pizzen.&lt;br&gt;
+In der Zwischenzeit den Salat waschen und trocken schleudern. Die Tomaten waschen, trocknen, den grünen Stielansatz entfernen und die Tomaten in Scheiben schneiden. &lt;br&gt;
 &lt;br&gt;
-Anmerkungen: Belegen kann man diese nach Belieben, natürlich sollten die Tomatensauce und der Käse nicht fehlen. Ich habe sie schon auf einem Blech sowie auf verschiedenen runden Pizzaformen gebacken. Sie wird immer supertoll und schmeckt original wie von meinem Lieblingsitaliener. Wenn man die Menge entsprechend reduzieren möchte, ist das auch kein Problem. Die Menge der Hefe habe ich jedoch immer bei 40 g gelassen.&lt;br&gt;
+Die Hamburgerbrötchen halbieren und jeweils mit der Schnittfläche nach oben unter dem Backofengrill knusprig toasten.&lt;br&gt;
 &lt;br&gt;
-Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmöglichen Temperatur vorheizt!</CookingInstructions>
+Anschließend alle unteren Hälften mit Salat belegen, darauf je 1 Burger mit geschmolzener Käsescheibe geben und mit der oberen Hälfte der Hamburgerbrötchen bedecken. Sofort servieren.&lt;br&gt;
+&lt;br&gt;
+Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- und Zwiebelscheiben belegt und mit Senf oder Mayonnaise bestrichen werden.</CookingInstructions>
     <CookingTime>PT0S</CookingTime>
     <CuisineType>African</CuisineType>
     <OccasionTags>Breakfast</OccasionTags>
@@ -23,9 +25,9 @@ Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmögliche
         simpel</DifficultyLevel>
     <ListofIngredients>
       <Ingredient>
-        <IngredientsName>500                                ml                            
+        <IngredientsName>1                                                            
                     
-                                                    Wasser, lauwarmes</IngredientsName>
+                                                    Zwiebel(n)</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -34,9 +36,9 @@ Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmögliche
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>25                                ml                            
+        <IngredientsName>600                                g                            
                     
-                                                    Olivenöl</IngredientsName>
+                                                    Rinderhackfleisch</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -45,9 +47,9 @@ Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmögliche
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>40                                g                            
+        <IngredientsName>1                                TL                            
                     
-                                                    Frischhefe</IngredientsName>
+                                                    Worcestersauce</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -56,9 +58,7 @@ Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmögliche
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>20                                g                            
-                    
-                                                    Salz</IngredientsName>
+        <IngredientsName>Salz und Pfeffer</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -67,9 +67,9 @@ Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmögliche
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>1                                Prise(n)                            
+        <IngredientsName>3                                EL                            
                     
-                                                    Zucker</IngredientsName>
+                                                    Pflanzenöl, neutrales</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -78,9 +78,53 @@ Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmögliche
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>925                                g                            
+        <IngredientsName>4                                Scheibe/n                            
                     
-                                                    Mehl, glattes</IngredientsName>
+                                                    Schmelzkäse</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>4                                Blätter                            
+                    
+                                                    Friséesalat</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>2                                                            
+                    
+                                                    Tomate(n)</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>4                                TL                            
+                    
+                                                    Tomatenketchup</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>4                                                            
+                    
+                                                    Burgerbrötchen</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -92,73 +136,6 @@ Am besten gelingt die Pizza, wenn man den Ofen sehr gut auf der höchstmögliche
     <Ratings />
     <Rating>0</Rating>
     <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/716331174378295/Italienischer-Pizzateig.html#eyJvYmplY3RJZCI6IjcxNjMzMTE3NDM3ODI5NSIsInF1ZXJ5SWQiOiIyNTdhOTNlNjg1M2VmZWJkZGVlZTFkMmZjY2RiZDljOSIsInNlYXJjaE9yaWdpbiI6InJzZWxfcmVsZXZhbmNlIiwidGltZXN0YW1wIjoxNzIzNTUyNzI5NTg3LCJ0eXBlIjoic2VhcmNoLXRyYWNraW5nIn0=</Url>
-  </Recipe>
-  <Recipe>
-    <SearchTerms />
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-  </Recipe>
-  <Recipe>
-    <SearchTerms />
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-  </Recipe>
-  <Recipe>
-    <SearchTerms />
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-  </Recipe>
-  <Recipe>
-    <SearchTerms />
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-  </Recipe>
-  <Recipe>
-    <SearchTerms />
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-  </Recipe>
-  <Recipe>
-    <SearchTerms />
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Ratings />
-    <Rating>0</Rating>
-    <Reviews />
-  </Recipe>
-  <Recipe>
-    <CookingTime>PT0S</CookingTime>
-    <CuisineType>African</CuisineType>
-    <OccasionTags>Breakfast</OccasionTags>
-    <ListofIngredients />
-    <Rating>0</Rating>
+    <Url>https://www.chefkoch.de/rezepte/452791137770019/All-American-Burger.html#eyJvYmplY3RJZCI6IjQ1Mjc5MTEzNzc3MDAxOSIsInF1ZXJ5SWQiOiI5N2M4YmRiNGU0ZjlkYjhlOWM3ZDc0OGZiZDEzN2FmNyIsInNlYXJjaE9yaWdpbiI6InJzZWxfcmVsZXZhbmNlIiwidGltZXN0YW1wIjoxNzIzNTUwNjIzMjM5LCJ0eXBlIjoic2VhcmNoLXRyYWNraW5nIn0=</Url>
   </Recipe>
 </ArrayOfRecipe>

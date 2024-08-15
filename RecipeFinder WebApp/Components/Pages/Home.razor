@@ -4,6 +4,8 @@
 @using HtmlAgilityPack
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
+@inject UserService userService
+
 
 <PageTitle>Home</PageTitle>
 
@@ -63,6 +65,7 @@
 @code {
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private User user { get; set; } = new User();
+
     private string searchQuery { get; set; } = string.Empty;
 
     private async Task SearchForRecipeFromCK()
@@ -85,6 +88,6 @@
     }
     private async void AddRecipeToFavorite(Recipe recipe)
     {
-        await FavoriteRecipeService.AddFavoriteRecipeAsync(recipe.UserId, recipe.RecipeId);
+        await userService.AddFavoriteRecipeAsync(recipe.UserId, recipe.RecipeId);
     }
 }

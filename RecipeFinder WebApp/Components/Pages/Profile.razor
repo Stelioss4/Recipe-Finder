@@ -4,8 +4,11 @@
 @using Recipe_Finder
 @using System.Security.Claims
 
+@inject DataService DataService
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserService userService
+
 
 
 <h3>User Profile</h3>
@@ -55,6 +58,7 @@
     private User userProfile { get; set; }
     private List<Recipe> recipes { get; set; }
 
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -86,7 +90,7 @@
                 if (userProfile != null)
                 {
                     // Load the user's favorite recipes
-                    userProfile.FavoriteRecipes = await FavoriteRecipeService.GetFavoriteRecipesAsync(userId);
+                    userProfile.FavoriteRecipes = await userService.GetFavoritesAsync(userId);
                 }
             }
             else

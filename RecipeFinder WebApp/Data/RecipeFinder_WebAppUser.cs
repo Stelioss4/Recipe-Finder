@@ -8,5 +8,6 @@ namespace RecipeFinder_WebApp.Data
     {
         User User { get; set; } = new User();
         public ICollection<Recipe> FavoriteRecipes { get; set; } = new List<Recipe>();
+
     }
 }
