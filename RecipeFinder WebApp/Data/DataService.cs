@@ -6,7 +6,7 @@ namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
-        private User? user { get; set; } = new User();
+        public User? user { get; set; } = new User();
 
         public Address Address { get; set; } = new Address();
 
@@ -20,6 +20,11 @@ namespace RecipeFinder_WebApp.Data
         {
             _clientFactory = clientFactory;
             Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
+        }
+
+        public void AddToUserFav(User user, Recipe recipe)
+        {
+            user.FavoriteRecipes.Add(recipe);
         }
 
         private void Init()

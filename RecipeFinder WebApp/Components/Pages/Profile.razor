@@ -8,6 +8,7 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserService userService
+@inject DataService dataService
 
 
 
@@ -90,7 +91,7 @@
                 if (userProfile != null)
                 {
                     // Load the user's favorite recipes
-                    userProfile.FavoriteRecipes = await userService.GetFavoritesAsync(userId);
+                    userProfile.FavoriteRecipes = dataService.user.FavoriteRecipes;
                 }
             }
             else

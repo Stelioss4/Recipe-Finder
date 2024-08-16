@@ -5,6 +5,7 @@
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
 @inject UserService userService
+@inject DataService DataService
 
 
 <PageTitle>Home</PageTitle>
@@ -86,8 +87,8 @@
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
-    private async void AddRecipeToFavorite(Recipe recipe)
+    private void AddRecipeToFavorite(Recipe recipe)
     {
-        await userService.AddFavoriteRecipeAsync(recipe.UserId, recipe.RecipeId);
+        DataService.AddToUserFav(user, recipe);
     }
 }

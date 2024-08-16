@@ -3,21 +3,15 @@
   <Recipe>
     <SourceDomain>https://www.chefkoch.de</SourceDomain>
     <SearchTerms>
-      <string>burger</string>
+      <string>brot</string>
     </SearchTerms>
-    <RecipeName>All American Burger</RecipeName>
-    <Image>https://img.chefkoch-cdn.de/rezepte/452791137770019/bilder/1519646/crop-360x240/all-american-burger.jpg</Image>
-    <CookingInstructions>Die Zwiebel schälen, fein würfeln und mit dem Hackfleisch vermischen.&lt;br&gt;
+    <RecipeName>Saftiges Vollkornbrot</RecipeName>
+    <Image>https://img.chefkoch-cdn.de/rezepte/1344331239198800/bilder/437561/crop-360x240/saftiges-vollkornbrot.jpg</Image>
+    <CookingInstructions>Die Zutaten in der genannten Reihenfolge mischen und in der Küchenmaschine oder mit dem Rührgerät mit den Knethaken zu einem Teig verarbeiten. Dieser ist relativ flüssig. &lt;br&gt;
 &lt;br&gt;
-Das Rinderhack mit Worcestersauce, Salz und Pfeffer kräftig würzen und daraus 4 flache Burger formen. Das Öl in einer Pfanne erhitzen und die Burger darin kräftig anbraten, anschließend auf kleiner Flamme 6 Minuten durchbraten, einmal wenden. Kurz bevor die Burger gar sind, auf jeden 1 Scheibe Käse legen und schmelzen lassen. &lt;br&gt;
+In eine mit Backpapier ausgelegt Kastenform (meine ist 30 cm lang und 15 cm breit) füllen. Wenn das Papier am Rand zerknüllt ist, macht das gar nichts. &lt;br&gt;
 &lt;br&gt;
-In der Zwischenzeit den Salat waschen und trocken schleudern. Die Tomaten waschen, trocknen, den grünen Stielansatz entfernen und die Tomaten in Scheiben schneiden. &lt;br&gt;
-&lt;br&gt;
-Die Hamburgerbrötchen halbieren und jeweils mit der Schnittfläche nach oben unter dem Backofengrill knusprig toasten.&lt;br&gt;
-&lt;br&gt;
-Anschließend alle unteren Hälften mit Salat belegen, darauf je 1 Burger mit geschmolzener Käsescheibe geben und mit der oberen Hälfte der Hamburgerbrötchen bedecken. Sofort servieren.&lt;br&gt;
-&lt;br&gt;
-Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- und Zwiebelscheiben belegt und mit Senf oder Mayonnaise bestrichen werden.</CookingInstructions>
+Dann die Form in den kalten (!) Backofen auf den Rost in die Mitte stellen und bei Ober-/Unterhitze 200°C eine Stunde backen. Das Brot ist sehr schnell zu machen, superlecker und lange saftig.</CookingInstructions>
     <CookingTime>PT0S</CookingTime>
     <CuisineType>African</CuisineType>
     <OccasionTags>Breakfast</OccasionTags>
@@ -25,9 +19,9 @@ Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- 
         simpel</DifficultyLevel>
     <ListofIngredients>
       <Ingredient>
-        <IngredientsName>1                                                            
+        <IngredientsName>500                                g                            
                     
-                                                    Zwiebel(n)</IngredientsName>
+                                                    Dinkelvollkornmehl</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -36,9 +30,9 @@ Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- 
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>600                                g                            
+        <IngredientsName>150                                g                            
                     
-                                                    Rinderhackfleisch</IngredientsName>
+                                                    Kerne, gemischte nach Wahl (z.B. Kürbiskerne, Leinsamen, Sonnenblumenkerne etc.)</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -47,9 +41,9 @@ Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- 
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>1                                TL                            
+        <IngredientsName>½                                Liter                            
                     
-                                                    Worcestersauce</IngredientsName>
+                                                    Wasser</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -58,7 +52,9 @@ Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- 
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>Salz und Pfeffer</IngredientsName>
+        <IngredientsName>1                                Würfel                            
+                    
+                                                    Hefe</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -67,9 +63,9 @@ Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- 
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>3                                EL                            
+        <IngredientsName>2                                TL                            
                     
-                                                    Pflanzenöl, neutrales</IngredientsName>
+                                                    Salz</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -78,53 +74,9 @@ Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- 
         <Unit>0</Unit>
       </Ingredient>
       <Ingredient>
-        <IngredientsName>4                                Scheibe/n                            
+        <IngredientsName>2                                EL                            
                     
-                                                    Schmelzkäse</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                Blätter                            
-                    
-                                                    Friséesalat</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>2                                                            
-                    
-                                                    Tomate(n)</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                TL                            
-                    
-                                                    Tomatenketchup</IngredientsName>
-        <Calories>0</Calories>
-        <Fat>0</Fat>
-        <Carbohydrate>0</Carbohydrate>
-        <Protein>0</Protein>
-        <Amount>Grams</Amount>
-        <Unit>0</Unit>
-      </Ingredient>
-      <Ingredient>
-        <IngredientsName>4                                                            
-                    
-                                                    Burgerbrötchen</IngredientsName>
+                                                    Obstessig, z.B. Apfelessig</IngredientsName>
         <Calories>0</Calories>
         <Fat>0</Fat>
         <Carbohydrate>0</Carbohydrate>
@@ -136,6 +88,103 @@ Tipp: Die All-American Burger können je nach Geschmack zusätzlich mit Gurken- 
     <Ratings />
     <Rating>0</Rating>
     <Reviews />
-    <Url>https://www.chefkoch.de/rezepte/452791137770019/All-American-Burger.html#eyJvYmplY3RJZCI6IjQ1Mjc5MTEzNzc3MDAxOSIsInF1ZXJ5SWQiOiI5N2M4YmRiNGU0ZjlkYjhlOWM3ZDc0OGZiZDEzN2FmNyIsInNlYXJjaE9yaWdpbiI6InJzZWxfcmVsZXZhbmNlIiwidGltZXN0YW1wIjoxNzIzNTUwNjIzMjM5LCJ0eXBlIjoic2VhcmNoLXRyYWNraW5nIn0=</Url>
+    <Url>https://www.chefkoch.de/rezepte/1344331239198800/Saftiges-Vollkornbrot.html#eyJvYmplY3RJZCI6IjEzNDQzMzEyMzkxOTg4MDAiLCJxdWVyeUlkIjoiZGIyNTgyMTJlMzcxYTY3NWFiYWIyZmU0MzM4MWZmYjciLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzU1Mjc4MTM0MSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
+  </Recipe>
+  <Recipe>
+    <SourceDomain>https://www.chefkoch.de</SourceDomain>
+    <SearchTerms>
+      <string>brot</string>
+    </SearchTerms>
+    <RecipeName>Einfaches Weizenbrot</RecipeName>
+    <Image>https://img.chefkoch-cdn.de/rezepte/2497421392380064/bilder/1481198/crop-360x240/einfaches-weizenbrot.jpg</Image>
+    <CookingInstructions>Das Mehl und allen anderen Zutaten in eine Schüssel geben und mit einem Holzlöffel verrühren,bis der Teig nicht mehr an der Schüssel klebt. Die Schüssel mit einem Tuch abdecken und den Teig 30 Minuten gehen lassen. Eine 500 g Kastenform mit Backpapier auskleiden. &lt;br&gt;
+&lt;br&gt;
+Nach 30 Minuten die Arbeitsfläche, den Teig und die Hände mehlieren. Den Teig aus der Schüssel heben und noch mal mit der Hand auf Spannung kneten. Den Teig in die Form geben und mit einem Backpinsel mit etwas Wasser glatt streichen. Einen Längsschnitt machen und in den kalten Backofen schieben. Die Backzeit beginnt, wenn die Backtemperatur erreicht ist, ca. 40 Min. bei 170 Grad Ober-/Unterhitze.</CookingInstructions>
+    <CookingTime>PT0S</CookingTime>
+    <CuisineType>African</CuisineType>
+    <OccasionTags>Breakfast</OccasionTags>
+    <DifficultyLevel>
+        simpel</DifficultyLevel>
+    <ListofIngredients>
+      <Ingredient>
+        <IngredientsName>500                                g                            
+                    
+                                                    Weizenmehl</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>350                                ml                            
+                    
+                                                    Wasser, lauwarm</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>1                                EL                            
+                    
+                                                    Olivenöl</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>2                                TL, gestr.                            
+                    
+                                                    Salz</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>1                                TL                            
+                    
+                                                    Zucker</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>1                                Tüte/n                            
+                    
+                                                    Trockenhefe</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+      <Ingredient>
+        <IngredientsName>Mehl für die Arbeitsfläche</IngredientsName>
+        <Calories>0</Calories>
+        <Fat>0</Fat>
+        <Carbohydrate>0</Carbohydrate>
+        <Protein>0</Protein>
+        <Amount>Grams</Amount>
+        <Unit>0</Unit>
+      </Ingredient>
+    </ListofIngredients>
+    <Ratings />
+    <Rating>0</Rating>
+    <Reviews />
+    <Url>https://www.chefkoch.de/rezepte/2497421392380064/Einfaches-Weizenbrot.html#eyJvYmplY3RJZCI6IjI0OTc0MjEzOTIzODAwNjQiLCJxdWVyeUlkIjoiZGIyNTgyMTJlMzcxYTY3NWFiYWIyZmU0MzM4MWZmYjciLCJzZWFyY2hPcmlnaW4iOiJyc2VsX3JlbGV2YW5jZSIsInRpbWVzdGFtcCI6MTcyMzU1Mjc4MTM0MSwidHlwZSI6InNlYXJjaC10cmFja2luZyJ9</Url>
   </Recipe>
 </ArrayOfRecipe>

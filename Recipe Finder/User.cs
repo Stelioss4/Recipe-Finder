@@ -12,7 +12,7 @@ namespace Recipe_Finder
             set { _userId = value; }
         }
 
-        private List<Recipe> _favoriteRecipes;
+        private List<Recipe> _favoriteRecipes = new List<Recipe>();
 
         public List<Recipe> FavoriteRecipes
         {
