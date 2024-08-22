@@ -1,4 +1,5 @@
-﻿using Recipe_Finder;
+﻿using Microsoft.EntityFrameworkCore;
+using Recipe_Finder;
 using System.Xml.Serialization;
 
 
@@ -16,15 +17,35 @@ namespace RecipeFinder_WebApp.Data
 
         private readonly IHttpClientFactory _clientFactory;
 
-        public DataService(IHttpClientFactory clientFactory)
+        private readonly RecipeFinder_WebAppContext _context;
+
+        public DataService(IHttpClientFactory clientFactory, RecipeFinder_WebAppContext context)
         {
             _clientFactory = clientFactory;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
         }
 
-        public void AddToUserFav(User user, Recipe recipe)
+        public async Task AddToUserFavAsync(User user, Recipe recipe)
         {
+            if (user.FavoriteRecipes == null)
+            {
+                user.FavoriteRecipes = new List<Recipe>();
+            }
+
             user.FavoriteRecipes.Add(recipe);
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+        }
+        public static List<Recipe> GetUserFavorites(User user)
+        {
+            return user.FavoriteRecipes ?? new List<Recipe>();
+        }
+
+        public static User GetUser(User user)
+        {
+            return user?? new User();
         }
 
         private void Init()

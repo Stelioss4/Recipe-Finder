@@ -87,8 +87,8 @@
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
-    private void AddRecipeToFavorite(Recipe recipe)
+    private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        DataService.AddToUserFav(user, recipe);
+        await DataService.AddToUserFavAsync(user, recipe);
     }
 }

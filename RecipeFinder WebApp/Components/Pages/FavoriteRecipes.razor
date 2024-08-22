@@ -80,7 +80,7 @@
                 if (userProfile != null)
                 {
                     // Load the user's favorite recipes
-                    userProfile.FavoriteRecipes = await userService.GetFavoritesAsync(userId);
+                    userProfile.FavoriteRecipes = DataService.GetUserFavorites(userProfile);
                 }
             }
             else
