@@ -43,10 +43,43 @@ namespace RecipeFinder_WebApp.Data
             return user.FavoriteRecipes ?? new List<Recipe>();
         }
 
-        public static User GetUser(User user)
+        public async Task<User> GetUserProfileAsync(string userId)
         {
-            return user?? new User();
+            var dbUser = await _context.Users
+                .Include(u => u.FavoriteRecipes)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (dbUser == null)
+            {
+                throw new Exception($"User with ID {userId} not found.");
+            }
+
+            // Map database user to your User model
+            return new User
+            {
+                UserId = dbUser.Id,
+                FirstName = dbUser.FirstName,
+                LastName = dbUser.LastName,
+                Email = dbUser.Email,
+                FavoriteRecipes = dbUser.FavoriteRecipes.Select(fr => new Recipe
+                {
+                    UserId = fr.UserId,
+                    RecipeName = fr.RecipeName,
+                    Url = fr.Url,
+                    Image = fr.Image,
+                    // Map other properties as needed
+                }).ToList()
+            };
         }
+        //public async Task<User> GetUserByIdAsync(string userId)
+        //{
+        //    // Retrieve the user by ID, including their favorite recipes
+        //    var user = await _context.Users
+        //                             .Include(u => u.FavoriteRecipes) // Assuming FavoriteRecipes is a navigation property
+        //                             .FirstOrDefaultAsync(u => u.Id == userId);
+
+        //    return user;
+        //}
 
         private void Init()
         {

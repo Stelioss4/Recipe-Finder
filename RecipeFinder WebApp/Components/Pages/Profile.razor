@@ -45,7 +45,7 @@
 </div>
 
 @code {
-    private User userProfile { get; set; } 
+    private User userProfile { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -58,19 +58,8 @@
 
             if (!string.IsNullOrEmpty(userId))
             {
-                // Check if the user profile is already loaded
-                if (userProfile == null)
-                {
-                    // Load the user's profile and favorite recipes only once
-                    userProfile = DataService.GetUser(userProfile);
-                    // Load the user's favorite recipes from the XML file
-                    if (userProfile != null && userProfile.FavoriteRecipes == null)
-                    {
-                        userProfile.FavoriteRecipes = DataService.GetUserFavorites(userProfile)
-                                                               .Where(r => r.UserId == userId)
-                                                               .ToList();
-                    }
-                }
+                // Load the user's profile, which should include FavoriteRecipes
+                userProfile = await DataService.GetUserProfileAsync(userId);
             }
             else
             {

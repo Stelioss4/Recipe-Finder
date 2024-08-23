@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeFinder_WebApp.Data;
 
@@ -10,9 +11,11 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinder_WebApp.Migrations
 {
     [DbContext(typeof(RecipeFinder_WebAppContext))]
-    partial class RecipeFinder_WebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240823095811_AddRecipesTable")]
+    partial class AddRecipesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
