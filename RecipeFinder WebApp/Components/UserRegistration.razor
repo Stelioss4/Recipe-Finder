@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using RecipeFinder_WebApp.Components.Account.Shared
+@using RecipeFinder_WebApp.Components.Account
 @using RecipeFinder_WebApp.Data
 
 @inject UserManager<RecipeFinder_WebAppUser> UserManager
@@ -41,9 +42,9 @@
             }
 
             <div class="form-floating mb-3">
-                <InputText @bind-Value="user.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="name" />
+                <InputText @bind-Value="user.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="name" />
                 <label for="firstName">Name</label>
-                <ValidationMessage For="@(() => user.FirstName)" class="text-danger" />
+                <ValidationMessage For="@(() => user.UserName)" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
                 <InputText @bind-Value="user.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -89,9 +90,14 @@
 
         var userEntity = CreateUser();
 
-        await UserStore.SetUserNameAsync(userEntity, user.FirstName, CancellationToken.None);
+        // Set UserName and Email
+        userEntity.UserName = user.UserName;  // Ensure UserName is set
+        userEntity.Email = user.Email;
+
+        await UserStore.SetUserNameAsync(userEntity, user.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(userEntity, user.Email, CancellationToken.None);
+
         var result = await UserManager.CreateAsync(userEntity, user.Password);
 
         if (!result.Succeeded)
@@ -106,7 +112,7 @@
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(userEntity);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+            NavigationManager.ToAbsoluteUri("ConfirmEmail").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
 
         await EmailSender.SendConfirmationLinkAsync(userEntity, user.Email, HtmlEncoder.Default.Encode(callbackUrl));
@@ -114,7 +120,7 @@
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
         {
             RedirectManager.RedirectTo(
-                "Account/RegisterConfirmation",
+                "RegisterConfirmation",
                 new() { ["email"] = user.Email, ["returnUrl"] = ReturnUrl });
             return;
         }
@@ -123,6 +129,7 @@
 
         RedirectManager.RedirectTo(ReturnUrl ?? "/profile");
     }
+
 
     private RecipeFinder_WebAppUser CreateUser()
     {

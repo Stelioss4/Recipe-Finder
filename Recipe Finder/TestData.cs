@@ -239,22 +239,21 @@
             User user1 = new User();
             User user2 = new User();
 
-            user.FirstName = "Jack";
-            user.LastName = "Black";
+            user.UserName = "Jack";
             user.Email = "jack@email.strom";
             user.Password = "password";
           //  user.Address = address1;
           //  user.PaymentMethods = paymentMethods;
 
-            user1.FirstName = "John";
-            user1.LastName = "Johnson";
+            user1.UserName = "John";
+            
             user1.Email = "john@email.ccm";
             user1.Password = "Password";
          //   user1.Address = address;
             //user1.PaymentMethods = paymentMethods1;
 
-            user2.FirstName = "Allh";
-            user2.LastName = "Brazi";
+            user2.UserName = "Allh";
+         
             user2.Email = "maria.mar@email.de";
             user2.Password = "password";
          //   user2.Address = address2;

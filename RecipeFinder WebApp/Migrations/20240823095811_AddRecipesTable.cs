@@ -12,14 +12,7 @@ namespace RecipeFinder_WebApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "FirstName",
-                table: "AspNetUsers",
-                type: "TEXT",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "LastName",
+                name: "UserName",
                 table: "AspNetUsers",
                 type: "TEXT",
                 nullable: false,
@@ -246,7 +239,7 @@ namespace RecipeFinder_WebApp.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropColumn(
-                name: "FirstName",
+                name: "UserName",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(

@@ -1,11 +1,13 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Identity
 @using RecipeFinder_WebApp.Data
 @using Recipe_Finder
 @using HtmlAgilityPack
 @using System.Security.Claims
+
+@inject SignInManager<RecipeFinder_WebAppUser> SignInManager
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
-@inject UserService userService
 @inject DataService DataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
@@ -87,13 +89,15 @@
             if (!string.IsNullOrEmpty(userId))
             {
                 user = await DataService.GetUserProfileAsync(userId);
+               
             }
         }
-
         if (user == null)
         {
-            Console.WriteLine("User is not authenticated or could not be found.");
-            Navigation.NavigateTo("/login");
+            // User profile not found, force logout and redirect to login
+            await SignInManager.SignOutAsync();
+            Navigation.NavigateTo("/userAccount");
+            return;
         }
     }
 

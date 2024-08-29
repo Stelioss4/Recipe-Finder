@@ -9,11 +9,9 @@ namespace RecipeFinder_WebApp.Data
     {
         User User { get; set; } = new User();
 
-        public string FirstName { get; set; }
+        public string UserName { get; set; }
 
-        public string LastName { get; set; }
-
-        public List<Recipe> FavoriteRecipes { get; set; } = new List<Recipe>();
+        public List<Recipe> FavoriteRecipes { get; set; }
 
     }
 }

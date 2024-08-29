@@ -58,8 +58,7 @@ namespace RecipeFinder_WebApp.Data
             return new User
             {
                 UserId = dbUser.Id,
-                FirstName = dbUser.FirstName,
-                LastName = dbUser.LastName,
+                UserName = dbUser.UserName,
                 Email = dbUser.Email,
                 FavoriteRecipes = dbUser.FavoriteRecipes.Select(fr => new Recipe
                 {
