@@ -1,10 +1,9 @@
 ﻿@page "/Account/Manage/Disable2fa"
 
 @using Microsoft.AspNetCore.Identity
-@using RecipeFinder_WebApp.Components.Account
 @using RecipeFinder_WebApp.Data
 
-@inject UserManager<RecipeFinder_WebAppUser> UserManager
+@inject UserManager<ApplicationUser> UserManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<Disable2fa> Logger
@@ -32,7 +31,7 @@
 </div>
 
 @code {
-    private RecipeFinder_WebAppUser user = default!;
+    private ApplicationUser user = default!;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;

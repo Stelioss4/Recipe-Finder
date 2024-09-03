@@ -41,7 +41,7 @@
 
 @code {
     [Inject]
-    private RecipeFinder_WebAppContext DbContext { get; set; } = default!;
+    private ApplicationDbContext DbContext { get; set; } = default!;
 
     private List<User> users { get; set; } = new List<User>();
     private User userProfile { get; set; } = new User();
@@ -68,7 +68,7 @@
                                  .Select(u => new User
                                      {
                                          UserId = u.Id,
-                                         UserName = u.UserName,
+                                         Name = u.UserName,
                                          Email = u.Email,
                                          FavoriteRecipes = new List<Recipe>() // Initialize to avoid null reference
                                      })

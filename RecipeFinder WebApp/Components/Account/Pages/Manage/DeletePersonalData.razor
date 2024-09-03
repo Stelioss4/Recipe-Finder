@@ -1,13 +1,11 @@
 ﻿@page "/Account/Manage/DeletePersonalData"
 
 @using System.ComponentModel.DataAnnotations
-@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Identity
-@using RecipeFinder_WebApp.Components.Account
 @using RecipeFinder_WebApp.Data
 
-@inject UserManager<RecipeFinder_WebAppUser> UserManager
-@inject SignInManager<RecipeFinder_WebAppUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<DeletePersonalData> Logger
@@ -42,7 +40,7 @@
 
 @code {
     private string? message;
-    private RecipeFinder_WebAppUser user = default!;
+    private ApplicationUser user = default!;
     private bool requirePassword;
 
     [CascadingParameter]

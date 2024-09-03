@@ -7,10 +7,10 @@
 @using Microsoft.AspNetCore.WebUtilities
 @using RecipeFinder_WebApp.Data
 
-@inject UserManager<RecipeFinder_WebAppUser> UserManager
-@inject IUserStore<RecipeFinder_WebAppUser> UserStore
-@inject SignInManager<RecipeFinder_WebAppUser> SignInManager
-@inject IEmailSender<RecipeFinder_WebAppUser> EmailSender
+@inject UserManager<ApplicationUser> UserManager
+@inject IUserStore<ApplicationUser> UserStore
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IEmailSender<ApplicationUser> EmailSender
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
@@ -28,14 +28,19 @@
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
-                <InputText @bind-Value="user.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label for="email">Email</label>
-                <ValidationMessage For="() => user.Email" class="text-danger" />
+                <InputText @bind-Value="Input.Name" class="form-control" autocomplete="username" aria-required="true" placeholder="John,Anna,ect..." />
+                <label for="email">Name</label>
+                <ValidationMessage For="() => Input.Name" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="user.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label for="email">Email</label>
+                <ValidationMessage For="() => Input.Email" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                 <label for="password">Password</label>
-                <ValidationMessage For="() => user.Password" class="text-danger" />
+                <ValidationMessage For="() => Input.Password" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
                 <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
@@ -64,8 +69,6 @@
     private string? ReturnUrl { get; set; }
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
-
-    private User user { get; set; } = new();
 
     public async Task RegisterUser(EditContext editContext)
     {
@@ -104,30 +107,35 @@
         RedirectManager.RedirectTo(ReturnUrl);
     }
 
-    private RecipeFinder_WebAppUser CreateUser()
+    private ApplicationUser CreateUser()
     {
         try
         {
-            return Activator.CreateInstance<RecipeFinder_WebAppUser>();
+            return Activator.CreateInstance<ApplicationUser>();
         }
         catch
         {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(RecipeFinder_WebAppUser)}'. " +
-                $"Ensure that '{nameof(RecipeFinder_WebAppUser)}' is not an abstract class and has a parameterless constructor.");
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
         }
     }
 
-    private IUserEmailStore<RecipeFinder_WebAppUser> GetEmailStore()
+    private IUserEmailStore<ApplicationUser> GetEmailStore()
     {
         if (!UserManager.SupportsUserEmail)
         {
             throw new NotSupportedException("The default UI requires a user store with email support.");
         }
-        return (IUserEmailStore<RecipeFinder_WebAppUser>)UserStore;
+        return (IUserEmailStore<ApplicationUser>)UserStore;
     }
 
     private sealed class InputModel
     {
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+        [Display(Name = "Name")]
+        public string Name { get; set; } = "";
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

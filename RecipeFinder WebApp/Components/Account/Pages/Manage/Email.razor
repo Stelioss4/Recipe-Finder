@@ -3,14 +3,12 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
-@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
-@using RecipeFinder_WebApp.Components.Account
 @using RecipeFinder_WebApp.Data
 
-@inject UserManager<RecipeFinder_WebAppUser> UserManager
-@inject IEmailSender<RecipeFinder_WebAppUser> EmailSender
+@inject UserManager<ApplicationUser> UserManager
+@inject IEmailSender<ApplicationUser> EmailSender
 @inject IdentityUserAccessor UserAccessor
 @inject NavigationManager NavigationManager
 
@@ -32,7 +30,7 @@
                 <div class="form-floating mb-3 input-group">
                     <input type="text" value="@email" class="form-control" placeholder="Please enter your email." disabled />
                     <div class="input-group-append">
-                        <span class="h-100 input-group-text text-success font-weight-bold">?</span>
+                        <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
                     </div>
                     <label for="email" class="form-label">Email</label>
                 </div>
@@ -57,7 +55,7 @@
 
 @code {
     private string? message;
-    private RecipeFinder_WebAppUser user = default!;
+    private ApplicationUser user = default!;
     private string? email;
     private bool isEmailConfirmed;
 

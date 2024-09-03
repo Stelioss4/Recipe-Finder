@@ -7,8 +7,8 @@
 @using Microsoft.AspNetCore.WebUtilities
 @using RecipeFinder_WebApp.Data
 
-@inject UserManager<RecipeFinder_WebAppUser> UserManager
-@inject IEmailSender<RecipeFinder_WebAppUser> EmailSender
+@inject UserManager<ApplicationUser> UserManager
+@inject IEmailSender<ApplicationUser> EmailSender
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 

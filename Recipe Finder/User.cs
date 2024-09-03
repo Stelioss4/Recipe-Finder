@@ -21,12 +21,12 @@ namespace Recipe_Finder
         }
 
 
-        private string _username;
+        private string _name;
       
-        public string UserName
+        public string Name
         {
-            get { return _username; }
-            set { _username = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
         private string? _email;

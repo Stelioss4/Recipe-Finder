@@ -1,9 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
-@using RecipeFinder_WebApp.Components.Account
 @using RecipeFinder_WebApp.Data
 
-@inject SignInManager<RecipeFinder_WebAppUser> SignInManager
+@inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
 
 @if (externalLogins.Length == 0)

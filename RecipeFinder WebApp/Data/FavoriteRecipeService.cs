@@ -6,9 +6,9 @@ namespace RecipeFinder_WebApp.Data
 {
     public class FavoriteRecipeService
     {
-        private readonly RecipeFinder_WebAppContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public FavoriteRecipeService(RecipeFinder_WebAppContext context)
+        public FavoriteRecipeService(ApplicationDbContext context)
         {
             _context = context;
         }

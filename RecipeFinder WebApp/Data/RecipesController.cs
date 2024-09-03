@@ -8,9 +8,9 @@ namespace RecipeFinder_WebApp.Data
     public class RecipesController : Controller
     {
         private readonly UserService _userService;
-        private readonly UserManager<RecipeFinder_WebAppUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RecipesController(UserService userService, UserManager<RecipeFinder_WebAppUser> userManager)
+        public RecipesController(UserService userService, UserManager<ApplicationUser> userManager)
         {
             _userService = userService;
             _userManager = userManager;

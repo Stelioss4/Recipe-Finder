@@ -5,11 +5,11 @@ using RecipeFinder_WebApp.Data;
 
 public class UserService
 {
-    private readonly UserManager<RecipeFinder_WebAppUser> _userManager;
-    private readonly RecipeFinder_WebAppContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ApplicationDbContext _context;
     private readonly DataService _dataService;
 
-    public UserService(UserManager<RecipeFinder_WebAppUser> userManager, RecipeFinder_WebAppContext context, DataService dataService)
+    public UserService(UserManager<ApplicationUser> userManager, ApplicationDbContext context, DataService dataService)
     {
         _userManager = userManager;
         _context = context;

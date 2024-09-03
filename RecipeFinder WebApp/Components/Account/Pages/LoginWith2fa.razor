@@ -1,13 +1,11 @@
 ﻿@page "/Account/LoginWith2fa"
 
 @using System.ComponentModel.DataAnnotations
-@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Identity
-@using RecipeFinder_WebApp.Components.Account
 @using RecipeFinder_WebApp.Data
 
-@inject SignInManager<RecipeFinder_WebAppUser> SignInManager
-@inject UserManager<RecipeFinder_WebAppUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<LoginWith2fa> Logger
 
@@ -48,7 +46,7 @@
 
 @code {
     private string? message;
-    private RecipeFinder_WebAppUser user = default!;
+    private ApplicationUser user = default!;
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();

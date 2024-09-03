@@ -5,7 +5,7 @@
 @using HtmlAgilityPack
 @using System.Security.Claims
 
-@inject SignInManager<RecipeFinder_WebAppUser> SignInManager
+@inject SignInManager<ApplicationUser> SignInManager
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
 @inject DataService DataService
@@ -77,29 +77,29 @@
     private bool showSuccessMessage { get; set; } = false;
     private string searchQuery { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var claimsUser = authState.User;
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    //     var claimsUser = authState.User;
 
-        if (claimsUser.Identity.IsAuthenticated)
-        {
-            var userId = claimsUser.FindFirst("UserId")?.Value ?? claimsUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //     if (claimsUser.Identity.IsAuthenticated)
+    //     {
+    //         var userId = claimsUser.FindFirst("UserId")?.Value ?? claimsUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (!string.IsNullOrEmpty(userId))
-            {
-                user = await DataService.GetUserProfileAsync(userId);
+    //         if (!string.IsNullOrEmpty(userId))
+    //         {
+    //             user = await DataService.GetUserProfileAsync(userId);
                
-            }
-        }
-        if (user == null)
-        {
-            // User profile not found, force logout and redirect to login
-            await SignInManager.SignOutAsync();
-            Navigation.NavigateTo("/userAccount");
-            return;
-        }
-    }
+    //         }
+    //     }
+    //     if (user == null)
+    //     {
+    //         // User profile not found, force logout and redirect to login
+    //         await SignInManager.SignOutAsync();
+    //         Navigation.NavigateTo("/userAccount");
+    //         return;
+    //     }
+    // }
 
     private async Task SearchForRecipeFromCK()
     {

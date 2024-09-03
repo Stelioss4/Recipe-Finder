@@ -17,9 +17,9 @@ namespace RecipeFinder_WebApp.Data
 
         private readonly IHttpClientFactory _clientFactory;
 
-        private readonly RecipeFinder_WebAppContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public DataService(IHttpClientFactory clientFactory, RecipeFinder_WebAppContext context)
+        public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context)
         {
             _clientFactory = clientFactory;
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -40,6 +40,7 @@ namespace RecipeFinder_WebApp.Data
         }
         public static List<Recipe> GetUserFavorites(User user)
         {
+
             return user.FavoriteRecipes ?? new List<Recipe>();
         }
 
@@ -58,7 +59,7 @@ namespace RecipeFinder_WebApp.Data
             return new User
             {
                 UserId = dbUser.Id,
-                UserName = dbUser.UserName,
+                Name = dbUser.UserName,
                 Email = dbUser.Email,
                 FavoriteRecipes = dbUser.FavoriteRecipes.Select(fr => new Recipe
                 {

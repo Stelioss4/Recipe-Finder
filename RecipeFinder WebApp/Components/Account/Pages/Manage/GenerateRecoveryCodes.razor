@@ -1,10 +1,9 @@
 ﻿@page "/Account/Manage/GenerateRecoveryCodes"
 
 @using Microsoft.AspNetCore.Identity
-@using RecipeFinder_WebApp.Components.Account
 @using RecipeFinder_WebApp.Data
 
-@inject UserManager<RecipeFinder_WebAppUser> UserManager
+@inject UserManager<ApplicationUser> UserManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<GenerateRecoveryCodes> Logger
@@ -41,7 +40,7 @@ else
 
 @code {
     private string? message;
-    private RecipeFinder_WebAppUser user = default!;
+    private ApplicationUser user = default!;
     private IEnumerable<string>? recoveryCodes;
 
     [CascadingParameter]

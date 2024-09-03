@@ -1,11 +1,11 @@
-﻿using RecipeFinder_WebApp.Data;
 using Microsoft.AspNetCore.Identity;
+using RecipeFinder_WebApp.Data;
 
 namespace RecipeFinder_WebApp.Components.Account
 {
-    internal sealed class IdentityUserAccessor(UserManager<RecipeFinder_WebAppUser> userManager, IdentityRedirectManager redirectManager)
+    internal sealed class IdentityUserAccessor(UserManager<ApplicationUser> userManager, IdentityRedirectManager redirectManager)
     {
-        public async Task<RecipeFinder_WebAppUser> GetRequiredUserAsync(HttpContext context)
+        public async Task<ApplicationUser> GetRequiredUserAsync(HttpContext context)
         {
             var user = await userManager.GetUserAsync(context.User);
 

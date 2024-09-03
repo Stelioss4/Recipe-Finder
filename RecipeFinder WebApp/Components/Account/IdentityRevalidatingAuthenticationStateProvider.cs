@@ -1,8 +1,8 @@
-﻿using RecipeFinder_WebApp.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using RecipeFinder_WebApp.Data;
 using System.Security.Claims;
 
 namespace RecipeFinder_WebApp.Components.Account
@@ -22,11 +22,11 @@ namespace RecipeFinder_WebApp.Components.Account
         {
             // Get the user manager from a new scope to ensure it fetches fresh data
             await using var scope = scopeFactory.CreateAsyncScope();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RecipeFinder_WebAppUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             return await ValidateSecurityStampAsync(userManager, authenticationState.User);
         }
 
-        private async Task<bool> ValidateSecurityStampAsync(UserManager<RecipeFinder_WebAppUser> userManager, ClaimsPrincipal principal)
+        private async Task<bool> ValidateSecurityStampAsync(UserManager<ApplicationUser> userManager, ClaimsPrincipal principal)
         {
             var user = await userManager.GetUserAsync(principal);
             if (user is null)
