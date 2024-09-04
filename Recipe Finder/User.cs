@@ -32,16 +32,16 @@ namespace Recipe_Finder
         private string? _email;
         [Required]
         [EmailAddress]
-        public string Email
+        public string? Email
         {
             get { return _email; }
             set { _email = value; }
         }
 
-        private string _password;
+        private string? _password;
         [Required]
         [DataType(DataType.Password)]
-        public string Password
+        public string? Password
         {
             get { return _password; }
             set { _password = value; }
