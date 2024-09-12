@@ -1,4 +1,6 @@
-﻿namespace Recipe_Finder
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Recipe_Finder
 {
     public class Recipe
     {
@@ -92,7 +94,7 @@
         }
 
         private CuisineType _cuisineType;
-
+        [NotMapped]
         public CuisineType CuisineType
         {
             get { return _cuisineType; }
@@ -100,7 +102,7 @@
         }
 
         private OccasionTags _occasionTags;
-
+        [NotMapped]
         public OccasionTags OccasionTags
         {
             get { return _occasionTags; }
@@ -114,7 +116,7 @@
             get { return _difficultyLevel; }
             set { _difficultyLevel = value; }
         }
-
+        [NotMapped]
         public List<Ingredient>? ListofIngredients { get; set; } = new List<Ingredient>();
 
         private string _linksForDrinkPairing;
@@ -126,7 +128,7 @@
         }
 
         private List<Rating> _ratings;
-
+        [NotMapped]
         public List<Rating> Ratings
         {
             get { return _ratings; }
@@ -150,7 +152,7 @@
         }
 
         private List<Review> _reviews;
-
+        [NotMapped]
         public List<Review> Reviews
         {
             get { return _reviews; }

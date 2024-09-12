@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Recipe_Finder
 {
     public class User
     {
         private string _userId;
-
+        [Key]
         public string UserId
         {
             get { return _userId; }
@@ -13,7 +14,7 @@ namespace Recipe_Finder
         }
 
         private List<Recipe> _favoriteRecipes = new List<Recipe>();
-
+        [NotMapped]
         public List<Recipe> FavoriteRecipes
         {
             get { return _favoriteRecipes; }
@@ -62,26 +63,24 @@ namespace Recipe_Finder
             set {  _rememberMe = value; }
         }
 
-
-
         private Address _address = new Address();
-
+        [NotMapped]
         public Address Address
         {
             get { return _address; }
             set { _address = value; }
         }
 
-        //private PaymentMethod _paymentMethods;
-
-        //public PaymentMethod PaymentMethods
-        //{
-        //    get { return _paymentMethods; }
-        //    set { _paymentMethods = value; }
-        //}
+        private PaymentMethod _paymentMethods;
+        [NotMapped]
+        public PaymentMethod PaymentMethods
+        {
+            get { return _paymentMethods; }
+            set { _paymentMethods = value; }
+        }
 
         private List<Recipe> _weeklyPlan;
-
+        [NotMapped]
         public List<Recipe> WeeklyPlan
         {
             get { return _weeklyPlan; }

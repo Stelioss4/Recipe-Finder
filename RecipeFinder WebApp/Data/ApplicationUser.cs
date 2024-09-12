@@ -7,6 +7,8 @@ namespace RecipeFinder_WebApp.Data
     public class ApplicationUser : IdentityUser
     {
         public User? User { get; set; }
+
+        public List<Recipe>? FavoriteRecipes {  get; set; }
     }
 
 }

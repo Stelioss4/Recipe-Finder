@@ -2,17 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeFinder_WebApp.Data;
 
 #nullable disable
 
-namespace RecipeFinder_WebApp.Migrations
+namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240912104901_ApplicationUserId")]
+    partial class ApplicationUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -193,6 +196,9 @@ namespace RecipeFinder_WebApp.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -206,85 +212,9 @@ namespace RecipeFinder_WebApp.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Address", b =>
-                {
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Housenumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("StreetsName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("PostalCode");
-
-                    b.ToTable("Addresses");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Ingredient", b =>
-                {
-                    b.Property<string>("IngredientsName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Calories")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Carbohydrate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Fat")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Protein")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Unit")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("IngredientsName");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("Ingredients");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Rating", b =>
-                {
-                    b.Property<double>("Value")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("ProfileUserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("TimeStam")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Value");
-
-                    b.HasIndex("ProfileUserId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -302,9 +232,6 @@ namespace RecipeFinder_WebApp.Migrations
                     b.Property<TimeSpan>("CookingTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CuisineType")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("DifficultyLevel")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -316,9 +243,6 @@ namespace RecipeFinder_WebApp.Migrations
                     b.Property<string>("LinksForDrinkPairing")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("OccasionTags")
-                        .HasColumnType("INTEGER");
 
                     b.Property<double>("Rating")
                         .HasColumnType("REAL");
@@ -347,9 +271,6 @@ namespace RecipeFinder_WebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("VideoUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -360,41 +281,12 @@ namespace RecipeFinder_WebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("UserId1");
-
                     b.ToTable("Recipes");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Review", b =>
-                {
-                    b.Property<string>("ReviewText")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ProfileUserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("TimeStam")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ReviewText");
-
-                    b.HasIndex("ProfileUserId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("AddressPostalCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ConfirmPassword")
@@ -418,9 +310,7 @@ namespace RecipeFinder_WebApp.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("AddressPostalCode");
-
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -474,24 +364,13 @@ namespace RecipeFinder_WebApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Recipe_Finder.Ingredient", b =>
+            modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>
                 {
-                    b.HasOne("Recipe_Finder.Recipe", null)
-                        .WithMany("ListofIngredients")
-                        .HasForeignKey("RecipeId");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Rating", b =>
-                {
-                    b.HasOne("Recipe_Finder.User", "Profile")
+                    b.HasOne("Recipe_Finder.User", "User")
                         .WithMany()
-                        .HasForeignKey("ProfileUserId");
+                        .HasForeignKey("UserId");
 
-                    b.HasOne("Recipe_Finder.Recipe", null)
-                        .WithMany("Ratings")
-                        .HasForeignKey("RecipeId");
-
-                    b.Navigation("Profile");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -506,35 +385,7 @@ namespace RecipeFinder_WebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Recipe_Finder.User", null)
-                        .WithMany("WeeklyPlan")
-                        .HasForeignKey("UserId1");
-
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Review", b =>
-                {
-                    b.HasOne("Recipe_Finder.User", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileUserId");
-
-                    b.HasOne("Recipe_Finder.Recipe", null)
-                        .WithMany("Reviews")
-                        .HasForeignKey("RecipeId");
-
-                    b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.User", b =>
-                {
-                    b.HasOne("Recipe_Finder.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressPostalCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>
@@ -542,20 +393,9 @@ namespace RecipeFinder_WebApp.Migrations
                     b.Navigation("FavoriteRecipes");
                 });
 
-            modelBuilder.Entity("Recipe_Finder.Recipe", b =>
-                {
-                    b.Navigation("ListofIngredients");
-
-                    b.Navigation("Ratings");
-
-                    b.Navigation("Reviews");
-                });
-
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Navigation("FavoriteRecipes");
-
-                    b.Navigation("WeeklyPlan");
                 });
 #pragma warning restore 612, 618
         }

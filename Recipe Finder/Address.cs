@@ -5,7 +5,6 @@ namespace Recipe_Finder
     public class Address
     {
 		private string _streetsname;
-        [Required(ErrorMessage = "Street name is required.")]
 
         public string StreetsName
 		{
@@ -14,7 +13,7 @@ namespace Recipe_Finder
 		}
 
 		private string _housenumber;
-        [Required(ErrorMessage = "House number is required.")]
+
 
         public string Housenumber
 		{
@@ -23,7 +22,7 @@ namespace Recipe_Finder
 		}
 
 		private string _city;
-        [Required(ErrorMessage = "City is required.")]
+
 
         public string City
 		{
@@ -32,7 +31,6 @@ namespace Recipe_Finder
 		}
 
 		private string _postalCode;
-        [Required(ErrorMessage = "Postal code is required.")]
 
         public string PostalCode
 		{

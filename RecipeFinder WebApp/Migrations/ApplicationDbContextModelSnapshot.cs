@@ -219,6 +219,9 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("RecipeId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CookingInstructions")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -271,6 +274,8 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("RecipeId");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
@@ -279,7 +284,6 @@ namespace RecipeFinderWebApp.Migrations
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Property<string>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ConfirmPassword")
@@ -368,6 +372,10 @@ namespace RecipeFinderWebApp.Migrations
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
+                    b.HasOne("RecipeFinder_WebApp.Data.ApplicationUser", null)
+                        .WithMany("FavoriteRecipes")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Recipe_Finder.User", "User")
                         .WithMany("FavoriteRecipes")
                         .HasForeignKey("UserId")
@@ -375,6 +383,11 @@ namespace RecipeFinderWebApp.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>
+                {
+                    b.Navigation("FavoriteRecipes");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
