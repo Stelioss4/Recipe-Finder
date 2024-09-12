@@ -1,6 +1,7 @@
 ﻿@page "/profile"
 @using RecipeFinder_WebApp.Data
 @using System.Security.Claims
+@using Recipe_Finder
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 @inject DataService DataService
@@ -44,7 +45,7 @@
 </div>
 
 @code {
-    private User userProfile { get; set; }
+    private User? userProfile { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -58,7 +59,7 @@
             if (!string.IsNullOrEmpty(userId))
             {
                 // Load the user's profile, which should include FavoriteRecipes
-                userProfile = await DataService.GetUserProfileAsync(userId);
+                userProfile = await DataService.GetUserByIdAsync(userId);
             }
             else
             {

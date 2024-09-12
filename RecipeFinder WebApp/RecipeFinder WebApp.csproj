@@ -1,104 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-RecipeFinder WebApp-cf43d92e-26c7-4644-b2e2-e2586ccbd777</UserSecretsId>
+    <RootNamespace>RecipeFinder WebApp</RootNamespace>
+    <AssemblyName>$(AssemblyName.Replace(' ', '_'))</AssemblyName>
+  </PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Data\Migrations\**" />
-	  <Content Remove="Data\Migrations\**" />
-	  <EmbeddedResource Remove="Data\Migrations\**" />
-	  <None Remove="Data\Migrations\**" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.65" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<Content Remove="Components\Recipe.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Recipe Finder\Recipe Finder.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<UpToDateCheckInput Remove="Components\Recipe.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<_ContentIncludedByDefault Remove="Components\Recipe.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="Components\Account\Pages\ConfirmEmail.razor" />
-		<None Include="Components\Account\Pages\ConfirmEmailChange.razor" />
-		<None Include="Components\Account\Pages\ExternalLogin.razor" />
-		<None Include="Components\Account\Pages\ForgotPassword.razor" />
-		<None Include="Components\Account\Pages\ForgotPasswordConfirmation.razor" />
-		<None Include="Components\Account\Pages\InvalidPasswordReset.razor" />
-		<None Include="Components\Account\Pages\InvalidUser.razor" />
-		<None Include="Components\Account\Pages\Lockout.razor" />
-		<None Include="Components\Account\Pages\Login.razor" />
-		<None Include="Components\Account\Pages\LoginWith2fa.razor" />
-		<None Include="Components\Account\Pages\LoginWithRecoveryCode.razor" />
-		<None Include="Components\Account\Pages\Manage\ChangePassword.razor" />
-		<None Include="Components\Account\Pages\Manage\DeletePersonalData.razor" />
-		<None Include="Components\Account\Pages\Manage\Disable2fa.razor" />
-		<None Include="Components\Account\Pages\Manage\Email.razor" />
-		<None Include="Components\Account\Pages\Manage\EnableAuthenticator.razor" />
-		<None Include="Components\Account\Pages\Manage\ExternalLogins.razor" />
-		<None Include="Components\Account\Pages\Manage\GenerateRecoveryCodes.razor" />
-		<None Include="Components\Account\Pages\Manage\Index.razor" />
-		<None Include="Components\Account\Pages\Manage\PersonalData.razor" />
-		<None Include="Components\Account\Pages\Manage\ResetAuthenticator.razor" />
-		<None Include="Components\Account\Pages\Manage\SetPassword.razor" />
-		<None Include="Components\Account\Pages\Manage\TwoFactorAuthentication.razor" />
-		<None Include="Components\Account\Pages\Manage\_Imports.razor" />
-		<None Include="Components\Account\Pages\Register.razor" />
-		<None Include="Components\Account\Pages\RegisterConfirmation.razor" />
-		<None Include="Components\Account\Pages\ResendEmailConfirmation.razor" />
-		<None Include="Components\Account\Pages\ResetPassword.razor" />
-		<None Include="Components\Account\Pages\ResetPasswordConfirmation.razor" />
-		<None Include="Components\Account\Pages\_Imports.razor" />
-		<None Include="Components\Account\Shared\AccountLayout.razor" />
-		<None Include="Components\Account\Shared\ExternalLoginPicker.razor" />
-		<None Include="Components\Account\Shared\ManageLayout.razor" />
-		<None Include="Components\Account\Shared\ManageNavMenu.razor" />
-		<None Include="Components\Account\Shared\RedirectToLogin.razor" />
-		<None Include="Components\Account\Shared\ShowRecoveryCodes.razor" />
-		<None Include="Components\Account\Shared\StatusMessage.razor" />
-		<None Include="Components\Layout\MainLayout.razor" />
-		<None Include="Components\Layout\NavMenu.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="AngleSharp" Version="1.1.2" />
-		<PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-		<PackageReference Include="EntityFrameworkCore.Triggered.Abstractions" Version="3.2.2" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.65" />
-		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.8" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
-		<PackageReference Include="PuppeteerSharp" Version="20.0.0" />
-		<PackageReference Include="Rayab.ApplicationDbContext" Version="1.2.4" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Recipe Finder\Recipe Finder.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeFinder_WebApp.Data;
 
@@ -10,9 +11,11 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240911214935_CreateIdentitySchema")]
+    partial class CreateIdentitySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -214,68 +217,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Recipe_Finder.Recipe", b =>
-                {
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CookingInstructions")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<TimeSpan>("CookingTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DifficultyLevel")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LinksForDrinkPairing")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Rating")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("RecipeName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SearchTerms")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SourceDomain")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Time")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("VideoUrl")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("RecipeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Recipes");
-                });
-
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Property<string>("UserId")
@@ -303,7 +244,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -364,22 +305,6 @@ namespace RecipeFinderWebApp.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Recipe", b =>
-                {
-                    b.HasOne("Recipe_Finder.User", "User")
-                        .WithMany("FavoriteRecipes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.User", b =>
-                {
-                    b.Navigation("FavoriteRecipes");
                 });
 #pragma warning restore 612, 618
         }

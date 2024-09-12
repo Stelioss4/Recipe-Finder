@@ -1,6 +1,7 @@
 ﻿@page "/favoriteRecipes"
 @using RecipeFinder_WebApp.Data
 @using System.Security.Claims
+@using Recipe_Finder
 
 @inject FavoriteRecipeService FavoriteRecipeService
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -64,15 +65,15 @@
             if (!string.IsNullOrEmpty(userId))
             {
                 // Load users from the SQLite database
-                users = DbContext.User
-                                 .Select(u => new User
-                                     {
-                                         UserId = u.UserId,
-                                         Name = u.Name,
-                                         Email = u.Email,
-                                         FavoriteRecipes = new List<Recipe>() // Initialize to avoid null reference
-                                     })
-                                 .ToList();
+                // users = DbContext.User
+                //                  .Select(u => new User
+                //                      {
+                //                          UserId = u.UserId,
+                //                          Name = u.Name,
+                //                          Email = u.Email,
+                //                          FavoriteRecipes = new List<Recipe>() // Initialize to avoid null reference
+                //                      })
+                //                  .ToList();
 
                 // Find the logged-in user from the list
                 userProfile = users.FirstOrDefault(u => u.UserId == userId);

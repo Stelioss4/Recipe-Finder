@@ -2,21 +2,16 @@
 using Recipe_Finder;
 using System.Xml.Serialization;
 
-
 namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
         public User? user { get; set; } = new User();
-
         public Address Address { get; set; } = new Address();
-
         public List<User> users { get; set; } = new List<User>();
-
         public List<Recipe> Recipes { get; set; } = new List<Recipe>();
 
         private readonly IHttpClientFactory _clientFactory;
-
         private readonly ApplicationDbContext _context;
 
         public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context)
@@ -26,6 +21,9 @@ namespace RecipeFinder_WebApp.Data
             Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
         }
 
+        /// <summary>
+        /// Adds a recipe to the user's favorites and saves the changes to the database.
+        /// </summary>
         public async Task AddToUserFavAsync(User user, Recipe recipe)
         {
             if (user.FavoriteRecipes == null)
@@ -34,20 +32,26 @@ namespace RecipeFinder_WebApp.Data
             }
 
             user.FavoriteRecipes.Add(recipe);
-
-            // Save changes to the database
+            _context.Users.Update(user); // Update the user entity to reflect the changes.
             await _context.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Gets the user's favorite recipes. If none exist, returns an empty list.
+        /// </summary>
         public static List<Recipe> GetUserFavorites(User user)
         {
-
             return user.FavoriteRecipes ?? new List<Recipe>();
         }
 
-        public async Task<User> GetUserProfileAsync(string userId)
+        /// <summary>
+        /// Retrieves a user by their user ID from the database.
+        /// Throws an exception if the user is not found.
+        /// </summary>
+        public async Task<User> GetUserByIdAsync(string userId)
         {
-            var dbUser = await _context.User
-                .Include(u => u.FavoriteRecipes)
+            var dbUser = await _context.Users
+                .Include(u => u.FavoriteRecipes) // Include FavoriteRecipes navigation property
                 .FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (dbUser == null)
@@ -55,7 +59,7 @@ namespace RecipeFinder_WebApp.Data
                 throw new Exception($"User with ID {userId} not found.");
             }
 
-            // Map database user to your User model
+            // Return the user entity with their favorite recipes mapped
             return new User
             {
                 UserId = dbUser.UserId,
@@ -67,29 +71,21 @@ namespace RecipeFinder_WebApp.Data
                     RecipeName = fr.RecipeName,
                     Url = fr.Url,
                     Image = fr.Image,
-                    // Map other properties as needed
                 }).ToList()
             };
         }
-        //public async Task<User> GetUserByIdAsync(string userId)
-        //{
-        //    // Retrieve the user by ID, including their favorite recipes
-        //    var user = await _context.User
-        //                             .Include(u => u.FavoriteRecipes) // Assuming FavoriteRecipes is a navigation property
-        //                             .FirstOrDefaultAsync(u => u.Id == userId);
 
-        //    return user;
-        //}
-
-        private void Init()
-        {
-            //load recipied
-        }
+        /// <summary>
+        /// Checks if a user exists by their email.
+        /// </summary>
         public bool UserExists(string email)
         {
             return users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
+        /// <summary>
+        /// Saves the list of recipes to an XML file.
+        /// </summary>
         public static void SaveRecipesToXmlFile(List<Recipe> recipes, string filePath)
         {
             try
@@ -106,6 +102,9 @@ namespace RecipeFinder_WebApp.Data
             }
         }
 
+        /// <summary>
+        /// Loads the list of recipes from an XML file.
+        /// </summary>
         public static List<Recipe> LoadRecipesFromXmlFile(string filePath)
         {
             try
@@ -127,6 +126,9 @@ namespace RecipeFinder_WebApp.Data
             return new List<Recipe>();
         }
 
+        /// <summary>
+        /// Retrieves cached recipes based on search terms and source.
+        /// </summary>
         public List<Recipe> GetCachedRecipes(List<string> searchTerms, string source)
         {
             var normalizedSearchTerms = searchTerms.Select(term => term.Trim().ToLowerInvariant()).ToList();
