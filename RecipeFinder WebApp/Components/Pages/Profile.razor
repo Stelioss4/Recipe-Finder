@@ -1,10 +1,12 @@
 ﻿@page "/profile"
+@using Microsoft.AspNetCore.Identity
 @using RecipeFinder_WebApp.Data
 @using System.Security.Claims
 @using Recipe_Finder
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 @inject DataService DataService
+@inject UserManager<ApplicationUser> _userManager
 
 <h3>User Profile</h3>
 <div class="container mt-5">
@@ -54,24 +56,38 @@
 
         if (user.Identity.IsAuthenticated)
         {
-            var userId = user.FindFirst("UserId")?.Value ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var appUser = await _userManager.GetUserAsync(user);
 
-            if (!string.IsNullOrEmpty(userId))
+            if (appUser != null && appUser.User != null)
             {
-                // Load the user's profile, which should include FavoriteRecipes
-                userProfile = await DataService.GetUserByIdAsync(userId);
+                // Now retrieve the actual User entity (without claims mismatch)
+                userProfile = appUser.User;
+
+                // Alternatively, if you want to use a DataService method, you could do something like:
+                // userProfile = await DataService.GetUserByIdAsync(appUser.User.UserId);
+
+                if (userProfile != null)
+                {
+                    // Load Favorite Recipes if necessary or other user data
+                    Console.WriteLine("User profile loaded successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("No User profile found for the given appUser.");
+                }
             }
             else
             {
-                Console.WriteLine("UserId is null or empty.");
+                Console.WriteLine("appUser or appUser.User is null.");
             }
         }
         else
         {
             Console.WriteLine("User is not authenticated.");
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("Account/Login");
         }
     }
+
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {

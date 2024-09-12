@@ -18,9 +18,10 @@ namespace RecipeFinder_WebApp.Data
         {
             base.OnModelCreating(builder);
 
-            // Configure User entity (no reference to ApplicationUser)
-            builder.Entity<User>()
-                   .HasKey(u => u.UserId); // Set UserId as the primary key
+            builder.Entity<ApplicationUser>()
+                   .HasOne(a => a.User)
+                   .WithOne()
+                   .HasForeignKey<User>(u => u.UserId);
 
             // Configure the relationship between User and Recipe if needed
             builder.Entity<Recipe>()

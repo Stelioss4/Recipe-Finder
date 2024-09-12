@@ -14,7 +14,7 @@ namespace Recipe_Finder
         }
 
         private List<Recipe> _favoriteRecipes = new List<Recipe>();
-        [NotMapped]
+
         public List<Recipe> FavoriteRecipes
         {
             get { return _favoriteRecipes; }

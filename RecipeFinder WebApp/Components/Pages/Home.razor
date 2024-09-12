@@ -10,6 +10,7 @@
 @inject NavigationManager Navigation
 @inject DataService DataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> _userManager
 
 <PageTitle>Home</PageTitle>
 
@@ -85,20 +86,21 @@
         if (claimsUser.Identity.IsAuthenticated)
         {
             var userId = claimsUser.FindFirst("UserId")?.Value ?? claimsUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.GetUserAsync(claimsUser);
 
             if (!string.IsNullOrEmpty(userId))
             {
-                // user = await DataService.GetUserByIdAsync(userId);
+                user = await _userManager.GetUserAsync(claimsUser);
                 return;
             }
         }
-        if (user == null)
-        {
-            // User profile not found, force logout and redirect to login
-            await SignInManager.SignOutAsync();
-            Navigation.NavigateTo("Account/Register");
-            return;
-        }
+        // if (user == null)
+        // {
+        //     // User profile not found, force logout and redirect to login
+        //     await SignInManager.SignOutAsync();
+        //     Navigation.NavigateTo("Account/Register");
+        //     return;
+        // }
     }
 
     private async Task SearchForRecipeFromCK()
