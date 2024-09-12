@@ -64,11 +64,11 @@
             if (!string.IsNullOrEmpty(userId))
             {
                 // Load users from the SQLite database
-                users = DbContext.Users
+                users = DbContext.User
                                  .Select(u => new User
                                      {
-                                         UserId = u.Id,
-                                         Name = u.UserName,
+                                         UserId = u.UserId,
+                                         Name = u.Name,
                                          Email = u.Email,
                                          FavoriteRecipes = new List<Recipe>() // Initialize to avoid null reference
                                      })
