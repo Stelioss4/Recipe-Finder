@@ -1,9 +1,10 @@
 ﻿@page "/profile"
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.EntityFrameworkCore
 @using RecipeFinder_WebApp.Data
 @using System.Security.Claims
 @using Recipe_Finder
+@using Microsoft.EntityFrameworkCore
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 @inject DataService DataService
@@ -57,28 +58,18 @@
 
         if (user.Identity.IsAuthenticated)
         {
-            var appUser = await _userManager.Users
-                .Include(user => user.User)
-                .FirstOrDefaultAsync(user => user.Id == user.User.UserId);
+            var appUser = await _userManager.GetUserAsync(user);
 
             if (appUser == null)
             {
                 throw new NullReferenceException("ApplicationUser is null.");
             }
 
-            var actualUser = appUser.User;
-
-            if (actualUser == null)
-            {
-                throw new NullReferenceException("User associated with ApplicationUser is null.");
-            }
-
-            // Proceed with loading user profile
-            userProfile = await DataService.GetUserByIdAsync(actualUser.UserId);
+            userProfile = appUser.User;
 
             if (userProfile == null)
             {
-                throw new NullReferenceException("User profile is null.");
+                throw new NullReferenceException("User associated with ApplicationUser is null.");
             }
         }
         else
@@ -87,7 +78,6 @@
             Navigation.NavigateTo("/login");
         }
     }
-
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {

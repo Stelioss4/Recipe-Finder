@@ -11,8 +11,8 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240912100313_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240917123222_add-adress")]
+    partial class addadress
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,9 +196,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -212,9 +209,34 @@ namespace RecipeFinderWebApp.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Recipe_Finder.Address", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Housenumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StreetsName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -276,25 +298,22 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Property<string>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ConfirmPassword")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("AddressID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
@@ -306,7 +325,9 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.HasIndex("AddressID");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -360,15 +381,6 @@ namespace RecipeFinderWebApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>
-                {
-                    b.HasOne("Recipe_Finder.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
                     b.HasOne("Recipe_Finder.User", "User")
@@ -377,6 +389,28 @@ namespace RecipeFinderWebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Recipe_Finder.User", b =>
+                {
+                    b.HasOne("Recipe_Finder.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RecipeFinder_WebApp.Data.ApplicationUser", null)
+                        .WithOne("User")
+                        .HasForeignKey("Recipe_Finder.User", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>
+                {
                     b.Navigation("User");
                 });
 

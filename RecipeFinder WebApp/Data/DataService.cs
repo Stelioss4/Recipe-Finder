@@ -78,37 +78,31 @@ namespace RecipeFinder_WebApp.Data
         /// </summary>
         public async Task<User> GetUserByIdAsync(string userId)
         {
-            var dbUser = await _context.Users
-                .Include(u => u.FavoriteRecipes) // Include FavoriteRecipes navigation property
-                .FirstOrDefaultAsync(u => u.UserId == userId);
+            throw new NotImplementedException();
 
-            if (dbUser == null)
-            {
-                throw new Exception($"User with ID {userId} not found.");
-            }
+            //var dbUser = await _context.Users
+            //    .Include(u => u.FavoriteRecipes) // Include FavoriteRecipes navigation property
+            //    .FirstOrDefaultAsync(u => u.UserId == userId);
+
+            //if (dbUser == null)
+            //{
+            //    throw new Exception($"User with ID {userId} not found.");
+            //}
 
             // Return the user entity with their favorite recipes mapped
-            return new User
-            {
-                UserId = dbUser.UserId,
-                Name = dbUser.Name,
-                Email = dbUser.Email,
-                FavoriteRecipes = dbUser.FavoriteRecipes.Select(fr => new Recipe
-                {
-                    UserId = fr.UserId,
-                    RecipeName = fr.RecipeName,
-                    Url = fr.Url,
-                    Image = fr.Image,
-                }).ToList()
-            };
-        }
-
-        /// <summary>
-        /// Checks if a user exists by their email.
-        /// </summary>
-        public bool UserExists(string email)
-        {
-            return users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            //return new User
+            //{
+            //    UserId = dbUser.UserId,
+            //    Name = dbUser.Name,
+            //    Email = dbUser.Email,
+            //    FavoriteRecipes = dbUser.FavoriteRecipes.Select(fr => new Recipe
+            //    {
+            //        UserId = fr.UserId,
+            //        RecipeName = fr.RecipeName,
+            //        Url = fr.Url,
+            //        Image = fr.Image,
+            //    }).ToList()
+            //};
         }
 
         /// <summary>

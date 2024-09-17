@@ -6,7 +6,6 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using RecipeFinder_WebApp.Data
-@using Recipe_Finder
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
@@ -15,7 +14,6 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
-@inject ApplicationDbContext _dbContext
 
 <PageTitle>Register</PageTitle>
 
@@ -74,16 +72,12 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
-        // Create ApplicationUser
-        var appUser = CreateUser();
+        var user = CreateUser();
 
-        // Set username and email
-        await UserStore.SetUserNameAsync(appUser, Input.Email, CancellationToken.None);
+        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
-        await emailStore.SetEmailAsync(appUser, Input.Email, CancellationToken.None);
-
-        // Create ApplicationUser in the identity system
-        var result = await UserManager.CreateAsync(appUser, Input.Password);
+        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+        var result = await UserManager.CreateAsync(user, Input.Password);
 
         if (!result.Succeeded)
         {
@@ -93,34 +87,15 @@
 
         Logger.LogInformation("User created a new account with password.");
 
-        // Get the generated ApplicationUser ID
-        appUser.Id = await UserManager.GetUserIdAsync(appUser);
-
-        // Create an instance of your custom User entity
-        appUser.User = new User
-            {
-                UserId = appUser.Id, // Set UserId same as ApplicationUser.Id
-                Name = Input.Name,  // You might need an additional field for the Name in your Input model
-                Email = Input.Email,
-                Password = Input.Password,
-                FavoriteRecipes = new List<Recipe>() // Initialize an empty list for FavoriteRecipes
-            };
-
-        // Save customUser to your ApplicationDbContext
-        _dbContext.Users.Add(appUser.User);
-        await _dbContext.SaveChangesAsync();
-
-        // Generate email confirmation token
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(appUser);
+        var userId = await UserManager.GetUserIdAsync(user);
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
             NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = appUser.Id, ["code"] = code, ["returnUrl"] = ReturnUrl });
+            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
 
-        // Send confirmation email
-        await EmailSender.SendConfirmationLinkAsync(appUser, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
-        // Handle account confirmation logic
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
         {
             RedirectManager.RedirectTo(
@@ -128,10 +103,7 @@
                 new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
         }
 
-        // Sign in the new ApplicationUser
-        await SignInManager.SignInAsync(appUser, isPersistent: false);
-
-        // Redirect to the specified return URL
+        await SignInManager.SignInAsync(user, isPersistent: false);
         RedirectManager.RedirectTo(ReturnUrl);
     }
 

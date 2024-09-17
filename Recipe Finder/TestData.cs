@@ -226,14 +226,14 @@
             PaymentMethod paymentMethods1 = new PaymentMethod();
             PaymentMethod paymentMethods2 = new PaymentMethod();
 
-            paymentMethods.AcountEmail = "john@email.ccm";
-            paymentMethods.Acountpasword = "acountpassword";
+            paymentMethods.AccountEmail = "john@email.ccm";
+            paymentMethods.AccountPassword = "acountpassword";
 
-            paymentMethods1.AcountEmail = "jack@email.strom";
-            paymentMethods1.Acountpasword = "ountpassword";
+            paymentMethods1.AccountEmail = "jack@email.strom";
+            paymentMethods1.AccountPassword = "ountpassword";
 
-            paymentMethods2.AcountEmail = "maria.mar@email.de";
-            paymentMethods2.Acountpasword = "passsssssword";
+            paymentMethods2.AccountEmail = "maria.mar@email.de";
+            paymentMethods2.AccountPassword = "passsssssword";
 
             User user = new User();
             User user1 = new User();
@@ -294,8 +294,8 @@
             Ingrediants.Add(ing2);
 
             PaymentMethod paymentMethods = new PaymentMethod();
-            paymentMethods.AcountEmail = "jack@email.strom";
-            paymentMethods.Acountpasword = "acountpassword";
+            paymentMethods.AccountEmail = "jack@email.strom";
+            paymentMethods.AccountPassword = "acountpassword";
 
             productInformation.AvailableProduct = Ingrediants;
             productInformation.PaymentMethods = paymentMethods;
@@ -312,7 +312,7 @@
             {
                 Console.WriteLine(ing.IngredientsName);
             }
-            Console.WriteLine(productInformation.PaymentMethods.AcountEmail + " " + productInformation.PaymentMethods.Acountpasword);
+            Console.WriteLine(productInformation.PaymentMethods.AccountEmail + " " + productInformation.PaymentMethods.AccountPassword);
             Console.WriteLine("Number of servings : " + productInformation.NumberOfServings);
             Console.WriteLine("Price : " + productInformation.Price);
             for (int i = 0; i < productInformation.MarketLinks.Count; i++)

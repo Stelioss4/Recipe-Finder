@@ -2,20 +2,28 @@
 {
     public class PaymentMethod
     {
-		private string _acountemail;
+		private int _iD;
 
-		public string AcountEmail
+		public int Id
 		{
-			get { return _acountemail; }
-			set { _acountemail = value; }
+			get { return _iD; }
+			set { _iD = value; }
 		}
 
-		private string _acountpasword;
+		private string _accountemail;
 
-		public string Acountpasword
+		public string AccountEmail
+		{
+			get { return _accountemail; }
+			set { _accountemail = value; }
+		}
+
+		private string _accountPassword;
+
+		public string AccountPassword
         {
-			get { return _acountpasword; }
-			set { _acountpasword = value; }
+			get { return _accountPassword; }
+			set { _accountPassword = value; }
 		}
 
 

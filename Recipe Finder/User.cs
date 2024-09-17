@@ -64,7 +64,7 @@ namespace Recipe_Finder
         }
 
         private Address _address = new Address();
-        [NotMapped]
+     
         public Address Address
         {
             get { return _address; }
@@ -72,7 +72,7 @@ namespace Recipe_Finder
         }
 
         private PaymentMethod? _paymentMethods;
-        [NotMapped]
+
         public PaymentMethod? PaymentMethods
         {
             get { return _paymentMethods; }

@@ -209,6 +209,52 @@ namespace RecipeFinderWebApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Recipe_Finder.Address", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Housenumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StreetsName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("Recipe_Finder.PaymentMethod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AccountEmail")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AccountPassword")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentMethod");
+                });
+
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
                     b.Property<string>("RecipeId")
@@ -268,7 +314,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
@@ -276,24 +322,33 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("AddressID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PaymentMethodsId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("RememberMe")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.HasIndex("AddressID");
+
+                    b.HasIndex("PaymentMethodsId");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -360,11 +415,25 @@ namespace RecipeFinderWebApp.Migrations
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
+                    b.HasOne("Recipe_Finder.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recipe_Finder.PaymentMethod", "PaymentMethods")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodsId");
+
                     b.HasOne("RecipeFinder_WebApp.Data.ApplicationUser", null)
                         .WithOne("User")
                         .HasForeignKey("Recipe_Finder.User", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("PaymentMethods");
                 });
 
             modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>

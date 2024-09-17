@@ -4,6 +4,14 @@ namespace Recipe_Finder
 {
     public class Address
     {
+		private int _iD;
+
+		public int ID
+		{
+			get { return _iD; }
+			set { _iD = value; }
+		}
+
 		private string _streetsname;
 
         public string StreetsName

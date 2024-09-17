@@ -11,8 +11,7 @@ namespace RecipeFinder_WebApp.Data
         }
 
         // Only store User entity without referencing ApplicationUser
-        public DbSet<User> Users { get; set; }
-        public DbSet<Recipe> Recipes { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
