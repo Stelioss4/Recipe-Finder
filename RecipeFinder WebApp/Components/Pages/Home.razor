@@ -74,7 +74,7 @@
 
 @code {
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
-    private User user { get; set; }
+    private User user { get; set; } = new User();
     private bool showSuccessMessage { get; set; } = false;
     private string searchQuery { get; set; } = string.Empty;
 
@@ -94,13 +94,13 @@
                 return;
             }
         }
-        // if (user == null)
-        // {
-        //     // User profile not found, force logout and redirect to login
-        //     await SignInManager.SignOutAsync();
-        //     Navigation.NavigateTo("Account/Register");
-        //     return;
-        // }
+        if (user == null)
+        {
+            // User profile not found, force logout and redirect to login
+            await SignInManager.SignOutAsync();
+            Navigation.NavigateTo("Account/Register");
+            return;
+        }
     }
 
     private async Task SearchForRecipeFromCK()
@@ -125,18 +125,6 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        if (user != null)
-        {
-            user.FavoriteRecipes.Add(recipe);
-            showSuccessMessage = true;
-            StateHasChanged();
-            await Task.Delay(3000); // Delay to auto-hide the success message after 3 seconds
-            showSuccessMessage = false;
-            StateHasChanged();
-        }
-        else
-        {
-            Console.WriteLine("Cannot add to favorites, user is not authenticated.");
-        }
+         await DataService.AddToUserFavAsync(user.UserId , recipe);
     }  
 }

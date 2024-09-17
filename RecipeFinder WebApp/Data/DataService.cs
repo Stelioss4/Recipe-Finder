@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 using System.Xml.Serialization;
 
@@ -13,6 +14,7 @@ namespace RecipeFinder_WebApp.Data
 
         private readonly IHttpClientFactory _clientFactory;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context)
         {
@@ -24,18 +26,44 @@ namespace RecipeFinder_WebApp.Data
         /// <summary>
         /// Adds a recipe to the user's favorites and saves the changes to the database.
         /// </summary>
-        public async Task AddToUserFavAsync(User user, Recipe recipe)
+        public async Task AddToUserFavAsync(string userId, Recipe recipe)
         {
-            if (user.FavoriteRecipes == null)
+            try
             {
-                user.FavoriteRecipes = new List<Recipe>();
+                if (_context == null)
+                {
+                    throw new NullReferenceException("Database context is null.");
+                }
+
+                var appUser = await _userManager.Users
+                    .Include(user => user.User)
+                    .ThenInclude(u => u.FavoriteRecipes)
+                    .FirstOrDefaultAsync(user => user.Id == userId);
+
+                if (appUser == null)
+                {
+                    throw new NullReferenceException($"User with ID {userId} not found.");
+                }
+
+                if (recipe == null)
+                {
+                    throw new NullReferenceException("Recipe is null.");
+                }
+
+                if (appUser.User.FavoriteRecipes.Any(r => r.RecipeId == recipe.RecipeId))
+                {
+                    throw new ArgumentException("Recipe is already in the user's favorites.", nameof(recipe));
+                }
+
+                appUser.User.FavoriteRecipes.Add(recipe);
+                await _context.SaveChangesAsync();
             }
-
-            user.FavoriteRecipes.Add(recipe);
-            _context.Users.Update(user); // Update the user entity to reflect the changes.
-            await _context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
         }
-
         /// <summary>
         /// Gets the user's favorite recipes. If none exist, returns an empty list.
         /// </summary>

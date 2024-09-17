@@ -1,5 +1,6 @@
 ﻿@page "/profile"
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @using RecipeFinder_WebApp.Data
 @using System.Security.Claims
 @using Recipe_Finder
@@ -47,7 +48,7 @@
 </div>
 
 @code {
-    private User? userProfile { get; set; }
+    private User userProfile { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,35 +57,34 @@
 
         if (user.Identity.IsAuthenticated)
         {
-            var appUser = await _userManager.GetUserAsync(user);
+            var appUser = await _userManager.Users
+                .Include(user => user.User)
+                .FirstOrDefaultAsync(user => user.Id == user.User.UserId);
 
-            if (appUser != null && appUser.User != null)
+            if (appUser == null)
             {
-                // Now retrieve the actual User entity (without claims mismatch)
-                userProfile = appUser.User;
-
-                // Alternatively, if you want to use a DataService method, you could do something like:
-                // userProfile = await DataService.GetUserByIdAsync(appUser.User.UserId);
-
-                if (userProfile != null)
-                {
-                    // Load Favorite Recipes if necessary or other user data
-                    Console.WriteLine("User profile loaded successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("No User profile found for the given appUser.");
-                }
+                throw new NullReferenceException("ApplicationUser is null.");
             }
-            else
+
+            var actualUser = appUser.User;
+
+            if (actualUser == null)
             {
-                Console.WriteLine("appUser or appUser.User is null.");
+                throw new NullReferenceException("User associated with ApplicationUser is null.");
+            }
+
+            // Proceed with loading user profile
+            userProfile = await DataService.GetUserByIdAsync(actualUser.UserId);
+
+            if (userProfile == null)
+            {
+                throw new NullReferenceException("User profile is null.");
             }
         }
         else
         {
             Console.WriteLine("User is not authenticated.");
-            Navigation.NavigateTo("Account/Login");
+            Navigation.NavigateTo("/login");
         }
     }
 

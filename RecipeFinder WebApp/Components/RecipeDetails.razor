@@ -144,6 +144,6 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-      await  DataService.AddToUserFavAsync(user, recipe);
+      await  DataService.AddToUserFavAsync(user.UserId , recipe);
     }
 }

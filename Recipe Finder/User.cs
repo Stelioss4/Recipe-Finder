@@ -5,9 +5,9 @@ namespace Recipe_Finder
 {
     public class User
     {
-        private string _userId;
+        private string? _userId;
         [Key]
-        public string UserId
+        public string? UserId
         {
             get { return _userId; }
             set { _userId = value; }
@@ -22,9 +22,9 @@ namespace Recipe_Finder
         }
 
 
-        private string _name;
+        private string? _name;
       
-        public string Name
+        public string? Name
         {
             get { return _name; }
             set { _name = value; }
@@ -47,13 +47,13 @@ namespace Recipe_Finder
             get { return _password; }
             set { _password = value; }
         }
-        private string _confirmPassword;
-        [DataType(DataType.Password)]
-        public string ConfirmPassword 
-        {
-            get { return _confirmPassword; }
-            set { _confirmPassword = value; }
-        }
+        //private string _confirmPassword;
+        //[DataType(DataType.Password)]
+        //public string ConfirmPassword 
+        //{
+        //    get { return _confirmPassword; }
+        //    set { _confirmPassword = value; }
+        //}
 
         private bool _rememberMe;
         [Display(Name = "Remember me?")]
@@ -71,17 +71,17 @@ namespace Recipe_Finder
             set { _address = value; }
         }
 
-        private PaymentMethod _paymentMethods;
+        private PaymentMethod? _paymentMethods;
         [NotMapped]
-        public PaymentMethod PaymentMethods
+        public PaymentMethod? PaymentMethods
         {
             get { return _paymentMethods; }
             set { _paymentMethods = value; }
         }
 
-        private List<Recipe> _weeklyPlan;
+        private List<Recipe>? _weeklyPlan;
         [NotMapped]
-        public List<Recipe> WeeklyPlan
+        public List<Recipe>? WeeklyPlan
         {
             get { return _weeklyPlan; }
             set { _weeklyPlan = value; }

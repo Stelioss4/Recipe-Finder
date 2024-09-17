@@ -8,7 +8,6 @@ namespace RecipeFinder_WebApp.Data
     {
         public User? User { get; set; }
 
-      //  public List<Recipe>? FavoriteRecipes {  get; set; }
     }
 
 }

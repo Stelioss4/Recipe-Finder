@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using RecipeFinder_WebApp.Data
+@using Recipe_Finder
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
@@ -14,6 +15,7 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject ApplicationDbContext _dbContext
 
 <PageTitle>Register</PageTitle>
 
@@ -27,6 +29,11 @@
             <h2>Create a new account.</h2>
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.Name" class="form-control" autocomplete="username" aria-required="true" placeholder="name" />
+                <label for="Name">Name</label>
+                <ValidationMessage For="() => Input.Name" class="text-danger" />
+            </div>
             <div class="form-floating mb-3">
                 <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label for="email">Email</label>
@@ -67,12 +74,16 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
-        var user = CreateUser();
+        // Create ApplicationUser
+        var appUser = CreateUser();
 
-        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+        // Set username and email
+        await UserStore.SetUserNameAsync(appUser, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
-        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-        var result = await UserManager.CreateAsync(user, Input.Password);
+        await emailStore.SetEmailAsync(appUser, Input.Email, CancellationToken.None);
+
+        // Create ApplicationUser in the identity system
+        var result = await UserManager.CreateAsync(appUser, Input.Password);
 
         if (!result.Succeeded)
         {
@@ -82,15 +93,34 @@
 
         Logger.LogInformation("User created a new account with password.");
 
-        var userId = await UserManager.GetUserIdAsync(user);
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        // Get the generated ApplicationUser ID
+        appUser.Id = await UserManager.GetUserIdAsync(appUser);
+
+        // Create an instance of your custom User entity
+        appUser.User = new User
+            {
+                UserId = appUser.Id, // Set UserId same as ApplicationUser.Id
+                Name = Input.Name,  // You might need an additional field for the Name in your Input model
+                Email = Input.Email,
+                Password = Input.Password,
+                FavoriteRecipes = new List<Recipe>() // Initialize an empty list for FavoriteRecipes
+            };
+
+        // Save customUser to your ApplicationDbContext
+        _dbContext.Users.Add(appUser.User);
+        await _dbContext.SaveChangesAsync();
+
+        // Generate email confirmation token
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(appUser);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
             NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+            new Dictionary<string, object?> { ["userId"] = appUser.Id, ["code"] = code, ["returnUrl"] = ReturnUrl });
 
-        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        // Send confirmation email
+        await EmailSender.SendConfirmationLinkAsync(appUser, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
+        // Handle account confirmation logic
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
         {
             RedirectManager.RedirectTo(
@@ -98,7 +128,10 @@
                 new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
         }
 
-        await SignInManager.SignInAsync(user, isPersistent: false);
+        // Sign in the new ApplicationUser
+        await SignInManager.SignInAsync(appUser, isPersistent: false);
+
+        // Redirect to the specified return URL
         RedirectManager.RedirectTo(ReturnUrl);
     }
 
@@ -126,6 +159,9 @@
 
     private sealed class InputModel
     {
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+        public string Name { get; set; } = "";
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
