@@ -10,9 +10,6 @@ namespace RecipeFinder_WebApp.Data
         {
         }
 
-        // Only store User entity without referencing ApplicationUser
-
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -65,6 +65,13 @@
                 throw new NullReferenceException("ApplicationUser is null.");
             }
 
+            appUser.User = new User
+                {
+                    UserId = appUser.Id, // Set UserId same as ApplicationUser.Id
+                    Name = appUser.UserName,  // You might need an additional field for the Name in your Input model
+                    Email = appUser.Email,
+                };
+
             userProfile = appUser.User;
 
             if (userProfile == null)

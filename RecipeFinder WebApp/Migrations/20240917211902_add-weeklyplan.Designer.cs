@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeFinder_WebApp.Data;
 
@@ -10,9 +11,11 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240917211902_add-weeklyplan")]
+    partial class addweeklyplan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -233,7 +236,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Address", (string)null);
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("Recipe_Finder.PaymentMethod", b =>
@@ -252,7 +255,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethod", (string)null);
+                    b.ToTable("PaymentMethod");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -319,7 +322,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Recipe", (string)null);
+                    b.ToTable("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
@@ -353,7 +356,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("PaymentMethodsId");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

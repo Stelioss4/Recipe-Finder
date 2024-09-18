@@ -13,24 +13,24 @@ namespace RecipeFinder_WebApp.Data
             _context = context;
         }
 
-        public static async Task AddFavoriteRecipeAsync(string userId, string recipeId)
-        {
-            // Load the existing favorite recipes from the XML file
-            List<Recipe> favoriteRecipes = DataService.LoadRecipesFromXmlFile(Constants.XML_FAVORITE_REC_PATH);
+        //public static async Task AddFavoriteRecipeAsync(string userId, string recipeId)
+        //{
+        //    // Load the existing favorite recipes from DataService
+        //    List<Recipe> favoriteRecipes = DataService.Recipes;
 
-            // Create a new favorite recipe entry
-            var favorite = new Recipe
-            {
-                UserId = userId,
-                RecipeId = recipeId
-            };
+        //    // Create a new favorite recipe entry
+        //    var favorite = new Recipe
+        //    {
+        //        UserId = userId,
+        //        RecipeId = recipeId
+        //    };
 
-            // Add the new favorite to the list
-            favoriteRecipes.Add(favorite);
+        //    // Add the new favorite to the list
+        //    favoriteRecipes.Add(favorite);
 
-            // Save the updated list back to the XML file
-            DataService.SaveRecipesToXmlFile(favoriteRecipes, Constants.XML_FAVORITE_REC_PATH);
-        }
+        //    // Save the updated list back to the XML file
+        //    DataService.SaveRecipesToXmlFile(favoriteRecipes, Constants.XML_FAVORITE_REC_PATH);
+        //}
 
 
         public static async Task<List<Recipe>> GetFavoriteRecipesAsync(string userId)

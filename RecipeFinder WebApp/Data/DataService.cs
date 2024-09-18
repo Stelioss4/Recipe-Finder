@@ -73,39 +73,6 @@ namespace RecipeFinder_WebApp.Data
         }
 
         /// <summary>
-        /// Retrieves a user by their user ID from the database.
-        /// Throws an exception if the user is not found.
-        /// </summary>
-        public async Task<User> GetUserByIdAsync(string userId)
-        {
-            throw new NotImplementedException();
-
-            //var dbUser = await _context.Users
-            //    .Include(u => u.FavoriteRecipes) // Include FavoriteRecipes navigation property
-            //    .FirstOrDefaultAsync(u => u.UserId == userId);
-
-            //if (dbUser == null)
-            //{
-            //    throw new Exception($"User with ID {userId} not found.");
-            //}
-
-            // Return the user entity with their favorite recipes mapped
-            //return new User
-            //{
-            //    UserId = dbUser.UserId,
-            //    Name = dbUser.Name,
-            //    Email = dbUser.Email,
-            //    FavoriteRecipes = dbUser.FavoriteRecipes.Select(fr => new Recipe
-            //    {
-            //        UserId = fr.UserId,
-            //        RecipeName = fr.RecipeName,
-            //        Url = fr.Url,
-            //        Image = fr.Image,
-            //    }).ToList()
-            //};
-        }
-
-        /// <summary>
         /// Saves the list of recipes to an XML file.
         /// </summary>
         public static void SaveRecipesToXmlFile(List<Recipe> recipes, string filePath)
