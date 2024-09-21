@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 using System.Xml.Serialization;
@@ -15,57 +16,109 @@ namespace RecipeFinder_WebApp.Data
         private readonly IHttpClientFactory _clientFactory;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly AuthenticationStateProvider AuthenticationStateProvider;
 
-        public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context)
+        public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
         {
             _clientFactory = clientFactory;
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            AuthenticationStateProvider = authenticationStateProvider;
             Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
         }
 
+        public async Task InitializeUserDataAsync()
+        {
+            // Get the current authenticated ClaimUser
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var ClaimUser = authState.User;
+
+            if (ClaimUser.Identity.IsAuthenticated)
+            {
+                // Find the ApplicationUser based on the current ClaimUser's identity
+                var appUser = await _userManager.GetUserAsync(ClaimUser);
+
+                if (appUser != null)
+                {
+                    if (appUser.User == null)
+                    {
+                        // Initialize the custom User entity if it doesn't exist
+                        appUser.User = new User
+                        {
+                            UserId = appUser.Id,
+                            Name = appUser.UserName,
+                            Email = appUser.Email,
+                            FavoriteRecipes = new List<Recipe>()
+                        };
+                    }
+
+                    user = appUser.User;
+                }
+            }
+        }
+
         /// <summary>
-        /// Adds a recipe to the user's favorites and saves the changes to the database.
+        /// Adds a recipe to the ClaimUser's favorites and saves the changes to the database.
         /// </summary>
-        public async Task AddToUserFavAsync(string userId, Recipe recipe)
+        public async Task AddFavoriteRecipeAsync(string userId, Recipe recipe)
         {
             try
             {
-                if (_context == null)
+                // Get the authenticated state
+                var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+
+                // Check if the ClaimUser is authenticated
+                if (user.Identity.IsAuthenticated)
                 {
-                    throw new NullReferenceException("Database context is null.");
+                    // Fetch the ApplicationUser based on the authenticated ClaimUser
+                    var appUser = await _userManager.GetUserAsync(user);
+
+                    if (appUser == null)
+                    {
+                        throw new NullReferenceException("ApplicationUser is null.");
+                    }
+
+                    // Check if the custom User entity is null, and initialize it if needed
+                    if (appUser.User == null)
+                    {
+                        appUser.User = new User
+                        {
+                            UserId = appUser.Id, // Same as ApplicationUser ID
+                            Name = appUser.UserName,
+                            Email = appUser.Email,
+                            FavoriteRecipes = new List<Recipe>() // Initialize the favorite recipes list
+                        };
+
+                    }
+
+                    // Check if the recipe already exists in the ClaimUser's favorites
+                    if (appUser.User.FavoriteRecipes.Any(r => r.RecipeId == recipe.RecipeId))
+                    {
+                        throw new ArgumentException("Recipe is already in the ClaimUser's favorites.", nameof(recipe));
+                    }
+
+                    // Add the recipe to the ClaimUser's favorite recipes
+                    appUser.User.FavoriteRecipes.Add(recipe);
+
+                    // Save changes to the database (both ApplicationUser and User entities)
+                    await _context.SaveChangesAsync();
                 }
-
-                var appUser = await _userManager.Users
-                    .Include(user => user.User)
-                    .ThenInclude(u => u.FavoriteRecipes)
-                    .FirstOrDefaultAsync(user => user.Id == userId);
-
-                if (appUser == null)
+                else
                 {
-                    throw new NullReferenceException($"User with ID {userId} not found.");
+                    throw new InvalidOperationException("User is not authenticated.");
                 }
-
-                if (recipe == null)
-                {
-                    throw new NullReferenceException("Recipe is null.");
-                }
-
-                if (appUser.User.FavoriteRecipes.Any(r => r.RecipeId == recipe.RecipeId))
-                {
-                    throw new ArgumentException("Recipe is already in the user's favorites.", nameof(recipe));
-                }
-
-                appUser.User.FavoriteRecipes.Add(recipe);
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
+                // Log the error for debugging purposes
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                // Re-throw the exception to allow the caller to handle it
                 throw;
             }
         }
         /// <summary>
-        /// Gets the user's favorite recipes. If none exist, returns an empty list.
+        /// Gets the ClaimUser's favorite recipes. If none exist, returns an empty list.
         /// </summary>
         public static List<Recipe> GetUserFavorites(User user)
         {

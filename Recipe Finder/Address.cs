@@ -12,12 +12,12 @@ namespace Recipe_Finder
 			set { _iD = value; }
 		}
 
-		private string _streetsname;
+		private string? _streetsName;
 
-        public string StreetsName
+        public string? StreetsName
 		{
-			get { return _streetsname; }
-			set { _streetsname = value; }
+			get { return _streetsName; }
+			set { _streetsName = value; }
 		}
 
 		private string _housenumber;

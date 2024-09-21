@@ -1,10 +1,23 @@
 ﻿@using RecipeFinder_WebApp.Data
 @using Recipe_Finder
 @using HtmlAgilityPack
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+
+
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
 @inject UserService userService
 @inject DataService DataService
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ScrapperService Scrap
+@inject NavigationManager Navigation
+@inject DataService DataService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> _userManager
+@inject ApplicationDbContext _context
+
 
 
 <PageTitle>Recipe Details</PageTitle>
@@ -89,7 +102,9 @@
 
     private Ingredient ingredient { get; set; }
 
-    private User user { get; set; } = new User();
+    private bool showSuccessMessage { get; set; } = false;
+
+    private User userProfile { get; set; } = new User();
 
     protected override async Task OnInitializedAsync()
     {
@@ -144,6 +159,40 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-      await  DataService.AddToUserFavAsync(user.UserId , recipe);
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var appUser = await _userManager.GetUserAsync(user);
+
+                if (appUser == null)
+                {
+                    throw new NullReferenceException("ApplicationUser is null.");
+                }
+
+                userProfile = appUser.User;
+
+                if (userProfile != null)
+                {
+                    userProfile.FavoriteRecipes.Add(recipe);
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                Console.WriteLine("User is not authenticated.");
+                Navigation.NavigateTo("/login");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding recipe to favorites: {ex.Message}");
+            // Handle the error appropriately (e.g., display an error message)
+        }
     }
 }

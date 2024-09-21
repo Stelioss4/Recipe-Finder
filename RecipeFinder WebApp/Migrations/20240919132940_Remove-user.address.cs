@@ -5,10 +5,29 @@
 namespace RecipeFinderWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class addadress : Migration
+    public partial class Removeuseraddress : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_User_Address_AddressID",
+                table: "User");
+
+            migrationBuilder.DropTable(
+                name: "Address");
+
+            migrationBuilder.DropIndex(
+                name: "IX_User_AddressID",
+                table: "User");
+
+            migrationBuilder.DropColumn(
+                name: "AddressID",
+                table: "User");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
                 name: "AddressID",
@@ -23,10 +42,10 @@ namespace RecipeFinderWebApp.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    StreetsName = table.Column<string>(type: "TEXT", nullable: false),
-                    Housenumber = table.Column<string>(type: "TEXT", nullable: false),
                     City = table.Column<string>(type: "TEXT", nullable: false),
-                    PostalCode = table.Column<string>(type: "TEXT", nullable: false)
+                    Housenumber = table.Column<string>(type: "TEXT", nullable: false),
+                    PostalCode = table.Column<string>(type: "TEXT", nullable: false),
+                    StreetsName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,25 +64,6 @@ namespace RecipeFinderWebApp.Migrations
                 principalTable: "Address",
                 principalColumn: "ID",
                 onDelete: ReferentialAction.Cascade);
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_User_Address_AddressID",
-                table: "User");
-
-            migrationBuilder.DropTable(
-                name: "Address");
-
-            migrationBuilder.DropIndex(
-                name: "IX_User_AddressID",
-                table: "User");
-
-            migrationBuilder.DropColumn(
-                name: "AddressID",
-                table: "User");
         }
     }
 }

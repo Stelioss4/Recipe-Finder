@@ -209,33 +209,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Recipe_Finder.Address", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Housenumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("StreetsName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Address", (string)null);
-                });
-
             modelBuilder.Entity("Recipe_Finder.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
@@ -252,7 +225,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethod", (string)null);
+                    b.ToTable("PaymentMethod");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -319,7 +292,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Recipe", (string)null);
+                    b.ToTable("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
@@ -327,18 +300,10 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AddressID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("PaymentMethodsId")
@@ -349,11 +314,9 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("AddressID");
-
                     b.HasIndex("PaymentMethodsId");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -424,12 +387,6 @@ namespace RecipeFinderWebApp.Migrations
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
-                    b.HasOne("Recipe_Finder.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Recipe_Finder.PaymentMethod", "PaymentMethods")
                         .WithMany()
                         .HasForeignKey("PaymentMethodsId");
@@ -439,8 +396,6 @@ namespace RecipeFinderWebApp.Migrations
                         .HasForeignKey("Recipe_Finder.User", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Address");
 
                     b.Navigation("PaymentMethods");
                 });

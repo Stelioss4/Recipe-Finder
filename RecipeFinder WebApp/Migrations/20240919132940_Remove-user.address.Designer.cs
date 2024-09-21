@@ -11,8 +11,8 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240917195819_add-paymentMethod")]
-    partial class addpaymentMethod
+    [Migration("20240919132940_Remove-user.address")]
+    partial class Removeuseraddress
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,33 +212,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Recipe_Finder.Address", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Housenumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("StreetsName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Address");
-                });
-
             modelBuilder.Entity("Recipe_Finder.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
@@ -309,6 +282,9 @@ namespace RecipeFinderWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("VideoUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -316,6 +292,8 @@ namespace RecipeFinderWebApp.Migrations
                     b.HasKey("RecipeId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Recipe");
                 });
@@ -325,18 +303,10 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("AddressID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("PaymentMethodsId")
@@ -346,8 +316,6 @@ namespace RecipeFinderWebApp.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("AddressID");
 
                     b.HasIndex("PaymentMethodsId");
 
@@ -413,17 +381,15 @@ namespace RecipeFinderWebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Recipe_Finder.User", null)
+                        .WithMany("WeeklyPlan")
+                        .HasForeignKey("UserId1");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
-                    b.HasOne("Recipe_Finder.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Recipe_Finder.PaymentMethod", "PaymentMethods")
                         .WithMany()
                         .HasForeignKey("PaymentMethodsId");
@@ -433,8 +399,6 @@ namespace RecipeFinderWebApp.Migrations
                         .HasForeignKey("Recipe_Finder.User", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Address");
 
                     b.Navigation("PaymentMethods");
                 });
@@ -447,6 +411,8 @@ namespace RecipeFinderWebApp.Migrations
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Navigation("FavoriteRecipes");
+
+                    b.Navigation("WeeklyPlan");
                 });
 #pragma warning restore 612, 618
         }

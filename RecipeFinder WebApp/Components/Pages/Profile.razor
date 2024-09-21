@@ -65,26 +65,26 @@
                 throw new NullReferenceException("ApplicationUser is null.");
             }
 
-            appUser.User = new User
-                {
-                    UserId = appUser.Id, // Set UserId same as ApplicationUser.Id
-                    Name = appUser.UserName,  // You might need an additional field for the Name in your Input model
-                    Email = appUser.Email,
-                };
 
             userProfile = appUser.User;
+            userProfile.Name = appUser.UserName;
 
             if (userProfile == null)
             {
                 throw new NullReferenceException("User associated with ApplicationUser is null.");
             }
+
+
+            await _userManager.UpdateAsync(appUser);
+
         }
         else
         {
             Console.WriteLine("User is not authenticated.");
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("account/login");
         }
     }
+
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {

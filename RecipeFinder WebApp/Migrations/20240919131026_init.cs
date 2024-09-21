@@ -12,6 +12,22 @@ namespace RecipeFinderWebApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Address",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StreetsName = table.Column<string>(type: "TEXT", nullable: true),
+                    Housenumber = table.Column<string>(type: "TEXT", nullable: false),
+                    City = table.Column<string>(type: "TEXT", nullable: false),
+                    PostalCode = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -48,6 +64,20 @@ namespace RecipeFinderWebApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentMethod",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AccountEmail = table.Column<string>(type: "TEXT", nullable: false),
+                    AccountPassword = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethod", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -162,19 +192,31 @@ namespace RecipeFinderWebApp.Migrations
                 {
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    RememberMe = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    RememberMe = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AddressID = table.Column<int>(type: "INTEGER", nullable: false),
+                    PaymentMethodsId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_User_Address_AddressID",
+                        column: x => x.AddressID,
+                        principalTable: "Address",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_User_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_User_PaymentMethod_PaymentMethodsId",
+                        column: x => x.PaymentMethodsId,
+                        principalTable: "PaymentMethod",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -194,7 +236,8 @@ namespace RecipeFinderWebApp.Migrations
                     DifficultyLevel = table.Column<string>(type: "TEXT", nullable: false),
                     LinksForDrinkPairing = table.Column<string>(type: "TEXT", nullable: false),
                     Rating = table.Column<double>(type: "REAL", nullable: false),
-                    Url = table.Column<string>(type: "TEXT", nullable: false)
+                    Url = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId1 = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,6 +248,11 @@ namespace RecipeFinderWebApp.Migrations
                         principalTable: "User",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Recipe_User_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "User",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -248,6 +296,21 @@ namespace RecipeFinderWebApp.Migrations
                 name: "IX_Recipe_UserId",
                 table: "Recipe",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipe_UserId1",
+                table: "Recipe",
+                column: "UserId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_AddressID",
+                table: "User",
+                column: "AddressID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_PaymentMethodsId",
+                table: "User",
+                column: "PaymentMethodsId");
         }
 
         /// <inheritdoc />
@@ -278,7 +341,13 @@ namespace RecipeFinderWebApp.Migrations
                 name: "User");
 
             migrationBuilder.DropTable(
+                name: "Address");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethod");
         }
     }
 }

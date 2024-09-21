@@ -31,29 +31,13 @@ namespace Recipe_Finder
         }
 
         private string? _email;
-        [Required]
+
         [EmailAddress]
         public string? Email
         {
             get { return _email; }
             set { _email = value; }
         }
-
-        private string? _password;
-        [Required]
-        [DataType(DataType.Password)]
-        public string? Password
-        {
-            get { return _password; }
-            set { _password = value; }
-        }
-        //private string _confirmPassword;
-        //[DataType(DataType.Password)]
-        //public string ConfirmPassword 
-        //{
-        //    get { return _confirmPassword; }
-        //    set { _confirmPassword = value; }
-        //}
 
         private bool _rememberMe;
         [Display(Name = "Remember me?")]
@@ -63,14 +47,7 @@ namespace Recipe_Finder
             set {  _rememberMe = value; }
         }
 
-        private Address _address = new Address();
-     
-        public Address Address
-        {
-            get { return _address; }
-            set { _address = value; }
-        }
-
+      
         private PaymentMethod? _paymentMethods;
 
         public PaymentMethod? PaymentMethods
@@ -80,7 +57,7 @@ namespace Recipe_Finder
         }
 
         private List<Recipe>? _weeklyPlan;
-        [NotMapped]
+
         public List<Recipe>? WeeklyPlan
         {
             get { return _weeklyPlan; }

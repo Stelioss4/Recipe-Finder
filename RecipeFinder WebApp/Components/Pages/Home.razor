@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @using RecipeFinder_WebApp.Data
 @using Recipe_Finder
 @using HtmlAgilityPack
@@ -11,7 +12,7 @@
 @inject DataService DataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
-
+@inject ApplicationDbContext _context
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-5">
@@ -74,10 +75,10 @@
 
 @code {
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
-    private User user { get; set; } = new User();
+    private User userProfile { get; set; } = new User();
     private bool showSuccessMessage { get; set; } = false;
     private string searchQuery { get; set; } = string.Empty;
-
+    private Address address { get; set; } = new Address();
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -94,7 +95,8 @@
                 return;
             }
         }
-        if (user == null)
+
+        if (userProfile == null)
         {
             // User profile not found, force logout and redirect to login
             await SignInManager.SignOutAsync();
@@ -125,6 +127,40 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-         await DataService.AddToUserFavAsync(user.UserId , recipe);
-    }  
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                var appUser = await _userManager.GetUserAsync(user);
+
+                if (appUser == null)
+                {
+                    throw new NullReferenceException("ApplicationUser is null.");
+                }
+
+                userProfile = appUser.User;
+
+                 if (userProfile != null)
+                {
+                    userProfile.FavoriteRecipes.Add(recipe);
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                Console.WriteLine("User is not authenticated.");
+                Navigation.NavigateTo("/login");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding recipe to favorites: {ex.Message}");
+            // Handle the error appropriately (e.g., display an error message)
+        }
+    }
 }
