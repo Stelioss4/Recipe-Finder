@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Recipe_Finder;
 using System.Xml.Serialization;
 
@@ -17,6 +19,7 @@ namespace RecipeFinder_WebApp.Data
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
+        private readonly NavigationManager Navigation;
 
         public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
         {
@@ -64,14 +67,11 @@ namespace RecipeFinder_WebApp.Data
         {
             try
             {
-                // Get the authenticated state
                 var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
                 var user = authState.User;
 
-                // Check if the ClaimUser is authenticated
                 if (user.Identity.IsAuthenticated)
                 {
-                    // Fetch the ApplicationUser based on the authenticated ClaimUser
                     var appUser = await _userManager.GetUserAsync(user);
 
                     if (appUser == null)
@@ -79,42 +79,26 @@ namespace RecipeFinder_WebApp.Data
                         throw new NullReferenceException("ApplicationUser is null.");
                     }
 
-                    // Check if the custom User entity is null, and initialize it if needed
-                    if (appUser.User == null)
+                    this.user = appUser.User;
+
+                    if (this.user != null)
                     {
-                        appUser.User = new User
-                        {
-                            UserId = appUser.Id, // Same as ApplicationUser ID
-                            Name = appUser.UserName,
-                            Email = appUser.Email,
-                            FavoriteRecipes = new List<Recipe>() // Initialize the favorite recipes list
-                        };
+                        this.user.FavoriteRecipes.Add(recipe);
 
+                        // Save changes to the database
+                        await _context.SaveChangesAsync();
                     }
-
-                    // Check if the recipe already exists in the ClaimUser's favorites
-                    if (appUser.User.FavoriteRecipes.Any(r => r.RecipeId == recipe.RecipeId))
-                    {
-                        throw new ArgumentException("Recipe is already in the ClaimUser's favorites.", nameof(recipe));
-                    }
-
-                    // Add the recipe to the ClaimUser's favorite recipes
-                    appUser.User.FavoriteRecipes.Add(recipe);
-
-                    // Save changes to the database (both ApplicationUser and User entities)
-                    await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    throw new InvalidOperationException("User is not authenticated.");
+                    Console.WriteLine("User is not authenticated.");
+                    Navigation.NavigateTo("account/login");
                 }
             }
             catch (Exception ex)
             {
-                // Log the error for debugging purposes
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                // Re-throw the exception to allow the caller to handle it
-                throw;
+                Console.WriteLine($"Error adding recipe to favorites: {ex.Message}");
+                // Handle the error appropriately (e.g., display an error message)
             }
         }
         /// <summary>
