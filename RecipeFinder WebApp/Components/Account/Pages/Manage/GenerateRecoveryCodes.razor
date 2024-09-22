@@ -53,7 +53,7 @@ else
         var isTwoFactorEnabled = await UserManager.GetTwoFactorEnabledAsync(user);
         if (!isTwoFactorEnabled)
         {
-            throw new InvalidOperationException("Cannot generate recovery codes for user because they do not have 2FA enabled.");
+            throw new InvalidOperationException("Cannot generate recovery codes for userProfile because they do not have 2FA enabled.");
         }
     }
 

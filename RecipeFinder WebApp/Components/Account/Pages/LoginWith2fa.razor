@@ -59,9 +59,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Ensure the user has gone through the username & password screen first
+        // Ensure the userProfile has gone through the username & password screen first
         user = await SignInManager.GetTwoFactorAuthenticationUserAsync() ??
-            throw new InvalidOperationException("Unable to load two-factor authentication user.");
+            throw new InvalidOperationException("Unable to load two-factor authentication userProfile.");
     }
 
     private async Task OnValidSubmitAsync()
@@ -82,7 +82,7 @@
         }
         else
         {
-            Logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", userId);
+            Logger.LogWarning("Invalid authenticator code entered for userProfile with ID '{UserId}'.", userId);
             message = "Error: Invalid authenticator code.";
         }
     }

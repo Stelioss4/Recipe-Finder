@@ -67,7 +67,7 @@
         var result = await UserManager.DeleteAsync(user);
         if (!result.Succeeded)
         {
-            throw new InvalidOperationException("Unexpected error occurred deleting user.");
+            throw new InvalidOperationException("Unexpected error occurred deleting userProfile.");
         }
 
         await SignInManager.SignOutAsync();

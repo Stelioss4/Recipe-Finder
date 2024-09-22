@@ -36,7 +36,7 @@ public class UserService
             return;
         }
 
-        // Check if the recipe is already in the user's favorites
+        // Check if the recipe is already in the userProfile's favorites
         var userFavorites = allFavoriteRecipes.Where(r => r.UserId == userId).ToList();
         if (userFavorites.Any(r => r.RecipeId == recipeId))
         {
@@ -44,7 +44,7 @@ public class UserService
             return;
         }
 
-        // Assign the UserId to the recipe and add it to the user's favorites
+        // Assign the UserId to the recipe and add it to the userProfile's favorites
         recipe.UserId = userId;
         allFavoriteRecipes.Add(recipe);
 

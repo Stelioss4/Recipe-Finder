@@ -10,7 +10,7 @@ namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
-        public User? user { get; set; } = new User();
+        public User? userProfile { get; set; } = new User();
         public Address Address { get; set; } = new Address();
         public List<User> users { get; set; } = new List<User>();
         public List<Recipe> Recipes { get; set; } = new List<Recipe>();
@@ -20,6 +20,8 @@ namespace RecipeFinder_WebApp.Data
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly NavigationManager Navigation;
+        private bool showSuccessMessage;
+        private bool showAlreadyExistsMessage;
 
         public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
         {
@@ -55,11 +57,10 @@ namespace RecipeFinder_WebApp.Data
                         };
                     }
 
-                    user = appUser.User;
+                    userProfile = appUser.User;
                 }
             }
         }
-
         /// <summary>
         /// Adds a recipe to the ClaimUser's favorites and saves the changes to the database.
         /// </summary>
@@ -79,14 +80,34 @@ namespace RecipeFinder_WebApp.Data
                         throw new NullReferenceException("ApplicationUser is null.");
                     }
 
-                    this.user = appUser.User;
+                    userProfile = appUser.User;
 
-                    if (this.user != null)
+                    if (userProfile != null)
                     {
-                        this.user.FavoriteRecipes.Add(recipe);
+                        // Check if the recipe already exists in the user's favorite list
+                        bool isRecipeInFavorites = userProfile.FavoriteRecipes
+                            .Any(r => r.RecipeName == recipe.RecipeName && r.Url == recipe.Url);
 
-                        // Save changes to the database
-                        await _context.SaveChangesAsync();
+                        if (isRecipeInFavorites)
+                        {
+                            // Notify the user that the recipe is already in their favorites
+                            Console.WriteLine("Recipe is already in your favorites.");
+                            showSuccessMessage = false;
+                            showAlreadyExistsMessage = true;
+                        }
+                        else
+                        {
+                            // Add the recipe to the user's favorite list
+                            userProfile.FavoriteRecipes.Add(recipe);
+
+                            // Save changes to the database
+                            await _context.SaveChangesAsync();
+
+                            // Notify the user that the recipe was successfully added
+                            Console.WriteLine("Recipe added to your favorites successfully.");
+                            showSuccessMessage = true;
+                            showAlreadyExistsMessage = false;
+                        }
                     }
                 }
                 else

@@ -41,7 +41,7 @@
         var user = await UserManager.FindByIdAsync(UserId);
         if (user is null)
         {
-            message = "Unable to find user with Id '{userId}'";
+            message = "Unable to find userProfile with Id '{userId}'";
             return;
         }
 
@@ -53,12 +53,12 @@
             return;
         }
 
-        // In our UI email and user name are one and the same, so when we update the email
-        // we need to update the user name.
+        // In our UI email and userProfile name are one and the same, so when we update the email
+        // we need to update the userProfile name.
         var setUserNameResult = await UserManager.SetUserNameAsync(user, Email);
         if (!setUserNameResult.Succeeded)
         {
-            message = "Error changing user name.";
+            message = "Error changing userProfile name.";
             return;
         }
 

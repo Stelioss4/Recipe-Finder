@@ -75,12 +75,12 @@
                 //                      })
                 //                  .ToList();
 
-                // Find the logged-in user from the list
+                // Find the logged-in userProfile from the list
                 userProfile = users.FirstOrDefault(u => u.UserId == userId);
 
                 if (userProfile != null)
                 {
-                    // Load the user's favorite recipes
+                    // Load the userProfile's favorite recipes
                     userProfile.FavoriteRecipes = DataService.GetUserFavorites(userProfile);
                 }
             }
