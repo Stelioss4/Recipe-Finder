@@ -220,7 +220,7 @@ namespace RecipeFinder_WebApp.Data
                     var ingredientNodes = ingredientsNode.SelectNodes("//*[@id=\"mm-recipes-structured-ingredients_1-0\"]/ul/li");
                     if (ingredientNodes != null)
                     {
-                        searchResultRecipie.ListofIngredients = ingredientNodes
+                        searchResultRecipie.ListOfIngredients = ingredientNodes
                             .Select(li => new Ingredient { IngredientsName = li.InnerText.Trim() })
                             .ToList();
                     }
@@ -458,7 +458,7 @@ namespace RecipeFinder_WebApp.Data
                     var ingredientNodes = ingredientsNode.SelectNodes("/html/body/main/article[2]/table/tbody/tr");
                     if (ingredientNodes != null)
                     {
-                        searchResultRecipie.ListofIngredients = ingredientNodes
+                        searchResultRecipie.ListOfIngredients = ingredientNodes
                             .Select(li => new Ingredient { IngredientsName = li.InnerText.Trim() })
                             .ToList();
                     }
@@ -674,7 +674,7 @@ namespace RecipeFinder_WebApp.Data
                     var ingredientNodes = ingredientsNode.SelectNodes(".//li");
                     if (ingredientNodes != null)
                     {
-                        searchResultRecipe.ListofIngredients = ingredientNodes
+                        searchResultRecipe.ListOfIngredients = ingredientNodes
                             .Select(li => new Ingredient { IngredientsName = li.InnerText.Trim() })
                             .ToList();
                     }

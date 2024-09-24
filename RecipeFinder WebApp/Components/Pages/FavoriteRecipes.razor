@@ -1,12 +1,13 @@
 ﻿@page "/favoriteRecipes"
+@using Microsoft.AspNetCore.Identity
 @using RecipeFinder_WebApp.Data
 @using System.Security.Claims
 @using Recipe_Finder
 
-@inject FavoriteRecipeService FavoriteRecipeService
+@inject UserManager<ApplicationUser> userManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
-@inject UserService userService
+
 
 
 <h3>Favorite Recipes</h3>
@@ -44,7 +45,7 @@
     [Inject]
     private ApplicationDbContext DbContext { get; set; } = default!;
 
-    private List<User> users { get; set; } = new List<User>();
+
     private User userProfile { get; set; } = new User();
     private List<Recipe>? recipes { get; set; }
 
@@ -57,37 +58,12 @@
 
         if (user.Identity.IsAuthenticated)
         {
-            // Try to get UserId from different claims
-            var userId = user.FindFirst("UserId")?.Value ??
-                         user.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                         user.FindFirst(ClaimTypes.Name)?.Value;
+            // Try to get Id from different claims
+            var appuser = await userManager.GetUserAsync(user);
 
-            if (!string.IsNullOrEmpty(userId))
-            {
-                // Load users from the SQLite database
-                // users = DbContext.User
-                //                  .Select(u => new User
-                //                      {
-                //                          UserId = u.UserId,
-                //                          Name = u.Name,
-                //                          Email = u.Email,
-                //                          FavoriteRecipes = new List<Recipe>() // Initialize to avoid null reference
-                //                      })
-                //                  .ToList();
+            userProfile = appuser.User;
+            favoriteRecipes = userProfile.FavoriteRecipes;
 
-                // Find the logged-in userProfile from the list
-                userProfile = users.FirstOrDefault(u => u.UserId == userId);
-
-                if (userProfile != null)
-                {
-                    // Load the userProfile's favorite recipes
-                    userProfile.FavoriteRecipes = DataService.GetUserFavorites(userProfile);
-                }
-            }
-            else
-            {
-                Console.WriteLine("UserId is null or empty.");
-            }
         }
     }
     private void NavigateToRecipeDetails(string recipeUrl)

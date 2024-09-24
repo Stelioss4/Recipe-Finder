@@ -5,12 +5,11 @@ namespace Recipe_Finder
 {
     public class User
     {
-        private string? _userId;
-        [Key]
-        public string? UserId
+        private int _id;
+        public int Id
         {
-            get { return _userId; }
-            set { _userId = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         private List<Recipe> _favoriteRecipes = new List<Recipe>();
@@ -63,7 +62,6 @@ namespace Recipe_Finder
             get { return _weeklyPlan; }
             set { _weeklyPlan = value; }
         }
-
 
     }
 }

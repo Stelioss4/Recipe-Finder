@@ -26,12 +26,11 @@
             set { _profile = value; }
         }
 
-        private int _iD;
-
+        private int _id;
         public int Id
         {
-            get { return _iD; }
-            set { _iD = value; }
+            get { return _id; }
+            set { _id = value; }
         }
     }
 }

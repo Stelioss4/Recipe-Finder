@@ -86,7 +86,7 @@
 
         if (claimsUser.Identity.IsAuthenticated)
         {
-            var userId = claimsUser.FindFirst("UserId")?.Value ?? claimsUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = claimsUser.FindFirst("Id")?.Value ?? claimsUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _userManager.GetUserAsync(claimsUser);
 
             if (!string.IsNullOrEmpty(userId))
@@ -127,6 +127,6 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await DataService.AddFavoriteRecipeAsync(userProfile.UserId, recipe);
+        await DataService.AddFavoriteRecipeAsync(recipe);
     }
 }

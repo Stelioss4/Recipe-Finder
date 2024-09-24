@@ -4,6 +4,13 @@ namespace Recipe_Finder
 {
     public class Recipe
     {
+        private int _id;
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
         private string _sourceDomain;
 
         public string SourceDomain
@@ -28,21 +35,6 @@ namespace Recipe_Finder
             set { _searchTerms = value; }
         }
 
-        private string _userId;
-        public string UserId 
-        { 
-            get { return _userId; } 
-            set { _userId = value; } 
-        }
-
-        private string _recipeId;
-        public string RecipeId 
-        {
-            get { return _recipeId; }
-            set { _recipeId = value; } 
-        }
-
-        public User User { get; set; }
 
 
         private string _recipeName;
@@ -94,7 +86,6 @@ namespace Recipe_Finder
         }
 
         private CuisineType _cuisineType;
-        [NotMapped]
         public CuisineType CuisineType
         {
             get { return _cuisineType; }
@@ -102,7 +93,7 @@ namespace Recipe_Finder
         }
 
         private OccasionTags _occasionTags;
-        [NotMapped]
+
         public OccasionTags OccasionTags
         {
             get { return _occasionTags; }
@@ -116,8 +107,7 @@ namespace Recipe_Finder
             get { return _difficultyLevel; }
             set { _difficultyLevel = value; }
         }
-        [NotMapped]
-        public List<Ingredient>? ListofIngredients { get; set; } = new List<Ingredient>();
+        public List<Ingredient>? ListOfIngredients { get; set; } = new List<Ingredient>();
 
         private string _linksForDrinkPairing;
 

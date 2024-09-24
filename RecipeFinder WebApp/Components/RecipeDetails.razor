@@ -8,7 +8,6 @@
 
 @inject ScrapperService Scrap
 @inject NavigationManager Navigation
-@inject UserService userService
 @inject DataService DataService
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ScrapperService Scrap
@@ -66,7 +65,7 @@
                     <p class="font-italic">Quick tip: "Check the box for any ingredient you already have."</p>
                     <h3 class="text-secondary">Ingredients</h3><br />
                     <ul class="list-group list-group-flush mx-auto" style="max-width: 400px;">
-                        @foreach (var ingredient in recipe.ListofIngredients)
+                        @foreach (var ingredient in recipe.ListOfIngredients)
                         {
                             <li class="list-group-item">
                                 <input type="checkbox" id="@ingredient.IngredientsName" class="mr-2">
@@ -103,8 +102,6 @@
     private Ingredient ingredient { get; set; }
 
     private bool showSuccessMessage { get; set; } = false;
-
-    private User userProfile { get; set; } = new User();
 
     protected override async Task OnInitializedAsync()
     {
@@ -159,6 +156,6 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await DataService.AddFavoriteRecipeAsync(userProfile.UserId, recipe);
+        await DataService.AddFavoriteRecipeAsync(recipe);
     }
 }

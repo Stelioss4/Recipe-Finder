@@ -2,6 +2,13 @@
 {
     public class Ingredient
     {
+        private int _id;
+
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
         private string _ingredientsName;
 
         public string IngredientsName

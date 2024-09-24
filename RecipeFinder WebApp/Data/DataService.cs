@@ -32,39 +32,10 @@ namespace RecipeFinder_WebApp.Data
             Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
         }
 
-        public async Task InitializeUserDataAsync()
-        {
-            // Get the current authenticated ClaimUser
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var ClaimUser = authState.User;
-
-            if (ClaimUser.Identity.IsAuthenticated)
-            {
-                // Find the ApplicationUser based on the current ClaimUser's identity
-                var appUser = await _userManager.GetUserAsync(ClaimUser);
-
-                if (appUser != null)
-                {
-                    if (appUser.User == null)
-                    {
-                        // Initialize the custom User entity if it doesn't exist
-                        appUser.User = new User
-                        {
-                            UserId = appUser.Id,
-                            Name = appUser.UserName,
-                            Email = appUser.Email,
-                            FavoriteRecipes = new List<Recipe>()
-                        };
-                    }
-
-                    userProfile = appUser.User;
-                }
-            }
-        }
         /// <summary>
         /// Adds a recipe to the ClaimUser's favorites and saves the changes to the database.
         /// </summary>
-        public async Task AddFavoriteRecipeAsync(string userId, Recipe recipe)
+        public async Task AddFavoriteRecipeAsync(Recipe recipe)
         {
             try
             {
@@ -83,7 +54,7 @@ namespace RecipeFinder_WebApp.Data
                     userProfile = appUser.User;
 
                     if (userProfile != null)
-                    {
+                    {                  
                         // Check if the recipe already exists in the user's favorite list
                         bool isRecipeInFavorites = userProfile.FavoriteRecipes
                             .Any(r => r.RecipeName == recipe.RecipeName && r.Url == recipe.Url);

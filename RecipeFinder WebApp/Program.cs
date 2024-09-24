@@ -36,9 +36,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddScoped<DataService>();
-builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ScrapperService>();
-builder.Services.AddScoped<FavoriteRecipeService>();
 
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();

@@ -193,6 +193,9 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -206,7 +209,47 @@ namespace RecipeFinderWebApp.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Recipe_Finder.Ingredient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Calories")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Carbohydrate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Fat")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IngredientsName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Protein")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Unit")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("Ingredient");
                 });
 
             modelBuilder.Entity("Recipe_Finder.PaymentMethod", b =>
@@ -234,12 +277,11 @@ namespace RecipeFinderWebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ProfileUserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("TimeStam")
                         .HasColumnType("TEXT");
@@ -249,7 +291,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileUserId");
+                    b.HasIndex("ProfileId");
 
                     b.HasIndex("RecipeId");
 
@@ -258,8 +300,9 @@ namespace RecipeFinderWebApp.Migrations
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CookingInstructions")
                         .IsRequired()
@@ -267,6 +310,9 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.Property<TimeSpan>("CookingTime")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("CuisineType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("DifficultyLevel")
                         .IsRequired()
@@ -279,6 +325,9 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("LinksForDrinkPairing")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("OccasionTags")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("Rating")
                         .HasColumnType("REAL");
@@ -303,18 +352,17 @@ namespace RecipeFinderWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("VideoUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("RecipeId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -329,12 +377,11 @@ namespace RecipeFinderWebApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ProfileUserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ReviewText")
                         .IsRequired()
@@ -345,7 +392,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileUserId");
+                    b.HasIndex("ProfileId");
 
                     b.HasIndex("RecipeId");
 
@@ -354,8 +401,9 @@ namespace RecipeFinderWebApp.Migrations
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
@@ -369,7 +417,7 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<bool>("RememberMe")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PaymentMethodsId");
 
@@ -427,11 +475,27 @@ namespace RecipeFinderWebApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>
+                {
+                    b.HasOne("Recipe_Finder.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Recipe_Finder.Ingredient", b =>
+                {
+                    b.HasOne("Recipe_Finder.Recipe", null)
+                        .WithMany("ListOfIngredients")
+                        .HasForeignKey("RecipeId");
+                });
+
             modelBuilder.Entity("Recipe_Finder.Rating", b =>
                 {
                     b.HasOne("Recipe_Finder.User", "Profile")
                         .WithMany()
-                        .HasForeignKey("ProfileUserId")
+                        .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -444,24 +508,20 @@ namespace RecipeFinderWebApp.Migrations
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
-                    b.HasOne("Recipe_Finder.User", "User")
+                    b.HasOne("Recipe_Finder.User", null)
                         .WithMany("FavoriteRecipes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.HasOne("Recipe_Finder.User", null)
                         .WithMany("WeeklyPlan")
                         .HasForeignKey("UserId1");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Review", b =>
                 {
                     b.HasOne("Recipe_Finder.User", "Profile")
                         .WithMany()
-                        .HasForeignKey("ProfileUserId")
+                        .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -478,22 +538,13 @@ namespace RecipeFinderWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("PaymentMethodsId");
 
-                    b.HasOne("RecipeFinder_WebApp.Data.ApplicationUser", null)
-                        .WithOne("User")
-                        .HasForeignKey("Recipe_Finder.User", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("PaymentMethods");
-                });
-
-            modelBuilder.Entity("RecipeFinder_WebApp.Data.ApplicationUser", b =>
-                {
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
+                    b.Navigation("ListOfIngredients");
+
                     b.Navigation("Ratings");
 
                     b.Navigation("Reviews");
