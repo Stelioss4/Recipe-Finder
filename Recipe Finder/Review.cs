@@ -25,5 +25,13 @@
             get { return _profile; }
             set { _profile = value; }
         }
+
+        private int _iD;
+
+        public int Id
+        {
+            get { return _iD; }
+            set { _iD = value; }
+        }
     }
 }

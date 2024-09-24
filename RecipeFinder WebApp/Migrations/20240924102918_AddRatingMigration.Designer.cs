@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeFinder_WebApp.Data;
 
@@ -10,9 +11,11 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240924102918_AddRatingMigration")]
+    partial class AddRatingMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -323,35 +326,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.ToTable("Recipe");
                 });
 
-            modelBuilder.Entity("Recipe_Finder.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProfileUserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RecipeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ReviewText")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("TimeStam")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProfileUserId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("Review");
-                });
-
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Property<string>("UserId")
@@ -457,21 +431,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Recipe_Finder.Review", b =>
-                {
-                    b.HasOne("Recipe_Finder.User", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Recipe_Finder.Recipe", null)
-                        .WithMany("Reviews")
-                        .HasForeignKey("RecipeId");
-
-                    b.Navigation("Profile");
-                });
-
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.HasOne("Recipe_Finder.PaymentMethod", "PaymentMethods")
@@ -495,8 +454,6 @@ namespace RecipeFinderWebApp.Migrations
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
                     b.Navigation("Ratings");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>

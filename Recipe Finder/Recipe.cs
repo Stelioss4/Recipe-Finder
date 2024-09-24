@@ -128,7 +128,6 @@ namespace Recipe_Finder
         }
 
         private List<Rating> _ratings;
-        [NotMapped]
         public List<Rating> Ratings
         {
             get { return _ratings; }
@@ -152,7 +151,6 @@ namespace Recipe_Finder
         }
 
         private List<Review> _reviews;
-        [NotMapped]
         public List<Review> Reviews
         {
             get { return _reviews; }
