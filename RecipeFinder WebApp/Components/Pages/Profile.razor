@@ -30,6 +30,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">@rec.RecipeName</h5>
                                 <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
+                                <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove from Favorites</button>
                             </div>
                         </div>
                     </div>
@@ -65,18 +66,14 @@
                 throw new NullReferenceException("ApplicationUser is null.");
             }
 
-
             userProfile = appUser.User;
-            userProfile.Name = appUser.UserName;
 
             if (userProfile == null)
             {
                 throw new NullReferenceException("User associated with ApplicationUser is null.");
             }
 
-
             await _userManager.UpdateAsync(appUser);
-
         }
         else
         {
@@ -85,10 +82,17 @@
         }
     }
 
-
     private void NavigateToRecipeDetails(string recipeUrl)
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
+    }
+
+    private async Task RemoveRecipeFromFavorite(Recipe rec)
+    {
+        await DataService.RemoveFavoriteRecipeAsync(rec);
+        // Refresh the user's profile after removing the recipe
+        userProfile.FavoriteRecipes.Remove(rec);
+        StateHasChanged();
     }
 
     private void NavigateToHome()

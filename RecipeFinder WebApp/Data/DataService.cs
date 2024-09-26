@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Recipe_Finder;
+using System.Security.Cryptography;
 using System.Xml.Serialization;
 
 namespace RecipeFinder_WebApp.Data
@@ -20,8 +21,7 @@ namespace RecipeFinder_WebApp.Data
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly NavigationManager Navigation;
-        private bool showSuccessMessage;
-        private bool showAlreadyExistsMessage;
+     
 
         public DataService(IHttpClientFactory clientFactory, ApplicationDbContext context, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
         {
@@ -56,15 +56,13 @@ namespace RecipeFinder_WebApp.Data
                     if (userProfile != null)
                     {                  
                         // Check if the recipe already exists in the user's favorite list
-                        bool isRecipeInFavorites = userProfile.FavoriteRecipes
-                            .Any(r => r.RecipeName == recipe.RecipeName && r.Url == recipe.Url);
+                        //bool isRecipeInFavorites = userProfile.FavoriteRecipes
+                        //    .Any(r => r.RecipeName == recipe.RecipeName && r.Url == recipe.Url);
 
-                        if (isRecipeInFavorites)
+                        if (userProfile.FavoriteRecipes.Contains(recipe))
                         {
                             // Notify the user that the recipe is already in their favorites
                             Console.WriteLine("Recipe is already in your favorites.");
-                            showSuccessMessage = false;
-                            showAlreadyExistsMessage = true;
                         }
                         else
                         {
@@ -76,8 +74,6 @@ namespace RecipeFinder_WebApp.Data
 
                             // Notify the user that the recipe was successfully added
                             Console.WriteLine("Recipe added to your favorites successfully.");
-                            showSuccessMessage = true;
-                            showAlreadyExistsMessage = false;
                         }
                     }
                 }
@@ -93,12 +89,65 @@ namespace RecipeFinder_WebApp.Data
                 // Handle the error appropriately (e.g., display an error message)
             }
         }
+
         /// <summary>
-        /// Gets the ClaimUser's favorite recipes. If none exist, returns an empty list.
+        /// Removes a recipe from the authenticated user's list of favorite recipes.
         /// </summary>
-        public static List<Recipe> GetUserFavorites(User user)
+        public async Task RemoveFavoriteRecipeAsync(Recipe recipe)
         {
-            return user.FavoriteRecipes ?? new List<Recipe>();
+            try
+            {
+                var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
+
+                if (user.Identity.IsAuthenticated)
+                {
+                    var appUser = await _userManager.GetUserAsync(user);
+
+                    if (appUser == null)
+                    {
+                        throw new NullReferenceException("ApplicationUser is null.");
+                    }
+
+                    var userProfile = appUser.User;
+
+                    if (userProfile != null)
+                    {
+                        // Use SourceDomain and SearchTerms as additional criteria
+                        var recipeToRemove = userProfile.FavoriteRecipes
+                            .FirstOrDefault(r =>
+                                r.RecipeName == recipe.RecipeName &&
+                                r.Url == recipe.Url &&
+                                r.SourceDomain == recipe.SourceDomain &&
+                                r.SearchTerms.OrderBy(t => t).SequenceEqual(recipe.SearchTerms.OrderBy(t => t)));
+
+                        if (recipeToRemove != null)
+                        {
+                            // Remove the recipe from the list
+                            userProfile.FavoriteRecipes.Remove(recipeToRemove);
+
+                            // Save changes to the database
+                            await _context.SaveChangesAsync();
+
+                            Console.WriteLine("Recipe removed from favorites successfully.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Recipe not found in favorites.");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("User is not authenticated.");
+                    Navigation.NavigateTo("account/login");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error removing recipe from favorites: {ex.Message}");
+                // Handle the error appropriately (e.g., display an error message)
+            }
         }
 
         /// <summary>
