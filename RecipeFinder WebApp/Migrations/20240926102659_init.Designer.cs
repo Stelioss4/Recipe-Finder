@@ -11,14 +11,18 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240924130908_init")]
+    [Migration("20240926102659_init")]
     partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -308,28 +312,21 @@ namespace RecipeFinderWebApp.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CookingInstructions")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("CookingTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("CuisineType")
+                    b.Property<int?>("CuisineType")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("DifficultyLevel")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LinksForDrinkPairing")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("OccasionTags")
+                    b.Property<int?>("OccasionTags")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Rating")
@@ -348,7 +345,6 @@ namespace RecipeFinderWebApp.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Time")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
@@ -358,18 +354,12 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("VideoUrl")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Recipe");
                 });
@@ -514,10 +504,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.HasOne("Recipe_Finder.User", null)
                         .WithMany("FavoriteRecipes")
                         .HasForeignKey("UserId");
-
-                    b.HasOne("Recipe_Finder.User", null)
-                        .WithMany("WeeklyPlan")
-                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Review", b =>
@@ -556,8 +542,6 @@ namespace RecipeFinderWebApp.Migrations
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Navigation("FavoriteRecipes");
-
-                    b.Navigation("WeeklyPlan");
                 });
 #pragma warning restore 612, 618
         }

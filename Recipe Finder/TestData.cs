@@ -96,7 +96,7 @@
             recipe.VideoUrl = "www.howtoBoilanEgg.com";
             recipe.DifficultyLevel = "Easy";
             recipe.ListOfIngredients = ingredients;
-            recipe.CookingTime = TimeSpan.FromMinutes(14);
+            //recipe.CookingTime = TimeSpan.FromMinutes(14);
             recipe.CuisineType = CuisineType.Australian;
             recipe.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe.OccasionTags = OccasionTags.Brunch;
@@ -181,11 +181,11 @@
             recipe2.VideoUrl = "www.howtocooknudles.com";
             recipe2.DifficultyLevel = "Easy";
             recipe2.ListOfIngredients = ingredients;
-            recipe2.CookingTime = TimeSpan.FromMinutes(10);
+            //recipe2.CookingTime = TimeSpan.FromMinutes(10);
             recipe2.CuisineType = CuisineType.Italian;
             recipe2.LinksForDrinkPairing = "www.drinkwithfood.com";
             recipe2.OccasionTags = OccasionTags.Lunch;
-            recipe2.Rating = 4.6;
+            //recipe2.Rating = 4.6;
 
             recipes.Add(recipe);
             recipes.Add(recipe2);

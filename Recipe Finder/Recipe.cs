@@ -45,86 +45,86 @@ namespace Recipe_Finder
             set { _recipeName = value; }
         }
 
-        private string _image;
+        private string? _image;
 
-        public string Image
+        public string? Image
         {
             get { return _image; }
             set { _image = value; }
         }
 
-        private string _cookingInstructions;
+        private string? _cookingInstructions;
 
-        public string CookingInstructions
+        public string? CookingInstructions
         {
             get { return _cookingInstructions; }
             set { _cookingInstructions = value; }
         }
 
-        private string _videoUrl;
+        private string? _videoUrl;
 
-        public string VideoUrl
+        public string? VideoUrl
         {
             get { return _videoUrl; }
             set { _videoUrl = value; }
         }
 
-        private string _time;
+        private string? _time;
 
-        public string Time
+        public string? Time
         {
             get { return _time; }
             set { _time = value; }
         }
 
-        private TimeSpan _cookingTime;
+        //private TimeSpan _cookingTime;
 
-        public TimeSpan CookingTime
-        {
-            get { return _cookingTime; }
-            set { _cookingTime = value; }
-        }
+        //public TimeSpan CookingTime
+        //{
+        //    get { return _cookingTime; }
+        //    set { _cookingTime = value; }
+        //}
 
-        private CuisineType _cuisineType;
-        public CuisineType CuisineType
+        private CuisineType? _cuisineType;
+        public CuisineType? CuisineType
         {
             get { return _cuisineType; }
             set { _cuisineType = value; }
         }
 
-        private OccasionTags _occasionTags;
+        private OccasionTags? _occasionTags;
 
-        public OccasionTags OccasionTags
+        public OccasionTags? OccasionTags
         {
             get { return _occasionTags; }
             set { _occasionTags = value; }
         }
 
-        private string _difficultyLevel;    //difficulty will be measured by easy, medium and hard.
+        private string? _difficultyLevel;    //difficulty will be measured by easy, medium and hard.
 
-        public string DifficultyLevel
+        public string? DifficultyLevel
         {
             get { return _difficultyLevel; }
             set { _difficultyLevel = value; }
         }
-        public List<Ingredient>? ListOfIngredients { get; set; } = new List<Ingredient>();
+        public virtual List<Ingredient>? ListOfIngredients { get; set; } = new List<Ingredient>();
 
-        private string _linksForDrinkPairing;
+        private string? _linksForDrinkPairing;
 
-        public string LinksForDrinkPairing
+        public string? LinksForDrinkPairing
         {
             get { return _linksForDrinkPairing; }
             set { _linksForDrinkPairing = value; }
         }
 
         private List<Rating> _ratings;
-        public List<Rating> Ratings
+        public virtual List<Rating> Ratings
         {
             get { return _ratings; }
             set { _ratings = value; }
         }
 
-        public double Rating
+        public virtual double Rating
         {
             get
             {
@@ -141,7 +141,7 @@ namespace Recipe_Finder
         }
 
         private List<Review> _reviews;
-        public List<Review> Reviews
+        public virtual List<Review> Reviews
         {
             get { return _reviews; }
             set { _reviews = value; }

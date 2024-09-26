@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Recipe_Finder
 {
@@ -14,7 +13,7 @@ namespace Recipe_Finder
 
         private List<Recipe> _favoriteRecipes = new List<Recipe>();
 
-        public List<Recipe> FavoriteRecipes
+        public virtual List<Recipe> FavoriteRecipes
         {
             get { return _favoriteRecipes; }
             set { _favoriteRecipes = value; }
@@ -49,19 +48,19 @@ namespace Recipe_Finder
       
         private PaymentMethod? _paymentMethods;
 
-        public PaymentMethod? PaymentMethods
+        public virtual PaymentMethod? PaymentMethods
         {
             get { return _paymentMethods; }
             set { _paymentMethods = value; }
         }
 
-        private List<Recipe>? _weeklyPlan;
+        //private List<Recipe>? _weeklyPlan;
 
-        public List<Recipe>? WeeklyPlan
-        {
-            get { return _weeklyPlan; }
-            set { _weeklyPlan = value; }
-        }
+        //public List<Recipe>? WeeklyPlan
+        //{
+        //    get { return _weeklyPlan; }
+        //    set { _weeklyPlan = value; }
+        //}
 
     }
 }

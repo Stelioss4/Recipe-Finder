@@ -121,19 +121,17 @@ namespace RecipeFinderWebApp.Migrations
                     SourceDomain = table.Column<string>(type: "TEXT", nullable: false),
                     SearchTerms = table.Column<string>(type: "TEXT", nullable: false),
                     RecipeName = table.Column<string>(type: "TEXT", nullable: false),
-                    Image = table.Column<string>(type: "TEXT", nullable: false),
-                    CookingInstructions = table.Column<string>(type: "TEXT", nullable: false),
-                    VideoUrl = table.Column<string>(type: "TEXT", nullable: false),
-                    Time = table.Column<string>(type: "TEXT", nullable: false),
-                    CookingTime = table.Column<TimeSpan>(type: "TEXT", nullable: false),
-                    CuisineType = table.Column<int>(type: "INTEGER", nullable: false),
-                    OccasionTags = table.Column<int>(type: "INTEGER", nullable: false),
-                    DifficultyLevel = table.Column<string>(type: "TEXT", nullable: false),
-                    LinksForDrinkPairing = table.Column<string>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true),
+                    CookingInstructions = table.Column<string>(type: "TEXT", nullable: true),
+                    VideoUrl = table.Column<string>(type: "TEXT", nullable: true),
+                    Time = table.Column<string>(type: "TEXT", nullable: true),
+                    CuisineType = table.Column<int>(type: "INTEGER", nullable: true),
+                    OccasionTags = table.Column<int>(type: "INTEGER", nullable: true),
+                    DifficultyLevel = table.Column<string>(type: "TEXT", nullable: true),
+                    LinksForDrinkPairing = table.Column<string>(type: "TEXT", nullable: true),
                     Rating = table.Column<double>(type: "REAL", nullable: false),
                     Url = table.Column<string>(type: "TEXT", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -141,11 +139,6 @@ namespace RecipeFinderWebApp.Migrations
                     table.ForeignKey(
                         name: "FK_Recipe_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Recipe_User_UserId1",
-                        column: x => x.UserId1,
                         principalTable: "User",
                         principalColumn: "Id");
                 });
@@ -375,11 +368,6 @@ namespace RecipeFinderWebApp.Migrations
                 name: "IX_Recipe_UserId",
                 table: "Recipe",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Recipe_UserId1",
-                table: "Recipe",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_ProfileId",

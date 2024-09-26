@@ -21,7 +21,7 @@
 
         private User _profile;
 
-        public User Profile
+        public virtual User Profile
         {
             get { return _profile; }
             set { _profile = value; }
