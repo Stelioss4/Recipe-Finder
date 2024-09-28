@@ -81,20 +81,7 @@
     private Address address { get; set; } = new Address();
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var claimsUser = authState.User;
-
-        if (claimsUser.Identity.IsAuthenticated)
-        {
-            var userId = claimsUser.FindFirst("Id")?.Value ?? claimsUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userManager.GetUserAsync(claimsUser);
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                user = await _userManager.GetUserAsync(claimsUser);
-                return;
-            }
-        }
+        userProfile = await DataService.GetAuthenticatedUserAsync();
 
         if (userProfile == null)
         {

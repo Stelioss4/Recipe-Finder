@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
-using System.Xml.Serialization;
 
 namespace RecipeFinder_WebApp.Data
 {
@@ -8,16 +8,19 @@ namespace RecipeFinder_WebApp.Data
     {
         private readonly HttpClient _httpClient;
         private DataService _dataService;
+        private ApplicationDbContext _context;
 
-        public ScrapperService(HttpClient httpClient, DataService ds)
+        public ScrapperService(HttpClient httpClient, DataService ds, ApplicationDbContext context)
         {
             _httpClient = httpClient;
             _dataService = ds;
+            _context = context;
         }
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
             var existingRecipes = _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.ALLRECIPE_URL);
+
             if (existingRecipes.Any())
             {
                 return existingRecipes;
@@ -47,8 +50,8 @@ namespace RecipeFinder_WebApp.Data
 
             if (detailedRecipes.Count > 0)
             {
-                _dataService.Recipes.AddRange(detailedRecipes);
-                DataService.SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
+                _context.Recipes.AddRange(detailedRecipes);
+              await _context.SaveChangesAsync();
             }
 
             return detailedRecipes;
@@ -249,6 +252,7 @@ namespace RecipeFinder_WebApp.Data
             {
                 return existingRecipes;
             }
+            
 
             // If not found, scrape new recipes
             var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
@@ -275,8 +279,8 @@ namespace RecipeFinder_WebApp.Data
 
             if (detailedRecipes.Count > 0)
             {
-                _dataService.Recipes.AddRange(detailedRecipes);
-                DataService.SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
+                _context.Recipes.AddRange(detailedRecipes);
+                await _context.SaveChangesAsync();
             }
             return detailedRecipes;
         }
@@ -482,7 +486,7 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeCookPadRecipes(string searchQuery)
         {
-            List<Recipe> existingRecipes = _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.COOKPAD_URL);
+            List<Recipe> existingRecipes =  _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.COOKPAD_URL);
             if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
@@ -513,8 +517,8 @@ namespace RecipeFinder_WebApp.Data
 
             if (detailedRecipes.Count > 0)
             {
-                _dataService.Recipes.AddRange(detailedRecipes);
-                DataService.SaveRecipesToXmlFile(_dataService.Recipes, Constants.XML_CACHE_PATH); // Save to cache
+                _context.Recipes.AddRange(detailedRecipes);
+                await _context.SaveChangesAsync();
             }
             return detailedRecipes;
         }

@@ -5,6 +5,7 @@
 @using Recipe_Finder
 @using Microsoft.EntityFrameworkCore
 
+@inject SignInManager<ApplicationUser> SignInManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager Navigation
 @inject DataService DataService
@@ -50,35 +51,17 @@
 </div>
 
 @code {
-    private User userProfile { get; set; }
+    public User? userProfile { get; set; } = new User();
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity.IsAuthenticated)
+        userProfile = await DataService.GetAuthenticatedUserAsync();
+        if (userProfile == null)
         {
-            var appUser = await _userManager.GetUserAsync(user);
-
-            if (appUser == null)
-            {
-                throw new NullReferenceException("ApplicationUser is null.");
-            }
-
-            userProfile = appUser.User;
-
-            if (userProfile == null)
-            {
-                throw new NullReferenceException("User associated with ApplicationUser is null.");
-            }
-
-            await _userManager.UpdateAsync(appUser);
-        }
-        else
-        {
-            Console.WriteLine("User is not authenticated.");
-            Navigation.NavigateTo("account/login");
+            // User profile not found, force logout and redirect to login
+            await SignInManager.SignOutAsync();
+            Navigation.NavigateTo("Account/Register");
+            return;
         }
     }
 

@@ -240,19 +240,19 @@
             User user2 = new User();
 
             user.Name = "Jack";
-            user.Email = "jack@email.strom";
+            
           //  user.Address = address1;
           //  user.PaymentMethods = paymentMethods;
 
             user1.Name = "John";
             
-            user1.Email = "john@email.ccm";
+            
          //   user1.Address = address;
             //user1.PaymentMethods = paymentMethods1;
 
             user2.Name = "Allh";
          
-            user2.Email = "maria.mar@email.de";
+            
 
          //   user2.Address = address2;
  //           user2.PaymentMethods = paymentMethods2;
