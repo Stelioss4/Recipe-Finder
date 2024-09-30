@@ -116,11 +116,11 @@
 
             try
             {
-                if (decodedUrl.Contains("chefkoch.de"))
+                if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
                 {
                     recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                 }
-                else if (decodedUrl.Contains("allrecipes.com"))
+                else if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
                 {
                     recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                 }

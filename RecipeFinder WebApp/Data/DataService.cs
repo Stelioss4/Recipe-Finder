@@ -29,56 +29,10 @@ namespace RecipeFinder_WebApp.Data
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             AuthenticationStateProvider = authenticationStateProvider;
-            Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
+            //Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
             _navigation = Navigation;
         }
-        /// <summary>
-        /// Get an Authenticate User with all of their properties.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NullReferenceException"></exception>
-        public async Task<User> GetAuthenticatedUserAsync()
-        {
-            try
-            {
-                var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-                var user = authState.User;
-
-                if (user.Identity.IsAuthenticated)
-                {
-                    var appUser = await _userManager.GetUserAsync(user);
-
-                    if (appUser == null)
-                    {
-                        throw new NullReferenceException("ApplicationUser is null.");
-                    }
-
-                    userProfile = appUser.User;
-
-                    if (userProfile != null)
-                    {
-                        return userProfile; // Return the authenticated user
-                    }
-                    else
-                    {
-                        throw new NullReferenceException("User associated with ApplicationUser is null.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("User is not authenticated.");
-                    _navigation.NavigateTo("account/login");
-                    return null; // No authenticated user, return null
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error retrieving authenticated user: {ex.Message}");
-                // Handle the error (you might want to log or display an error message)
-                return null; // Return null in case of an error
-            }
-        }
-
+        
         /// <summary>
         /// Adds a recipe to the ClaimUser's favorites and saves the changes to the database.
         /// </summary>
@@ -114,7 +68,6 @@ namespace RecipeFinder_WebApp.Data
             }
 
         }
-
 
         /// <summary>
         /// Removes a recipe from the authenticated user's list of favorite recipes.
@@ -164,49 +117,6 @@ namespace RecipeFinder_WebApp.Data
         }
 
         /// <summary>
-        /// Saves the list of recipes to an XML file.
-        /// </summary>
-        public static void SaveRecipesToXmlFile(List<Recipe> recipes, string filePath)
-        {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<Recipe>));
-                using (StreamWriter writer = new StreamWriter(filePath))
-                {
-                    serializer.Serialize(writer, recipes);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving recipes to XML file: {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Loads the list of recipes from an XML file.
-        /// </summary>
-        public static List<Recipe> LoadRecipesFromXmlFile(string filePath)
-        {
-            try
-            {
-                if (File.Exists(filePath))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<Recipe>));
-                    using (StreamReader reader = new StreamReader(filePath))
-                    {
-                        var recipes = (List<Recipe>)serializer.Deserialize(reader);
-                        return recipes ?? new List<Recipe>(); // Return an empty list if deserialization returns null
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading recipes from XML file: {ex.Message}");
-            }
-            return new List<Recipe>();
-        }
-
-        /// <summary>
         /// Retrieves cached recipes based on search terms and source.
         /// </summary>
         public List<Recipe> GetCachedRecipes(List<string> searchTerms, string source)
@@ -225,23 +135,75 @@ namespace RecipeFinder_WebApp.Data
 
             return existingRecipes;
         }
-
-        public List<Recipe> GetRecipesFromDatabase(List<string> searchTerms, string source)
+        /// <summary>
+        /// Retrieves saved recipes from database based on search terms and source.
+        /// </summary>
+        /// <param name="searchQuery"></param>
+        /// <returns></returns>
+        public async Task<List<Recipe>> GetRecipesFromDatabaseAsync(string searchQuery)
         {
-            var normalizedSearchTerms = searchTerms.Select(term => term.Trim().ToLowerInvariant()).ToList();
+            // Normalize the search query
+            searchQuery = searchQuery.Trim().ToLowerInvariant();
 
-            var existingRecipes = _context.Recipes
-                .Where(r => r.RecipeName != null && r.SourceDomain != null &&
-                            r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
-                            r.SearchTerms != null)
-                .Where(r => normalizedSearchTerms.Any(term => r.RecipeName.Contains(term, StringComparison.OrdinalIgnoreCase)) &&
-                              normalizedSearchTerms.Any(term => r.SearchTerms.Any(st => st.Trim().ToLowerInvariant().Equals(term, StringComparison.OrdinalIgnoreCase))))
-            .ToList();
+            // Query the database for existing recipes that match the search query or URL
+            var existingRecipes = await _context.Recipes
+                .Where(r => r.SearchTerms.Contains(searchQuery) && r.SourceDomain == Constants.CHEFKOCH_URL)
+                .ToListAsync();
 
-            return existingRecipes;
+            // If any matching recipes exist in the database, return them
+            if (existingRecipes.Any())
+            {
+                return existingRecipes;
+            }
+            return new List<Recipe>();
         }
 
+        /// <summary>
+        /// Get an Authenticate User with all of their properties.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public async Task<User> GetAuthenticatedUserAsync()
+        {
+            try
+            {
+                var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
 
+                if (user.Identity.IsAuthenticated)
+                {
+                    var appUser = await _userManager.GetUserAsync(user);
 
+                    if (appUser == null)
+                    {
+                        throw new NullReferenceException("ApplicationUser is null.");
+                    }
+
+                    userProfile = appUser.User;
+                    userProfile.Name = appUser.UserName;
+
+                    if (userProfile != null)
+                    {
+                        return userProfile; // Return the authenticated user
+                    }
+                    else
+                    {
+                        throw new NullReferenceException("User associated with ApplicationUser is null.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("User is not authenticated.");
+                    _navigation.NavigateTo("account/login");
+                    return null; // No authenticated user, return null
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving authenticated user: {ex.Message}");
+                // Handle the error (you might want to log or display an error message)
+                return null; // Return null in case of an error
+            }
+        }
     }
 }

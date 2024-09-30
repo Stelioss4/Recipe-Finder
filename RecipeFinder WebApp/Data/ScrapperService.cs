@@ -19,9 +19,8 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
-            var existingRecipes = _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.ALLRECIPE_URL);
-
-            if (existingRecipes.Any())
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery);
+            if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
             }
@@ -247,13 +246,11 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
-            var existingRecipes = _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.CHEFKOCH_URL);
-            if (existingRecipes.Count > 0)
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery);
+            if(existingRecipes.Count > 0)
             {
                 return existingRecipes;
             }
-            
-
             // If not found, scrape new recipes
             var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
             if (searchResults == null || !searchResults.Any())
@@ -265,23 +262,29 @@ namespace RecipeFinder_WebApp.Data
 
             foreach (var recipe in searchResults)
             {
-                if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
+                // Skip recipes that are already in the database
+                if (existingRecipes.Any(r => r.Url == recipe.Url))
                 {
-                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
-                    recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
-                    Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
-                    if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
-                    {
-                        detailedRecipes.Add(detailedRecipe);
-                    }
+                    continue;
+                }
+
+                // Scrape details and add new recipes
+                recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
+                recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
+                Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
+                if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
+                {
+                    detailedRecipes.Add(detailedRecipe);
                 }
             }
 
+            // Add new recipes to the database
             if (detailedRecipes.Count > 0)
             {
                 _context.Recipes.AddRange(detailedRecipes);
                 await _context.SaveChangesAsync();
             }
+
             return detailedRecipes;
         }
 
@@ -486,7 +489,7 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeCookPadRecipes(string searchQuery)
         {
-            List<Recipe> existingRecipes =  _dataService.GetCachedRecipes(new List<string> { searchQuery }, Constants.COOKPAD_URL);
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery);
             if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
