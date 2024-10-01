@@ -6,13 +6,10 @@
 @using System.Security.Claims
 
 
-@inject ScrapperService Scrap
 @inject NavigationManager Navigation
-@inject DataService DataService
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ScrapperService Scrap
-@inject NavigationManager Navigation
-@inject DataService DataService
+@inject DataService _dataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
 @inject ApplicationDbContext _context
@@ -156,6 +153,6 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await DataService.AddFavoriteRecipeAsync(recipe);
+        await _dataService.AddFavoriteRecipeAsync(recipe);
     }
 }
