@@ -140,14 +140,14 @@ namespace RecipeFinder_WebApp.Data
         /// </summary>
         /// <param name="searchQuery"></param>
         /// <returns></returns>
-        public async Task<List<Recipe>> GetRecipesFromDatabaseAsync(string searchQuery)
+        public async Task<List<Recipe>> GetRecipesFromDatabaseAsync(string searchQuery, string source)
         {
             // Normalize the search query
             searchQuery = searchQuery.Trim().ToLowerInvariant();
 
             // Query the database for existing recipes that match the search query or URL
             var existingRecipes = await _context.Recipes
-                .Where(r => r.SearchTerms.Contains(searchQuery) && r.SourceDomain == Constants.CHEFKOCH_URL)
+                .Where(r => r.SearchTerms.Contains(searchQuery) && r.SourceDomain == source)
                 .ToListAsync();
 
             // If any matching recipes exist in the database, return them

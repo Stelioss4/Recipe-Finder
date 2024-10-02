@@ -1,0 +1,59 @@
+﻿@using RecipeFinder_WebApp.Data
+@using Recipe_Finder
+
+@inject NavigationManager Navigation
+@inject DataService DataService
+
+<div class="row mt-5">
+    @if (recipes?.Count > 0)
+    {
+        @foreach (var rec in recipes)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(rec.Image))
+                    {
+                        <img src="@rec.Image" class="card-img-top" alt="Recipe Image" style="height: 200px; object-fit: cover;" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@rec.RecipeName</h5>
+                        <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
+
+                        @if (AddRecipeButton)
+                        {
+                            <button class="btn btn-outline-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
+                        }
+
+                        @if (RemoveRecipeButton)
+                        {
+                            <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove from Favorites</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public List<Recipe> recipes { get; set; } = new List<Recipe>();
+    [Parameter] public bool RemoveRecipeButton { get; set; } = true;
+    [Parameter] public bool AddRecipeButton { get; set; } = true;
+
+    private void NavigateToRecipeDetails(string recipeUrl)
+    {
+        Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
+    }
+
+    private async Task AddRecipeToFavorite(Recipe recipe)
+    {
+        await DataService.AddFavoriteRecipeAsync(recipe);
+    }
+
+    private async Task RemoveRecipeFromFavorite(Recipe rec)
+    {
+        await DataService.RemoveFavoriteRecipeAsync(rec);
+        // Refresh the user's profile after removing the recipe
+        StateHasChanged();
+    }
+}

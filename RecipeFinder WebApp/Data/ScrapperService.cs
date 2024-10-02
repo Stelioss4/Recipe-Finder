@@ -19,7 +19,8 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
-            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery);
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.ALLRECIPE_URL);
+
             if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
@@ -35,7 +36,7 @@ namespace RecipeFinder_WebApp.Data
             List<Recipe> detailedRecipes = new List<Recipe>();
             foreach (var recipe in searchResults)
             {
-                if (recipe?.Url != null) // Check if the searchResultRecipie and its URL are not null
+                if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
                     recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
                     recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
@@ -238,7 +239,7 @@ namespace RecipeFinder_WebApp.Data
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error scraping searchResultRecipie details: {ex.Message}");
+                Console.WriteLine($"Error scraping searchResultRecipe details: {ex.Message}");
             }
 
             return searchResultRecipie;
@@ -246,13 +247,13 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
-            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery);
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CHEFKOCH_URL);
             if(existingRecipes.Count > 0)
             {
                 return existingRecipes;
             }
             // If not found, scrape new recipes
-            var searchResults = await ScrapeSearchResultsFromChefkoch(searchQuery);
+            var searchResults = await ScrapeSearchResultsFromChefKoch(searchQuery);
             if (searchResults == null || !searchResults.Any())
             {
                 return new List<Recipe>(); // Return an empty list if no search results are found
@@ -288,7 +289,7 @@ namespace RecipeFinder_WebApp.Data
             return detailedRecipes;
         }
 
-        public async Task<List<Recipe>> ScrapeSearchResultsFromChefkoch(string searchQuery)
+        public async Task<List<Recipe>> ScrapeSearchResultsFromChefKoch(string searchQuery)
         {
             List<Recipe> recipes = new List<Recipe>();
 
@@ -351,11 +352,11 @@ namespace RecipeFinder_WebApp.Data
             return recipes;
         }
 
-        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipe(Recipe searchResultRecipie)
+        public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipe(Recipe searchResultRecipe)
         {
             try
             {
-                var html = await _httpClient.GetStringAsync(searchResultRecipie.Url);
+                var html = await _httpClient.GetStringAsync(searchResultRecipe.Url);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
@@ -364,7 +365,7 @@ namespace RecipeFinder_WebApp.Data
                 var recipeNameNode = document.DocumentNode.SelectSingleNode("//h1");
                 if (recipeNameNode != null)
                 {
-                    searchResultRecipie.RecipeName = recipeNameNode.InnerText.Trim();
+                    searchResultRecipe.RecipeName = recipeNameNode.InnerText.Trim();
                 }
                 else
                 {
@@ -375,7 +376,7 @@ namespace RecipeFinder_WebApp.Data
                 var imageNode = document.DocumentNode.SelectSingleNode("//*[@id=\"i-amp-0\"]/img");
                 if (imageNode != null)
                 {
-                    searchResultRecipie.Image = imageNode.GetAttributeValue("src", string.Empty);
+                    searchResultRecipe.Image = imageNode.GetAttributeValue("src", string.Empty);
                 }
 
                 // Parse Cooking Instructions
@@ -389,7 +390,7 @@ namespace RecipeFinder_WebApp.Data
 
                 if (correctInstructionsNode != null)
                 {
-                    searchResultRecipie.CookingInstructions = correctInstructionsNode.InnerHtml.Trim();
+                    searchResultRecipe.CookingInstructions = correctInstructionsNode.InnerHtml.Trim();
                 }
                 else
                 {
@@ -401,7 +402,7 @@ namespace RecipeFinder_WebApp.Data
                 var videoNode = document.DocumentNode.SelectSingleNode("//video/source");
                 if (videoNode != null)
                 {
-                    searchResultRecipie.VideoUrl = videoNode.GetAttributeValue("src", string.Empty);
+                    searchResultRecipe.VideoUrl = videoNode.GetAttributeValue("src", string.Empty);
                 }
                 else
                 {
@@ -414,7 +415,7 @@ namespace RecipeFinder_WebApp.Data
                 {
                     if (Enum.TryParse(cuisineTypeNode.InnerText.Trim(), true, out CuisineType cuisineType))
                     {
-                        searchResultRecipie.CuisineType = cuisineType;
+                        searchResultRecipe.CuisineType = cuisineType;
                     }
                 }
                 else
@@ -426,7 +427,7 @@ namespace RecipeFinder_WebApp.Data
                 var difficultyLevelNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[1]/div/div[2]/small/span[2]");
                 if (difficultyLevelNode != null)
                 {
-                    searchResultRecipie.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
+                    searchResultRecipe.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
                 }
                 else
                 {
@@ -436,7 +437,7 @@ namespace RecipeFinder_WebApp.Data
                 var cookingTimeNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]//main/section/div[5]/div/div//div[3]/div");
                 if (cookingTimeNode != null)
                 {
-                    searchResultRecipie.Time = cookingTimeNode.InnerText.Trim();
+                    searchResultRecipe.Time = cookingTimeNode.InnerText.Trim();
                 }
                 else
                 {
@@ -450,7 +451,7 @@ namespace RecipeFinder_WebApp.Data
                 {
                     if (Enum.TryParse(occasionTagsNode.InnerText.Trim(), true, out OccasionTags occasionTags))
                     {
-                        searchResultRecipie.OccasionTags = occasionTags;
+                        searchResultRecipe.OccasionTags = occasionTags;
                     }
                 }
                 else
@@ -465,7 +466,7 @@ namespace RecipeFinder_WebApp.Data
                     var ingredientNodes = ingredientsNode.SelectNodes("/html/body/main/article[2]/table/tbody/tr");
                     if (ingredientNodes != null)
                     {
-                        searchResultRecipie.ListOfIngredients = ingredientNodes
+                        searchResultRecipe.ListOfIngredients = ingredientNodes
                             .Select(li => new Ingredient { IngredientsName = li.InnerText.Trim() })
                             .ToList();
                     }
@@ -481,15 +482,16 @@ namespace RecipeFinder_WebApp.Data
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error scraping searchResultRecipie details: {ex.Message}");
+                Console.WriteLine($"Error scraping searchResultRecipe details: {ex.Message}");
             }
 
-            return searchResultRecipie;
+            return searchResultRecipe;
         }
 
         public async Task<List<Recipe>> ScrapeCookPadRecipes(string searchQuery)
         {
-            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery);
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.COOKPAD_URL);
+
             if (existingRecipes.Count > 0)
             {
                 return existingRecipes;

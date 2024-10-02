@@ -13,12 +13,13 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
 @inject ApplicationDbContext _context
+
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-5">
     <div class="text-center">
         <h1 class="display-4 text-primary">Recipe Finder!</h1>
-        <p class="lead">Discover delicious recipes from Chefkoch and AllRecipes</p>
+        <p class="lead">Discover delicious recipes from ChefKoch, AllRecipes, and CookPad</p>
 
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
@@ -26,11 +27,13 @@
                     <DataAnnotationsValidator />
                     <ValidationSummary />
 
-                    <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe here..." /><br />
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
-                        <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
-                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCookPad">Search CookPad</button>
+                    <div class="input-group mb-3">
+                        <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe here..." />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
+                            <button class="btn btn-secondary" type="button" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
+                            <button class="btn btn-primary" type="button" @onclick="SearchForRecipeFromCookPad">Search CookPad</button>
+                        </div>
                     </div>
                 </EditForm>
             </div>
@@ -39,24 +42,7 @@
 
     @if (recipes.Count > 0)
     {
-        <div class="row mt-5">
-            @foreach (var rec in recipes)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        @if (!string.IsNullOrEmpty(rec.Image))
-                        {
-                            <img src="@rec.Image" class="card-img-top" alt="Recipe Image" style="height: 200px; object-fit: cover;" />
-                        }
-                        <div class="card-body">
-                            <h5 class="card-title">@rec.RecipeName</h5>
-                            <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
-                            <button class="btn btn-outline-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+       <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
     }
     else if (!string.IsNullOrEmpty(searchQuery))
     {
@@ -78,7 +64,7 @@
     private User userProfile { get; set; } = new User();
     private bool showSuccessMessage { get; set; } = false;
     private string searchQuery { get; set; } = string.Empty;
-    private Address address { get; set; } = new Address();
+
     protected override async Task OnInitializedAsync()
     {
         userProfile = await DataService.GetAuthenticatedUserAsync();
@@ -115,5 +101,11 @@
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
         await DataService.AddFavoriteRecipeAsync(recipe);
+        showSuccessMessage = true;
+
+        // Hide the success message after 3 seconds
+        await Task.Delay(3000);
+        showSuccessMessage = false;
+        StateHasChanged();
     }
 }

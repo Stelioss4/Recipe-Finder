@@ -19,9 +19,9 @@ namespace Recipe_Finder
             set { _favoriteRecipes = value; }
         }
 
-        private string? _name;
+        private string _name;
       
-        public string? Name
+        public string Name
         {
             get { return _name; }
             set { _name = value; }
@@ -36,9 +36,9 @@ namespace Recipe_Finder
         }
 
       
-        private PaymentMethod? _paymentMethods;
+        private PaymentMethod _paymentMethods;
 
-        public virtual PaymentMethod? PaymentMethods
+        public virtual PaymentMethod PaymentMethods
         {
             get { return _paymentMethods; }
             set { _paymentMethods = value; }

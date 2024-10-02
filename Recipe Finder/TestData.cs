@@ -208,17 +208,17 @@
             Address address2 = new Address();
 
             address.StreetsName = "onstreet";
-            address.Housenumber = "11";
+            address.HouseNumber = "11";
             address.City = "Genk";
             address.PostalCode = "12312";
 
             address1.StreetsName = "outsidestreet";
-            address1.Housenumber = "32B";
+            address1.HouseNumber = "32B";
             address1.City = "NY city";
             address1.PostalCode = "56430";
 
             address2.StreetsName = "insidethestreet";
-            address2.Housenumber = "100";
+            address2.HouseNumber = "100";
             address2.City = "Athens";
             address2.PostalCode = "10000";
 
