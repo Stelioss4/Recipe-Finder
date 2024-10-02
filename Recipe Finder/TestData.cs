@@ -55,7 +55,7 @@
             ingredient.Carbohydrate = 280.5m;
             ingredient.Calories = 200;
             ingredient.Unit = 1;
-            ingredient.Amount = IngredientAmount.Pieces;
+//ingredient.Amount = IngredientAmount.Pieces;
 
             Ingredient ingredient1 = new Ingredient();
 
@@ -65,7 +65,7 @@
             ingredient1.Carbohydrate = 0;
             ingredient1.Calories = 0;
             ingredient1.Unit = 2;
-            ingredient1.Amount = IngredientAmount.Cups;
+           // ingredient1.Amount = IngredientAmount.Cups;
 
             Ingredient ingredient2 = new Ingredient();
 
@@ -75,7 +75,7 @@
             ingredient2.Carbohydrate = 0;
             ingredient2.Calories = 0;
             ingredient2.Unit = 1 / 2;
-            ingredient2.Amount = IngredientAmount.Teaspoons;
+            //ingredient2.Amount = IngredientAmount.Teaspoons;
 
             ingredients.Add(ingredient);
             ingredients.Add(ingredient1);
@@ -107,7 +107,7 @@
             ingredient.Carbohydrate = 280.5m;
             ingredient.Calories = 200;
             ingredient.Unit = 500;
-            ingredient.Amount = IngredientAmount.Grams;
+            //ingredient.Amount = IngredientAmount.Grams;
 
             ingredient1.IngredientsName = "water";
             ingredient1.Protein = 0m;
@@ -115,7 +115,7 @@
             ingredient1.Carbohydrate = 0;
             ingredient1.Calories = 0;
             ingredient1.Unit = 2000;
-            ingredient1.Amount = IngredientAmount.Milliliters;
+            //ingredient1.Amount = IngredientAmount.Milliliters;
 
             ingredient2.IngredientsName = "salt";
             ingredient2.Protein = 0m;
@@ -123,7 +123,7 @@
             ingredient2.Carbohydrate = 0;
             ingredient2.Calories = 0;
             ingredient2.Unit = 2;
-            ingredient2.Amount = IngredientAmount.Teaspoons;
+            //ingredient2.Amount = IngredientAmount.Teaspoons;
 
             Ingredient ingredient3 = new Ingredient();
 
@@ -133,7 +133,7 @@
             ingredient3.Carbohydrate = 97;
             ingredient3.Calories = 450;
             ingredient3.Unit = 500;
-            ingredient3.Amount = IngredientAmount.Milliliters;
+            //ingredient3.Amount = IngredientAmount.Milliliters;
 
             Ingredient ingredient4 = new Ingredient();
 
@@ -143,7 +143,7 @@
             ingredient4.Carbohydrate = 0;
             ingredient4.Calories = 9;
             ingredient4.Unit = 2;
-            ingredient4.Amount = IngredientAmount.Tablespoons;
+            //ingredient4.Amount = IngredientAmount.Tablespoons;
 
             Ingredient ingredient5 = new Ingredient();
 
@@ -153,7 +153,7 @@
             ingredient5.Carbohydrate = 12;
             ingredient5.Calories = 1;
             ingredient5.Unit = 1;
-            ingredient5.Amount = IngredientAmount.Pieces;
+            //ingredient5.Amount = IngredientAmount.Pieces;
 
             Ingredient ingredient6 = new Ingredient();
 
@@ -163,7 +163,7 @@
             ingredient6.Carbohydrate = 12;
             ingredient6.Calories = 1;
             ingredient6.Unit = 2;
-            ingredient6.Amount = IngredientAmount.Pieces;
+            //ingredient6.Amount = IngredientAmount.Pieces;
 
             ingredients.Clear();
             ingredients.Add(ingredient);
@@ -277,7 +277,7 @@
             ing1.Fat = 50;
             ing1.Carbohydrate = 280.5m;
             ing1.Calories = 200;
-            ing1.Amount = IngredientAmount.Pieces;
+            //ing1.Amount = IngredientAmount.Pieces;
 
             Ingredient ing2 = new Ingredient();
 
@@ -286,7 +286,7 @@
             ing2.Fat = 0;
             ing2.Carbohydrate = 0;
             ing2.Calories = 0;
-            ing2.Amount = IngredientAmount.Cups;
+            //ing2.Amount = IngredientAmount.Cups;
 
             Ingrediants.Add(ing1);
             Ingrediants.Add(ing2);

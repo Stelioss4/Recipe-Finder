@@ -45,9 +45,9 @@ namespace Recipe_Finder
             set { _recipeName = value; }
         }
 
-        private string _image;
+        private byte[] _image;
 
-        public string Image
+        public byte[] Image
         {
             get { return _image; }
             set { _image = value; }

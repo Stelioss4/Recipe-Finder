@@ -84,15 +84,21 @@ namespace RecipeFinder_WebApp.Data
 
                             if (titleNode != null && linkNode != null)
                             {
+                                var imageUrl = imageNode?.GetAttributeValue("src", string.Empty);
+
+                                // Create a new Recipe object
                                 var recipe = new Recipe
                                 {
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
-                                    Image = imageNode?.GetAttributeValue("src", string.Empty),
+                                    Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
+                                    SearchTerms = new List<string> { searchQuery },
                                     SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
+
                                 recipes.Add(recipe);
                             }
+
                             else
                             {
                                 Console.WriteLine("Title or link node is null for one of the recipes.");
@@ -117,16 +123,16 @@ namespace RecipeFinder_WebApp.Data
             return recipes;
         }
 
-        public async Task<Recipe> ScrapeAllRecipesDetailsAndUpdateRecipe(Recipe searchResultRecipie)
+        public async Task<Recipe> ScrapeAllRecipesDetailsAndUpdateRecipe(Recipe searchResultRecipe)
         {
             try
             {
-                if (!Uri.IsWellFormedUriString(searchResultRecipie.Url, UriKind.Absolute))
+                if (!Uri.IsWellFormedUriString(searchResultRecipe.Url, UriKind.Absolute))
                 {
-                    searchResultRecipie.Url = $"https://www.allrecipes.com {searchResultRecipie.Url}";
+                    searchResultRecipe.Url = $"https://www.allrecipes.com {searchResultRecipe.Url}";
                 }
 
-                var html = await _httpClient.GetStringAsync(searchResultRecipie.Url);
+                var html = await _httpClient.GetStringAsync(searchResultRecipe.Url);
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
@@ -135,7 +141,7 @@ namespace RecipeFinder_WebApp.Data
                 var recipeNameNode = document.DocumentNode.SelectSingleNode("//*[@id=\"article-header--recipe_1-0\"]/h1");
                 if (recipeNameNode != null)
                 {
-                    searchResultRecipie.RecipeName = recipeNameNode.InnerText.Trim();
+                    searchResultRecipe.RecipeName = recipeNameNode.InnerText.Trim();
                 }
                 else
                 {
@@ -146,7 +152,11 @@ namespace RecipeFinder_WebApp.Data
                 var imageNode = document.DocumentNode.SelectSingleNode("//*[@id=\"article__photo-ribbon_1-0\"]");
                 if (imageNode != null)
                 {
-                    searchResultRecipie.Image = imageNode.GetAttributeValue("src", string.Empty);
+                    var imageUrl = imageNode.GetAttributeValue("src", string.Empty);
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        searchResultRecipe.Image = await DownloadImageAsByteArray(imageUrl);
+                    }
                 }
                 else
                 {
@@ -157,7 +167,7 @@ namespace RecipeFinder_WebApp.Data
                 var instructionsNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mntl-sc-block_22-0\"]");
                 if (instructionsNode != null)
                 {
-                    searchResultRecipie.CookingInstructions = instructionsNode.InnerHtml.Trim();
+                    searchResultRecipe.CookingInstructions = instructionsNode.InnerHtml.Trim();
                 }
                 else
                 {
@@ -168,7 +178,7 @@ namespace RecipeFinder_WebApp.Data
                 var videoNode = document.DocumentNode.SelectSingleNode("//*[@id=\"article__primary-video-jw_1-0\"]/video");
                 if (videoNode != null)
                 {
-                    searchResultRecipie.VideoUrl = videoNode.GetAttributeValue("src", string.Empty);
+                    searchResultRecipe.VideoUrl = videoNode.GetAttributeValue("src", string.Empty);
                 }
                 else
                 {
@@ -181,7 +191,7 @@ namespace RecipeFinder_WebApp.Data
                 {
                     if (Enum.TryParse(cuisineTypeNode.InnerText.Trim(), true, out CuisineType cuisineType))
                     {
-                        searchResultRecipie.CuisineType = cuisineType;
+                        searchResultRecipe.CuisineType = cuisineType;
                     }
                 }
                 else
@@ -194,7 +204,7 @@ namespace RecipeFinder_WebApp.Data
                 if (difficultyLevelNode != null)
                 {
 
-                    searchResultRecipie.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
+                    searchResultRecipe.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
 
                 }
                 else
@@ -208,7 +218,7 @@ namespace RecipeFinder_WebApp.Data
                 {
                     if (Enum.TryParse(occasionTagsNode.InnerText.Trim(), true, out OccasionTags occasionTags))
                     {
-                        searchResultRecipie.OccasionTags = occasionTags;
+                        searchResultRecipe.OccasionTags = occasionTags;
                     }
                 }
                 else
@@ -223,7 +233,7 @@ namespace RecipeFinder_WebApp.Data
                     var ingredientNodes = ingredientsNode.SelectNodes("//*[@id=\"mm-recipes-structured-ingredients_1-0\"]/ul/li");
                     if (ingredientNodes != null)
                     {
-                        searchResultRecipie.ListOfIngredients = ingredientNodes
+                        searchResultRecipe.ListOfIngredients = ingredientNodes
                             .Select(li => new Ingredient { IngredientsName = li.InnerText.Trim() })
                             .ToList();
                     }
@@ -242,7 +252,7 @@ namespace RecipeFinder_WebApp.Data
                 Console.WriteLine($"Error scraping searchResultRecipe details: {ex.Message}");
             }
 
-            return searchResultRecipie;
+            return searchResultRecipe;
         }
 
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
@@ -318,16 +328,21 @@ namespace RecipeFinder_WebApp.Data
 
                             if (titleNode != null && linkNode != null)
                             {
+                                var imageUrl = imageNode?.GetAttributeValue("src", string.Empty);
+
+                                // Create a new Recipe object
                                 var recipe = new Recipe
                                 {
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
-                                    Image = imageNode?.GetAttributeValue("src", string.Empty),
+                                    Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
                                     SearchTerms = new List<string> { searchQuery },
                                     SourceDomain = new Uri(Constants.CHEFKOCH_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
+
                                 recipes.Add(recipe);
                             }
+
                             else
                             {
                                 Console.WriteLine("Title or link node is null for one of the recipes.");
@@ -376,7 +391,11 @@ namespace RecipeFinder_WebApp.Data
                 var imageNode = document.DocumentNode.SelectSingleNode("//*[@id=\"i-amp-0\"]/img");
                 if (imageNode != null)
                 {
-                    searchResultRecipe.Image = imageNode.GetAttributeValue("src", string.Empty);
+                    var imageUrl = imageNode.GetAttributeValue("src", string.Empty);
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        searchResultRecipe.Image = await DownloadImageAsByteArray(imageUrl);
+                    }
                 }
 
                 // Parse Cooking Instructions
@@ -396,7 +415,6 @@ namespace RecipeFinder_WebApp.Data
                 {
                     Console.WriteLine("Valid instructions node not found");
                 }
-
 
                 // Parse Video URL if available
                 var videoNode = document.DocumentNode.SelectSingleNode("//video/source");
@@ -433,6 +451,7 @@ namespace RecipeFinder_WebApp.Data
                 {
                     Console.WriteLine("Difficulty Level node is null");
                 }
+
                 // Parse Cooking Time
                 var cookingTimeNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]//main/section/div[5]/div/div//div[3]/div");
                 if (cookingTimeNode != null)
@@ -443,7 +462,6 @@ namespace RecipeFinder_WebApp.Data
                 {
                     Console.WriteLine("Cooking time node is null");
                 }
-
 
                 // Parse Occasion Tags
                 var occasionTagsNode = document.DocumentNode.SelectSingleNode("//span[@class='occasion-tags']");
@@ -486,6 +504,15 @@ namespace RecipeFinder_WebApp.Data
             }
 
             return searchResultRecipe;
+        }
+
+        private async Task<byte[]> DownloadImageAsByteArray(string imageUrl)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
+                return imageBytes;
+            }
         }
 
         public async Task<List<Recipe>> ScrapeCookPadRecipes(string searchQuery)
@@ -557,16 +584,21 @@ namespace RecipeFinder_WebApp.Data
 
                             if (titleNode != null && linkNode != null)
                             {
+                                var imageUrl = imageNode?.GetAttributeValue("src", string.Empty);
+
+                                // Create a new Recipe object
                                 var recipe = new Recipe
                                 {
                                     RecipeName = titleNode.InnerText.Trim(),
-                                    Url = "https://www.cookpad.com" + linkNode.GetAttributeValue("href", string.Empty),
-                                    Image = imageNode?.GetAttributeValue("src", string.Empty),
+                                    Url = linkNode.GetAttributeValue("href", string.Empty),
+                                    Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
                                     SearchTerms = new List<string> { searchQuery },
                                     SourceDomain = new Uri(Constants.COOKPAD_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
+
                                 recipes.Add(recipe);
                             }
+
                             else
                             {
                                 Console.WriteLine("Title or link node is null for one of the recipes.");
@@ -615,7 +647,11 @@ namespace RecipeFinder_WebApp.Data
                 var imageNode = document.DocumentNode.SelectSingleNode("//img[@class='photo recipe-image']");
                 if (imageNode != null)
                 {
-                    searchResultRecipe.Image = imageNode.GetAttributeValue("src", string.Empty);
+                    var imageUrl = imageNode.GetAttributeValue("src", string.Empty);
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        searchResultRecipe.Image = await DownloadImageAsByteArray(imageUrl);
+                    }
                 }
 
                 // Parse Cooking Instructions

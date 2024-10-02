@@ -2,13 +2,13 @@
 {
     public class Ingredient
     {
-        private int _id;
+          private int _iD;
 
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
+  public int Id
+  {
+      get { return _iD; }
+      set { _iD = value; }
+  }
         private string _ingredientsName;
 
         public string IngredientsName
@@ -53,9 +53,9 @@
             set { _protein = value; }
         }
 
-        private IngredientAmount _amount; 
+        private string _amount; 
 
-        public IngredientAmount Amount
+        public string Amount
         {
             get { return _amount; }
             set { _amount = value; }

@@ -18,10 +18,10 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-    })
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+})
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -39,6 +39,15 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<ScrapperService>();
 
+// Add MealDbService with API key injection
+builder.Services.AddScoped<MealDbService>(provider =>
+{
+    var httpClient = provider.GetRequiredService<HttpClient>();
+    var apiKey = builder.Configuration["MealDb:ApiKey"]; // Read API key from appsettings.json
+    var dbContext = provider.GetRequiredService<ApplicationDbContext>(); // Get DbContext
+    return new MealDbService(httpClient, apiKey, dbContext);
+}); builder.Services.AddScoped<MealDbResponse>();
+
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();
 
@@ -46,8 +55,6 @@ builder.Services.Configure<CircuitOptions>(options =>
 {
     options.DetailedErrors = builder.Configuration.GetValue<bool>("DetailedErrors");
 });
-
-
 
 var app = builder.Build();
 
@@ -59,12 +66,10 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
 

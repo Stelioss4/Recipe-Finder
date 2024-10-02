@@ -13,13 +13,14 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
 @inject ApplicationDbContext _context
+@inject MealDbService _mealDbService
 
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-5">
     <div class="text-center">
         <h1 class="display-4 text-primary">Recipe Finder!</h1>
-        <p class="lead">Discover delicious recipes from ChefKoch, AllRecipes, and CookPad</p>
+        <p class="lead">Discover delicious recipes from Chefkoch and AllRecipes</p>
 
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
@@ -27,13 +28,11 @@
                     <DataAnnotationsValidator />
                     <ValidationSummary />
 
-                    <div class="input-group mb-3">
-                        <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe here..." />
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
-                            <button class="btn btn-secondary" type="button" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
-                            <button class="btn btn-primary" type="button" @onclick="SearchForRecipeFromCookPad">Search CookPad</button>
-                        </div>
+                    <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe here..." /><br />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
+                        <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
+                        <button class="btn btn-primary" @onclick="SearchRecipes">Search API</button>
                     </div>
                 </EditForm>
             </div>
@@ -42,9 +41,9 @@
 
     @if (recipes.Count > 0)
     {
-       <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
+        <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
     }
-    else if (!string.IsNullOrEmpty(searchQuery))
+    else if (recipes == null || recipes.Count == 0)
     {
         <div class="alert alert-warning text-center mt-4">
             <p>No results found for "@searchQuery".</p>
@@ -88,9 +87,9 @@
         recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
     }
 
-    private async Task SearchForRecipeFromCookPad()
+    private async Task SearchRecipes()
     {
-        recipes = await Scrap.ScrapeCookPadRecipes(searchQuery);
+        recipes = await _mealDbService.GetRecipesAsync(searchQuery);
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)
@@ -108,4 +107,4 @@
         showSuccessMessage = false;
         StateHasChanged();
     }
-}
+    }
