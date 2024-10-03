@@ -11,23 +11,25 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    @if (rec.Image != null)
+                    @if (rec.Image != null && rec.Image.Length > 0)
                     {
-                        <img src="@rec.Image" class="card-img-top" alt="Recipe Image" style="height: 200px; object-fit: cover;" />
+                        <img src="data:image/png;base64,@Convert.ToBase64String(rec.Image)" class="card-img-top" alt="Recipe Image" style="height: 200px; object-fit: cover;" />
                     }
-                    <div class="card-body">
-                        <h5 class="card-title">@rec.RecipeName</h5>
-                        <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
+                    <div class="btn-group">
+                        <div class="card-body">
+                            <h5 class="card-title">@rec.RecipeName</h5>
+                            <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
 
-                        @if (AddRecipeButton)
-                        {
-                            <button class="btn btn-outline-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
-                        }
+                            @if (AddRecipeButton)
+                            {
+                                <button class="btn btn-outline-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
+                            }
 
-                        @if (RemoveRecipeButton)
-                        {
-                            <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove from Favorites</button>
-                        }
+                            @if (RemoveRecipeButton)
+                            {
+                                <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove</button>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
