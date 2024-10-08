@@ -42,6 +42,13 @@ namespace Recipe_Finder
             set { _weeklyPlan = value; }
         }
 
+        private DateTime? _lastWeeklyPlanDate;
+
+        public DateTime? LastWeeklyPlanDate
+        {
+            get { return _lastWeeklyPlanDate;  }
+            set { _lastWeeklyPlanDate = value; }
+        }
 
         private PaymentMethod _paymentMethods;
 

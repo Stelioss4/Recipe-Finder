@@ -11,6 +11,7 @@
 @inject DataService DataService
 @inject UserManager<ApplicationUser> _userManager
 @inject WeeklyPlanService _weeklyPlan
+@inject ApplicationDbContext _context
 
 <h3>User Profile</h3>
 <div class="container mt-5">
@@ -52,6 +53,8 @@
                     {
                         <!-- Display the weekly meal plan -->
                         <RecipeOutput recipes="weeklyPlan" AddRecipeButton="false"></RecipeOutput>
+                        <p>your weekly plan made on @userProfile.LastWeeklyPlanDate!</p>
+                        <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate new plan</button>
                     }
                     else
                     {
@@ -99,6 +102,11 @@
         }
     }
 
+    public async Task CreateNewPlan()
+    {
+        await _weeklyPlan.ForceNewPlanAsync();
+    }
+
     private void TogglePopupWeeklyPlan()
     {
         // If a weekly plan was generated more than 7 days ago, regenerate it
@@ -110,11 +118,11 @@
     }
     private async Task GenerateWeeklyPlan()
     {
+        
         // Logic to generate a weekly meal plan based on favorite recipes
-        weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync(userProfile.FavoriteRecipes);
+        weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
         weeklyPlanGeneratedDate = DateTime.Now;
         showWeeklyPlanPopup = true;
-
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)

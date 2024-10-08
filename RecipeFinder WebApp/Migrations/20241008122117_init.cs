@@ -31,8 +31,8 @@ namespace RecipeFinderWebApp.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AccountEmail = table.Column<string>(type: "TEXT", nullable: false),
-                    AccountPassword = table.Column<string>(type: "TEXT", nullable: false)
+                    AccountEmail = table.Column<string>(type: "TEXT", nullable: true),
+                    AccountPassword = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,7 +67,6 @@ namespace RecipeFinderWebApp.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
                     RememberMe = table.Column<bool>(type: "INTEGER", nullable: false),
                     PaymentMethodsId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
@@ -113,15 +112,15 @@ namespace RecipeFinderWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Recipe",
+                name: "Recipes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SourceDomain = table.Column<string>(type: "TEXT", nullable: false),
-                    SearchTerms = table.Column<string>(type: "TEXT", nullable: false),
-                    RecipeName = table.Column<string>(type: "TEXT", nullable: false),
-                    Image = table.Column<string>(type: "TEXT", nullable: true),
+                    SourceDomain = table.Column<string>(type: "TEXT", nullable: true),
+                    SearchTerms = table.Column<string>(type: "TEXT", nullable: true),
+                    RecipeName = table.Column<string>(type: "TEXT", nullable: true),
+                    Image = table.Column<byte[]>(type: "BLOB", nullable: true),
                     CookingInstructions = table.Column<string>(type: "TEXT", nullable: true),
                     VideoUrl = table.Column<string>(type: "TEXT", nullable: true),
                     Time = table.Column<string>(type: "TEXT", nullable: true),
@@ -130,15 +129,21 @@ namespace RecipeFinderWebApp.Migrations
                     DifficultyLevel = table.Column<string>(type: "TEXT", nullable: true),
                     LinksForDrinkPairing = table.Column<string>(type: "TEXT", nullable: true),
                     Rating = table.Column<double>(type: "REAL", nullable: false),
-                    Url = table.Column<string>(type: "TEXT", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Url = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
+                    UserId1 = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Recipe", x => x.Id);
+                    table.PrimaryKey("PK_Recipes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Recipe_User_UserId",
+                        name: "FK_Recipes_User_UserId",
                         column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Recipes_User_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "User",
                         principalColumn: "Id");
                 });
@@ -234,12 +239,12 @@ namespace RecipeFinderWebApp.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    IngredientsName = table.Column<string>(type: "TEXT", nullable: false),
+                    IngredientsName = table.Column<string>(type: "TEXT", nullable: true),
                     Calories = table.Column<decimal>(type: "TEXT", nullable: false),
                     Fat = table.Column<decimal>(type: "TEXT", nullable: false),
                     Carbohydrate = table.Column<decimal>(type: "TEXT", nullable: false),
                     Protein = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Amount = table.Column<string>(type: "TEXT", nullable: true),
                     Unit = table.Column<double>(type: "REAL", nullable: false),
                     RecipeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
@@ -247,9 +252,9 @@ namespace RecipeFinderWebApp.Migrations
                 {
                     table.PrimaryKey("PK_Ingredient", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ingredient_Recipe_RecipeId",
+                        name: "FK_Ingredient_Recipes_RecipeId",
                         column: x => x.RecipeId,
-                        principalTable: "Recipe",
+                        principalTable: "Recipes",
                         principalColumn: "Id");
                 });
 
@@ -261,23 +266,22 @@ namespace RecipeFinderWebApp.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Value = table.Column<double>(type: "REAL", nullable: false),
                     TimeStam = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ProfileId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProfileId = table.Column<int>(type: "INTEGER", nullable: true),
                     RecipeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rating", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rating_Recipe_RecipeId",
+                        name: "FK_Rating_Recipes_RecipeId",
                         column: x => x.RecipeId,
-                        principalTable: "Recipe",
+                        principalTable: "Recipes",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Rating_User_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -286,25 +290,24 @@ namespace RecipeFinderWebApp.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ReviewText = table.Column<string>(type: "TEXT", nullable: false),
+                    ReviewText = table.Column<string>(type: "TEXT", nullable: true),
                     TimeStam = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ProfileId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProfileId = table.Column<int>(type: "INTEGER", nullable: true),
                     RecipeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Review", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Review_Recipe_RecipeId",
+                        name: "FK_Review_Recipes_RecipeId",
                         column: x => x.RecipeId,
-                        principalTable: "Recipe",
+                        principalTable: "Recipes",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Review_User_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -365,9 +368,14 @@ namespace RecipeFinderWebApp.Migrations
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Recipe_UserId",
-                table: "Recipe",
+                name: "IX_Recipes_UserId",
+                table: "Recipes",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Recipes_UserId1",
+                table: "Recipes",
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_ProfileId",
@@ -419,7 +427,7 @@ namespace RecipeFinderWebApp.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Recipe");
+                name: "Recipes");
 
             migrationBuilder.DropTable(
                 name: "User");

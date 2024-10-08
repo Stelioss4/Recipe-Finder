@@ -16,15 +16,30 @@ namespace RecipeFinder_WebApp.Data
         }
 
         // Generates a weekly plan based on the user's favorite recipes
-        public async Task<List<Recipe>> GenerateWeeklyPlanAsync(List<Recipe> recipes)
+        public async Task<List<Recipe>> GenerateWeeklyPlanAsync()
         {
-            if (currentWeeklyPlan.Any() && lastPlanDate.HasValue && (DateTime.Now - lastPlanDate.Value).TotalDays < 7)
+            // Fetch the authenticated user
+            var userProfile = await _dataService.GetAuthenticatedUserAsync();
+
+            if (userProfile == null)
             {
-                return currentWeeklyPlan; // Return existing plan if less than 7 days have passed
+                throw new Exception("User not authenticated.");
             }
 
-            // Fetch user's favorite recipes
-            var userProfile = await _dataService.GetAuthenticatedUserAsync();
+            // Check if the user already has a weekly plan and the date of the last plan
+            if (userProfile.WeeklyPlan != null && userProfile.WeeklyPlan.Any() && userProfile.LastWeeklyPlanDate.HasValue)
+            {
+                // Calculate the number of days since the last plan was created
+                var daysSinceLastPlan = (DateTime.Now - userProfile.LastWeeklyPlanDate.Value).TotalDays;
+
+                if (daysSinceLastPlan < 7)
+                {
+                    // Return the existing weekly plan if it's less than 7 days old
+                    return userProfile.WeeklyPlan;
+                }
+            }
+
+            // Fetch user's favorite recipes from the database
             var favoriteRecipes = userProfile.FavoriteRecipes;
 
             if (favoriteRecipes == null || !favoriteRecipes.Any())
@@ -34,15 +49,23 @@ namespace RecipeFinder_WebApp.Data
 
             // Randomly select 7 recipes for the weekly plan
             var random = new Random();
-            currentWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(7).ToList();
-            lastPlanDate = DateTime.Now;
+            var newWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(7).ToList();
+
+            // Update the user's profile with the new weekly plan and the current date
+            userProfile.WeeklyPlan = newWeeklyPlan;
+            userProfile.LastWeeklyPlanDate = DateTime.Now;
+
+            // Save changes to the database
+            _context.Update(userProfile); // Make sure the user is tracked by the context
             await _context.SaveChangesAsync();
-            
-            return currentWeeklyPlan;
+
+            // Return the new weekly plan
+            return newWeeklyPlan;
         }
 
+
         // Allow the user to force a new plan manually
-        public async Task<List<Recipe>> ForceNewPlanAsync(Guid userId)
+        public async Task<List<Recipe>> ForceNewPlanAsync()
         {
             var userProfile = await _dataService.GetAuthenticatedUserAsync();
             var favoriteRecipes = userProfile.FavoriteRecipes;
