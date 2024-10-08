@@ -31,8 +31,8 @@
                 {
                     <img src="data:image/png;base64,@Convert.ToBase64String(recipe.Image)" class="card-img-top" alt="Recipe Image" style="width: 100%; max-width: 400px; height: auto;" />
                 }
-                <h4 class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</h4>
-                <h4 class="alert-primary text-center">Total time needed: @recipe.Time</h4>
+                <p class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</p>
+                <p class="alert-primary text-center">Total time needed: @recipe.Time</p>
 
                 <!-- Popup button for user input -->
                 <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
