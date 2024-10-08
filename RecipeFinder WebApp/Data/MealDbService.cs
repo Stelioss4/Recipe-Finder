@@ -13,7 +13,7 @@ public class MealDbService
     public MealDbService(HttpClient httpClient, string apiKey, ApplicationDbContext dbContext)
     {
         _httpClient = httpClient;
-        _apiKey = apiKey;
+        _apiKey = string.IsNullOrEmpty(apiKey) ? "1" : apiKey; // Fallback to default if null/empty
         _dbContext = dbContext;
     }
 
@@ -36,7 +36,8 @@ public class MealDbService
                     CookingInstructions = meal.StrInstructions,
                     ListOfIngredients = ParseIngredients(meal),
                     SearchTerms = new List<string> { searchQuery }, // You can add this for tracking search queries
-                    SourceDomain = "themealdb.com"
+                    SourceDomain = "themealdb.com",
+                    Url = $"https://www.themealdb.com/meal/{meal.IdMeal}"
                 }).ToList();
 
                 // Save recipes to the database

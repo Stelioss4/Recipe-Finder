@@ -35,6 +35,7 @@ namespace Recipe_Finder
             set {  _rememberMe = value; }
         }
 
+
       
         private PaymentMethod _paymentMethods;
 

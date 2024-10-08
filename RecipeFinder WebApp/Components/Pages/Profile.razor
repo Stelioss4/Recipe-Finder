@@ -16,16 +16,28 @@
     @if (userProfile != null)
     {
         <p>Welcome, @userProfile.Name!</p>
+        <br /> <button class="btn btn-secondary mt-3" @onclick="TogglePopup">Favorite Recipes</button>
+       
+
+        <!-- Popup box -->
+        @if (showPopup)
+        {
+            <div class="popup">
+                <div class="popup-content">
+
+                    @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
+                    {
+                        <RecipeOutput recipes="userProfile.FavoriteRecipes" AddRecipeButton="false"></RecipeOutput>
+                    }
+                    else
+                    {
+                        <p>You don't have any favorite recipes yet.</p>
+                        <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
+                    }
+                </div>
+            </div>
+        }
         <div class="col-md-6 col-md-offset-2"></div>
-        @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
-        {
-                <RecipeOutput recipes="userProfile.FavoriteRecipes" AddRecipeButton="false"></RecipeOutput>
-        }
-        else
-        {
-            <p>You don't have any favorite recipes yet.</p>
-            <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
-        }
     }
     else
     {
@@ -35,6 +47,15 @@
 
 @code {
     public User? userProfile { get; set; } = new User();
+
+    private bool showPopup { get; set; } = false;
+
+    private void TogglePopup()
+    {
+        showPopup = !showPopup; // Toggle the popup
+    }
+
+
 
     protected override async Task OnInitializedAsync()
     {

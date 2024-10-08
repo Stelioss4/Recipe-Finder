@@ -84,12 +84,12 @@
 
     private async Task SearchForRecipeFromAR()
     {
-        recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
+        recipes = await Scrap.ScrapeBBCGoodFoodRecipes(searchQuery);
     }
 
     private async Task SearchRecipes()
     {
-        recipes = await _mealDbService.GetRecipesAsync(searchQuery);
+        recipes = await Scrap.ScrapeDelishRecipes(searchQuery);
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)
