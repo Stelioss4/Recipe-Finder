@@ -344,12 +344,17 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("VideoUrl")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Recipes");
                 });
@@ -488,6 +493,10 @@ namespace RecipeFinderWebApp.Migrations
                     b.HasOne("Recipe_Finder.User", null)
                         .WithMany("FavoriteRecipes")
                         .HasForeignKey("UserId");
+
+                    b.HasOne("Recipe_Finder.User", null)
+                        .WithMany("WeeklyPlan")
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Review", b =>
@@ -524,6 +533,8 @@ namespace RecipeFinderWebApp.Migrations
             modelBuilder.Entity("Recipe_Finder.User", b =>
                 {
                     b.Navigation("FavoriteRecipes");
+
+                    b.Navigation("WeeklyPlan");
                 });
 #pragma warning restore 612, 618
         }

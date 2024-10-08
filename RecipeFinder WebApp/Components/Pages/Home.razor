@@ -32,7 +32,7 @@
                     <div class="input-group-append">
                         <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
                         <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
-                        <button class="btn btn-primary" @onclick="SearchRecipes">Search API</button>
+                        <button class="btn btn-primary" @onclick="SearchRecipes">Search Delish recipes</button>
                     </div>
                 </EditForm>
             </div>
@@ -84,7 +84,7 @@
 
     private async Task SearchForRecipeFromAR()
     {
-        recipes = await Scrap.ScrapeBBCGoodFoodRecipes(searchQuery);
+        recipes = await Scrap.ScrapeSearchResultsFromAllRecipe(searchQuery);
     }
 
     private async Task SearchRecipes()

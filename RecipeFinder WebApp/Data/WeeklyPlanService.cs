@@ -36,7 +36,7 @@ namespace RecipeFinder_WebApp.Data
             var random = new Random();
             currentWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(7).ToList();
             lastPlanDate = DateTime.Now;
-
+            await _context.SaveChangesAsync();
             
             return currentWeeklyPlan;
         }

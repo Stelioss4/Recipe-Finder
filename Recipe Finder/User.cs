@@ -35,8 +35,14 @@ namespace Recipe_Finder
             set {  _rememberMe = value; }
         }
 
+        private List<Recipe> _weeklyPlan; 
+        public virtual List<Recipe> WeeklyPlan 
+        {
+            get { return _weeklyPlan; }
+            set { _weeklyPlan = value; }
+        }
 
-      
+
         private PaymentMethod _paymentMethods;
 
         public virtual PaymentMethod PaymentMethods

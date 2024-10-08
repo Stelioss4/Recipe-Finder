@@ -23,58 +23,61 @@
 
     @if (recipe != null)
     {
-            <div class="card shadow-sm mb-4 mx-auto" style="max-width: 800px;">
-                <div class="card-body text-center">
-                    <h2 class="card-title">@recipe.RecipeName</h2>
+        <div class="card shadow-sm mb-4 mx-auto" style="max-width: 800px;">
+            <div class="card-body text-center">
+                <h2 class="card-title">@recipe.RecipeName</h2>
 
                 @if (recipe.Image != null && recipe.Image.Length > 0)
                 {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(recipe.Image)" class="card-img-top" alt="Recipe Image" style="width: 100%; max-width: 400px; height: auto;" />
+                    <img src="data:image/png;base64,@Convert.ToBase64String(recipe.Image)" class="card-img-top" alt="Recipe Image" style="width: 100%; max-width: 400px; height: auto;" />
                 }
+                <h4 class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</h4>
+                <h4 class="alert-primary text-center">Total time needed: @recipe.Time</h4>
 
-                    <!-- Popup button for user input -->
-                   <br/> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
+                <!-- Popup button for user input -->
+                <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
 
-                    <!-- Popup box -->
+                <!-- Popup box -->
                 @if (showPopup)
                 {
-                            <div class="popup">
-                                <div class="popup-content">
-                                    <h4>Enter Number of People</h4>
-                                    <input type="number" @bind="peopleCount" min="1" />
-                                    <button class="btn btn-primary mt-2" @onclick="UpdateIngredients">Update</button>
-                                    <button class="btn btn-danger mt-2" @onclick="() => showPopup = false">Close</button>
-                                </div>
-                            </div>
+                    <div class="popup">
+                        <div class="popup-content">
+                            <h4>Enter Number of People</h4>
+                            <input type="number" @bind="peopleCount" min="1" />
+                            <button class="btn btn-primary mt-2" @onclick="UpdateIngredients">Update</button>
+                            <button class="btn btn-danger mt-2" @onclick="() => showPopup = false">Close</button>
+                        </div>
+                    </div>
                 }
 
-                    <div class="mt-3 text-center">
-                        <p class="font-italic">Quick tip: "Check the box for any ingredient you already have."</p>
-                        <h3 class="text-secondary">Ingredients (For @peopleCount People)</h3><br />
-                        <ul class="list-group list-group-flush mx-auto" style="max-width: 400px;">
+                <div class="mt-3 text-center">
+
+                    <p class="font-italic">Quick tip: "Check the box for any ingredient you already have."</p>
+                    <h3 class="text-secondary">Ingredients (For @peopleCount People)</h3><br />
+                    <ul class="list-group list-group-flush mx-auto" style="max-width: 400px;">
                         @foreach (var ingredient in recipe.ListOfIngredients)
                         {
-                                    <li class="list-group-item">
-                                        <input type="checkbox" id="@ingredient.IngredientsName" class="mr-2">
+                            <li class="list-group-item">
+                                <input type="checkbox" id="@ingredient.IngredientsName" class="mr-2">
                                 <label for="@ingredient.IngredientsName">@ingredient.IngredientsName (@GetAmountForPeople(ConvertToDouble(ingredient.Amount)))</label>
-                                    </li>
+                            </li>
                         }
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
 
-                    <div class="mt-3 text-left">
-                        <h4 class="text-secondary text-center">Cooking Instructions</h4>
-                        <p class="card-text text-justify">@((MarkupString)recipe.CookingInstructions)</p>
-                    </div>
+                <div class="mt-3 text-left">
+                    <h4 class="text-secondary text-center">Cooking Instructions</h4>
+                    <p class="card-text text-justify">@((MarkupString)recipe.CookingInstructions)</p>
                 </div>
             </div>
+        </div>
     }
     else
     {
-            <p class="text-muted text-center">Loading...</p>
+        <p class="text-muted text-center">Loading...</p>
     }
-    <br/>
-    <br/>
+    <br />
+    <br />
     <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(recipe)">Add to Fav!</button>
 </div>
 

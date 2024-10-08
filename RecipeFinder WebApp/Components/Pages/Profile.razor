@@ -10,21 +10,23 @@
 @inject NavigationManager Navigation
 @inject DataService DataService
 @inject UserManager<ApplicationUser> _userManager
+@inject WeeklyPlanService _weeklyPlan
 
 <h3>User Profile</h3>
 <div class="container mt-5">
     @if (userProfile != null)
     {
         <p>Welcome, @userProfile.Name!</p>
-        <br /> <button class="btn btn-secondary mt-3" @onclick="TogglePopup">Favorite Recipes</button>
-       
+        <br />
 
-        <!-- Popup box -->
-        @if (showPopup)
+        <!-- Button for Favorite Recipes Popup -->
+        <button class="btn btn-secondary mt-3" @onclick="TogglePopupFavorites">Favorite Recipes</button>
+
+        <!-- Popup for Favorite Recipes -->
+        @if (showFavoritesPopup)
         {
             <div class="popup">
                 <div class="popup-content">
-
                     @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
                     {
                         <RecipeOutput recipes="userProfile.FavoriteRecipes" AddRecipeButton="false"></RecipeOutput>
@@ -37,6 +39,29 @@
                 </div>
             </div>
         }
+
+        <!-- Button for Weekly Plan Popup -->
+        <button class="btn btn-primary mt-3" @onclick="TogglePopupWeeklyPlan">Weekly Meal Plan</button>
+
+        <!-- Popup for Weekly Plan -->
+        @if (showWeeklyPlanPopup)
+        {
+            <div class="popup">
+                <div class="popup-content">
+                    @if (weeklyPlan != null && weeklyPlan.Count > 0)
+                    {
+                        <!-- Display the weekly meal plan -->
+                        <RecipeOutput recipes="weeklyPlan" AddRecipeButton="false"></RecipeOutput>
+                    }
+                    else
+                    {
+                        <p>No weekly plan generated yet.</p>
+                        <button class="btn btn-outline-primary" @onclick="GenerateWeeklyPlan">Generate Weekly Plan</button>
+                    }
+                </div>
+            </div>
+        }
+
         <div class="col-md-6 col-md-offset-2"></div>
     }
     else
@@ -45,17 +70,22 @@
     }
 </div>
 
+
 @code {
     public User? userProfile { get; set; } = new User();
 
-    private bool showPopup { get; set; } = false;
+    private bool showWeeklyPlanPopup = false;
 
-    private void TogglePopup()
+    private List<Recipe> weeklyPlan { get; set; } = new();
+
+    private DateTime weeklyPlanGeneratedDate;
+
+    private bool showFavoritesPopup { get; set; } = false;
+
+    private void TogglePopupFavorites()
     {
-        showPopup = !showPopup; // Toggle the popup
+        showFavoritesPopup = !showFavoritesPopup; // Toggle the popup
     }
-
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,6 +97,24 @@
             Navigation.NavigateTo("Account/Register");
             return;
         }
+    }
+
+    private void TogglePopupWeeklyPlan()
+    {
+        // If a weekly plan was generated more than 7 days ago, regenerate it
+        if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > 7)
+        {
+            GenerateWeeklyPlan();
+        }
+        showWeeklyPlanPopup = !showWeeklyPlanPopup;
+    }
+    private async Task GenerateWeeklyPlan()
+    {
+        // Logic to generate a weekly meal plan based on favorite recipes
+        weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync(userProfile.FavoriteRecipes);
+        weeklyPlanGeneratedDate = DateTime.Now;
+        showWeeklyPlanPopup = true;
+
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)

@@ -38,6 +38,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<ScrapperService>();
+builder.Services.AddScoped<WeeklyPlanService>();
 
 // Add MealDbService with API key injection
 builder.Services.AddScoped<MealDbService>(provider =>
