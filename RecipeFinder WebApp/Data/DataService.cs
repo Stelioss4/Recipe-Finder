@@ -11,9 +11,7 @@ namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
-        public User? userProfile { get; set; } = new User();
-        public Address Address { get; set; } = new Address();
-        public List<User> users { get; set; } = new List<User>();
+        public User? UserProfile { get; set; } = new User();
         public List<Recipe> Recipes { get; set; } = new List<Recipe>();
 
         private readonly IHttpClientFactory _clientFactory;
@@ -21,7 +19,6 @@ namespace RecipeFinder_WebApp.Data
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly NavigationManager _navigation;
-
 
         public DataService(NavigationManager Navigation, IHttpClientFactory clientFactory, ApplicationDbContext context, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
         {
@@ -39,12 +36,12 @@ namespace RecipeFinder_WebApp.Data
         public async Task AddFavoriteRecipeAsync(Recipe recipe)
         {
 
-            userProfile = await GetAuthenticatedUserAsync();
+            UserProfile = await GetAuthenticatedUserAsync();
 
-            if (userProfile != null)
+            if (UserProfile != null)
             {
 
-                if (userProfile.FavoriteRecipes.Contains(recipe))
+                if (UserProfile.FavoriteRecipes.Contains(recipe))
                 {
                     // Notify the user that the recipe is already in their favorites
                     Console.WriteLine("Recipe is already in your favorites.");
@@ -52,7 +49,7 @@ namespace RecipeFinder_WebApp.Data
                 else
                 {
                     // Add the recipe to the user's favorite list
-                    userProfile.FavoriteRecipes.Add(recipe);
+                    UserProfile.FavoriteRecipes.Add(recipe);
 
                     // Save changes to the database
                     await _context.SaveChangesAsync();
@@ -76,12 +73,12 @@ namespace RecipeFinder_WebApp.Data
         {
             try
             {
-                userProfile = await GetAuthenticatedUserAsync();
+                UserProfile = await GetAuthenticatedUserAsync();
 
-                if (userProfile != null)
+                if (UserProfile != null)
                 {
                     // Use SourceDomain and SearchTerms as additional criteria
-                    var recipeToRemove = userProfile.FavoriteRecipes
+                    var recipeToRemove = UserProfile.FavoriteRecipes
                         .FirstOrDefault(r =>
                             r.RecipeName == recipe.RecipeName &&
                             r.Url == recipe.Url &&
@@ -91,7 +88,7 @@ namespace RecipeFinder_WebApp.Data
                     if (recipeToRemove != null)
                     {
                         // Remove the recipe from the list
-                        userProfile.FavoriteRecipes.Remove(recipeToRemove);
+                        UserProfile.FavoriteRecipes.Remove(recipeToRemove);
 
                         // Save changes to the database
                         await _context.SaveChangesAsync();
@@ -179,12 +176,12 @@ namespace RecipeFinder_WebApp.Data
                         throw new NullReferenceException("ApplicationUser is null.");
                     }
 
-                    userProfile = appUser.User;
-                    userProfile.Name = appUser.UserName;
+                    UserProfile = appUser.User;
+                    UserProfile.Name = appUser.UserName;
 
-                    if (userProfile != null)
+                    if (UserProfile != null)
                     {
-                        return userProfile; // Return the authenticated user
+                        return UserProfile; // Return the authenticated user
                     }
                     else
                     {
