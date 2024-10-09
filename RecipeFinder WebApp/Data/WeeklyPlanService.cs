@@ -9,7 +9,7 @@ namespace RecipeFinder_WebApp.Data
         private DateTime? lastPlanDate = null;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
-        public WeeklyPlanService(DataService dataService , ApplicationDbContext context)
+        public WeeklyPlanService(DataService dataService, ApplicationDbContext context)
         {
             _dataService = dataService;
             _context = context;
@@ -42,25 +42,28 @@ namespace RecipeFinder_WebApp.Data
             // Fetch user's favorite recipes from the database
             var favoriteRecipes = userProfile.FavoriteRecipes;
 
-            if (favoriteRecipes == null || !favoriteRecipes.Any())
+            if (favoriteRecipes != null && favoriteRecipes.Count > Constants.WEEKS_DAYS)
+            {
+                // Randomly select 7 recipes for the weekly plan
+                var random = new Random();
+                var newWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(7).ToList();
+
+                // Update the user's profile with the new weekly plan and the current date
+                userProfile.WeeklyPlan = newWeeklyPlan;
+                userProfile.LastWeeklyPlanDate = DateTime.Now;
+
+                // Save changes to the database
+                _context.Update(userProfile); // Make sure the user is tracked by the context
+                await _context.SaveChangesAsync();
+
+                // Return the new weekly plan
+                return newWeeklyPlan;
+            }
+            else
             {
                 throw new Exception("No favorite recipes found.");
             }
 
-            // Randomly select 7 recipes for the weekly plan
-            var random = new Random();
-            var newWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(7).ToList();
-
-            // Update the user's profile with the new weekly plan and the current date
-            userProfile.WeeklyPlan = newWeeklyPlan;
-            userProfile.LastWeeklyPlanDate = DateTime.Now;
-
-            // Save changes to the database
-            _context.Update(userProfile); // Make sure the user is tracked by the context
-            await _context.SaveChangesAsync();
-
-            // Return the new weekly plan
-            return newWeeklyPlan;
         }
 
 

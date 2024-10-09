@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RecipeFinderWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,6 +68,7 @@ namespace RecipeFinderWebApp.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     RememberMe = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LastWeeklyPlanDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     PaymentMethodsId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
