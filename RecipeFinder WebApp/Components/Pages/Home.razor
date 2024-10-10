@@ -84,7 +84,7 @@
 
     private async Task SearchForRecipeFromAR()
     {
-        recipes = await Scrap.ScrapeSearchResultsFromAllRecipe(searchQuery);
+        recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
     }
 
     private async Task SearchRecipes()

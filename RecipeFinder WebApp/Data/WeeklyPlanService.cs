@@ -42,7 +42,7 @@ namespace RecipeFinder_WebApp.Data
             // Fetch user's favorite recipes from the database
             var favoriteRecipes = userProfile.FavoriteRecipes;
 
-            if (favoriteRecipes != null && favoriteRecipes.Count > Constants.WEEKS_DAYS)
+            if (favoriteRecipes != null && favoriteRecipes.Count > Constants.LIMIT_DAYS)
             {
                 // Randomly select 7 recipes for the weekly plan
                 var random = new Random();

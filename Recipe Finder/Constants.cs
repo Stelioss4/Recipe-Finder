@@ -15,6 +15,6 @@ namespace Recipe_Finder
         public const string XML_CACHE_PATH = "cached_recipes.xml";
         public const string XML_USER_PATH = "Users.xml";
         public const string XML_FAVORITE_REC_PATH = "Favorite_recipes.xml";
-        public const int WEEKS_DAYS = 7;
+        public const int LIMIT_DAYS = 6;
     }
 }

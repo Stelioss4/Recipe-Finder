@@ -56,6 +56,11 @@
                         <p>your weekly plan made on @userProfile.LastWeeklyPlanDate!</p>
                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate new plan</button>
                     }
+                    else if (userProfile.FavoriteRecipes.Count < Constants.LIMIT_DAYS)
+                    {
+                        <p>You don't have any favorite recipes yet.</p>
+                        <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
+                    }
                     else
                     {
                         <p>No weekly plan generated yet.</p>
@@ -118,7 +123,7 @@
     }
     private async Task GenerateWeeklyPlan()
     {
-        
+
         // Logic to generate a weekly meal plan based on favorite recipes
         weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
         weeklyPlanGeneratedDate = DateTime.Now;
