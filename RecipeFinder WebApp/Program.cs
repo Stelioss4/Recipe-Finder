@@ -39,6 +39,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<ScrapperService>();
 builder.Services.AddScoped<WeeklyPlanService>();
+builder.Services.AddHttpClient<SpoonacularService>();
 
 // Add MealDbService with API key injection
 builder.Services.AddScoped<MealDbService>(provider =>

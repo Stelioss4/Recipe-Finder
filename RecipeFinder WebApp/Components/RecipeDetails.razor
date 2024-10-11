@@ -13,6 +13,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
 @inject ApplicationDbContext _context
+@inject SpoonacularService spoonacular
 
 
 
@@ -79,6 +80,25 @@
     <br />
     <br />
     <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(recipe)">Add to Fav!</button>
+
+    <button @onclick="GetIngredientsForRecipe">View Ingredients and Order</button>
+
+    @if (recipe != null)
+    {   
+        @if (recipe.ListOfIngredients != null)
+        {
+            <ol>
+                @foreach (var ingredient in recipe.ListOfIngredients)
+                {
+                    <li>@ingredient.Amount @ingredient.Unit @ingredient.IngredientsName</li>
+                }
+            </ol>
+        }
+        else
+        {
+            <p>Loading ingredients...</p>
+        }
+    }
 </div>
 
 @code {
@@ -89,7 +109,7 @@
 
     private List<Recipe> recipes { get; set; }
 
-    private Ingredient ingredient { get; set; }
+    private Ingredient ingredient { get; set; } = new();
 
     private int peopleCount { get; set; } = 4;  // Default for 4 people
 
@@ -162,6 +182,11 @@
             Console.WriteLine("url parameter not found, navigating to home");
             Navigation.NavigateTo("/");
         }
+    }
+
+    private async Task GetIngredientsForRecipe()
+    {
+        recipe.ListOfIngredients = await spoonacular.GetIngredientsForRecipe(recipe.Id);
     }
 
     // Method to update ingredient amounts based on peopleCount
