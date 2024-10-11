@@ -186,7 +186,7 @@
 
     private async Task GetIngredientsForRecipe()
     {
-        recipe.ListOfIngredients = await spoonacular.GetIngredientsForRecipe(recipe.Id);
+        recipe.ListOfIngredients = await spoonacular.GetIngredientsForRecipe(recipe);
     }
 
     // Method to update ingredient amounts based on peopleCount

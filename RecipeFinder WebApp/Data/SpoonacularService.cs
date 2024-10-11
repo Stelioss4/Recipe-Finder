@@ -16,9 +16,9 @@ namespace RecipeFinder_WebApp.Data
             _apiKey = configuration["Spoonacular:ApiKey"];
         }
 
-        public async Task<List<Ingredient>> GetIngredientsForRecipe(int recipeId)
+        public async Task<List<Ingredient>> GetIngredientsForRecipe(Recipe recipe)
         {
-            var response = await _httpClient.GetAsync($"https://api.spoonacular.com/recipes/{recipeId}/ingredientWidget.json?apiKey={_apiKey}");
+            var response = await _httpClient.GetAsync($"https://api.spoonacular.com/recipes/{recipe}/ingredientWidget.json?apiKey={_apiKey}");
 
             if (response.IsSuccessStatusCode)
             {
