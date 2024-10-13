@@ -51,8 +51,30 @@
                 <div class="popup-content">
                     @if (weeklyPlan != null && weeklyPlan.Count > 0)
                     {
-                        <!-- Display the weekly meal plan -->
-                        <RecipeOutput recipes="weeklyPlan" AddRecipeButton="false"></RecipeOutput>
+
+                        @for (int i = 0; i < weeklyPlan.Count; i++)
+                        {
+                            var rec = weeklyPlan[i];
+                            var day = daysOfWeek[i];
+
+                            <div>
+                                <div class="list-group-item">
+                                    <h5>@day</h5> <!-- Display the day of the week above each recipe -->
+                                    <div class="d-flex align-items-center">
+                                        <input type="checkbox" id="checkbox-@rec.RecipeName" class="me-2" />
+                                        @if (rec.Image != null && rec.Image.Length > 0)
+                                        {
+                                            <img src="data:image/png;base64,@Convert.ToBase64String(rec.Image)" alt="Recipe Image" style="width: 50px; height: 50px; object-fit: cover;" class="me-3" />
+                                        }
+                                        <div>
+                                            <h6 class="mb-1">@rec.RecipeName</h6>
+                                            <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary btn-sm">View Recipe</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
                         <p>your weekly plan made on @userProfile.LastWeeklyPlanDate!</p>
                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate new plan</button>
                     }
@@ -89,6 +111,8 @@
     private DateTime weeklyPlanGeneratedDate;
 
     private bool showFavoritesPopup { get; set; } = false;
+
+    private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
     private void TogglePopupFavorites()
     {
