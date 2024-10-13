@@ -29,7 +29,7 @@ namespace RecipeFinder_WebApp.Data
             //Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
             _navigation = Navigation;
         }
-        
+
         /// <summary>
         /// Adds a recipe to the ClaimUser's favorites and saves the changes to the database.
         /// </summary>
@@ -79,11 +79,13 @@ namespace RecipeFinder_WebApp.Data
                 {
                     // Use SourceDomain and SearchTerms as additional criteria
                     var recipeToRemove = UserProfile.FavoriteRecipes
-                        .FirstOrDefault(r =>
-                            r.RecipeName == recipe.RecipeName &&
-                            r.Url == recipe.Url &&
-                            r.SourceDomain == recipe.SourceDomain &&
-                            r.SearchTerms.OrderBy(t => t).SequenceEqual(recipe.SearchTerms.OrderBy(t => t)));
+                    .FirstOrDefault(r =>
+                        r.RecipeName == recipe.RecipeName &&
+                        r.Url == recipe.Url &&
+                        r.SourceDomain == recipe.SourceDomain &&
+                        r.SearchTerms != null && recipe.SearchTerms != null &&
+                        r.SearchTerms.OrderBy(t => t).SequenceEqual(recipe.SearchTerms.OrderBy(t => t)));
+
 
                     if (recipeToRemove != null)
                     {

@@ -50,18 +50,11 @@
         </div>
     }
 
-    @if (showSuccessMessage)
-    {
-        <div class="alert alert-success mt-4" role="alert">
-            <i class="bi bi-check-circle"></i> Recipe successfully added to favorites!
-        </div>
-    }
 </div>
 
 @code {
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private User userProfile { get; set; } = new User();
-    private bool showSuccessMessage { get; set; } = false;
     private string searchQuery { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -100,11 +93,6 @@
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
         await DataService.AddFavoriteRecipeAsync(recipe);
-        showSuccessMessage = true;
-
-        // Hide the success message after 3 seconds
-        await Task.Delay(3000);
-        showSuccessMessage = false;
         StateHasChanged();
     }
     }

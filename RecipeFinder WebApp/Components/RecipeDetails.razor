@@ -79,12 +79,11 @@
     }
     <br />
     <br />
-    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(recipe)">Add to Fav!</button>
 
     <button @onclick="GetIngredientsForRecipe">View Ingredients and Order</button>
 
     @if (recipe != null)
-    {   
+    {
         @if (recipe.ListOfIngredients != null)
         {
             <ol>
@@ -200,10 +199,5 @@
     {
         double adjustedAmount = baseAmount * peopleCount / 4;
         return adjustedAmount.ToString("0.##"); // Format to two decimal places
-    }
-
-    private async Task AddRecipeToFavorite(Recipe recipe)
-    {
-        await _dataService.AddFavoriteRecipeAsync(recipe);
     }
 }
