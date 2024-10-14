@@ -80,23 +80,30 @@
     <br />
     <br />
 
-    <button @onclick="GetIngredientsForRecipe">View Ingredients and Order</button>
+    <button class="btn btn-secondary" @onclick="GetIngredientsForRecipePopUp">View Ingredients and Order</button>
 
-    @if (recipe != null)
+    @if (showIngredientStorePopup)
     {
-        @if (recipe.ListOfIngredients != null)
-        {
-            <ol>
-                @foreach (var ingredient in recipe.ListOfIngredients)
+        <div class="popup">
+            <div class="popup-content">
+                @if (recipe != null)
                 {
-                    <li>@ingredient.Amount @ingredient.Unit @ingredient.IngredientsName</li>
+                    @if (recipe.ListOfIngredients != null)
+                    {
+                        <ol>
+                            @foreach (var ingredient in recipe.ListOfIngredients)
+                            {
+                                <li>@ingredient.Amount @ingredient.Unit @ingredient.IngredientsName</li>
+                            }
+                        </ol>
+                    }
+                    else
+                    {
+                        <p>Loading ingredients...</p>
+                    }
                 }
-            </ol>
-        }
-        else
-        {
-            <p>Loading ingredients...</p>
-        }
+            </div>
+        </div>
     }
 </div>
 
@@ -113,6 +120,8 @@
     private int peopleCount { get; set; } = 4;  // Default for 4 people
 
     private bool showPopup { get; set; } = false;
+
+    private bool showIngredientStorePopup { get; set; } = false;
 
     private double ConvertToDouble(object amount)
     {
@@ -182,7 +191,14 @@
             Navigation.NavigateTo("/");
         }
     }
-
+    private async Task GetIngredientsForRecipePopUp()
+    {
+        if (recipe != null)
+        {
+            await GetIngredientsForRecipe();
+        }
+        showIngredientStorePopup = !showIngredientStorePopup;
+    }
     private async Task GetIngredientsForRecipe()
     {
         recipe.ListOfIngredients = await spoonacular.GetIngredientsForRecipe(recipe);
