@@ -11,8 +11,11 @@ namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
-        public User? UserProfile { get; set; } = new User();
-        public List<Recipe> Recipes { get; set; } = new List<Recipe>();
+        private Recipe recipe { get; set; } = new();
+        private User? UserProfile { get; set; } = new User();
+        private List<Recipe> Recipes { get; set; } = new List<Recipe>();
+        private int newRating { get; set; } = 5; // Default to 5-star rating
+        private string newReviewText { get; set; } = string.Empty;
 
         private readonly IHttpClientFactory _clientFactory;
         private readonly ApplicationDbContext _context;
@@ -204,5 +207,55 @@ namespace RecipeFinder_WebApp.Data
                 return null; // Return null in case of an error
             }
         }
+
+
+        /// <summary>
+        /// Submits a new review and rating for the current recipe from the authenticated user.
+        /// If the user is authenticated and a valid rating is provided (between 1 and 5), 
+        /// the review and rating are added to the recipe and saved to the database.
+        /// </summary>
+        /// <returns></returns>
+        private async Task SubmitReviewAndRating()
+        {
+            if (recipe != null && newRating >= 1 && newRating <= 5)
+            {
+                //var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                var user = await GetAuthenticatedUserAsync();
+
+                if (user != null)
+                {
+                    // Create a new review
+                    var review = new Review
+                    {
+                        ReviewText = newReviewText,
+                        TimeStam = DateTime.Now,
+                        RecipeId = recipe.Id,
+                        Profile = user
+                    };
+
+                    // Create a new rating
+                    var rating = new Rating
+                    {
+                        Value = newRating,
+                        TimeStam = DateTime.Now,
+                        RecipeId = recipe.Id,
+                        Profile = user
+                    };
+
+                    // Add the review and rating to the recipe
+                    recipe.Reviews.Add(review);
+                    recipe.Ratings.Add(rating);
+
+                    // Save to the database
+                    _context.Update(recipe);
+                    await _context.SaveChangesAsync();
+
+                    // Clear the form
+                    newRating = 5;
+                    newReviewText = string.Empty;
+                }
+            }
+        }
+
     }
 }

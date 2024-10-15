@@ -26,6 +26,15 @@
             set { _profile = value; }
         }
 
+        private int _recipeId;
+
+        public int RecipeId
+        {
+            get { return _recipeId; }
+            set { _recipeId = value; }
+        }
+
+
         private int _id;
         public int Id
         {
