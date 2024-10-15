@@ -1,16 +1,18 @@
-﻿namespace Recipe_Finder
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Recipe_Finder
 {
     public class Rating
     {
 
         private double _value;
-
+        [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5.")]
         public double Value
         {
             get { return _value; }
             set { _value = value; }
         }
-
+    
         private DateTime _timeStam;
 
         public DateTime TimeStam

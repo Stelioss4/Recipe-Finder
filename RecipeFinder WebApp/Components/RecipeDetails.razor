@@ -80,7 +80,7 @@
     <br />
     <br />
 
-    <button class="btn btn primary" @onclick="GetReviewAndRatingShowPopup">Make a review</button>
+    <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
 
     @if (ReviewAndRatingShowPopup)
     {
@@ -90,14 +90,14 @@
                     <h4 class="text-secondary">Leave a Review</h4>
                     <div class="form-group">
                         <label>Rating (1 to 5):</label>
-                        <input type="number" class="form-control" @bind="recipe.Rating" min="1" max="5" />
+                        <input type="number" class="form-control" @bind="newRating.Value" min="1" max="5" />
                     </div>
                     <div class="form-group">
                         <label>Review Text:</label>
-                        <textarea class="form-control" @bind="recipe.Reviews"></textarea>
+                        <textarea class="form-control" @bind="newReview.ReviewText"></textarea>
                     </div>
                 </div>
-
+                <button class="btn btn-primary" @onclick="SubmitRatingAndReview">Confirm your review and/or rating</button>
             </div>
         </div>
     }
@@ -134,6 +134,10 @@
     public string Url { get; set; }
 
     private Recipe recipe { get; set; } = new();
+
+    private Review newReview { get; set; } = new();
+
+    private Rating newRating { get; set; } = new();
 
     private List<Recipe> recipes { get; set; }
 
@@ -241,9 +245,37 @@
         return adjustedAmount.ToString("0.##"); // Format to two decimal places
     }
 
-    private void GetReviewAndRatingShowPopup()
+    private void RatingShowPopup()
     {
-
         ReviewAndRatingShowPopup = !ReviewAndRatingShowPopup;
+    }
+
+    private async Task SubmitRatingAndReview()
+    {
+        // Ensure Reviews is initialized before adding a new review
+        if (recipe.Reviews == null)
+        {
+            recipe.Reviews = new List<Review>();
+        }
+        // Add the new review to the recipe's list of reviews
+        recipe.Reviews.Add(newReview);
+
+        // Ensure Reviews is initialized before adding a new review
+        if (recipe.Ratings == null)
+        {
+            recipe.Ratings = new List<Rating>();
+        }
+        // Add the new rating to the recipe rating list
+        if (recipe.Rating > 1 && recipe.Rating < 5)
+        {
+            recipe.Ratings.Add(newRating);
+        }
+
+        // Save the review to the database (if applicable)
+        _context.Recipes.Update(recipe);
+        await _context.SaveChangesAsync();
+
+        // Reset the newReview object after submission
+        newReview = new Review();
     }
 }
