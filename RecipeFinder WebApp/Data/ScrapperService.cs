@@ -485,7 +485,22 @@ namespace RecipeFinder_WebApp.Data
                     if (ingredientNodes != null)
                     {
                         searchResultRecipe.ListOfIngredients = ingredientNodes
-                            .Select(li => new Ingredient { IngredientsName = li.InnerText.Trim() })
+                            .Select(li =>
+                            {
+                                // Extract the ingredient text (name and amount)
+                                var ingredientText = li.InnerText.Trim();
+
+                                // Example of splitting name and amount by space or other delimiters
+                                var splitText = ingredientText.Split(new[] { ' ' }, 2); // Split by first space
+                                var amount = splitText[0]; // Assuming the first part is the amount
+                                var ingredientName = splitText.Length > 1 ? splitText[1] : ""; // Rest is the name
+
+                                return new Ingredient
+                                {
+                                    IngredientsName = ingredientName,
+                                    Amount = amount // Assuming you have an Amount property in the Ingredient class
+                                };
+                            })
                             .ToList();
                     }
                     else
@@ -497,6 +512,7 @@ namespace RecipeFinder_WebApp.Data
                 {
                     Console.WriteLine("Ingredients node is null");
                 }
+
             }
             catch (Exception ex)
             {

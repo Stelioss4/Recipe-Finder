@@ -60,7 +60,7 @@
                         {
                             <li class="list-group-item">
                                 <input type="checkbox" id="@ingredient.IngredientsName" class="mr-2">
-                                <label for="@ingredient.IngredientsName">@ingredient.IngredientsName (@GetAmountForPeople(ConvertToDouble(ingredient.Amount)))</label>
+                                <label for="@ingredient.IngredientsName">(@GetAmountForPeople(ConvertToDouble(ingredient.Amount))) @ingredient.IngredientsName </label>
                             </li>
                         }
                     </ul>
