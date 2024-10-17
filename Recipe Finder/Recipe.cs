@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Recipe_Finder
+﻿namespace Recipe_Finder
 {
     public class Recipe
     {
@@ -76,14 +74,6 @@ namespace Recipe_Finder
             get { return _time; }
             set { _time = value; }
         }
-
-        //private TimeSpan _cookingTime;
-
-        //public TimeSpan CookingTime
-        //{
-        //    get { return _cookingTime; }
-        //    set { _cookingTime = value; }
-        //}
 
         private CuisineType? _cuisineType;
         public CuisineType? CuisineType

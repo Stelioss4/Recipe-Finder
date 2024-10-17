@@ -102,9 +102,9 @@
         </div>
     }
 
-    <button class="btn btn-secondary" @onclick="GetIngredientsForRecipePopUp">Add Ingredients to cart and Order</button>
+    <a class="btn btn-danger" href="https://www.rewe.de/suche/produkte?search=">REWE</a>
 
-    @if (showIngredientStorePopup)
+   @*  @if (showIngredientStorePopup)
     {
         <div class="popup">
             <div class="popup-content">
@@ -127,6 +127,7 @@
             </div>
         </div>
     }
+    *@
 </div>
 
 @code {
@@ -135,9 +136,9 @@
 
     private Recipe recipe { get; set; } = new();
 
-    private Review newReview { get; set; } = new();
+    private Review newReview { get; set; } = new Review();
 
-    private Rating newRating { get; set; } = new();
+    private Rating newRating { get; set; } = new Rating();
 
     private List<Recipe> recipes { get; set; }
 
@@ -266,7 +267,7 @@
             recipe.Ratings = new List<Rating>();
         }
         // Add the new rating to the recipe rating list
-        if (recipe.Rating > 1 && recipe.Rating < 5)
+        if (newRating.Value >= 1 && newRating.Value <= 5)
         {
             recipe.Ratings.Add(newRating);
         }
@@ -275,7 +276,6 @@
         _context.Recipes.Update(recipe);
         await _context.SaveChangesAsync();
 
-        // Reset the newReview object after submission
-        newReview = new Review();
+     
     }
 }
