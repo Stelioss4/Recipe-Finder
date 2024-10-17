@@ -69,6 +69,11 @@
             set { _unit = value; }
         }
 
-
+        private string _productLink;
+        public string ProductLink
+        {
+            get { return _productLink; }
+            set { _productLink = value; }
+        }
     }
 }
