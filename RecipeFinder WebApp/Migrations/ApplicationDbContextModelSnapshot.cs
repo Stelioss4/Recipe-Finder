@@ -239,6 +239,9 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("IngredientsName")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ProductLink")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("Protein")
                         .HasColumnType("TEXT");
 
@@ -281,7 +284,7 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<int?>("ProfileId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("RecipeId")
+                    b.Property<int>("RecipeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("TimeStam")
@@ -368,7 +371,7 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<int?>("ProfileId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("RecipeId")
+                    b.Property<int>("RecipeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ReviewText")
@@ -486,7 +489,9 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasOne("Recipe_Finder.Recipe", null)
                         .WithMany("Ratings")
-                        .HasForeignKey("RecipeId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Profile");
                 });
@@ -510,7 +515,9 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasOne("Recipe_Finder.Recipe", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("RecipeId");
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Profile");
                 });

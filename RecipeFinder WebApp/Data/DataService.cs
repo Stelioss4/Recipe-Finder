@@ -16,6 +16,8 @@ namespace RecipeFinder_WebApp.Data
         private List<Recipe> Recipes { get; set; } = new List<Recipe>();
         private int newRating { get; set; } = 5; // Default to 5-star rating
         private string newReviewText { get; set; } = string.Empty;
+        private Review review { get; set; } = new();
+        private Rating rating { get; set; } = new();
 
         private readonly IHttpClientFactory _clientFactory;
         private readonly ApplicationDbContext _context;
@@ -215,7 +217,7 @@ namespace RecipeFinder_WebApp.Data
         /// the review and rating are added to the recipe and saved to the database.
         /// </summary>
         /// <returns></returns>
-        private async Task SubmitReviewAndRating()
+        public async Task SubmitReviewAndRating()
         {
             if (recipe != null && newRating >= 1 && newRating <= 5)
             {
@@ -224,6 +226,11 @@ namespace RecipeFinder_WebApp.Data
 
                 if (user != null)
                 {
+                    if (_context == null)
+                    {
+                        throw new InvalidOperationException("DbContext is null");
+                    }
+
                     // Create a new review
                     var review = new Review
                     {
@@ -253,6 +260,10 @@ namespace RecipeFinder_WebApp.Data
                     // Clear the form
                     newRating = 5;
                     newReviewText = string.Empty;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Authenticated user is null");
                 }
             }
         }

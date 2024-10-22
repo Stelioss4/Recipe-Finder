@@ -254,28 +254,7 @@
 
     private async Task SubmitRatingAndReview()
     {
-        // Ensure Reviews is initialized before adding a new review
-        if (recipe.Reviews == null)
-        {
-            recipe.Reviews = new List<Review>();
-        }
-        // Add the new review to the recipe's list of reviews
-        recipe.Reviews.Add(newReview);
-
-        // Ensure Reviews is initialized before adding a new review
-        if (recipe.Ratings == null)
-        {
-            recipe.Ratings = new List<Rating>();
-        }
-        // Add the new rating to the recipe rating list
-        if (newRating.Value >= 1 && newRating.Value <= 5)
-        {
-            recipe.Ratings.Add(newRating);
-        }
-
-        // Save the review to the database (if applicable)
-        _context.Recipes.Update(recipe);
-        await _context.SaveChangesAsync();
+        await _dataService.SubmitReviewAndRating();
 
      
     }
