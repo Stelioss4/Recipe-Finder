@@ -218,6 +218,36 @@ namespace RecipeFinderWebApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RecipeUser", b =>
+                {
+                    b.Property<int>("FavoriteByUsersId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FavoriteRecipesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("FavoriteByUsersId", "FavoriteRecipesId");
+
+                    b.HasIndex("FavoriteRecipesId");
+
+                    b.ToTable("RecipeUser");
+                });
+
+            modelBuilder.Entity("RecipeUser1", b =>
+                {
+                    b.Property<int>("WeeklyPlanId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WeeklyPlanUsersId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("WeeklyPlanId", "WeeklyPlanUsersId");
+
+                    b.HasIndex("WeeklyPlanUsersId");
+
+                    b.ToTable("RecipeUser1");
+                });
+
             modelBuilder.Entity("Recipe_Finder.Ingredient", b =>
                 {
                     b.Property<int>("Id")
@@ -344,20 +374,10 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("VideoUrl")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Recipes");
                 });
@@ -474,6 +494,36 @@ namespace RecipeFinderWebApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("RecipeUser", b =>
+                {
+                    b.HasOne("Recipe_Finder.User", null)
+                        .WithMany()
+                        .HasForeignKey("FavoriteByUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recipe_Finder.Recipe", null)
+                        .WithMany()
+                        .HasForeignKey("FavoriteRecipesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RecipeUser1", b =>
+                {
+                    b.HasOne("Recipe_Finder.Recipe", null)
+                        .WithMany()
+                        .HasForeignKey("WeeklyPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recipe_Finder.User", null)
+                        .WithMany()
+                        .HasForeignKey("WeeklyPlanUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Recipe_Finder.Ingredient", b =>
                 {
                     b.HasOne("Recipe_Finder.Recipe", null)
@@ -494,17 +544,6 @@ namespace RecipeFinderWebApp.Migrations
                         .IsRequired();
 
                     b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.Recipe", b =>
-                {
-                    b.HasOne("Recipe_Finder.User", null)
-                        .WithMany("FavoriteRecipes")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("Recipe_Finder.User", null)
-                        .WithMany("WeeklyPlan")
-                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Review", b =>
@@ -538,13 +577,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.Navigation("Ratings");
 
                     b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.User", b =>
-                {
-                    b.Navigation("FavoriteRecipes");
-
-                    b.Navigation("WeeklyPlan");
                 });
 #pragma warning restore 612, 618
         }

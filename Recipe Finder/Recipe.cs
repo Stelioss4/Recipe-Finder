@@ -9,6 +9,9 @@
             set { _id = value; }
         }
 
+        public virtual ICollection<User> FavoriteByUsers { get; set; } = new List<User>();
+        public virtual ICollection<User> WeeklyPlanUsers { get; set; } = new List<User>();
+
         private string _sourceDomain;
 
         public string SourceDomain
