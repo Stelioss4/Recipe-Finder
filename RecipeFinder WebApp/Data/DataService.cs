@@ -36,6 +36,34 @@ namespace RecipeFinder_WebApp.Data
         }
 
         /// <summary>
+        /// Add Ingredient from user's recipes to a shopping list
+        /// </summary>
+        /// <returns></returns>
+        public async Task AddIngredientsToShoppingList(Ingredient ingredient)
+        {
+            UserProfile = await GetAuthenticatedUserAsync();
+
+            if (UserProfile != null)
+            {
+                if (UserProfile.ShoppingList.Contains(ingredient))
+                {
+                    Console.WriteLine("ingredient already in shopping list");
+                }
+                else
+                {
+                    UserProfile.ShoppingList.Add(ingredient);
+
+                    await _context.SaveChangesAsync();
+
+                    Console.WriteLine("Ingredient is successfully added to shopping list");
+
+                }
+            }
+        }
+
+
+
+        /// <summary>
         /// Adds a recipe to the ClaimUser's favorites and saves the changes to the database.
         /// </summary>
         public async Task AddFavoriteRecipeAsync(Recipe recipe)

@@ -1,0 +1,35 @@
+﻿@using RecipeFinder_WebApp.Data
+@using Recipe_Finder
+
+@inject NavigationManager Navigation
+@inject DataService DataService
+
+<div class="row mt-5">
+    @if (ShoppingList != null && ShoppingList.Count > 0)
+    {
+        <div class="col-12">
+            <h3>Shopping List</h3>
+            <ul class="list-group">
+                @foreach (var ingredient in ShoppingList)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @ingredient.IngredientsName
+                        <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
+                            REWE
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <p>Your shopping list is empty.</p>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public List<Ingredient> ShoppingList { get; set; } = new List<Ingredient>();
+}

@@ -92,6 +92,14 @@
             </div>
         }
 
+        <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">Shopping List</button>
+        @if (showShoppingListPopup)
+        {
+            <ShoppingListOutput></ShoppingListOutput>
+        }
+
+
+
         <div class="col-md-6 col-md-offset-2"></div>
     }
     else
@@ -111,12 +119,18 @@
     private DateTime weeklyPlanGeneratedDate;
 
     private bool showFavoritesPopup { get; set; } = false;
+    
+    private bool showShoppingListPopup { get; set; } = false;
 
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
     private void TogglePopupFavorites()
     {
         showFavoritesPopup = !showFavoritesPopup; // Toggle the popup
+    }
+    private void TogglePopupShoppingList()
+    {
+        showShoppingListPopup = !showShoppingListPopup; // Toggle the popup
     }
 
     protected override async Task OnInitializedAsync()

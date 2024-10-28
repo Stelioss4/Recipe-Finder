@@ -59,9 +59,16 @@
                         @foreach (var ingredient in recipe.ListOfIngredients)
                         {
                             <li class="list-group-item">
-                                <input type="checkbox" id="@ingredient.IngredientsName" class="mr-2">
-                                <label for="@ingredient.IngredientsName">(@GetAmountForPeople(ConvertToDouble(ingredient.Amount))) @ingredient.IngredientsName </label>
+                                <input type="checkbox" id="@ingredient.IngredientsName" class="mr-2" />
+                                <label for="@ingredient.IngredientsName">
+                                    (@GetAmountForPeople(ParseAmount(ingredient.Amount))) @ingredient.IngredientsName
+                                </label>
+                                <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
+                                    REWE
+                                </a>
+
                             </li>
+
                         }
                     </ul>
                 </div>
@@ -102,7 +109,7 @@
         </div>
     }
 
-    <a class="btn btn-danger" href="https://www.rewe.de/suche/produkte?search=">REWE</a>
+    <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
     <div>
    @*  @if (showIngredientStorePopup)
     {
@@ -152,20 +159,6 @@
     private bool showIngredientStorePopup { get; set; } = false;
 
     private bool ReviewAndRatingShowPopup { get; set; } = false;
-
-    private double ConvertToDouble(object amount)
-    {
-        if (amount is double) return (double)amount;
-
-        // Attempt to parse if it's a string
-        if (double.TryParse(amount?.ToString(), out var parsedAmount))
-        {
-            return parsedAmount;
-        }
-
-        // Default to 0 if conversion fails
-        return 0;
-    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -221,6 +214,30 @@
             Navigation.NavigateTo("/");
         }
     }
+
+    private double ParseAmount(string amount)
+    {
+        if (string.IsNullOrWhiteSpace(amount))
+            return 0;
+
+        // Clean amount: remove non-numeric characters except for dots and commas
+        var cleanedAmount = new string(amount.Where(c => char.IsDigit(c) || c == '.' || c == ',').ToArray());
+
+        // Replace comma with dot for decimal consistency
+        cleanedAmount = cleanedAmount.Replace(",", ".");
+
+        // Try to parse to double; if fails, return 0
+        return double.TryParse(cleanedAmount, out var result) ? result : 0;
+    }
+
+    private double ConvertToDouble(object amount)
+    {
+        if (amount is double) return (double)amount;
+
+        double.TryParse(amount?.ToString(), out var result);
+        return result;
+    }
+
     private async Task GetIngredientsForRecipePopUp()
     {
         if (recipe != null)
@@ -255,7 +272,10 @@
     private async Task SubmitRatingAndReview()
     {
         await _dataService.SubmitReviewAndRating();
+    }
 
-     
+    private async Task AddIngredientToShoppingList()
+    {
+        await _dataService.AddIngredientsToShoppingList(ingredient);
     }
 }

@@ -50,6 +50,14 @@ namespace Recipe_Finder
             set { _lastWeeklyPlanDate = value; }
         }
 
+        private List<Ingredient> _shoppingList;
+        public virtual List<Ingredient> ShoppingList 
+        {
+            get { return _shoppingList; }
+            set { _shoppingList = value; }
+        }
+
+
         private PaymentMethod _paymentMethods;
 
         public virtual PaymentMethod PaymentMethods

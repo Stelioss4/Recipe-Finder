@@ -478,22 +478,21 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse List of Ingredients
-                var ingredientsNode = document.DocumentNode.SelectSingleNode("/html/body/main/article/table");
+                var ingredientsNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[2]/table/tbody");
                 if (ingredientsNode != null)
                 {
-                    var ingredientNodes = ingredientsNode.SelectNodes("/html/body/main/article[2]/table/tbody/tr");
-                    if (ingredientNodes != null)
+                    var ingredientRows = ingredientsNode.SelectNodes("tr");
+                    if (ingredientRows != null)
                     {
-                        searchResultRecipe.ListOfIngredients = ingredientNodes
-                            .Select(li =>
+                        searchResultRecipe.ListOfIngredients = ingredientRows
+                            .Select(row =>
                             {
-                                // Extract the ingredient text (name and amount)
-                                var ingredientText = li.InnerText.Trim();
+                                // Extract the amount and name from specific td elements
+                                var amountNode = row.SelectSingleNode("td[1]");
+                                var nameNode = row.SelectSingleNode("td[2]");
 
-                                // Example of splitting name and amount by space or other delimiters
-                                var splitText = ingredientText.Split(new[] { ' ' }, 2); // Split by first space
-                                var amount = splitText[0]; // Assuming the first part is the amount
-                                var ingredientName = splitText.Length > 1 ? splitText[1] : ""; // Rest is the name
+                                var amount = amountNode?.InnerText.Trim() ?? ""; // Get the amount or empty if null
+                                var ingredientName = nameNode?.InnerText.Trim() ?? ""; // Get the name or empty if null
 
                                 return new Ingredient
                                 {
@@ -505,13 +504,14 @@ namespace RecipeFinder_WebApp.Data
                     }
                     else
                     {
-                        Console.WriteLine("Ingredient nodes are null");
+                        Console.WriteLine("Ingredient rows are null");
                     }
                 }
                 else
                 {
                     Console.WriteLine("Ingredients node is null");
                 }
+
 
             }
             catch (Exception ex)
