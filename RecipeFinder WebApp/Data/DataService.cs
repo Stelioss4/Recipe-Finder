@@ -286,7 +286,6 @@ namespace RecipeFinder_WebApp.Data
                     await _context.SaveChangesAsync();
 
                     // Clear the form
-                    newRating = 5;
                     newReviewText = string.Empty;
                 }
                 else

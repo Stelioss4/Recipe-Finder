@@ -32,7 +32,7 @@
                     <div class="input-group-append">
                         <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
                         <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
-                        <button class="btn btn-primary" @onclick="SearchRecipes">Search Delish recipes</button>
+                        <button class="btn btn-primary" @onclick="SearchRecipes">Search SERIOUSEATs Recipes</button>
                     </div>
                 </EditForm>
             </div>
@@ -82,7 +82,7 @@
 
     private async Task SearchRecipes()
     {
-        recipes = await Scrap.ScrapeDelishRecipes(searchQuery);
+        recipes = await Scrap.ScrapeSERecipes(searchQuery);
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)

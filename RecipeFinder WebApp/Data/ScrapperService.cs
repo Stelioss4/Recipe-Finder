@@ -17,6 +17,154 @@ namespace RecipeFinder_WebApp.Data
             _context = context;
         }
 
+        public async Task<List<Recipe>> ScrapeSERecipes(string searchQuery)
+        {
+            // Check for existing recipes in the database
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.SERIOUSEATS_URL);
+            if (existingRecipes.Count > 0)
+            {
+                return existingRecipes;
+            }
+
+            // Scrape new recipes
+            var searchResults = await ScrapeSearchResultsFromSeriousEats(searchQuery);
+            if (searchResults == null || !searchResults.Any())
+            {
+                return new List<Recipe>(); // Return empty list if no results found
+            }
+
+            List<Recipe> detailedRecipes = new List<Recipe>();
+
+            foreach (var recipe in searchResults)
+            {
+                if (existingRecipes.Any(r => r.Url == recipe.Url))
+                {
+                    continue; // Skip if recipe already exists in the database
+                }
+
+                recipe.SearchTerms = new List<string> { searchQuery };
+                recipe.SourceDomain = Constants.SERIOUSEATS_URL;
+
+                var detailedRecipe = await ScrapeSeriousEatsDetailsAndUpdateRecipe(recipe);
+                if (detailedRecipe != null)
+                {
+                    detailedRecipes.Add(detailedRecipe);
+                }
+            }
+
+            if (detailedRecipes.Count > 0)
+            {
+                _context.Recipes.AddRange(detailedRecipes);
+                await _context.SaveChangesAsync();
+            }
+
+            return detailedRecipes;
+        }
+
+        public async Task<List<Recipe>> ScrapeSearchResultsFromSeriousEats(string searchQuery)
+        {
+            List<Recipe> recipes = new List<Recipe>();
+
+            try
+            {
+                string searchUrl = $"https://www.seriouseats.com/search?q={Uri.EscapeDataString(searchQuery)}";
+                var html = await _httpClient.GetStringAsync(searchUrl);
+
+                HtmlDocument document = new HtmlDocument();
+                document.LoadHtml(html);
+
+                // The container for search results
+                var resultNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'comp card')]");
+
+                if (resultNodes != null)
+                {
+                    foreach (var node in resultNodes)
+                    {
+                        var titleNode = node.SelectSingleNode("//span/span");
+                        var linkNode = node.SelectSingleNode(".//a");
+                        var imageNode = node.SelectSingleNode(".//img");
+
+                        if (titleNode != null && linkNode != null)
+                        {
+                            var recipe = new Recipe
+                            {
+                                RecipeName = titleNode.InnerText.Trim(),
+                                Url = linkNode.GetAttributeValue("href", string.Empty),
+                                Image = imageNode != null ? await DownloadImageAsByteArray(imageNode.GetAttributeValue("src", string.Empty)) : null,
+                                SearchTerms = new List<string> { searchQuery },
+                                SourceDomain = Constants.SERIOUSEATS_URL
+                            };
+
+                            recipes.Add(recipe);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No result nodes found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ScrapeSearchResultsFromSeriousEats: {ex.Message}");
+            }
+
+            return recipes;
+        }
+
+        public async Task<Recipe> ScrapeSeriousEatsDetailsAndUpdateRecipe(Recipe searchResultRecipe)
+        {
+            try
+            {
+                var html = await _httpClient.GetStringAsync(searchResultRecipe.Url);
+
+                HtmlDocument document = new HtmlDocument();
+                document.LoadHtml(html);
+
+                // Recipe name
+                var recipeNameNode = document.DocumentNode.SelectSingleNode("//h1");
+                if (recipeNameNode != null)
+                {
+                    searchResultRecipe.RecipeName = recipeNameNode.InnerText.Trim();
+                }
+
+                // Image
+                var imageNode = document.DocumentNode.SelectSingleNode("//img");
+                if (imageNode != null)
+                {
+                    var imageUrl = imageNode.GetAttributeValue("src", string.Empty);
+                    searchResultRecipe.Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null;
+                }
+
+                // Cooking instructions
+                var instructionsNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mntl-sc-block_39-0\"]");
+                if (instructionsNode != null)
+                {
+                    searchResultRecipe.CookingInstructions = instructionsNode.InnerHtml.Trim();
+                }
+
+                // Ingredients
+                var ingredientsNode = document.DocumentNode.SelectSingleNode("//ul");
+                if (ingredientsNode != null)
+                {
+                    var ingredientItems = ingredientsNode.SelectNodes(".//li");
+                    searchResultRecipe.ListOfIngredients = ingredientItems?.Select(item => new Ingredient
+                    {
+                        IngredientsName = item.InnerText.Trim()
+                    }).ToList() ?? new List<Ingredient>();
+                }
+
+                // Optional fields (e.g., difficulty level, cooking time) can be added similarly
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in ScrapeSeriousEatsDetailsAndUpdateRecipe: {ex.Message}");
+            }
+
+            return searchResultRecipe;
+        }
+
+
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.ALLRECIPE_URL);
@@ -522,14 +670,28 @@ namespace RecipeFinder_WebApp.Data
             return searchResultRecipe;
         }
 
-        private async Task<byte[]> DownloadImageAsByteArray(string imageUrl)
+        public async Task<byte[]> DownloadImageAsByteArray(string imageUrl, string baseUrl = null)
         {
-            using (var httpClient = new HttpClient())
+            if (string.IsNullOrWhiteSpace(imageUrl))
+                return null;
+
+            // If the URL is relative and a base URL is provided, prepend the base URL
+            if (!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute) && !string.IsNullOrWhiteSpace(baseUrl))
             {
-                var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
-                return imageBytes;
+                imageUrl = new Uri(new Uri(baseUrl), imageUrl).ToString();
+            }
+
+            try
+            {
+                return await _httpClient.GetByteArrayAsync(imageUrl);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error downloading image from {imageUrl}: {ex.Message}");
+                return null;
             }
         }
+
 
         public async Task<List<Recipe>> ScrapeBBCGoodFoodRecipes(string searchQuery)
         {

@@ -181,9 +181,9 @@
                 {
                     recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                 }
-                else if (decodedUrl.Contains(Constants.BBCGOODFOOD_URL))
+                else if (decodedUrl.Contains(Constants.SERIOUSEATS_URL))
                 {
-                    recipe = await Scrap.ScrapeBBCGoodFoodDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                    recipe = await Scrap.ScrapeSeriousEatsDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                 }
                 else if (decodedUrl.Contains(Constants.DELISH_URL))
                 {

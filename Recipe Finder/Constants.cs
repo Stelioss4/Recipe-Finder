@@ -8,6 +8,7 @@ namespace Recipe_Finder
 {
     public class Constants
     {
+        public const string SERIOUSEATS_URL = "https://www.seriouseats.com";
         public const string CHEFKOCH_URL = "https://www.chefkoch.de";
         public const string ALLRECIPE_URL = "https://www.allrecipes.com";
         public const string BBCGOODFOOD_URL = "https://www.bbcgoodfood.com";
