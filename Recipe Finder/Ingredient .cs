@@ -61,6 +61,15 @@
             set { _amount = value; }
         }
 
+        private string _amountUnit;
+
+        public string AmountUnit
+        {
+            get { return _amountUnit; }
+            set { _amountUnit = value; }
+        }
+
+
         private double _unit;
 
         public double Unit
