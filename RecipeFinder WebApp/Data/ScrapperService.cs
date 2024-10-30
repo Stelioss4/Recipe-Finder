@@ -275,10 +275,10 @@ namespace RecipeFinder_WebApp.Data
         {
             try
             {
-                if (!Uri.IsWellFormedUriString(searchResultRecipe.Url, UriKind.Absolute))
-                {
-                    searchResultRecipe.Url = $"https://www.allrecipes.com {searchResultRecipe.Url}";
-                }
+                //if (!Uri.IsWellFormedUriString(searchResultRecipe.Url, UriKind.Absolute))
+                //{
+                //    searchResultRecipe.Url = $"https://www.allrecipes.com {searchResultRecipe.Url}";
+                //}
 
                 var html = await _httpClient.GetStringAsync(searchResultRecipe.Url);
 
@@ -286,7 +286,7 @@ namespace RecipeFinder_WebApp.Data
                 document.LoadHtml(html);
 
                 // Parse Recipe Name
-                var recipeNameNode = document.DocumentNode.SelectSingleNode("/h1");
+                var recipeNameNode = document.DocumentNode.SelectSingleNode("//*[@id=\"article-header--recipe_1-0\"]/h1");
                 if (recipeNameNode != null)
                 {
                     searchResultRecipe.RecipeName = recipeNameNode.InnerText.Trim();
@@ -312,7 +312,7 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse Cooking Instructions
-                var instructionsNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mntl-sc-block_22-0\"]");
+                var instructionsNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mm-recipes-intro__content_1-0\"]");
                 if (instructionsNode != null)
                 {
                     searchResultRecipe.CookingInstructions = instructionsNode.InnerHtml.Trim();

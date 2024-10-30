@@ -238,6 +238,25 @@ namespace RecipeFinder_WebApp.Data
             }
         }
 
+        public async Task<(double AverageRating, List<Review> Reviews)> ShowRecipesReviewsAndRatings(int recipeId)
+        {
+            var recipe = await _context.Recipes
+                .Include(r => r.Reviews)
+                .Include(r => r.Ratings)
+                .FirstOrDefaultAsync(r => r.Id == recipeId);
+
+            if (recipe == null)
+            {
+                return (0, new List<Review>());
+            }
+
+            double averageRating = recipe.Rating; // Rating property now calculates the average
+            List<Review> reviews = recipe.Reviews;
+
+            return (averageRating, reviews);
+        }
+
+
 
         /// <summary>
         /// Submits a new review and rating for the current recipe from the authenticated user.

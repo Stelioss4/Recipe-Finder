@@ -51,6 +51,19 @@
                     </div>
                 }
 
+                <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopupReview = true">show Rating and review</button>
+
+                @if (showPopupReview)
+                {
+                    <div class="popup">
+                        <h4>Average Rating: @averageRating</h4>
+
+                        <button @onclick="NavigateToReviews">Click to see recipe reviews</button>
+
+                        <button @onclick="()=> showPopupReview = false">Close</button>
+                    </div>
+                }
+
                 <div class="mt-3 text-center">
 
                     <p class="font-italic">Quick tip: "Check the box for any ingredient you already have."</p>
@@ -111,36 +124,39 @@
 
     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
     <div>
-   @*  @if (showIngredientStorePopup)
-    {
+        @*  @if (showIngredientStorePopup)
+        {
         <div class="popup">
-            <div class="popup-content">
-                @if (recipe != null)
-                {
-                    @if (recipe.ListOfIngredients != null)
-                    {
-                        <ol>
-                            @foreach (var ingredient in recipe.ListOfIngredients)
-                            {
-                                <li>@ingredient.Amount @ingredient.Unit @ingredient.IngredientsName</li>
-                            }
-                        </ol>
-                    }
-                    else
-                    {
-                        <p>Loading ingredients...</p>
-                    }
-                }
-            </div>
+        <div class="popup-content">
+        @if (recipe != null)
+        {
+        @if (recipe.ListOfIngredients != null)
+        {
+        <ol>
+        @foreach (var ingredient in recipe.ListOfIngredients)
+        {
+        <li>@ingredient.Amount @ingredient.Unit @ingredient.IngredientsName</li>
+        }
+        </ol>
+        }
+        else
+        {
+        <p>Loading ingredients...</p>
+        }
+        }
         </div>
-    }
-    *@
+        </div>
+        }
+        *@
     </div>
 </div>
+<br/>
+
 
 @code {
     [Parameter]
     public string Url { get; set; }
+
 
     private Recipe recipe { get; set; } = new();
 
@@ -152,13 +168,19 @@
 
     private Ingredient ingredient { get; set; } = new();
 
+    private double averageRating;
+
     private int peopleCount { get; set; } = 4;  // Default for 4 people
+
+    private bool showPopupReview { get; set; } = false;
 
     private bool showPopup { get; set; } = false;
 
     private bool showIngredientStorePopup { get; set; } = false;
 
     private bool ReviewAndRatingShowPopup { get; set; } = false;
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -193,6 +215,9 @@
                 {
                     Console.WriteLine("Unknown source domain");
                 }
+
+                var result = await _dataService.ShowRecipesReviewsAndRatings(recipe.Id);
+                averageRating = result.AverageRating;
 
                 if (recipe == null)
                 {
@@ -278,4 +303,9 @@
     {
         await _dataService.AddIngredientsToShoppingList(ingredient);
     }
+    private void NavigateToReviews()
+    {
+        Navigation.NavigateTo($"/watchUsersReview/{recipe.Id}");
+    }
+
 }

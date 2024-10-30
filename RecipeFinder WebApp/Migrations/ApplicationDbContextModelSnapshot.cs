@@ -334,7 +334,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Rating");
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -411,7 +411,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>

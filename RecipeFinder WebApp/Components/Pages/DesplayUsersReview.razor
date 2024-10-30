@@ -1,0 +1,39 @@
+﻿@page "/watchUsersReview"
+
+@using RecipeFinder_WebApp.Data
+@using Recipe_Finder
+
+@inject DataService _dataService
+
+<h3>User Reviews</h3>
+
+@if (reviews == null)
+{
+    <p>Loading reviews...</p>
+}
+else if (reviews.Count == 0)
+{
+    <p>No reviews available for this recipe.</p>
+}
+else
+{
+    <ul>
+        @foreach (var review in reviews)
+        {
+            <li>@review.ReviewText</li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter]
+    public int RecipeId { get; set; }
+
+    private List<Review> reviews;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _dataService.ShowRecipesReviewsAndRatings(RecipeId);
+        reviews = result.Reviews;
+    }
+}
