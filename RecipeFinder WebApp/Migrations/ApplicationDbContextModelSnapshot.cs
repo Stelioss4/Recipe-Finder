@@ -549,13 +549,15 @@ namespace RecipeFinderWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
-                    b.HasOne("Recipe_Finder.Recipe", null)
+                    b.HasOne("Recipe_Finder.Recipe", "Recipe")
                         .WithMany("Ratings")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Profile");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Review", b =>
@@ -564,13 +566,15 @@ namespace RecipeFinderWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
-                    b.HasOne("Recipe_Finder.Recipe", null)
+                    b.HasOne("Recipe_Finder.Recipe", "Recipe")
                         .WithMany("Reviews")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Profile");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>

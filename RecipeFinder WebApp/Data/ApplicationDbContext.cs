@@ -23,6 +23,16 @@ namespace RecipeFinder_WebApp.Data
             builder.Entity<User>()
                 .HasMany(u => u.WeeklyPlan)
                 .WithMany(r => r.WeeklyPlanUsers);
+
+            builder.Entity<Review>()
+                .HasOne(r => r.Recipe)
+                .WithMany(r => r.Reviews);
+
+            builder.Entity<Rating>()
+                .HasOne(r => r.Recipe)
+                .WithMany(r => r.Ratings);
+
+
         }
     }
 }

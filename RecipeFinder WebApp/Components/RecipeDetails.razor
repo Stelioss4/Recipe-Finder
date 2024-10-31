@@ -110,7 +110,7 @@
                     <h4 class="text-secondary">Leave a Review</h4>
                     <div class="form-group">
                         <label>Rating (1 to 5):</label>
-                        <input type="number" class="form-control" @bind="newRating.Value" min="1" max="5" />
+                        <input type="number" @bind="newRating.Value" min="1" max="5" />
                     </div>
                     <div class="form-group">
                         <label>Review Text:</label>
@@ -150,7 +150,7 @@
         *@
     </div>
 </div>
-<br/>
+<br />
 
 
 @code {
@@ -192,6 +192,9 @@
             Console.WriteLine($"Found url parameter: {urlValue}");
             var decodedUrl = Uri.UnescapeDataString(urlValue);
 
+            var result = await _dataService.ShowRecipesReviewsAndRatings(recipe.Id);
+            averageRating = result.AverageRating;
+
             try
             {
                 if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
@@ -214,9 +217,6 @@
                 {
                     Console.WriteLine("Unknown source domain");
                 }
-
-                var result = await _dataService.ShowRecipesReviewsAndRatings(recipe.Id);
-                averageRating = result.AverageRating;
 
                 if (recipe == null)
                 {
@@ -312,7 +312,53 @@
 
     private async Task SubmitRatingAndReview()
     {
-        await _dataService.SubmitReviewAndRating();
+
+        if (_context == null)
+        {
+            throw new InvalidOperationException("DbContext is null");
+        }
+
+        //var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = await _dataService.GetAuthenticatedUserAsync();
+        if (user == null)
+        {
+            throw new InvalidOperationException("Authenticated user is null");
+        }
+
+        if (recipe != null)
+        {
+            // Create a new review
+            var review = new Review
+                {
+                    ReviewText = newReview.ReviewText,
+                    TimeStam = DateTime.Now,
+                    RecipeId = recipe.Id,
+                    Profile = user
+                };
+
+            // Create a new rating
+            var rating = new Rating
+                {
+                    Value = newRating.Value,
+                    TimeStam = DateTime.Now,
+                    RecipeId = recipe.Id,
+                    Profile = user
+                };
+
+            // Add the review and rating to the database
+            _context.Reviews.Add(review);
+            _context.Ratings.Add(rating);
+
+            await _context.SaveChangesAsync();
+
+            // Clear the form fields
+            newReview.ReviewText = string.Empty;
+            newRating.Value = 0;
+        }
+
+
+
+
     }
 
     private async Task AddIngredientToShoppingList()

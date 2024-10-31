@@ -14,8 +14,6 @@ namespace RecipeFinder_WebApp.Data
         private Recipe recipe { get; set; } = new();
         private User? UserProfile { get; set; } = new User();
         private List<Recipe> Recipes { get; set; } = new List<Recipe>();
-        private int newRating { get; set; } = 5; // Default to 5-star rating
-        private string newReviewText { get; set; } = string.Empty;
         private Review review { get; set; } = new();
         private Rating rating { get; set; } = new();
 
@@ -255,64 +253,5 @@ namespace RecipeFinder_WebApp.Data
 
             return (averageRating, reviews);
         }
-
-
-
-        /// <summary>
-        /// Submits a new review and rating for the current recipe from the authenticated user.
-        /// If the user is authenticated and a valid rating is provided (between 1 and 5), 
-        /// the review and rating are added to the recipe and saved to the database.
-        /// </summary>
-        /// <returns></returns>
-        public async Task SubmitReviewAndRating()
-        {
-            if (recipe != null && newRating >= 1 && newRating <= 5)
-            {
-                //var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-                var user = await GetAuthenticatedUserAsync();
-
-                if (user != null)
-                {
-                    if (_context == null)
-                    {
-                        throw new InvalidOperationException("DbContext is null");
-                    }
-
-                    // Create a new review
-                    var review = new Review
-                    {
-                        ReviewText = newReviewText,
-                        TimeStam = DateTime.Now,
-                        RecipeId = recipe.Id,
-                        Profile = user
-                    };
-
-                    // Create a new rating
-                    var rating = new Rating
-                    {
-                        Value = newRating,
-                        TimeStam = DateTime.Now,
-                        RecipeId = recipe.Id,
-                        Profile = user
-                    };
-
-                    // Add the review and rating to the recipe
-                    recipe.Reviews.Add(review);
-                    recipe.Ratings.Add(rating);
-
-                    // Save to the database
-                    _context.Update(recipe);
-                    await _context.SaveChangesAsync();
-
-                    // Clear the form
-                    newReviewText = string.Empty;
-                }
-                else
-                {
-                    throw new InvalidOperationException("Authenticated user is null");
-                }
-            }
-        }
-
     }
 }

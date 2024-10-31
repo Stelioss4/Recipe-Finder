@@ -26,6 +26,15 @@
             set { _profile = value; }
         }
 
+        private Recipe _recipe;
+
+        public virtual Recipe Recipe
+        {
+            get { return _recipe; }
+            set { _recipe = value; }
+        }
+
+
         private int _recipeId;
 
         public int RecipeId

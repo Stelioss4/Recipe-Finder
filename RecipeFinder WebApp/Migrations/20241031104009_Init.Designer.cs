@@ -11,7 +11,7 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241028114648_Init")]
+    [Migration("20241031104009_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -260,6 +260,9 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("Amount")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AmountUnit")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("Calories")
                         .HasColumnType("TEXT");
 
@@ -337,7 +340,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Rating");
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -414,7 +417,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
@@ -549,13 +552,15 @@ namespace RecipeFinderWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
-                    b.HasOne("Recipe_Finder.Recipe", null)
+                    b.HasOne("Recipe_Finder.Recipe", "Recipe")
                         .WithMany("Ratings")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Profile");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Review", b =>
@@ -564,13 +569,15 @@ namespace RecipeFinderWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
-                    b.HasOne("Recipe_Finder.Recipe", null)
+                    b.HasOne("Recipe_Finder.Recipe", "Recipe")
                         .WithMany("Reviews")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Profile");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>

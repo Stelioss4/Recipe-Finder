@@ -149,6 +149,7 @@ namespace RecipeFinderWebApp.Migrations
                     Carbohydrate = table.Column<decimal>(type: "TEXT", nullable: false),
                     Protein = table.Column<decimal>(type: "TEXT", nullable: false),
                     Amount = table.Column<string>(type: "TEXT", nullable: true),
+                    AmountUnit = table.Column<string>(type: "TEXT", nullable: true),
                     Unit = table.Column<double>(type: "REAL", nullable: false),
                     ProductLink = table.Column<string>(type: "TEXT", nullable: true),
                     RecipeId = table.Column<int>(type: "INTEGER", nullable: true),
@@ -170,7 +171,7 @@ namespace RecipeFinderWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rating",
+                name: "Ratings",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -182,15 +183,15 @@ namespace RecipeFinderWebApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rating", x => x.Id);
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rating_Recipes_RecipeId",
+                        name: "FK_Ratings_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Rating_User_ProfileId",
+                        name: "FK_Ratings_User_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "User",
                         principalColumn: "Id");
@@ -245,7 +246,7 @@ namespace RecipeFinderWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Review",
+                name: "Reviews",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -257,15 +258,15 @@ namespace RecipeFinderWebApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Review", x => x.Id);
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Review_Recipes_RecipeId",
+                        name: "FK_Reviews_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Review_User_ProfileId",
+                        name: "FK_Reviews_User_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "User",
                         principalColumn: "Id");
@@ -409,13 +410,13 @@ namespace RecipeFinderWebApp.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rating_ProfileId",
-                table: "Rating",
+                name: "IX_Ratings_ProfileId",
+                table: "Ratings",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rating_RecipeId",
-                table: "Rating",
+                name: "IX_Ratings_RecipeId",
+                table: "Ratings",
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
@@ -429,13 +430,13 @@ namespace RecipeFinderWebApp.Migrations
                 column: "WeeklyPlanUsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_ProfileId",
-                table: "Review",
+                name: "IX_Reviews_ProfileId",
+                table: "Reviews",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_RecipeId",
-                table: "Review",
+                name: "IX_Reviews_RecipeId",
+                table: "Reviews",
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
@@ -466,7 +467,7 @@ namespace RecipeFinderWebApp.Migrations
                 name: "Ingredient");
 
             migrationBuilder.DropTable(
-                name: "Rating");
+                name: "Ratings");
 
             migrationBuilder.DropTable(
                 name: "RecipeUser");
@@ -475,7 +476,7 @@ namespace RecipeFinderWebApp.Migrations
                 name: "RecipeUser1");
 
             migrationBuilder.DropTable(
-                name: "Review");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
