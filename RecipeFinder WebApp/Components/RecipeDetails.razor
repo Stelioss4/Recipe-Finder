@@ -56,7 +56,7 @@
                 @if (showPopupReview)
                 {
                     <div class="popup">
-                        <h4>Average Rating: @averageRating</h4>
+                        <h4>Average Rating: @averageRating.ToString("F2")</h4>
 
                         <button @onclick="NavigateToReviews">Click to see recipe reviews</button>
 
