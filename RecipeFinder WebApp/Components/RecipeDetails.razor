@@ -117,7 +117,7 @@
                         <textarea class="form-control" @bind="newReview.ReviewText"></textarea>
                     </div>
                 </div>
-                <button class="btn btn-primary" @onclick="SubmitRatingAndReview">Confirm your review and/or rating</button>
+                <button class="btn btn-primary" @onclick="()=>SubmitRatingAndReview(recipe)">Confirm your review and/or rating</button>
             </div>
         </div>
     }
@@ -192,49 +192,65 @@
             Console.WriteLine($"Found url parameter: {urlValue}");
             var decodedUrl = Uri.UnescapeDataString(urlValue);
 
-            var result = await _dataService.ShowRecipesReviewsAndRatings(recipe.Id);
-            averageRating = result.AverageRating;
+            // 1. Check if the recipe is already in the database
+            recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
-            try
+            if (recipe != null)
             {
-                if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
-                {
-                    recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                }
-                else if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
-                {
-                    recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                }
-                else if (decodedUrl.Contains(Constants.SERIOUSEATS_URL))
-                {
-                    recipe = await Scrap.ScrapeSeriousEatsDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                }
-                else if (decodedUrl.Contains(Constants.DELISH_URL))
-                {
-                    recipe = await Scrap.ScrapeDelishDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                }
-                else
-                {
-                    Console.WriteLine("Unknown source domain");
-                }
-
-                if (recipe == null)
-                {
-                    Console.WriteLine("Recipe object is null after scraping.");
-                }
-                else
-                {
-                    Console.WriteLine($"Scraped recipe: {recipe.RecipeName}");
-                }
+                Console.WriteLine("Recipe found in the database.");
+                // Fetch additional related data as needed, e.g., average rating
+                var result = await _dataService.ShowRecipesReviewsAndRatings(recipe.Id);
+                averageRating = result.AverageRating;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error during scraping: {ex.Message}");
+                // 2. If not in the database, proceed with scraping
+                Console.WriteLine("Recipe not found in database; starting online scrape.");
+
+                try
+                {
+                    if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
+                    {
+                        recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                    }
+                    else if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
+                    {
+                        recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                    }
+                    else if (decodedUrl.Contains(Constants.SERIOUSEATS_URL))
+                    {
+                        recipe = await Scrap.ScrapeSeriousEatsDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                    }
+                    else if (decodedUrl.Contains(Constants.DELISH_URL))
+                    {
+                        recipe = await Scrap.ScrapeDelishDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                    }
+                    else
+                    {
+                        Console.WriteLine("Unknown source domain");
+                    }
+
+                    // 3. Save the newly scraped recipe to the database
+                    if (recipe != null)
+                    {
+                        _context.Recipes.Add(recipe);
+                        await _context.SaveChangesAsync();
+                        Console.WriteLine($"Scraped and saved recipe: {recipe.RecipeName}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Recipe object is null after scraping.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error during scraping: {ex.Message}");
+                }
             }
         }
         else
         {
-            Console.WriteLine("url parameter not found, navigating to home");
+            Console.WriteLine("URL parameter not found; navigating to home.");
             Navigation.NavigateTo("/");
         }
     }
@@ -305,69 +321,80 @@
         return adjustedAmount.ToString("0.##"); // Format to two decimal places
     }
 
-    private void RatingShowPopup()
-    {
-        ReviewAndRatingShowPopup = !ReviewAndRatingShowPopup;
-    }
-
-    private async Task SubmitRatingAndReview()
-    {
-
-        if (_context == null)
-        {
-            throw new InvalidOperationException("DbContext is null");
-        }
-
-        //var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = await _dataService.GetAuthenticatedUserAsync();
-        if (user == null)
-        {
-            throw new InvalidOperationException("Authenticated user is null");
-        }
-
-        if (recipe != null)
-        {
-            // Create a new review
-            var review = new Review
-                {
-                    ReviewText = newReview.ReviewText,
-                    TimeStam = DateTime.Now,
-                    RecipeId = recipe.Id,
-                    Profile = user
-                };
-
-            // Create a new rating
-            var rating = new Rating
-                {
-                    Value = newRating.Value,
-                    TimeStam = DateTime.Now,
-                    RecipeId = recipe.Id,
-                    Profile = user
-                };
-
-            // Add the review and rating to the database
-            _context.Reviews.Add(review);
-            _context.Ratings.Add(rating);
-
-            await _context.SaveChangesAsync();
-
-            // Clear the form fields
-            newReview.ReviewText = string.Empty;
-            newRating.Value = 0;
-        }
-
-
-
-
-    }
-
     private async Task AddIngredientToShoppingList()
     {
         await _dataService.AddIngredientsToShoppingList(ingredient);
     }
     private void NavigateToReviews()
     {
-        Navigation.NavigateTo($"/watchUsersReview/{recipe.Id}");
+        Navigation.NavigateTo($"/watchUsersReview");
     }
 
+    private void RatingShowPopup()
+    {
+        ReviewAndRatingShowPopup = !ReviewAndRatingShowPopup;
+    }
+
+    private async Task SubmitRatingAndReview(Recipe recipe)
+    {
+        if (recipe is null)
+        {
+            throw new ArgumentNullException(nameof(recipe));
+        }
+
+        try
+        {
+            if (_context == null)
+            {
+                throw new InvalidOperationException("DbContext is null");
+            }
+
+            var user = await _dataService.GetAuthenticatedUserAsync();
+            if (user == null)
+            {
+                throw new InvalidOperationException("Authenticated user is null");
+            }
+
+            if (recipe != null)
+            {
+                var recipeExists = await _context.Recipes.AnyAsync(r => r.Id == recipe.Id);
+                if (!recipeExists)
+                {
+                    throw new InvalidOperationException("The specified recipe does not exist in the database.");
+                }
+
+                // Create a new review
+                var review = new Review
+                    {
+                        ReviewText = newReview.ReviewText,
+                        TimeStam = DateTime.Now,
+                        RecipeId = recipe.Id,
+                        Profile = user
+                    };
+
+                // Create a new rating
+                var rating = new Rating
+                    {
+                        Value = newRating.Value,
+                        TimeStam = DateTime.Now,
+                        RecipeId = recipe.Id,
+                        Profile = user
+                    };
+
+                // Add the review and rating to the database
+                _context.Reviews.Add(review);
+                _context.Ratings.Add(rating);
+
+                await _context.SaveChangesAsync();
+
+                // Clear the form fields
+                newReview.ReviewText = string.Empty;
+                newRating.Value = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error submitting review and rating: {ex.Message}");
+        }
+    }
 }
