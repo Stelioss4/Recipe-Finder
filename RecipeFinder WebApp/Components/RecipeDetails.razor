@@ -34,6 +34,7 @@
                 }
                 <p class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</p>
                 <p class="alert-primary text-center">Total time needed: @recipe.Time</p>
+                <p class="alert-primary text-center">Average Rating: @averageRating.ToString("F2") <button class="btn btn-secondary" @onclick="NavigateToReviews">See recipe's reviews</button></p>
 
                 <!-- Popup button for user input -->
                 <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
@@ -48,19 +49,6 @@
                             <button class="btn btn-primary mt-2" @onclick="UpdateIngredients">Update</button>
                             <button class="btn btn-danger mt-2" @onclick="() => showPopup = false">Close</button>
                         </div>
-                    </div>
-                }
-
-                <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopupReview = true">show Rating and review</button>
-
-                @if (showPopupReview)
-                {
-                    <div class="popup">
-                        <h4>Average Rating: @averageRating.ToString("F2")</h4>
-
-                        <button @onclick="NavigateToReviews">Click to see recipe reviews</button>
-
-                        <button @onclick="()=> showPopupReview = false">Close</button>
                     </div>
                 }
 
@@ -123,32 +111,7 @@
     }
 
     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
-    <div>
-        @*  @if (showIngredientStorePopup)
-        {
-        <div class="popup">
-        <div class="popup-content">
-        @if (recipe != null)
-        {
-        @if (recipe.ListOfIngredients != null)
-        {
-        <ol>
-        @foreach (var ingredient in recipe.ListOfIngredients)
-        {
-        <li>@ingredient.Amount @ingredient.Unit @ingredient.IngredientsName</li>
-        }
-        </ol>
-        }
-        else
-        {
-        <p>Loading ingredients...</p>
-        }
-        }
-        </div>
-        </div>
-        }
-        *@
-    </div>
+
 </div>
 <br />
 
@@ -170,8 +133,6 @@
     private double averageRating;
 
     private int peopleCount { get; set; } = 4;  // Default for 4 people
-
-    private bool showPopupReview { get; set; } = false;
 
     private bool showPopup { get; set; } = false;
 
