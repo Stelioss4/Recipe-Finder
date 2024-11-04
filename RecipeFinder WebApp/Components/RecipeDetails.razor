@@ -130,7 +130,7 @@
 
     private Ingredient ingredient { get; set; } = new();
 
-    private double averageRating;
+    private double averageRating { get; set; }
 
     private int peopleCount { get; set; } = 4;  // Default for 4 people
 
@@ -155,7 +155,7 @@
             // 1. Check if the recipe is already in the database
             recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
-            if (recipe != null)
+            if (recipe.CookingInstructions != null)
             {   
                 Console.WriteLine("Recipe found in the database.");
                 // Fetch additional related data as needed, e.g., average rating

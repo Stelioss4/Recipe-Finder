@@ -147,25 +147,6 @@ namespace RecipeFinder_WebApp.Data
         }
 
         /// <summary>
-        /// Retrieves cached recipes based on search terms and source.
-        /// </summary>
-        public List<Recipe> GetCachedRecipes(List<string> searchTerms, string source)
-        {
-            var normalizedSearchTerms = searchTerms.Select(term => term.Trim().ToLowerInvariant()).ToList();
-            source = source.Trim().ToLowerInvariant();
-
-            var existingRecipes = Recipes
-                .Where(r => r.RecipeName != null &&
-                            r.SourceDomain != null &&
-                            r.SourceDomain.Trim().ToLowerInvariant().Equals(source, StringComparison.OrdinalIgnoreCase) &&
-                            r.SearchTerms != null)
-                .Where(r => normalizedSearchTerms.Any(term => r.RecipeName.Contains(term, StringComparison.OrdinalIgnoreCase)) &&
-                            normalizedSearchTerms.Any(term => r.SearchTerms.Any(st => st.Trim().ToLowerInvariant().Equals(term, StringComparison.OrdinalIgnoreCase))))
-                .ToList();
-
-            return existingRecipes;
-        }
-        /// <summary>
         /// Retrieves saved recipes from database based on search terms and source.
         /// </summary>
         /// <param name="searchQuery"></param>
