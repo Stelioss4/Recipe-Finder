@@ -26,14 +26,6 @@
 			set { _price = value; }
 		}
 
-		private PaymentMethod _paymentMethods;
-
-		public PaymentMethod PaymentMethods
-        {
-			get { return _paymentMethods; }
-			set { _paymentMethods = value; }
-		}
-
 		private List<string> _marketLinks;
 
 		public List<string> MarketLinks

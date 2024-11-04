@@ -56,15 +56,6 @@ namespace Recipe_Finder
             get { return _shoppingList; }
             set { _shoppingList = value; }
         }
-
-
-        private PaymentMethod _paymentMethods;
-
-        public virtual PaymentMethod PaymentMethods
-        {
-            get { return _paymentMethods; }
-            set { _paymentMethods = value; }
-        }
     }
 }
 
