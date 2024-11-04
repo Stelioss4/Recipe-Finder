@@ -144,7 +144,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("OnInitializedAsync called");
         var uri = new Uri(Navigation.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
@@ -157,10 +156,10 @@
             recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
             if (recipe != null)
-            {
+            {   
                 Console.WriteLine("Recipe found in the database.");
                 // Fetch additional related data as needed, e.g., average rating
-                var result = await _dataService.ShowRecipesReviewsAndRatings(recipe.Id);
+                var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
                 averageRating = result.AverageRating;
             }
             else
@@ -288,8 +287,19 @@
     }
     private void NavigateToReviews()
     {
-        Navigation.NavigateTo($"/watchUsersReview");
+        if (!string.IsNullOrEmpty(recipe?.Url))
+        {
+            string encodedUrl = Uri.EscapeDataString(recipe.Url);
+            Console.WriteLine($"Navigating to reviews with URL: {encodedUrl}"); // Log the URL
+            Navigation.NavigateTo($"/watchUsersReview?Url={encodedUrl}");
+        }
+        else
+        {
+            Console.WriteLine("Recipe URL is null or empty."); // Log the issue
+                                                               // Handle accordingly, e.g., show a message to the user or fallback navigation
+        }
     }
+
 
     private void RatingShowPopup()
     {

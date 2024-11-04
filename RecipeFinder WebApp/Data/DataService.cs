@@ -236,12 +236,12 @@ namespace RecipeFinder_WebApp.Data
             }
         }
 
-        public async Task<(double AverageRating, List<Review> Reviews)> ShowRecipesReviewsAndRatings(int recipeId)
+        public async Task<(double AverageRating, List<Review> Reviews)> ShowRecipesReviewsAndRatings(Recipe recipe)
         {
-            var recipe = await _context.Recipes
+             recipe = await _context.Recipes
                 .Include(r => r.Reviews)
                 .Include(r => r.Ratings)
-                .FirstOrDefaultAsync(r => r.Id == recipeId);
+                .FirstOrDefaultAsync(r => r.Id == recipe.Id);
 
             if (recipe == null)
             {
