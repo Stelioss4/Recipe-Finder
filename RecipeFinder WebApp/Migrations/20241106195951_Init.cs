@@ -26,20 +26,6 @@ namespace RecipeFinderWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PaymentMethod",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AccountEmail = table.Column<string>(type: "TEXT", nullable: true),
-                    AccountPassword = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PaymentMethod", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Recipes",
                 columns: table => new
                 {
@@ -65,6 +51,21 @@ namespace RecipeFinderWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    RememberMe = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LastWeeklyPlanDate = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -86,23 +87,29 @@ namespace RecipeFinderWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Ingredients",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    RememberMe = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LastWeeklyPlanDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    PaymentMethodsId = table.Column<int>(type: "INTEGER", nullable: true)
+                    IngredientsName = table.Column<string>(type: "TEXT", nullable: true),
+                    Calories = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Fat = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Carbohydrate = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Protein = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Amount = table.Column<string>(type: "TEXT", nullable: true),
+                    AmountUnit = table.Column<string>(type: "TEXT", nullable: true),
+                    Unit = table.Column<double>(type: "REAL", nullable: false),
+                    ProductLink = table.Column<string>(type: "TEXT", nullable: true),
+                    RecipeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Ingredients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_PaymentMethod_PaymentMethodsId",
-                        column: x => x.PaymentMethodsId,
-                        principalTable: "PaymentMethod",
+                        name: "FK_Ingredients_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
                         principalColumn: "Id");
                 });
 
@@ -132,39 +139,6 @@ namespace RecipeFinderWebApp.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ingredient",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    IngredientsName = table.Column<string>(type: "TEXT", nullable: true),
-                    Calories = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Fat = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Carbohydrate = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Protein = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Amount = table.Column<string>(type: "TEXT", nullable: true),
-                    AmountUnit = table.Column<string>(type: "TEXT", nullable: true),
-                    Unit = table.Column<double>(type: "REAL", nullable: false),
-                    ProductLink = table.Column<string>(type: "TEXT", nullable: true),
-                    RecipeId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredient", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Ingredient_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Ingredient_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id");
@@ -270,6 +244,30 @@ namespace RecipeFinderWebApp.Migrations
                         column: x => x.ProfileId,
                         principalTable: "User",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IngredientUser",
+                columns: table => new
+                {
+                    ShoppingListId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserIdId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IngredientUser", x => new { x.ShoppingListId, x.UserIdId });
+                    table.ForeignKey(
+                        name: "FK_IngredientUser_Ingredients_ShoppingListId",
+                        column: x => x.ShoppingListId,
+                        principalTable: "Ingredients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IngredientUser_User_UserIdId",
+                        column: x => x.UserIdId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -400,14 +398,14 @@ namespace RecipeFinderWebApp.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ingredient_RecipeId",
-                table: "Ingredient",
+                name: "IX_Ingredients_RecipeId",
+                table: "Ingredients",
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ingredient_UserId",
-                table: "Ingredient",
-                column: "UserId");
+                name: "IX_IngredientUser_UserIdId",
+                table: "IngredientUser",
+                column: "UserIdId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ratings_ProfileId",
@@ -438,11 +436,6 @@ namespace RecipeFinderWebApp.Migrations
                 name: "IX_Reviews_RecipeId",
                 table: "Reviews",
                 column: "RecipeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_PaymentMethodsId",
-                table: "User",
-                column: "PaymentMethodsId");
         }
 
         /// <inheritdoc />
@@ -464,7 +457,7 @@ namespace RecipeFinderWebApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Ingredient");
+                name: "IngredientUser");
 
             migrationBuilder.DropTable(
                 name: "Ratings");
@@ -485,13 +478,13 @@ namespace RecipeFinderWebApp.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Recipes");
+                name: "Ingredients");
 
             migrationBuilder.DropTable(
                 name: "User");
 
             migrationBuilder.DropTable(
-                name: "PaymentMethod");
+                name: "Recipes");
         }
     }
 }

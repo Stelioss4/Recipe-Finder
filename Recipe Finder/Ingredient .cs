@@ -2,13 +2,22 @@
 {
     public class Ingredient
     {
-          private int _iD;
+        private int _iD;
 
-  public int Id
-  {
-      get { return _iD; }
-      set { _iD = value; }
-  }
+        public int Id
+        {
+            get { return _iD; }
+            set { _iD = value; }
+        }
+
+        private List<User> _userId;
+
+        public virtual List<User> UserId
+        {
+            get { return _userId; }
+            set { _userId = value; }
+        }
+
         private string _ingredientsName;
 
         public string IngredientsName
@@ -36,8 +45,8 @@
         /// <summary>
         /// Represents the amount of carbohydrates in grams per 100g
         /// </summary>
-        private decimal _carbohydrate;   
-        public decimal Carbohydrate  
+        private decimal _carbohydrate;
+        public decimal Carbohydrate
         {
             get { return _carbohydrate; }
             set { _carbohydrate = value; }
@@ -45,15 +54,15 @@
         /// <summary>
         /// Represents the amount of protein in grams grams per 100g
         /// </summary>
-        private decimal _protein;   
+        private decimal _protein;
 
-        public decimal Protein      
+        public decimal Protein
         {
             get { return _protein; }
             set { _protein = value; }
         }
 
-        private string _amount; 
+        private string _amount;
 
         public string Amount
         {

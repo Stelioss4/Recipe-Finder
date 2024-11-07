@@ -59,6 +59,40 @@ namespace RecipeFinder_WebApp.Data
             }
         }
 
+        /// <summary>
+        /// Removes Ingredient from shopping list
+        /// </summary>
+        /// <param name="ingredient"></param>
+        /// <returns></returns>
+        public async Task RemoveIngredientFromShoppingListAsync(Ingredient ingredient)
+        {
+            try
+            {
+                UserProfile = await GetAuthenticatedUserAsync();
+                if (UserProfile != null)
+                {
+                    var ingredientToRemove = UserProfile.ShoppingList
+                        .FirstOrDefault(i =>
+                         i.Id == ingredient.Id && i.UserId == ingredient.UserId);
+
+                    if (ingredientToRemove != null)
+                    {
+                        // Remove the recipe from the list
+                        UserProfile.ShoppingList.Remove(ingredientToRemove);
+
+                        // Save changes to the database
+                        await _context.SaveChangesAsync();
+
+                        Console.WriteLine("Ingredient removed from ShoppingList successfully.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error removing ingredient from Shopping list: {ex.Message}");
+                // Handle the error appropriately (e.g., display an error message)
+            }
+        }
 
 
         /// <summary>

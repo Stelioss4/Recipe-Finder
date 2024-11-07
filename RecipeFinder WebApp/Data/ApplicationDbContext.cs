@@ -9,6 +9,7 @@ namespace RecipeFinder_WebApp.Data
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Review> Reviews { get; set; } 
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -24,6 +25,10 @@ namespace RecipeFinder_WebApp.Data
                 .HasMany(u => u.WeeklyPlan)
                 .WithMany(r => r.WeeklyPlanUsers);
 
+            builder.Entity<User>()
+                .HasMany(u => u.ShoppingList)
+                .WithMany(i => i.UserId);
+
             builder.Entity<Review>()
                 .HasOne(r => r.Recipe)
                 .WithMany(r => r.Reviews);
@@ -32,6 +37,7 @@ namespace RecipeFinder_WebApp.Data
                 .HasOne(r => r.Recipe)
                 .WithMany(r => r.Ratings);
 
+            
 
         }
     }

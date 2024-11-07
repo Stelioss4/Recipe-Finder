@@ -19,8 +19,8 @@
 
 <div class="container mt-5">
     <div class="text-center">
-        <h1 class="display-4 text-primary">Recipe Finder!</h1>
-        <p class="lead">Discover delicious recipes from ChefKoch and AllRecipes</p>
+        <h1 class="display-4">Recipe Finder</h1>
+        <p class="lead">Discover delicious recipes</p>
 
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
@@ -30,9 +30,9 @@
 
                     <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe here..." /><br />
                     <div class="input-group-append">
-                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search ChefKoch</button>
-                        <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
-                        <button class="btn btn-primary" @onclick="SearchRecipes">Search SERIOUSEATs Recipes</button>
+                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search</button>
+                      @*   <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
+                        <button class="btn btn-primary" @onclick="SearchRecipes">Search SERIOUSEATs Recipes</button> *@
                     </div>
                 </EditForm>
             </div>
@@ -43,13 +43,13 @@
     {
         <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
     }
-    else if (recipes == null || recipes.Count == 0)
+    @if (recipes.Count < 1 && !string.IsNullOrEmpty(searchQuery))
     {
         <div class="alert alert-warning text-center mt-4">
             <p>No results found for "@searchQuery" yet.</p>
         </div>
     }
-
+   
 </div>
 
 @code {

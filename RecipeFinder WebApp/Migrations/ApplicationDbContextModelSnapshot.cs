@@ -21,6 +21,21 @@ namespace RecipeFinderWebApp.Migrations
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
 
+            modelBuilder.Entity("IngredientUser", b =>
+                {
+                    b.Property<int>("ShoppingListId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserIdId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ShoppingListId", "UserIdId");
+
+                    b.HasIndex("UserIdId");
+
+                    b.ToTable("IngredientUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -284,33 +299,11 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<double>("Unit")
                         .HasColumnType("REAL");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RecipeId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Ingredient");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.PaymentMethod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AccountEmail")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("AccountPassword")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentMethod");
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Rating", b =>
@@ -429,17 +422,27 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PaymentMethodsId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("RememberMe")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentMethodsId");
-
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("IngredientUser", b =>
+                {
+                    b.HasOne("Recipe_Finder.Ingredient", null)
+                        .WithMany()
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recipe_Finder.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserIdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -537,10 +540,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.HasOne("Recipe_Finder.Recipe", null)
                         .WithMany("ListOfIngredients")
                         .HasForeignKey("RecipeId");
-
-                    b.HasOne("Recipe_Finder.User", null)
-                        .WithMany("ShoppingList")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Rating", b =>
@@ -577,15 +576,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Recipe_Finder.User", b =>
-                {
-                    b.HasOne("Recipe_Finder.PaymentMethod", "PaymentMethods")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodsId");
-
-                    b.Navigation("PaymentMethods");
-                });
-
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
                 {
                     b.Navigation("ListOfIngredients");
@@ -593,11 +583,6 @@ namespace RecipeFinderWebApp.Migrations
                     b.Navigation("Ratings");
 
                     b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("Recipe_Finder.User", b =>
-                {
-                    b.Navigation("ShoppingList");
                 });
 #pragma warning restore 612, 618
         }

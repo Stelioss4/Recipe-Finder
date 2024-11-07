@@ -95,7 +95,7 @@
         <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">Shopping List</button>
         @if (showShoppingListPopup)
         {
-            <ShoppingListOutput></ShoppingListOutput>
+            <ShoppingListOutput ShoppingList="userProfile.ShoppingList"></ShoppingListOutput>
         }
 
 

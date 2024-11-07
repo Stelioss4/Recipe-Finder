@@ -137,14 +137,14 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Cooking instructions
-                var instructionsNode = document.DocumentNode.SelectSingleNode("//*[@id=\"mntl-sc-block_39-0\"]");
+                var instructionsNode = document.DocumentNode.SelectSingleNode("//*[@id=\"section--instructions_1-0\"]");
                 if (instructionsNode != null)
                 {
                     searchResultRecipe.CookingInstructions = instructionsNode.InnerHtml.Trim();
                 }
 
                 // Ingredients
-                var ingredientsNode = document.DocumentNode.SelectSingleNode("//ul");
+                var ingredientsNode = document.DocumentNode.SelectSingleNode("//div/ul");
                 if (ingredientsNode != null)
                 {
                     var ingredientItems = ingredientsNode.SelectNodes(".//li");
