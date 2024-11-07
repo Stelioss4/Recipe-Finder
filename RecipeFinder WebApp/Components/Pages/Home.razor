@@ -43,12 +43,6 @@
     {
         <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
     }
-    @if (recipes.Count < 1 && !string.IsNullOrEmpty(searchQuery))
-    {
-        <div class="alert alert-warning text-center mt-4">
-            <p>No results found for "@searchQuery" yet.</p>
-        </div>
-    }
    
 </div>
 
