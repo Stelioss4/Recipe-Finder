@@ -1,12 +1,12 @@
+# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 80  # Port for production use
+EXPOSE 8080
+EXPOSE 8081
 
-# Optionally set ASPNETCORE_ENVIRONMENT to Production
-# This ensures the environment is set to 'Production' when the container runs
-ENV ASPNETCORE_ENVIRONMENT=Production
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -15,7 +15,7 @@ WORKDIR /src
 COPY ["RecipeFinder WebApp/RecipeFinder WebApp.csproj", "RecipeFinder WebApp/"]
 COPY ["Recipe Finder/Recipe Finder.csproj", "Recipe Finder/"]
 RUN dotnet restore "./RecipeFinder WebApp/RecipeFinder WebApp.csproj"
-COPY . . 
+COPY . .
 WORKDIR "/src/RecipeFinder WebApp"
 RUN dotnet build "./RecipeFinder WebApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
