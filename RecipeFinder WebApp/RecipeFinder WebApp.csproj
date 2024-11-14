@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <None Update="RecipeFinder_WebAppContext.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
