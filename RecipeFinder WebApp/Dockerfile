@@ -1,31 +1,25 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+# Base Image for ASP.NET runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
+EXPOSE 443
 
-
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+# Build image using .NET SDK
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["RecipeFinder WebApp/RecipeFinder WebApp.csproj", "RecipeFinder WebApp/"]
 COPY ["Recipe Finder/Recipe Finder.csproj", "Recipe Finder/"]
-RUN dotnet restore "./RecipeFinder WebApp/RecipeFinder WebApp.csproj"
+RUN dotnet restore "RecipeFinder WebApp/RecipeFinder WebApp.csproj"
 COPY . .
 WORKDIR "/src/RecipeFinder WebApp"
-RUN dotnet build "./RecipeFinder WebApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "RecipeFinder WebApp.csproj" -c Release -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# Publish the application
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./RecipeFinder WebApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "RecipeFinder WebApp.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Final image to run the application
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "RecipeFinder_WebApp.dll"]
+ENTRYPOINT ["dotnet", "RecipeFinder WebApp.dll"]
