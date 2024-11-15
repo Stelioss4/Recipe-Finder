@@ -59,16 +59,6 @@ builder.Services.Configure<CircuitOptions>(options =>
     options.DetailedErrors = builder.Configuration.GetValue<bool>("DetailedErrors");
 });
 
-// Configure Kestrel to listen on specific ports
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(80);  // Listen on port 80 for HTTP
-    options.ListenAnyIP(443, listenOptions =>
-    {
-        listenOptions.UseHttps();  // Listen on port 443 for HTTPS
-    });
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
