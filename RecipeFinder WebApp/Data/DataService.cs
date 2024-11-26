@@ -192,7 +192,7 @@ namespace RecipeFinder_WebApp.Data
 
             // Query the database for existing recipes that match the search query or URL
             var existingRecipes = await _context.Recipes
-                .Where(r => r.SearchTerms.Contains(searchQuery) && r.SourceDomain == source)
+                .Where(r => r.SearchTerms.Any(st => st.Term == searchQuery) && r.SourceDomain == source)
                 .ToListAsync();
 
             // If any matching recipes exist in the database, return them

@@ -42,8 +42,10 @@ namespace RecipeFinder_WebApp.Data
                     continue; // Skip if recipe already exists in the database
                 }
 
-                recipe.SearchTerms = new List<string> { searchQuery };
-                recipe.SourceDomain = Constants.SERIOUSEATS_URL;
+                recipe.SearchTerms = new List<RecipeSearchTerm>
+{
+    new RecipeSearchTerm { Term = searchQuery }
+}; recipe.SourceDomain = Constants.SERIOUSEATS_URL;
 
                 var detailedRecipe = await ScrapeSeriousEatsDetailsAndUpdateRecipe(recipe);
                 if (detailedRecipe != null)
@@ -91,7 +93,7 @@ namespace RecipeFinder_WebApp.Data
                                 RecipeName = titleNode.InnerText.Trim(),
                                 Url = linkNode.GetAttributeValue("href", string.Empty),
                                 Image = imageNode != null ? await DownloadImageAsByteArray(imageNode.GetAttributeValue("src", string.Empty)) : null,
-                                SearchTerms = new List<string> { searchQuery },
+                                SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
                                 SourceDomain = Constants.SERIOUSEATS_URL
                             };
 
@@ -186,8 +188,10 @@ namespace RecipeFinder_WebApp.Data
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
-                    recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
+                    recipe.SearchTerms = new List<RecipeSearchTerm>
+                    {
+                        new RecipeSearchTerm { Term = searchQuery }
+                    }; recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeAllRecipesDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
                     {
@@ -199,7 +203,7 @@ namespace RecipeFinder_WebApp.Data
             if (detailedRecipes.Count > 0)
             {
                 _context.Recipes.AddRange(detailedRecipes);
-              await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
 
             return detailedRecipes;
@@ -237,12 +241,15 @@ namespace RecipeFinder_WebApp.Data
                                 // Create a new Recipe object
                                 var recipe = new Recipe
                                 {
-                                    RecipeName = titleNode.InnerText.Trim(),
-                                    Url = linkNode.GetAttributeValue("href", string.Empty),
-                                    Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
-                                    SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
-                                };
+                                   RecipeName = titleNode.InnerText.Trim(),
+                                   Url = linkNode.GetAttributeValue("href", string.Empty),
+                                   Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
+                                   SearchTerms = new List<RecipeSearchTerm>
+                                   {
+                                       new RecipeSearchTerm { Term = searchQuery }
+                                   },
+                                   SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
+                                   };
 
                                 recipes.Add(recipe);
                             }
@@ -406,7 +413,7 @@ namespace RecipeFinder_WebApp.Data
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CHEFKOCH_URL);
-            if(existingRecipes.Count > 0)
+            if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
             }
@@ -428,7 +435,7 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Scrape details and add new recipes
-                recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
+                recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
                 recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
                 Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
                 if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -484,7 +491,7 @@ namespace RecipeFinder_WebApp.Data
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
+                                    SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
                                     SourceDomain = new Uri(Constants.CHEFKOCH_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
 
@@ -715,7 +722,7 @@ namespace RecipeFinder_WebApp.Data
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
+                    recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
                     recipe.SourceDomain = Constants.BBCGOODFOOD_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeBBCGoodFoodDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -775,7 +782,7 @@ namespace RecipeFinder_WebApp.Data
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
+                                    SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
                                     SourceDomain = new Uri(Constants.BBCGOODFOOD_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
 
@@ -945,7 +952,7 @@ namespace RecipeFinder_WebApp.Data
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
+                    recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
                     recipe.SourceDomain = Constants.DELISH_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeDelishDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -1000,7 +1007,7 @@ namespace RecipeFinder_WebApp.Data
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
+                                    SearchTerms =   new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
                                     SourceDomain = new Uri("https://www.delish.com").Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
 
