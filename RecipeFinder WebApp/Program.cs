@@ -29,7 +29,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 31))
+        new MySqlServerVersion(new Version(8, 0, 40))
     ));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
