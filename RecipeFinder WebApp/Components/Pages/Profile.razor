@@ -17,7 +17,7 @@
 <div class="container mt-5">
     @if (userProfile != null)
     {
-        <p>Welcome, @userProfile.Name!</p>
+        <p>Welcome, @appUser.UserName!</p>
         <br />
 
         <!-- Button for Favorite Recipes Popup -->
@@ -112,6 +112,8 @@
 @code {
     public User? userProfile { get; set; } = new User();
 
+    private ApplicationUser appUser { get; set; } = new();
+
     private bool showWeeklyPlanPopup = false;
 
     private List<Recipe> weeklyPlan { get; set; } = new();
@@ -119,7 +121,7 @@
     private DateTime weeklyPlanGeneratedDate;
 
     private bool showFavoritesPopup { get; set; } = false;
-    
+
     private bool showShoppingListPopup { get; set; } = false;
 
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -135,7 +137,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        userProfile = await DataService.GetAuthenticatedUserAsync();
+        appUser = await DataService.GetAuthenticatedUserAsync();
+
+        userProfile = appUser?.User;
+        // using ApplicationDbContext dbContext = new(new DbContextOptions<ApplicationDbContext> ());
+
+        // var x = dbContext.Users.Include(x => x.User).Where(u => u.Email == "stelios.boursanidis@gmail.com").First();
+
+
         if (userProfile == null)
         {
             // User profile not found, force logout and redirect to login

@@ -50,10 +50,13 @@
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private User userProfile { get; set; } = new User();
     private string searchQuery { get; set; } = string.Empty;
+    private ApplicationUser appUser { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        userProfile = await DataService.GetAuthenticatedUserAsync();
+        appUser = await DataService.GetAuthenticatedUserAsync();
+
+        userProfile = appUser?.User;
 
         if (userProfile == null)
         {

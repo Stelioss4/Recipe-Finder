@@ -322,7 +322,7 @@
             }
 
             var user = await _dataService.GetAuthenticatedUserAsync();
-            if (user == null)
+            if (user.User == null)
             {
                 throw new InvalidOperationException("Authenticated user is null");
             }
@@ -341,7 +341,7 @@
                         ReviewText = newReview.ReviewText,
                         TimeStam = DateTime.Now,
                         RecipeId = recipe.Id,
-                        Profile = user
+                        Profile = user.User
                     };
 
                 // Create a new rating
@@ -350,7 +350,7 @@
                         Value = newRating.Value,
                         TimeStam = DateTime.Now,
                         RecipeId = recipe.Id,
-                        Profile = user
+                        Profile = user.User
                     };
 
                 // Add the review and rating to the database
