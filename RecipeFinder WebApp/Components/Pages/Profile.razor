@@ -162,7 +162,7 @@
     private void TogglePopupWeeklyPlan()
     {
         // If a weekly plan was generated more than 7 days ago, regenerate it
-        if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > 7)
+        if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > Constants.WEEK_DAY_NUM)
         {
             GenerateWeeklyPlan();
         }

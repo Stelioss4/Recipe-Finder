@@ -32,7 +32,7 @@ namespace RecipeFinder_WebApp.Data
                 // Calculate the number of days since the last plan was created
                 var daysSinceLastPlan = (DateTime.Now - userProfile.User.LastWeeklyPlanDate.Value).TotalDays;
 
-                if (daysSinceLastPlan < 7)
+                if (daysSinceLastPlan < Constants.WEEK_DAY_NUM)
                 {
                     // Return the existing weekly plan if it's less than 7 days old
                     return userProfile.User.WeeklyPlan;
@@ -46,7 +46,7 @@ namespace RecipeFinder_WebApp.Data
             {
                 // Randomly select 7 recipes for the weekly plan
                 var random = new Random();
-                var newWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(7).ToList();
+                var newWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(Constants.WEEK_DAY_NUM).ToList();
 
                 // Update the user's profile with the new weekly plan and the current date
                 userProfile.User.WeeklyPlan = newWeeklyPlan;
@@ -73,7 +73,7 @@ namespace RecipeFinder_WebApp.Data
             var userProfile = await _dataService.GetAuthenticatedUserAsync();
             var favoriteRecipes = userProfile.User.FavoriteRecipes;
             var random = new Random();
-            currentWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(7).ToList();
+            currentWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(Constants.WEEK_DAY_NUM).ToList();
             lastPlanDate = DateTime.Now;
 
             return currentWeeklyPlan;
