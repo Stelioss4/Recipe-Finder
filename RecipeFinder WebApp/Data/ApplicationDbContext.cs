@@ -54,6 +54,10 @@ namespace RecipeFinder_WebApp.Data
                 .Navigation(u => u.WeeklyPlan)
                 .AutoInclude();
 
+            builder.Entity<Recipe>()
+                .Navigation(r => r.ListOfIngredients)
+                .AutoInclude(); 
+
         }
     }
 }
