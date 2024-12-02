@@ -31,8 +31,8 @@
                     <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe here..." /><br />
                     <div class="input-group-append">
                         <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search</button>
-                      @*   <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button>
-                        <button class="btn btn-primary" @onclick="SearchRecipes">Search SERIOUSEATs Recipes</button> *@
+                        @* <button class="btn btn-primary" @onclick="SearchRecipes">Search CANTINA's Recipes</button> 
+                          <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button> *@
                     </div>
                 </EditForm>
             </div>
@@ -79,7 +79,7 @@
 
     private async Task SearchRecipes()
     {
-        recipes = await Scrap.ScrapeSERecipes(searchQuery);
+        recipes = await Scrap.ScrapeCantinaRecipes(searchQuery);
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)

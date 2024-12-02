@@ -178,13 +178,17 @@
                     {
                         recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                     }
-                    else if (decodedUrl.Contains(Constants.SERIOUSEATS_URL))
-                    {
-                        recipe = await Scrap.ScrapeSeriousEatsDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
+                    // else if (decodedUrl.Contains(Constants.SERIOUSEATS_URL))
+                    // {
+                    //     recipe = await Scrap.ScrapeSeriousEatsDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                    // }
                     else if (decodedUrl.Contains(Constants.DELISH_URL))
                     {
                         recipe = await Scrap.ScrapeDelishDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                    }
+                    else if (decodedUrl.Contains(Constants.CANTINA_URL))
+                    {
+                        recipe = await Scrap.ScrapeCantinaDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
                     }
                     else
                     {
