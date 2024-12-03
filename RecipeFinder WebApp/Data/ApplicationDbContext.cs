@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
+using System.Reflection.Emit;
 
 namespace RecipeFinder_WebApp.Data
 {
@@ -12,6 +13,7 @@ namespace RecipeFinder_WebApp.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+           
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,7 +39,24 @@ namespace RecipeFinder_WebApp.Data
                 .HasOne(r => r.Recipe)
                 .WithMany(r => r.Ratings);
 
-            
+
+            // AutoInclude the User navigation property in ApplicationUser
+            builder.Entity<ApplicationUser>()
+                .Navigation(e => e.User)
+                .AutoInclude();
+
+            // Configure User entity to include FavoriteRecipes and WeeklyPlan
+            builder.Entity<User>()
+                .Navigation(u => u.FavoriteRecipes)
+                .AutoInclude();
+
+            builder.Entity<User>()
+                .Navigation(u => u.WeeklyPlan)
+                .AutoInclude();
+
+            builder.Entity<Recipe>()
+                .Navigation(r => r.ListOfIngredients)
+                .AutoInclude(); 
 
         }
     }

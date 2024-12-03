@@ -17,17 +17,17 @@ namespace RecipeFinder_WebApp.Data
             _context = context;
         }
 
-        public async Task<List<Recipe>> ScrapeSERecipes(string searchQuery)
+        public async Task<List<Recipe>> ScrapeCantinaRecipes(string searchQuery)
         {
             // Check for existing recipes in the database
-            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.SERIOUSEATS_URL);
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CANTINA_URL);
             if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
             }
 
             // Scrape new recipes
-            var searchResults = await ScrapeSearchResultsFromSeriousEats(searchQuery);
+            var searchResults = await ScrapeSearchResultsFromCantina(searchQuery);
             if (searchResults == null || !searchResults.Any())
             {
                 return new List<Recipe>(); // Return empty list if no results found
@@ -42,10 +42,13 @@ namespace RecipeFinder_WebApp.Data
                     continue; // Skip if recipe already exists in the database
                 }
 
-                recipe.SearchTerms = new List<string> { searchQuery };
-                recipe.SourceDomain = Constants.SERIOUSEATS_URL;
+                recipe.SearchTerms = new List<RecipeSearchTerm>
+                 {
+                     new RecipeSearchTerm { Term = searchQuery }
+                 };
+                recipe.SourceDomain = Constants.CANTINA_URL;
 
-                var detailedRecipe = await ScrapeSeriousEatsDetailsAndUpdateRecipe(recipe);
+                var detailedRecipe = await ScrapeCantinaDetailsAndUpdateRecipe(recipe);
                 if (detailedRecipe != null)
                 {
                     detailedRecipes.Add(detailedRecipe);
@@ -61,58 +64,51 @@ namespace RecipeFinder_WebApp.Data
             return detailedRecipes;
         }
 
-        public async Task<List<Recipe>> ScrapeSearchResultsFromSeriousEats(string searchQuery)
+        private async Task<List<Recipe>> ScrapeSearchResultsFromCantina(string searchQuery)
         {
-            List<Recipe> recipes = new List<Recipe>();
+            var searchUrl = $"{Constants.CANTINA_URL}?s={Uri.EscapeDataString(searchQuery)}&post_type=recipe";
 
-            try
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetStringAsync(searchUrl);
+
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(response);
+
+            // Adjust the selectors based on Cantina's HTML structure
+            var recipeNodes = htmlDocument.DocumentNode.SelectNodes("/html/body//div[3]");
+
+            if (recipeNodes == null) return null;
+
+            var recipes = new List<Recipe>();
+            foreach (var node in recipeNodes)
             {
-                string searchUrl = $"https://www.seriouseats.com/search?q={Uri.EscapeDataString(searchQuery)}";
-                var html = await _httpClient.GetStringAsync(searchUrl);
+                var titleNode = node.SelectSingleNode("//h2");
+                var linkNode = node.SelectSingleNode("//a");
+                var imageNode = node.SelectSingleNode("//img");
 
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(html);
-
-                // The container for search results
-                var resultNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'comp card')]");
-
-                if (resultNodes != null)
+                if (titleNode != null && linkNode != null)
                 {
-                    foreach (var node in resultNodes)
+                    var imageUrl = imageNode?.GetAttributeValue("src", string.Empty);
+
+                    // Create a new Recipe object
+                    var recipe = new Recipe
                     {
-                        var titleNode = node.SelectSingleNode("//span/span");
-                        var linkNode = node.SelectSingleNode(".//a");
-                        var imageNode = node.SelectSingleNode(".//img");
+                        RecipeName = titleNode.InnerText.Trim(),
+                        Url = linkNode.GetAttributeValue("href", string.Empty),
+                        Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
+                        SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
+                        SourceDomain = new Uri(Constants.CANTINA_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
+                    };
 
-                        if (titleNode != null && linkNode != null)
-                        {
-                            var recipe = new Recipe
-                            {
-                                RecipeName = titleNode.InnerText.Trim(),
-                                Url = linkNode.GetAttributeValue("href", string.Empty),
-                                Image = imageNode != null ? await DownloadImageAsByteArray(imageNode.GetAttributeValue("src", string.Empty)) : null,
-                                SearchTerms = new List<string> { searchQuery },
-                                SourceDomain = Constants.SERIOUSEATS_URL
-                            };
-
-                            recipes.Add(recipe);
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No result nodes found.");
+                    recipes.Add(recipe);
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in ScrapeSearchResultsFromSeriousEats: {ex.Message}");
-            }
+            
 
             return recipes;
         }
 
-        public async Task<Recipe> ScrapeSeriousEatsDetailsAndUpdateRecipe(Recipe searchResultRecipe)
+        public async Task<Recipe> ScrapeCantinaDetailsAndUpdateRecipe(Recipe searchResultRecipe)
         {
             try
             {
@@ -121,44 +117,106 @@ namespace RecipeFinder_WebApp.Data
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                // Recipe name
+                // Parse Recipe Name
                 var recipeNameNode = document.DocumentNode.SelectSingleNode("//h1");
                 if (recipeNameNode != null)
                 {
                     searchResultRecipe.RecipeName = recipeNameNode.InnerText.Trim();
                 }
+                else
+                {
+                    Console.WriteLine("Recipe's Name node is null");
+                }
 
-                // Image
+                // Parse Image
                 var imageNode = document.DocumentNode.SelectSingleNode("//img");
                 if (imageNode != null)
                 {
                     var imageUrl = imageNode.GetAttributeValue("src", string.Empty);
-                    searchResultRecipe.Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null;
+                    if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        searchResultRecipe.Image = await DownloadImageAsByteArray(imageUrl);
+                    }
                 }
 
-                // Cooking instructions
-                var instructionsNode = document.DocumentNode.SelectSingleNode("//*[@id=\"section--instructions_1-0\"]");
+                // Parse Cooking Instructions
+                var instructionsNode = document.DocumentNode.SelectSingleNode("//div[@class='recipe-instructions']");
                 if (instructionsNode != null)
                 {
                     searchResultRecipe.CookingInstructions = instructionsNode.InnerHtml.Trim();
                 }
-
-                // Ingredients
-                var ingredientsNode = document.DocumentNode.SelectSingleNode("//div/ul");
-                if (ingredientsNode != null)
+                else
                 {
-                    var ingredientItems = ingredientsNode.SelectNodes(".//li");
-                    searchResultRecipe.ListOfIngredients = ingredientItems?.Select(item => new Ingredient
-                    {
-                        IngredientsName = item.InnerText.Trim()
-                    }).ToList() ?? new List<Ingredient>();
+                    Console.WriteLine("Instructions node is null");
                 }
 
-                // Optional fields (e.g., difficulty level, cooking time) can be added similarly
+                // Parse Ingredients
+                var ingredientsNode = document.DocumentNode.SelectSingleNode("//ul[@class='recipe-ingredients']");
+                if (ingredientsNode != null)
+                {
+                    var ingredientItems = ingredientsNode.SelectNodes("li");
+                    if (ingredientItems != null)
+                    {
+                        searchResultRecipe.ListOfIngredients = ingredientItems
+                            .Select(item =>
+                            {
+                                var amountNode = item.SelectSingleNode(".//span[@class='ingredient-amount']");
+                                var nameNode = item.SelectSingleNode(".//span[@class='ingredient-name']");
+
+                                var amount = amountNode?.InnerText.Trim() ?? string.Empty;
+                                var name = nameNode?.InnerText.Trim() ?? string.Empty;
+
+                                return new Ingredient
+                                {
+                                    IngredientsName = name,
+                                    Amount = amount
+                                };
+                            })
+                            .ToList();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ingredient items are null");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ingredients node is null");
+                }
+
+                // Parse Cooking Time
+                var cookingTimeNode = document.DocumentNode.SelectSingleNode("//span[@class='cooking-time']");
+                if (cookingTimeNode != null)
+                {
+                    searchResultRecipe.Time = cookingTimeNode.InnerText.Trim();
+                }
+                else
+                {
+                    Console.WriteLine("Cooking Time node is null");
+                }
+
+                // Parse Difficulty Level
+                var difficultyNode = document.DocumentNode.SelectSingleNode("//span[@class='recipe-difficulty']");
+                if (difficultyNode != null)
+                {
+                    searchResultRecipe.DifficultyLevel = difficultyNode.InnerText.Trim();
+                }
+                else
+                {
+                    Console.WriteLine("Difficulty Level node is null");
+                }
+
+                // Parse Video URL (if available)
+                var videoNode = document.DocumentNode.SelectSingleNode("//div[@class='recipe-video']//source");
+                if (videoNode != null)
+                {
+                    searchResultRecipe.VideoUrl = videoNode.GetAttributeValue("src", string.Empty);
+                }
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in ScrapeSeriousEatsDetailsAndUpdateRecipe: {ex.Message}");
+                Console.WriteLine($"Error scraping recipe details: {ex.Message}");
             }
 
             return searchResultRecipe;
@@ -186,8 +244,10 @@ namespace RecipeFinder_WebApp.Data
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
-                    recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
+                    recipe.SearchTerms = new List<RecipeSearchTerm>
+                    {
+                        new RecipeSearchTerm { Term = searchQuery }
+                    }; recipe.SourceDomain = Constants.ALLRECIPE_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeAllRecipesDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
                     {
@@ -199,7 +259,7 @@ namespace RecipeFinder_WebApp.Data
             if (detailedRecipes.Count > 0)
             {
                 _context.Recipes.AddRange(detailedRecipes);
-              await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
 
             return detailedRecipes;
@@ -237,12 +297,15 @@ namespace RecipeFinder_WebApp.Data
                                 // Create a new Recipe object
                                 var recipe = new Recipe
                                 {
-                                    RecipeName = titleNode.InnerText.Trim(),
-                                    Url = linkNode.GetAttributeValue("href", string.Empty),
-                                    Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
-                                    SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
-                                };
+                                   RecipeName = titleNode.InnerText.Trim(),
+                                   Url = linkNode.GetAttributeValue("href", string.Empty),
+                                   Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
+                                   SearchTerms = new List<RecipeSearchTerm>
+                                   {
+                                       new RecipeSearchTerm { Term = searchQuery }
+                                   },
+                                   SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
+                                   };
 
                                 recipes.Add(recipe);
                             }
@@ -406,7 +469,7 @@ namespace RecipeFinder_WebApp.Data
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CHEFKOCH_URL);
-            if(existingRecipes.Count > 0)
+            if (existingRecipes.Count > 0)
             {
                 return existingRecipes;
             }
@@ -428,7 +491,7 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Scrape details and add new recipes
-                recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
+                recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
                 recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
                 Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
                 if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -484,7 +547,7 @@ namespace RecipeFinder_WebApp.Data
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
+                                    SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
                                     SourceDomain = new Uri(Constants.CHEFKOCH_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
 
@@ -715,7 +778,7 @@ namespace RecipeFinder_WebApp.Data
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
+                    recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
                     recipe.SourceDomain = Constants.BBCGOODFOOD_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeBBCGoodFoodDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -775,7 +838,7 @@ namespace RecipeFinder_WebApp.Data
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
+                                    SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
                                     SourceDomain = new Uri(Constants.BBCGOODFOOD_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
 
@@ -945,7 +1008,7 @@ namespace RecipeFinder_WebApp.Data
             {
                 if (recipe?.Url != null) // Check if the searchResultRecipe and its URL are not null
                 {
-                    recipe.SearchTerms = new List<string> { searchQuery }; // Set the search terms
+                    recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
                     recipe.SourceDomain = Constants.DELISH_URL; // Set the SourceDomain
                     Recipe detailedRecipe = await ScrapeDelishDetailsAndUpdateRecipe(recipe);
                     if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
@@ -1000,7 +1063,7 @@ namespace RecipeFinder_WebApp.Data
                                     RecipeName = titleNode.InnerText.Trim(),
                                     Url = linkNode.GetAttributeValue("href", string.Empty),
                                     Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                    SearchTerms = new List<string> { searchQuery },
+                                    SearchTerms =   new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
                                     SourceDomain = new Uri("https://www.delish.com").Host.ToLowerInvariant() // Set SourceDomain and normalize
                                 };
 

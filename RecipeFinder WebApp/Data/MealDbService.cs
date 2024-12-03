@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Data;
+using System.Linq;
 using System.Net;
 
 public class MealDbService
@@ -35,7 +36,10 @@ public class MealDbService
                     VideoUrl = meal.StrYoutube,
                     CookingInstructions = meal.StrInstructions,
                     ListOfIngredients = ParseIngredients(meal),
-                    SearchTerms = new List<string> { searchQuery }, // You can add this for tracking search queries
+                    SearchTerms = new List<RecipeSearchTerm>
+                    {
+                        new RecipeSearchTerm { Term = searchQuery }
+                    },
                     SourceDomain = "themealdb.com",
                     Url = $"https://www.themealdb.com/meal/{meal.IdMeal}"
                 }).ToList();

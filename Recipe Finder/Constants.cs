@@ -8,6 +8,7 @@ namespace Recipe_Finder
 {
     public class Constants
     {
+        public const string CANTINA_URL = "https://cantina.protothema.gr";
         public const string SERIOUSEATS_URL = "https://www.seriouseats.com";
         public const string CHEFKOCH_URL = "https://www.chefkoch.de";
         public const string ALLRECIPE_URL = "https://www.allrecipes.com";
@@ -16,6 +17,7 @@ namespace Recipe_Finder
         public const string XML_CACHE_PATH = "cached_recipes.xml";
         public const string XML_USER_PATH = "Users.xml";
         public const string XML_FAVORITE_REC_PATH = "Favorite_recipes.xml";
-        public const int LIMIT_DAYS = 7;
+        public const int LIMIT_DAYS = 6;
+        public const int WEEK_DAY_NUM = 7;
     }
 }

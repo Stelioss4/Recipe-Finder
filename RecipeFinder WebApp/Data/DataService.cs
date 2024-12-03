@@ -29,7 +29,6 @@ namespace RecipeFinder_WebApp.Data
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             AuthenticationStateProvider = authenticationStateProvider;
-            //Recipes = LoadRecipesFromXmlFile(Constants.XML_CACHE_PATH);
             _navigation = Navigation;
         }
 
@@ -39,7 +38,9 @@ namespace RecipeFinder_WebApp.Data
         /// <returns></returns>
         public async Task AddIngredientsToShoppingList(Ingredient ingredient)
         {
-            UserProfile = await GetAuthenticatedUserAsync();
+            var appUser = await GetAuthenticatedUserAsync();
+
+            UserProfile = appUser.User;
 
             if (UserProfile != null)
             {
@@ -68,7 +69,10 @@ namespace RecipeFinder_WebApp.Data
         {
             try
             {
-                UserProfile = await GetAuthenticatedUserAsync();
+                var appUser = await GetAuthenticatedUserAsync();
+
+                UserProfile = appUser.User;
+
                 if (UserProfile != null)
                 {
                     var ingredientToRemove = UserProfile.ShoppingList
@@ -101,12 +105,13 @@ namespace RecipeFinder_WebApp.Data
         public async Task AddFavoriteRecipeAsync(Recipe recipe)
         {
 
-            UserProfile = await GetAuthenticatedUserAsync();
+            var appUser = await GetAuthenticatedUserAsync();
 
-            if (UserProfile != null)
+
+            if (appUser.User != null)
             {
 
-                if (UserProfile.FavoriteRecipes.Contains(recipe))
+                if (appUser.User.FavoriteRecipes.Contains(recipe))
                 {
                     // Notify the user that the recipe is already in their favorites
                     Console.WriteLine("Recipe is already in your favorites.");
@@ -114,7 +119,7 @@ namespace RecipeFinder_WebApp.Data
                 else
                 {
                     // Add the recipe to the user's favorite list
-                    UserProfile.FavoriteRecipes.Add(recipe);
+                    appUser.User.FavoriteRecipes.Add(recipe);
 
                     // Save changes to the database
                     await _context.SaveChangesAsync();
@@ -138,24 +143,34 @@ namespace RecipeFinder_WebApp.Data
         {
             try
             {
-                UserProfile = await GetAuthenticatedUserAsync();
+                var appUser = await GetAuthenticatedUserAsync();
 
-                if (UserProfile != null)
+
+
+                if (appUser.User != null)
                 {
+
                     // Use SourceDomain and SearchTerms as additional criteria
-                    var recipeToRemove = UserProfile.FavoriteRecipes
-                    .FirstOrDefault(r =>
-                        r.RecipeName == recipe.RecipeName &&
-                        r.Url == recipe.Url &&
-                        r.SourceDomain == recipe.SourceDomain &&
-                        r.SearchTerms != null && recipe.SearchTerms != null &&
-                        r.SearchTerms.OrderBy(t => t).SequenceEqual(recipe.SearchTerms.OrderBy(t => t)));
+                    var recipeToRemove = appUser.User.FavoriteRecipes
+                     .FirstOrDefault(r =>
+                         string.Equals(r.RecipeName, recipe.RecipeName, StringComparison.OrdinalIgnoreCase) &&
+                         string.Equals(r.SourceDomain, recipe.SourceDomain, StringComparison.OrdinalIgnoreCase) 
+                         //r.SearchTerms != null &&
+                         //recipe.SearchTerms != null &&
+                         //r.SearchTerms
+                         //    .OrderBy(t => t.Term) 
+                         //    .Select(t => t.Term) 
+                         //    .SequenceEqual(
+                         //        recipe.SearchTerms.OrderBy(t => t.Term).Select(t => t.Term)
+                     );
+
+
 
 
                     if (recipeToRemove != null)
                     {
                         // Remove the recipe from the list
-                        UserProfile.FavoriteRecipes.Remove(recipeToRemove);
+                        appUser.User.FavoriteRecipes.Remove(recipeToRemove);
 
                         // Save changes to the database
                         await _context.SaveChangesAsync();
@@ -192,7 +207,7 @@ namespace RecipeFinder_WebApp.Data
 
             // Query the database for existing recipes that match the search query or URL
             var existingRecipes = await _context.Recipes
-                .Where(r => r.SearchTerms.Contains(searchQuery) && r.SourceDomain == source)
+                .Where(r => r.SearchTerms.Any(st => st.Term == searchQuery) && r.SourceDomain == source)
                 .ToListAsync();
 
             // If any matching recipes exist in the database, return them
@@ -208,7 +223,7 @@ namespace RecipeFinder_WebApp.Data
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public async Task<User> GetAuthenticatedUserAsync()
+        public async Task<ApplicationUser> GetAuthenticatedUserAsync()
         {
             try
             {
@@ -224,12 +239,9 @@ namespace RecipeFinder_WebApp.Data
                         throw new NullReferenceException("ApplicationUser is null.");
                     }
 
-                    UserProfile = appUser.User;
-                    UserProfile.Name = appUser.UserName;
-
-                    if (UserProfile != null)
+                    if (appUser != null)
                     {
-                        return UserProfile; // Return the authenticated user
+                        return appUser; // Return the authenticated user
                     }
                     else
                     {
@@ -253,10 +265,10 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<(double AverageRating, List<Review> Reviews)> ShowRecipesReviewsAndRatings(Recipe recipe)
         {
-             recipe = await _context.Recipes
-                .Include(r => r.Reviews)
-                .Include(r => r.Ratings)
-                .FirstOrDefaultAsync(r => r.Id == recipe.Id);
+            recipe = await _context.Recipes
+               .Include(r => r.Reviews)
+               .Include(r => r.Ratings)
+               .FirstOrDefaultAsync(r => r.Id == recipe.Id);
 
             if (recipe == null)
             {

@@ -13,9 +13,17 @@
                     <button class="btn btn-primary" @onclick="NavigateToProfile">Profile</button>
                 </Authorized>
                 <NotAuthorized>
-                    <button class="btn btn-primary" @onclick="NavigateToUserAccount">Register</button>
-                    <button class="btn btn-secondary" @onclick="NavigateToLogIn">Log in</button>
+                    <div class="d-flex align-items-center">
+                        <NavLink class="nav-link p-0" href="Account/LogIn">
+                            <button class="btn btn-primary">Log in</button>
+                        </NavLink>
+                        <NavLink class="nav-link p-0" href="Account/Register">
+                            <button class="btn btn-secondary">Register</button>
+                        </NavLink>
+                    </div>
                 </NotAuthorized>
+
+
             </AuthorizeView>
         </div>
 
@@ -34,12 +42,12 @@
 @code {
     private void NavigateToUserAccount()
     {
-        Navigation.NavigateTo("/userAccount");
+        Navigation.NavigateTo("/Account/LogIn");
     }
 
     private void NavigateToLogIn()
     {
-        Navigation.NavigateTo("/userLogIn");
+        Navigation.NavigateTo("/Account/userLogIn");
     }
 
     private void NavigateToProfile()

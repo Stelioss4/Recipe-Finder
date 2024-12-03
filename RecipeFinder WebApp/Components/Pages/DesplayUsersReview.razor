@@ -40,7 +40,7 @@ else
 
     public Recipe recipe { get; set; } = new();
 
-    private List<Review> reviews;
+    private List<Review> reviews { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {

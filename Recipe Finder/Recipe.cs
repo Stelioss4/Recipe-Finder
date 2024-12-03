@@ -28,9 +28,9 @@
             set { _sourceDomain = value.ToLowerInvariant(); } // Normalize the value being set; 
         }
 
-        private List<string> _searchTerms;
+        private ICollection<RecipeSearchTerm> _searchTerms;
 
-        public List<string> SearchTerms
+        public virtual ICollection<RecipeSearchTerm> SearchTerms
         {
             get { return _searchTerms; }
             set { _searchTerms = value; }
