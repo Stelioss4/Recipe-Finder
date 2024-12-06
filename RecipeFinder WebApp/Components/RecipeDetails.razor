@@ -64,12 +64,13 @@
                                 <label for="@ingredient.IngredientsName">
                                     (@GetAmountForPeople(ParseAmount(ingredient.Amount))@ParseUnit(ingredient.Amount)) @ingredient.IngredientsName
                                 </label>
-                                <br/>
+                                <br />
                                 <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
                                     REWE
                                 </a>
-@*                                 <button class="btn btn-secondary" @onclick="AddIngredientToShoppingList">Add to shopping list</button>
- *@                            </li>
+                                @*                                 <button class="btn btn-secondary" @onclick="AddIngredientToShoppingList">Add to shopping list</button>
+                        *@
+                            </li>
 
                         }
                     </ul>
@@ -157,7 +158,7 @@
             recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
             if (recipe.CookingInstructions != null)
-            {   
+            {
                 Console.WriteLine("Recipe found in the database.");
                 // Fetch additional related data as needed, e.g., average rating
                 var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
@@ -170,25 +171,16 @@
 
                 try
                 {
-                    if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
+                    if (decodedUrl.Contains(Constants.CHEFKOCH_URL) || decodedUrl.Contains(Constants.ALLRECIPE_URL))
                     {
-                        recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
-                    else if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
-                    {
-                        recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
-                    // else if (decodedUrl.Contains(Constants.SERIOUSEATS_URL))
-                    // {
-                    //     recipe = await Scrap.ScrapeSeriousEatsDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    // }
-                    else if (decodedUrl.Contains(Constants.DELISH_URL))
-                    {
-                        recipe = await Scrap.ScrapeDelishDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
-                    else if (decodedUrl.Contains(Constants.CANTINA_URL))
-                    {
-                        recipe = await Scrap.ScrapeCantinaDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                        if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
+                        {
+                            recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                        }
+                        if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
+                        {
+                            recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+                        }
                     }
                     else
                     {

@@ -12,7 +12,7 @@
 @inject DataService DataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
-@inject ApplicationDbContext _context
+@inject ApplicationDbContext _context 
 @inject MealDbService _mealDbService
 
 <PageTitle>Home</PageTitle>
@@ -77,10 +77,10 @@
         recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
     }
 
-    private async Task SearchRecipes()
-    {
-        recipes = await Scrap.ScrapeCantinaRecipes(searchQuery);
-    }
+    // private async Task SearchRecipes()
+    // {
+    //     recipes = await Scrap.ScrapeCantinaRecipes(searchQuery);
+    // }
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {

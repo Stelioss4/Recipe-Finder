@@ -114,33 +114,34 @@ namespace RecipeFinder_WebApp.Data
 
             var appUser = await GetAuthenticatedUserAsync();
 
-
-            if (appUser.User != null)
+            if (appUser?.User != null)
             {
-
-                if (appUser.User.FavoriteRecipes.Contains(recipe))
+                // Access the user's favorite recipes directly due to AutoInclude
+                if (appUser.User.FavoriteRecipes.Any(r => r.Id == recipe.Id))
                 {
-                    // Notify the user that the recipe is already in their favorites
                     Console.WriteLine("Recipe is already in your favorites.");
+                    return;
                 }
-                else
+
+                // Retrieve the tracked recipe
+                var trackedRecipe = await context.Recipes.FirstOrDefaultAsync(r => r.Id == recipe.Id);
+                if (trackedRecipe == null)
                 {
-                    // Add the recipe to the user's favorite list
-                    appUser.User.FavoriteRecipes.Add(recipe);
-
-                    // Save changes to the database
-                    await context.SaveChangesAsync();
-
-                    // Notify the user that the recipe was successfully added
-                    Console.WriteLine("Recipe added to your favorites successfully.");
+                    Console.WriteLine("Recipe not found in the database.");
+                    return;
                 }
+
+                // Add the recipe to favorites
+                appUser.User.FavoriteRecipes.Add(trackedRecipe);
+                await context.SaveChangesAsync();
+
+                Console.WriteLine("Recipe added to your favorites successfully.");
             }
             else
             {
                 Console.WriteLine("User is not authenticated.");
                 _navigation.NavigateTo("account/login");
             }
-
         }
 
         /// <summary>
