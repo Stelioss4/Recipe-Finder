@@ -8,17 +8,200 @@ namespace RecipeFinder_WebApp.Data
     {
         private readonly HttpClient _httpClient;
         private DataService _dataService;
-        private ApplicationDbContext _context;
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
 
-        public ScrapperService(HttpClient httpClient, DataService ds, ApplicationDbContext context)
+
+        public ScrapperService(HttpClient httpClient, DataService ds, IDbContextFactory<ApplicationDbContext> contextFactory)
         {
             _httpClient = httpClient;
             _dataService = ds;
-            _context = context;
+            _contextFactory = contextFactory;
+        }
+
+        public async Task<List<Recipe>> ScrapeFunkyCookRecipes(string searchQuery)
+        {
+            using var _context = _contextFactory.CreateDbContext();
+
+            // Check for existing recipes in the database
+            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, "https://funkycook.gr/");
+            if (existingRecipes.Count > 0)
+            {
+                return existingRecipes;
+            }
+
+            // Scrape new recipes
+            var searchResults = await ScrapeSearchResultsFromFunkyCook(searchQuery);
+            if (searchResults == null || !searchResults.Any())
+            {
+                return new List<Recipe>(); // Return empty list if no results found
+            }
+
+            List<Recipe> detailedRecipes = new List<Recipe>();
+
+            foreach (var recipe in searchResults)
+            {
+                if (existingRecipes.Any(r => r.Url == recipe.Url))
+                {
+                    continue; // Skip if recipe already exists in the database
+                }
+
+                recipe.SearchTerms = new List<RecipeSearchTerm>
+        {
+            new RecipeSearchTerm { Term = searchQuery }
+        };
+                recipe.SourceDomain = "https://funkycook.gr/";
+
+                var detailedRecipe = await ScrapeFunkyCookDetailsAndUpdateRecipe(recipe);
+                if (detailedRecipe != null)
+                {
+                    detailedRecipes.Add(detailedRecipe);
+                }
+            }
+
+            if (detailedRecipes.Count > 0)
+            {
+                _context.Recipes.AddRange(detailedRecipes);
+                await _context.SaveChangesAsync();
+            }
+
+            return detailedRecipes;
+        }
+
+        public async Task<List<Recipe>> ScrapeSearchResultsFromFunkyCook(string searchQuery)
+        {
+            var searchUrl = $"https://funkycook.gr/?s={Uri.EscapeDataString(searchQuery)}";
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetStringAsync(searchUrl);
+
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(response);
+
+            // Adjust the selectors based on Funkycook's HTML structure
+            var recipeNodes = htmlDocument.DocumentNode.SelectNodes("//*[@id=\"primary\"]/div/div");
+
+            if (recipeNodes == null) return null;
+
+            var recipes = new List<Recipe>();
+            foreach (var node in recipeNodes)
+            {
+                var titleNode = node.SelectSingleNode("//h2");
+                var linkNode = node.SelectSingleNode("//a");
+                var imageNode = node.SelectSingleNode("//img");
+
+                if (titleNode != null && linkNode != null)
+                {
+                    var imageUrl = imageNode?.GetAttributeValue("src", string.Empty);
+
+                    // Create a new Recipe object
+                    var recipe = new Recipe
+                    {
+                        RecipeName = titleNode.InnerText.Trim(),
+                        Url = linkNode.GetAttributeValue("href", string.Empty),
+                        Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
+                        SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } },
+                        SourceDomain = new Uri("https://funkycook.gr/").Host.ToLowerInvariant() // Set SourceDomain and normalize
+                    };
+
+                    recipes.Add(recipe);
+                }
+            }
+
+            return recipes;
+        }
+
+        public async Task<Recipe> ScrapeFunkyCookDetailsAndUpdateRecipe(Recipe recipe)
+        {
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetStringAsync(recipe.Url);
+
+            var document = new HtmlDocument();
+            document.LoadHtml(response);
+
+            // Parse Ingredients
+            var ingredientsNode = document.DocumentNode.SelectSingleNode("//ul[@class='recipe-ingredients']");
+            if (ingredientsNode != null)
+            {
+                var ingredientItems = ingredientsNode.SelectNodes("li");
+                if (ingredientItems != null)
+                {
+                   recipe.ListOfIngredients = ingredientItems
+                        .Select(item =>
+                        {
+                            var amountNode = item.SelectSingleNode(".//span[@class='ingredient-amount']");
+                            var nameNode = item.SelectSingleNode(".//span[@class='ingredient-name']");
+
+                            var amount = amountNode?.InnerText.Trim() ?? string.Empty;
+                            var name = nameNode?.InnerText.Trim() ?? string.Empty;
+
+                            return new Ingredient
+                            {
+                                IngredientsName = name,
+                                Amount = amount
+                            };
+                        })
+                        .ToList();
+                }
+                else
+                {
+                    Console.WriteLine("Ingredient items are null");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ingredients node is null");
+            }
+
+            // Extract instructions
+            var instructionsNode = document.DocumentNode.SelectSingleNode("//div[contains(@class, 'instructions')]");
+
+            if (instructionsNode != null)
+            {
+                recipe.CookingInstructions = instructionsNode.InnerText.Trim();
+            }
+
+            // Extract cooking time
+            var cookingTimeNode = document.DocumentNode.SelectSingleNode("//div[contains(@class, 'cooking-time')]");
+
+            if (cookingTimeNode != null)
+            {
+                recipe.Time = cookingTimeNode.InnerText.Trim(); // Assuming CookingTime is a string, adjust type as needed
+            }
+
+            // Extract image URL
+            var imageNode = document.DocumentNode.SelectSingleNode("//div[contains(@class, 'recipe-image')]//img");
+
+            if (imageNode != null)
+            {
+                var imageUrl = imageNode.GetAttributeValue("src", string.Empty);
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    // Optionally, download and save the image as a byte array
+                    recipe.Image = await DownloadImageAsByteArray(imageUrl);
+                }
+            }
+
+            // Extract recipe name (if necessary, in case it is not already set)
+            var titleNode = document.DocumentNode.SelectSingleNode("//h1[contains(@class, 'recipe-title')]");
+            if (titleNode != null && string.IsNullOrEmpty(recipe.RecipeName))
+            {
+                recipe.RecipeName = titleNode.InnerText.Trim();
+            }
+
+            var difficultyNode = document.DocumentNode.SelectSingleNode("//div[contains(@class, 'difficulty')]");
+
+            if (difficultyNode != null)
+            {
+                recipe.DifficultyLevel = difficultyNode.InnerText.Trim(); // Store difficulty info
+            }
+
+            return recipe;
         }
 
         public async Task<List<Recipe>> ScrapeCantinaRecipes(string searchQuery)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             // Check for existing recipes in the database
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CANTINA_URL);
             if (existingRecipes.Count > 0)
@@ -225,6 +408,8 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.ALLRECIPE_URL);
 
             if (existingRecipes.Count > 0)
@@ -468,6 +653,8 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeCKRecipes(string searchQuery)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CHEFKOCH_URL);
             if (existingRecipes.Count > 0)
             {
@@ -758,6 +945,8 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<List<Recipe>> ScrapeBBCGoodFoodRecipes(string searchQuery)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.BBCGOODFOOD_URL);
 
             if (existingRecipes.Count > 0)

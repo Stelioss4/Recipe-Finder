@@ -1,23 +1,25 @@
-﻿using Recipe_Finder;
+﻿using Microsoft.EntityFrameworkCore;
+using Recipe_Finder;
 
 namespace RecipeFinder_WebApp.Data
 {
     public class WeeklyPlanService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
         private readonly DataService _dataService;
         private DateTime? lastPlanDate = null;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
-        public WeeklyPlanService(DataService dataService, ApplicationDbContext context)
+        public WeeklyPlanService(DataService dataService, IDbContextFactory<ApplicationDbContext> contextFactory)
         {
             _dataService = dataService;
-            _context = context;
+            _contextFactory = contextFactory;
         }
 
         // Generates a weekly plan based on the user's favorite recipes
         public async Task<List<Recipe>> GenerateWeeklyPlanAsync()
         {
+            using var context = _contextFactory.CreateDbContext();
             // Fetch the authenticated user
             var userProfile = await _dataService.GetAuthenticatedUserAsync();
 
@@ -53,8 +55,8 @@ namespace RecipeFinder_WebApp.Data
                 userProfile.User.LastWeeklyPlanDate = DateTime.Now;
 
                 // Save changes to the database
-                _context.Update(userProfile); // Make sure the user is tracked by the context
-                await _context.SaveChangesAsync();
+                context.Update(userProfile); // Make sure the user is tracked by the context
+                await context.SaveChangesAsync();
 
                 // Return the new weekly plan
                 return newWeeklyPlan;

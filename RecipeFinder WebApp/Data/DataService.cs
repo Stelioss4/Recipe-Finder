@@ -18,18 +18,20 @@ namespace RecipeFinder_WebApp.Data
         private Rating rating { get; set; } = new();
 
         private readonly IHttpClientFactory _clientFactory;
-        private readonly ApplicationDbContext _context;
+        //        private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly NavigationManager _navigation;
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
 
-        public DataService(NavigationManager Navigation, IHttpClientFactory clientFactory, ApplicationDbContext context, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
+        public DataService(NavigationManager Navigation, IHttpClientFactory clientFactory, IDbContextFactory<ApplicationDbContext> contextFactory, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
         {
             _clientFactory = clientFactory;
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            //       context = context ?? throw new ArgumentNullException(nameof(context));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             AuthenticationStateProvider = authenticationStateProvider;
             _navigation = Navigation;
+            _contextFactory = contextFactory;
         }
 
         /// <summary>
@@ -38,6 +40,8 @@ namespace RecipeFinder_WebApp.Data
         /// <returns></returns>
         public async Task AddIngredientsToShoppingList(Ingredient ingredient)
         {
+            using var context = _contextFactory.CreateDbContext();
+
             var appUser = await GetAuthenticatedUserAsync();
 
             UserProfile = appUser.User;
@@ -52,7 +56,7 @@ namespace RecipeFinder_WebApp.Data
                 {
                     UserProfile.ShoppingList.Add(ingredient);
 
-                    await _context.SaveChangesAsync();
+                    await context.SaveChangesAsync();
 
                     Console.WriteLine("Ingredient is successfully added to shopping list");
 
@@ -67,6 +71,8 @@ namespace RecipeFinder_WebApp.Data
         /// <returns></returns>
         public async Task RemoveIngredientFromShoppingListAsync(Ingredient ingredient)
         {
+            using var context = _contextFactory.CreateDbContext();
+
             try
             {
                 var appUser = await GetAuthenticatedUserAsync();
@@ -85,7 +91,7 @@ namespace RecipeFinder_WebApp.Data
                         UserProfile.ShoppingList.Remove(ingredientToRemove);
 
                         // Save changes to the database
-                        await _context.SaveChangesAsync();
+                        await context.SaveChangesAsync();
 
                         Console.WriteLine("Ingredient removed from ShoppingList successfully.");
                     }
@@ -104,6 +110,7 @@ namespace RecipeFinder_WebApp.Data
         /// </summary>
         public async Task AddFavoriteRecipeAsync(Recipe recipe)
         {
+            using var context = _contextFactory.CreateDbContext();
 
             var appUser = await GetAuthenticatedUserAsync();
 
@@ -122,7 +129,7 @@ namespace RecipeFinder_WebApp.Data
                     appUser.User.FavoriteRecipes.Add(recipe);
 
                     // Save changes to the database
-                    await _context.SaveChangesAsync();
+                    await context.SaveChangesAsync();
 
                     // Notify the user that the recipe was successfully added
                     Console.WriteLine("Recipe added to your favorites successfully.");
@@ -141,6 +148,8 @@ namespace RecipeFinder_WebApp.Data
         /// </summary>
         public async Task RemoveFavoriteRecipeAsync(Recipe recipe)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             try
             {
                 var appUser = await GetAuthenticatedUserAsync();
@@ -154,14 +163,15 @@ namespace RecipeFinder_WebApp.Data
                     var recipeToRemove = appUser.User.FavoriteRecipes
                      .FirstOrDefault(r =>
                          string.Equals(r.RecipeName, recipe.RecipeName, StringComparison.OrdinalIgnoreCase) &&
-                         string.Equals(r.SourceDomain, recipe.SourceDomain, StringComparison.OrdinalIgnoreCase) 
-                         //r.SearchTerms != null &&
-                         //recipe.SearchTerms != null &&
-                         //r.SearchTerms
-                         //    .OrderBy(t => t.Term) 
-                         //    .Select(t => t.Term) 
-                         //    .SequenceEqual(
-                         //        recipe.SearchTerms.OrderBy(t => t.Term).Select(t => t.Term)
+                         string.Equals(r.SourceDomain, recipe.SourceDomain, StringComparison.OrdinalIgnoreCase)
+                        
+                     //r.SearchTerms != null &&
+                     //recipe.SearchTerms != null &&
+                     //r.SearchTerms
+                     //    .OrderBy(t => t.Term) 
+                     //    .Select(t => t.Term) 
+                     //    .SequenceEqual(
+                     //        recipe.SearchTerms.OrderBy(t => t.Term).Select(t => t.Term)
                      );
 
 
@@ -202,6 +212,9 @@ namespace RecipeFinder_WebApp.Data
         /// <returns></returns>
         public async Task<List<Recipe>> GetRecipesFromDatabaseAsync(string searchQuery, string source)
         {
+
+            using var _context = _contextFactory.CreateDbContext();
+
             // Normalize the search query
             searchQuery = searchQuery.Trim().ToLowerInvariant();
 
@@ -265,6 +278,8 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<(double AverageRating, List<Review> Reviews)> ShowRecipesReviewsAndRatings(Recipe recipe)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             recipe = await _context.Recipes
                .Include(r => r.Reviews)
                .Include(r => r.Ratings)
