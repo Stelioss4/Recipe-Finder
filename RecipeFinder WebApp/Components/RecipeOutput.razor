@@ -3,6 +3,8 @@
 
 @inject NavigationManager Navigation
 @inject DataService DataService
+@inject FavoriteService _favorite
+
 
 <div class="row mt-5">
     @if (recipes?.Count > 0)
@@ -50,12 +52,12 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await DataService.AddFavoriteRecipeAsync(recipe);
+        await _favorite.AddFavoriteRecipeAsync(recipe);
     }
 
     private async Task RemoveRecipeFromFavorite(Recipe rec)
     {
-        await DataService.RemoveFavoriteRecipeAsync(rec);
+        await _favorite.RemoveFavoriteRecipeAsync(rec);
         // Refresh the user's profile after removing the recipe
         StateHasChanged();
     }

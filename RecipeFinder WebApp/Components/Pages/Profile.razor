@@ -12,6 +12,8 @@
 @inject UserManager<ApplicationUser> _userManager
 @inject WeeklyPlanService _weeklyPlan
 @inject ApplicationDbContext _context
+@inject FavoriteService _favorite
+
 
 <h3>User Profile</h3>
 <div class="container mt-5">
@@ -184,7 +186,7 @@
 
     private async Task RemoveRecipeFromFavorite(Recipe rec)
     {
-        await DataService.RemoveFavoriteRecipeAsync(rec);
+        await _favorite.RemoveFavoriteRecipeAsync(rec);
         // Refresh the user's profile after removing the recipe
         userProfile.FavoriteRecipes.Remove(rec);
         StateHasChanged();

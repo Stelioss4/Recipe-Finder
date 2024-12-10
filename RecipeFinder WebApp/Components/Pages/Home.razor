@@ -14,6 +14,8 @@
 @inject UserManager<ApplicationUser> _userManager
 @inject ApplicationDbContext _context 
 @inject MealDbService _mealDbService
+@inject FavoriteService _favorite
+
 
 <PageTitle>Home</PageTitle>
 
@@ -89,7 +91,7 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await DataService.AddFavoriteRecipeAsync(recipe);
+        await _favorite.AddFavoriteRecipeAsync(recipe);
         StateHasChanged();
     }
     }

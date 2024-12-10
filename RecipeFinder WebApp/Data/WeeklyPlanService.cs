@@ -86,6 +86,38 @@ namespace RecipeFinder_WebApp.Data
         {
             return lastPlanDate;
         }
-    }
 
+        //public async Task RemoveWeeklyPlanAsync()
+        //{
+        //    try
+        //    {
+        //        using var context = _contextFactory.CreateDbContext();
+        //        // Fetch the authenticated user
+        //        var userProfile = await _dataService.GetAuthenticatedUserAsync();
+        //        // Fetch all weekly plans
+        //        var weeklyPlans = userProfile.User.WeeklyPlan.ToList();
+
+        //        if (weeklyPlans.Any())
+        //        {
+        //            // Remove all weekly plans
+        //            context.WeeklyPlans.RemoveRange(weeklyPlans);
+
+        //            // Save changes to the database
+        //            await context.SaveChangesAsync();
+        //            Console.WriteLine("All weekly plans have been deleted.");
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("No weekly plans found to delete.");
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"An error occurred while deleting weekly plans: {ex.Message}");
+        //    }
+        //}
+    }
 }
+
+

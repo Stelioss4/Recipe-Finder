@@ -14,6 +14,8 @@
 @inject UserManager<ApplicationUser> _userManager
 @inject ApplicationDbContext _context
 @inject SpoonacularService spoonacular
+@inject FavoriteService _favorite
+
 
 
 
@@ -280,7 +282,7 @@
 
     private async Task AddIngredientToShoppingList()
     {
-        await _dataService.AddIngredientsToShoppingList(ingredient);
+        await _favorite.AddIngredientsToShoppingList(ingredient);
     }
     private void NavigateToReviews()
     {

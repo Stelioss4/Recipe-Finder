@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @inject DataService DataService
 @inject ApplicationDbContext _context
+@inject FavoriteService _favorite
 
 <div class="row mt-5">
     @if (ShoppingList != null && ShoppingList.Count > 0)
@@ -50,6 +51,6 @@
 
     private async Task RemoveIngredient(Ingredient ingredient)
     {
-        await DataService.RemoveIngredientFromShoppingListAsync(ingredient);
+        await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
     }
 }

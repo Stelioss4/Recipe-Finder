@@ -51,6 +51,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<ScrapperService>();
 builder.Services.AddScoped<WeeklyPlanService>();
+builder.Services.AddScoped<FavoriteService>();
 builder.Services.AddHttpClient<SpoonacularService>();
 builder.Services.AddHttpClient<GroceryService>();
 
