@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-RecipeFinder WebApp-cf43d92e-26c7-4644-b2e2-e2586ccbd777</UserSecretsId>
     <RootNamespace>RecipeFinder WebApp</RootNamespace>

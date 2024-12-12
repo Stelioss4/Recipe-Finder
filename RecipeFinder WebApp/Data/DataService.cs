@@ -12,7 +12,7 @@ namespace RecipeFinder_WebApp.Data
     public class DataService
     {
         private Recipe recipe { get; set; } = new();
-        private User? UserProfile { get; set; } = new User();
+        private User UserProfile { get; set; } = new User();
         private List<Recipe> Recipes { get; set; } = new List<Recipe>();
         private Review review { get; set; } = new();
         private Rating rating { get; set; } = new();

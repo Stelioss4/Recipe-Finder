@@ -51,12 +51,12 @@
         {
             <div class="popup">
                 <div class="popup-content">
-                    @if (weeklyPlan != null && weeklyPlan.Count > 0)
+                    @if (appUser.User.WeeklyPlan != null && appUser.User.WeeklyPlan.Count > 0)
                     {
 
-                        @for (int i = 0; i < weeklyPlan.Count; i++)
+                        @for (int i = 0; i < appUser.User.WeeklyPlan.Count; i++)
                         {
-                            var rec = weeklyPlan[i];
+                            var rec = appUser.User.WeeklyPlan[i];
                             var day = daysOfWeek[i];
 
                             <div>
@@ -78,8 +78,8 @@
                         }
 
                         <p>your weekly plan made on @userProfile.LastWeeklyPlanDate!</p>
-                        <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate new plan</button>
-                    }
+@*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate new plan</button>
+ *@                    }
                     else if (userProfile.FavoriteRecipes.Count < Constants.LIMIT_DAYS)
                     {
                         <p>You don't have any favorite recipes yet.</p>
@@ -88,17 +88,17 @@
                     else
                     {
                         <p>No weekly plan generated yet.</p>
-                        <button class="btn btn-outline-primary" @onclick="GenerateWeeklyPlan">Generate Weekly Plan</button>
+                        <button class="btn btn-outline-primary" @onclick="CreateWeeklyPlan">Generate Weekly Plan</button>
                     }
                 </div>
             </div>
         }
 
-     @*    <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">Shopping List</button>
-        @if (showShoppingListPopup)
-        {
-            <ShoppingListOutput ShoppingList="userProfile.ShoppingList"></ShoppingListOutput>
-        } *@
+        @*    <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">Shopping List</button>
+    @if (showShoppingListPopup)
+    {
+    <ShoppingListOutput ShoppingList="userProfile.ShoppingList"></ShoppingListOutput>
+    } *@
 
 
 
@@ -112,15 +112,15 @@
 
 
 @code {
-    public User? userProfile { get; set; } = new User();
+    public User userProfile { get; set; } = new User();
 
     private ApplicationUser appUser { get; set; } = new();
-
-    private bool showWeeklyPlanPopup = false;
 
     private List<Recipe> weeklyPlan { get; set; } = new();
 
     private DateTime weeklyPlanGeneratedDate;
+
+    private bool showWeeklyPlanPopup { get; set; } = false;
 
     private bool showFavoritesPopup { get; set; } = false;
 
@@ -136,15 +136,17 @@
     {
         showShoppingListPopup = !showShoppingListPopup; // Toggle the popup
     }
+    private void TogglePopupWeeklyPlan()
+    {
+        showWeeklyPlanPopup = !showWeeklyPlanPopup;  // Toggle the popup
+
+    }
 
     protected override async Task OnInitializedAsync()
     {
         appUser = await DataService.GetAuthenticatedUserAsync();
 
         userProfile = appUser?.User;
-        // using ApplicationDbContext dbContext = new(new DbContextOptions<ApplicationDbContext> ());
-
-        // var x = dbContext.Users.Include(x => x.User).Where(u => u.Email == "stelios.boursanidis@gmail.com").First();
 
 
         if (userProfile == null)
@@ -161,15 +163,24 @@
         await _weeklyPlan.ForceNewPlanAsync();
     }
 
-    private void TogglePopupWeeklyPlan()
+    // private async Task TogglePopupWeeklyPlan()
+    // {
+    //     // If a weekly plan was generated more than 7 days ago, regenerate it
+    //     if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > Constants.WEEK_DAY_NUM)
+    //     {
+    //       await  GenerateWeeklyPlan();
+    //     }
+    // }
+
+    private void CreateWeeklyPlan()
     {
         // If a weekly plan was generated more than 7 days ago, regenerate it
         if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > Constants.WEEK_DAY_NUM)
         {
             GenerateWeeklyPlan();
         }
-        showWeeklyPlanPopup = !showWeeklyPlanPopup;
     }
+
     private async Task GenerateWeeklyPlan()
     {
 

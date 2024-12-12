@@ -5,7 +5,7 @@ namespace RecipeFinder_WebApp.Data
 {
     public class FavoriteService
     {
-        private User? UserProfile { get; set; } = new User();
+        private User UserProfile { get; set; } = new User();
 
         private readonly ApplicationDbContext _context;
         private readonly NavigationManager _navigation;
