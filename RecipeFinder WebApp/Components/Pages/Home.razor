@@ -54,17 +54,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        appUser = await DataService.GetAuthenticatedUserAsync();
+        // appUser = await DataService.GetAuthenticatedUserAsync();
 
-        userProfile = appUser?.User;
+        // userProfile = appUser?.User;
 
-        if (userProfile == null)
-        {
-            // User profile not found, force logout and redirect to login
-            await SignInManager.SignOutAsync();
-            Navigation.NavigateTo("Account/Register");
-            return;
-        }
+        // if (userProfile == null)
+        // {
+        //     // User profile not found, force logout and redirect to login
+        //     await SignInManager.SignOutAsync();
+        //     Navigation.NavigateTo("Account/Register");
+        //     return;
+        // }
     }
 
     private async Task SearchForRecipeFromCK()

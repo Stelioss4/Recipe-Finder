@@ -76,8 +76,8 @@
                         }
 
                         <p>Your weekly plan was created on @userProfile.LastWeeklyPlanDate!</p>
-                        <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
-                    }
+@*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
+ *@                    }
                     else if (userProfile.FavoriteRecipes.Count < Constants.LIMIT_DAYS)
                     {
                         <p>You need more favorite recipes to generate a weekly plan.</p>
@@ -106,9 +106,50 @@
     private List<Recipe> weeklyPlan { get; set; } = new();
 
     private bool showWeeklyPlanPopup { get; set; } = false;
+
     private bool showFavoritesPopup { get; set; } = false;
 
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbContextFactory.CreateDbContext();
+
+        appUser = await DataService.GetAuthenticatedUserAsync();
+
+        if (appUser != null)
+        {
+            // // Include the WeeklyPlan if it exists
+            // appUser = await context.Users
+            //     .Include(u => u.User.WeeklyPlan)
+            //     .Include(u => u.User.FavoriteRecipes)
+            //     .FirstOrDefaultAsync(u => u.Id == appUser.Id);
+
+            if (appUser.User.LastWeeklyPlanDate.HasValue &&
+          (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
+            {
+                // Delete weekly plan after 7 days
+                appUser.User.WeeklyPlan.Clear();
+
+                // Update LastWeeklyPlanDate to the current date and time
+                appUser.User.LastWeeklyPlanDate = DateTime.UtcNow;
+
+                // Save changes to the database
+                context.Users.Update(appUser);
+                await context.SaveChangesAsync();
+            }
+        }
+        else
+        {
+            // User profile not found, force logout and redirect to login
+            await SignInManager.SignOutAsync();
+            Navigation.NavigateTo("Account/LogIn");
+            return;
+        }
+
+        userProfile = appUser.User;
+
+    }
 
     private void TogglePopupFavorites()
     {
@@ -118,44 +159,6 @@
     private void TogglePopupWeeklyPlan()
     {
         showWeeklyPlanPopup = !showWeeklyPlanPopup;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        using var context = DbContextFactory.CreateDbContext();
-
-        appUser = await DataService.GetAuthenticatedUserAsync();
-
-        // Include the WeeklyPlan if it exists
-        appUser = await context.Users
-            .Include(u => u.User.WeeklyPlan)
-            .Include(u => u.User.FavoriteRecipes)
-            .FirstOrDefaultAsync(u => u.Id == appUser.Id);
-
-        if (appUser.User.LastWeeklyPlanDate.HasValue &&
-      (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
-        {
-            // Delete weekly plan after 7 days
-            appUser.User.WeeklyPlan.Clear();
-
-            // Update LastWeeklyPlanDate to the current date and time
-            appUser.User.LastWeeklyPlanDate = DateTime.UtcNow;
-
-            // Save changes to the database
-            context.Users.Update(appUser);
-            await context.SaveChangesAsync();
-        }
-
-        if (appUser?.User == null)
-        {
-            // User profile not found, force logout and redirect to login
-            await SignInManager.SignOutAsync();
-            Navigation.NavigateTo("Account/Register");
-            return;
-        }
-
-        userProfile = appUser.User;
-
     }
 
     public async Task CreateNewPlan()

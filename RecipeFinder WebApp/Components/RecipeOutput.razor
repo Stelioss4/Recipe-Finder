@@ -20,17 +20,19 @@
                     <div class="btn-group">
                         <div class="card-body">
                             <h5 class="card-title">@rec.RecipeName</h5>
-                          
+
                             <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
-
-                            @if (AddRecipeButton)
+                            @if (appUser != null)
                             {
-                                <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
-                            }
+                                @if (AddRecipeButton)
+                                {
+                                    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
+                                }
 
-                            @if (RemoveRecipeButton)
-                            {
-                                <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove</button>
+                                @if (RemoveRecipeButton)
+                                {
+                                    <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove</button>
+                                }
                             }
                         </div>
                     </div>
@@ -42,6 +44,7 @@
 
 @code {
     [Parameter] public List<Recipe> recipes { get; set; } = new List<Recipe>();
+    [Parameter] public ApplicationUser appUser { get; set; } = new();
     [Parameter] public bool RemoveRecipeButton { get; set; } = true;
     [Parameter] public bool AddRecipeButton { get; set; } = true;
 
@@ -52,7 +55,16 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await _favorite.AddFavoriteRecipeAsync(recipe);
+        if(appUser != null)
+        {
+            await _favorite.AddFavoriteRecipeAsync(recipe);
+            StateHasChanged();
+
+        }
+        else
+        {
+            Navigation.NavigateTo("Account/LogIn");
+        }
     }
 
     private async Task RemoveRecipeFromFavorite(Recipe rec)

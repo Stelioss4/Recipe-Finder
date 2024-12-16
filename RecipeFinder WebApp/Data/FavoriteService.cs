@@ -69,7 +69,7 @@ namespace RecipeFinder_WebApp.Data
                 using var _context = _contextFactory.CreateDbContext();
 
                 var appUser = await _dataService.GetAuthenticatedUserAsync();
-                
+
                 appUser = await _context.Users
                 .Include(u => u.User.ShoppingList)
                 .FirstOrDefaultAsync(u => u.Id == appUser.Id);
@@ -110,28 +110,31 @@ namespace RecipeFinder_WebApp.Data
 
             var appUser = await _dataService.GetAuthenticatedUserAsync();
 
-            appUser = await _context.Users
-              .Include(u => u.User.FavoriteRecipes)
-              .FirstOrDefaultAsync(u => u.Id == appUser.Id);
-
-            if (appUser.User != null)
+            if (appUser != null)
             {
+                appUser = await _context.Users
+                  .Include(u => u.User.FavoriteRecipes)
+                  .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
-                if (appUser.User.FavoriteRecipes.Contains(recipe))
+                if (appUser.User != null)
                 {
-                    // Notify the user that the recipe is already in their favorites
-                    Console.WriteLine("Recipe is already in your favorites.");
-                }
-                else
-                {
-                    // Add the recipe to the user's favorite list
-                    appUser.User.FavoriteRecipes.Add(recipe);
 
-                    // Save changes to the database
-                    await _context.SaveChangesAsync();
+                    if (appUser.User.FavoriteRecipes.Contains(recipe))
+                    {
+                        // Notify the user that the recipe is already in their favorites
+                        Console.WriteLine("Recipe is already in your favorites.");
+                    }
+                    else
+                    {
+                        // Add the recipe to the user's favorite list
+                        appUser.User.FavoriteRecipes.Add(recipe);
 
-                    // Notify the user that the recipe was successfully added
-                    Console.WriteLine("Recipe added to your favorites successfully.");
+                        // Save changes to the database
+                        await _context.SaveChangesAsync();
+
+                        // Notify the user that the recipe was successfully added
+                        Console.WriteLine("Recipe added to your favorites successfully.");
+                    }
                 }
             }
             else
