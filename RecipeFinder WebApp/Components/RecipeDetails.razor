@@ -12,7 +12,7 @@
 @inject DataService _dataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
-@inject ApplicationDbContext _context
+@inject IDbContextFactory<ApplicationDbContext> _contextFactory
 @inject SpoonacularService spoonacular
 @inject FavoriteService _favorite
 
@@ -148,6 +148,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        using var _context = _contextFactory.CreateDbContext();
+
         var uri = new Uri(Navigation.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
@@ -307,6 +309,8 @@
 
     private async Task SubmitRatingAndReview(Recipe recipe)
     {
+        using var _context = _contextFactory.CreateDbContext();
+
         if (recipe is null)
         {
             throw new ArgumentNullException(nameof(recipe));

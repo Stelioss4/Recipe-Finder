@@ -5,23 +5,23 @@ namespace RecipeFinder_WebApp.Data
 {
     public class WeeklyPlanService
     {
-        //private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
-        private readonly ApplicationDbContext context;
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+        //private readonly ApplicationDbContext context;
         private readonly DataService _dataService;
         private DateTime? lastPlanDate = null;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
-        public WeeklyPlanService(DataService dataService, /*IDbContextFactory<ApplicationDbContext> contextFactory*/ ApplicationDbContext _context)
+        public WeeklyPlanService(DataService dataService, IDbContextFactory<ApplicationDbContext> contextFactory /* ApplicationDbContext _context*/)
         {
             _dataService = dataService;
-            context = _context;
-            //_contextFactory = contextFactory;
+            //context = _context;
+            _contextFactory = contextFactory;
         }
 
         // Generates a weekly plan based on the user's favorite recipes
         public async Task<List<Recipe>> GenerateWeeklyPlanAsync()
         {
-            //using var context = _contextFactory.CreateDbContext();
+            using var context = _contextFactory.CreateDbContext();
             // Fetch the authenticated user
             var userProfile = await _dataService.GetAuthenticatedUserAsync();
 
@@ -29,6 +29,11 @@ namespace RecipeFinder_WebApp.Data
             {
                 throw new Exception("User not authenticated.");
             }
+
+            userProfile = await context.Users
+            .Include(u => u.User.WeeklyPlan)
+            .Include(u => u.User.FavoriteRecipes)
+            .FirstOrDefaultAsync(u => u.Id == userProfile.Id);
 
             // Check if the user already has a weekly plan and the date of the last plan
             if (userProfile.User.WeeklyPlan != null && userProfile.User.WeeklyPlan.Any() && userProfile.User.LastWeeklyPlanDate.HasValue)

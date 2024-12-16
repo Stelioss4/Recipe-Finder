@@ -12,10 +12,8 @@
 @inject DataService DataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
-@inject ApplicationDbContext _context 
-@inject MealDbService _mealDbService
-@inject FavoriteService _favorite
-
+@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
+@inject FavoriteService favorite
 
 <PageTitle>Home</PageTitle>
 
@@ -79,11 +77,6 @@
         recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
     }
 
-    // private async Task SearchRecipes()
-    // {
-    //     recipes = await Scrap.ScrapeCantinaRecipes(searchQuery);
-    // }
-
     private void NavigateToRecipeDetails(string recipeUrl)
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
@@ -91,7 +84,7 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await _favorite.AddFavoriteRecipeAsync(recipe);
+        await favorite.AddFavoriteRecipeAsync(recipe);
         StateHasChanged();
     }
     }

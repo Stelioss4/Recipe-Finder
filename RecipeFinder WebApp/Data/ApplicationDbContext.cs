@@ -45,14 +45,14 @@ namespace RecipeFinder_WebApp.Data
                 .Navigation(e => e.User)
                 .AutoInclude();
 
-            // Configure User entity to include FavoriteRecipes and WeeklyPlan
-            builder.Entity<User>()
-                .Navigation(u => u.FavoriteRecipes)
-                .AutoInclude();
+            //// Configure User entity to include FavoriteRecipes and WeeklyPlan
+            //builder.Entity<User>()
+            //    .Navigation(u => u.FavoriteRecipes)
+            //    .AutoInclude();
 
-            builder.Entity<User>()
-                .Navigation(u => u.WeeklyPlan)
-                .AutoInclude();
+            //builder.Entity<User>()
+            //    .Navigation(u => u.WeeklyPlan)
+            //    .AutoInclude();
 
             builder.Entity<Recipe>()
                 .Navigation(r => r.ListOfIngredients)

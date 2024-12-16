@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 
 namespace RecipeFinder_WebApp.Data
@@ -7,15 +8,18 @@ namespace RecipeFinder_WebApp.Data
     {
         private User UserProfile { get; set; } = new User();
 
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
         private readonly NavigationManager _navigation;
         private readonly DataService _dataService;
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
 
-        public FavoriteService(DataService dataService, NavigationManager Navigation, ApplicationDbContext context)
+
+        public FavoriteService(DataService dataService, NavigationManager Navigation, IDbContextFactory<ApplicationDbContext> contextFactory/*, ApplicationDbContext context*/)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            //_context = context ?? throw new ArgumentNullException(nameof(context));
             _navigation = Navigation;
             _dataService = dataService;
+            _contextFactory = contextFactory;
 
         }
 
@@ -25,7 +29,13 @@ namespace RecipeFinder_WebApp.Data
         /// <returns></returns>
         public async Task AddIngredientsToShoppingList(Ingredient ingredient)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             var appUser = await _dataService.GetAuthenticatedUserAsync();
+
+            appUser = await _context.Users
+               .Include(u => u.User.ShoppingList)
+               .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
             UserProfile = appUser.User;
 
@@ -56,7 +66,13 @@ namespace RecipeFinder_WebApp.Data
         {
             try
             {
+                using var _context = _contextFactory.CreateDbContext();
+
                 var appUser = await _dataService.GetAuthenticatedUserAsync();
+                
+                appUser = await _context.Users
+                .Include(u => u.User.ShoppingList)
+                .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
                 UserProfile = appUser.User;
 
@@ -90,9 +106,13 @@ namespace RecipeFinder_WebApp.Data
         /// </summary>
         public async Task AddFavoriteRecipeAsync(Recipe recipe)
         {
+            using var _context = _contextFactory.CreateDbContext();
 
             var appUser = await _dataService.GetAuthenticatedUserAsync();
 
+            appUser = await _context.Users
+              .Include(u => u.User.FavoriteRecipes)
+              .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
             if (appUser.User != null)
             {
@@ -129,9 +149,13 @@ namespace RecipeFinder_WebApp.Data
         {
             try
             {
+                using var _context = _contextFactory.CreateDbContext();
+
                 var appUser = await _dataService.GetAuthenticatedUserAsync();
 
-
+                appUser = await _context.Users
+                 .Include(u => u.User.FavoriteRecipes)
+                 .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
                 if (appUser.User != null)
                 {

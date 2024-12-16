@@ -11,9 +11,8 @@
 @inject DataService DataService
 @inject UserManager<ApplicationUser> _userManager
 @inject WeeklyPlanService _weeklyPlan
-@inject ApplicationDbContext _context
+@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
 @inject FavoriteService _favorite
-
 
 <h3>User Profile</h3>
 <div class="container mt-5">
@@ -53,7 +52,6 @@
                 <div class="popup-content">
                     @if (appUser.User.WeeklyPlan != null && appUser.User.WeeklyPlan.Count > 0)
                     {
-
                         @for (int i = 0; i < appUser.User.WeeklyPlan.Count; i++)
                         {
                             var rec = appUser.User.WeeklyPlan[i];
@@ -77,12 +75,12 @@
                             </div>
                         }
 
-                        <p>your weekly plan made on @userProfile.LastWeeklyPlanDate!</p>
-@*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate new plan</button>
- *@                    }
+                        <p>Your weekly plan was created on @userProfile.LastWeeklyPlanDate!</p>
+                        <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
+                    }
                     else if (userProfile.FavoriteRecipes.Count < Constants.LIMIT_DAYS)
                     {
-                        <p>You don't have any favorite recipes yet.</p>
+                        <p>You need more favorite recipes to generate a weekly plan.</p>
                         <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
                     }
                     else
@@ -93,23 +91,12 @@
                 </div>
             </div>
         }
-
-        @*    <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">Shopping List</button>
-    @if (showShoppingListPopup)
-    {
-    <ShoppingListOutput ShoppingList="userProfile.ShoppingList"></ShoppingListOutput>
-    } *@
-
-
-
-        <div class="col-md-6 col-md-offset-2"></div>
     }
     else
     {
         <p>Loading user profile...</p>
     }
 </div>
-
 
 @code {
     public User userProfile { get; set; } = new User();
@@ -118,89 +105,84 @@
 
     private List<Recipe> weeklyPlan { get; set; } = new();
 
-    private DateTime weeklyPlanGeneratedDate;
-
     private bool showWeeklyPlanPopup { get; set; } = false;
-
     private bool showFavoritesPopup { get; set; } = false;
-
-    private bool showShoppingListPopup { get; set; } = false;
 
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
     private void TogglePopupFavorites()
     {
-        showFavoritesPopup = !showFavoritesPopup; // Toggle the popup
+        showFavoritesPopup = !showFavoritesPopup;
     }
-    private void TogglePopupShoppingList()
-    {
-        showShoppingListPopup = !showShoppingListPopup; // Toggle the popup
-    }
+
     private void TogglePopupWeeklyPlan()
     {
-        showWeeklyPlanPopup = !showWeeklyPlanPopup;  // Toggle the popup
-
+        showWeeklyPlanPopup = !showWeeklyPlanPopup;
     }
 
     protected override async Task OnInitializedAsync()
     {
+        using var context = DbContextFactory.CreateDbContext();
+
         appUser = await DataService.GetAuthenticatedUserAsync();
 
-        userProfile = appUser?.User;
+        // Include the WeeklyPlan if it exists
+        appUser = await context.Users
+            .Include(u => u.User.WeeklyPlan)
+            .Include(u => u.User.FavoriteRecipes)
+            .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
+        if (appUser.User.LastWeeklyPlanDate.HasValue &&
+      (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
+        {
+            // Delete weekly plan after 7 days
+            appUser.User.WeeklyPlan.Clear();
 
-        if (userProfile == null)
+            // Update LastWeeklyPlanDate to the current date and time
+            appUser.User.LastWeeklyPlanDate = DateTime.UtcNow;
+
+            // Save changes to the database
+            context.Users.Update(appUser);
+            await context.SaveChangesAsync();
+        }
+
+        if (appUser?.User == null)
         {
             // User profile not found, force logout and redirect to login
             await SignInManager.SignOutAsync();
             Navigation.NavigateTo("Account/Register");
             return;
         }
+
+        userProfile = appUser.User;
+
     }
 
     public async Task CreateNewPlan()
     {
+        using var context = DbContextFactory.CreateDbContext();
         await _weeklyPlan.ForceNewPlanAsync();
+        await context.Entry(appUser.User).Collection(u => u.WeeklyPlan).LoadAsync();
+        StateHasChanged();
     }
 
-    // private async Task TogglePopupWeeklyPlan()
-    // {
-    //     // If a weekly plan was generated more than 7 days ago, regenerate it
-    //     if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > Constants.WEEK_DAY_NUM)
-    //     {
-    //       await  GenerateWeeklyPlan();
-    //     }
-    // }
-
-    private void CreateWeeklyPlan()
+    private async Task CreateWeeklyPlan()
     {
-        // If a weekly plan was generated more than 7 days ago, regenerate it
-        if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > Constants.WEEK_DAY_NUM)
-        {
-            GenerateWeeklyPlan();
-        }
+        await GenerateWeeklyPlan();
+        StateHasChanged();
     }
 
     private async Task GenerateWeeklyPlan()
     {
-
         // Logic to generate a weekly meal plan based on favorite recipes
         weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
-        weeklyPlanGeneratedDate = DateTime.Now;
-        showWeeklyPlanPopup = true;
+        userProfile.WeeklyPlan = weeklyPlan;
+        StateHasChanged();
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
-    }
-
-    private async Task RemoveRecipeFromFavorite(Recipe rec)
-    {
-        await _favorite.RemoveFavoriteRecipeAsync(rec);
-        // Refresh the user's profile after removing the recipe
-        userProfile.FavoriteRecipes.Remove(rec);
-        StateHasChanged();
     }
 
     private void NavigateToHome()

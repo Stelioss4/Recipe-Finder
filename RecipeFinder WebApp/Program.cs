@@ -33,12 +33,12 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 40))
     ));
 
-// Register ApplicationDbContext for normal scoped usage
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 40))
-    ));
+//// Register ApplicationDbContext for normal scoped usage
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseMySql(
+//        builder.Configuration.GetConnectionString("DefaultConnection"),
+//        new MySqlServerVersion(new Version(8, 0, 40))
+//    ));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -56,13 +56,13 @@ builder.Services.AddHttpClient<SpoonacularService>();
 builder.Services.AddHttpClient<GroceryService>();
 
 // Add MealDbService with API key injection
-builder.Services.AddScoped<MealDbService>(provider =>
-{
-    var httpClient = provider.GetRequiredService<HttpClient>();
-    var apiKey = builder.Configuration["MealDb:ApiKey"]; // Read API key from appsettings.json
-    var dbContext = provider.GetRequiredService<ApplicationDbContext>(); // Get DbContext
-    return new MealDbService(httpClient, apiKey, dbContext);
-}); builder.Services.AddScoped<MealDbResponse>();
+//builder.Services.AddScoped<MealDbService>(provider =>
+//{
+//    var httpClient = provider.GetRequiredService<HttpClient>();
+//    var apiKey = builder.Configuration["MealDb:ApiKey"]; // Read API key from appsettings.json
+//    var dbContext = provider.GetRequiredService<ApplicationDbContext>(); // Get DbContext
+//    return new MealDbService(httpClient, apiKey, dbContext);
+//}); builder.Services.AddScoped<MealDbResponse>();
 
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();
