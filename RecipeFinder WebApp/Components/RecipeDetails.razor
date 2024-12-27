@@ -92,7 +92,7 @@
     <br />
     <br />
 
-@*     <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
+@*   <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
  *@
     @if (ReviewAndRatingShowPopup)
     {
@@ -333,7 +333,10 @@
 
             // Check if the recipe exists in the database
             var existingRecipe = await _context.Recipes
+                .Include(r => r.Ratings)
+                .Include(r => r.Reviews)
                 .FirstOrDefaultAsync(r => r.Id == recipe.Id);
+            _context.Recipes.Update(recipe);
 
             if (existingRecipe == null)
             {
@@ -358,6 +361,7 @@
                     Profile = user.User
                 };
 
+                
             // Add the review and rating to the database
             _context.Reviews.Add(review);
             _context.Ratings.Add(rating);

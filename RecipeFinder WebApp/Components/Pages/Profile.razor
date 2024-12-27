@@ -76,9 +76,10 @@
                         }
 
                         <p>Your weekly plan was created on @userProfile.LastWeeklyPlanDate!</p>
+
 @*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
  *@                    }
-                    else if (userProfile.FavoriteRecipes.Count < Constants.LIMIT_DAYS)
+                    else if (userProfile.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
                         <p>You need more favorite recipes to generate a weekly plan.</p>
                         <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
@@ -119,23 +120,13 @@
 
         if (appUser != null)
         {
-            // // Include the WeeklyPlan if it exists
-            // appUser = await context.Users
-            //     .Include(u => u.User.WeeklyPlan)
-            //     .Include(u => u.User.FavoriteRecipes)
-            //     .FirstOrDefaultAsync(u => u.Id == appUser.Id);
-
             if (appUser.User.LastWeeklyPlanDate.HasValue &&
           (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
             {
                 // Delete weekly plan after 7 days
                 appUser.User.WeeklyPlan.Clear();
 
-                // Update LastWeeklyPlanDate to the current date and time
-                appUser.User.LastWeeklyPlanDate = DateTime.UtcNow;
-
                 // Save changes to the database
-                context.Users.Update(appUser);
                 await context.SaveChangesAsync();
             }
         }
