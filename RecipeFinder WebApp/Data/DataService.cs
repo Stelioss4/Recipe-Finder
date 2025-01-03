@@ -14,8 +14,8 @@ namespace RecipeFinder_WebApp.Data
         private Recipe recipe { get; set; } = new();
         private User UserProfile { get; set; } = new User();
         private List<Recipe> Recipes { get; set; } = new List<Recipe>();
-        private Review review { get; set; } = new();
-        private Rating rating { get; set; } = new();
+        private Review newReview { get; set; } = new();
+        private Rating newRating { get; set; } = new();
 
         private readonly IHttpClientFactory _clientFactory;
         //        private readonly ApplicationDbContext context;
@@ -279,6 +279,12 @@ namespace RecipeFinder_WebApp.Data
             }
         }
 
+
+        /// <summary>
+        /// Returns recipe's reviews and ratings average
+        /// </summary>
+        /// <param name="recipe"></param>
+        /// <returns></returns>
         public async Task<(double AverageRating, List<Review> Reviews)> ShowRecipesReviewsAndRatings(Recipe recipe)
         {
             using var _context = _contextFactory.CreateDbContext();
@@ -298,5 +304,72 @@ namespace RecipeFinder_WebApp.Data
 
             return (averageRating, reviews);
         }
+
+public async Task SubmitRatingAndReview(Recipe recipe)
+{
+    using var _context = _contextFactory.CreateDbContext();
+
+    if (recipe == null)
+    {
+        throw new ArgumentNullException(nameof(recipe));
+    }
+
+    try
+    {
+        if (_context == null)
+        {
+            throw new InvalidOperationException("DbContext is null");
+        }
+
+        var user = await GetAuthenticatedUserAsync();
+        if (user.User == null)
+        {
+            throw new InvalidOperationException("Authenticated user is null");
+        }
+
+        // Check if the recipe exists in the database
+        var existingRecipe = await _context.Recipes
+            .FirstOrDefaultAsync(r => r.Id == recipe.Id);
+
+        if (existingRecipe == null)
+        {
+            throw new InvalidOperationException("The specified recipe does not exist in the database.");
+        }
+
+        // Create a new review
+        var review = new Review
+        {
+            ReviewText = newReview.ReviewText,
+            TimeStam = DateTime.Now,
+            RecipeId = existingRecipe.Id, // Use existingRecipe
+            Profile = user.User
+        };
+
+        // Create a new rating
+        var rating = new Rating
+        {
+            Value = newRating.Value,
+            TimeStam = DateTime.Now,
+            RecipeId = existingRecipe.Id, // Use existingRecipe
+            Profile = user.User
+        };
+
+        // Add the review and rating to the database
+        _context.Reviews.Add(review);
+        _context.Ratings.Add(rating);
+
+        // Save changes to the database
+        await _context.SaveChangesAsync();
+
+        // Clear the form fields
+        newReview.ReviewText = string.Empty;
+        newRating.Value = 0;
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"Error submitting review and rating: {ex.Message}");
+    }
+}
+
     }
 }

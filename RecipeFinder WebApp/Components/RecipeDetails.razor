@@ -92,8 +92,8 @@
     <br />
     <br />
 
-@*   <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
- *@
+     <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
+    
     @if (ReviewAndRatingShowPopup)
     {
         <div class="popup">
@@ -166,7 +166,7 @@
             if (recipe != null && recipe.CookingInstructions != null)
             {
                 Console.WriteLine("Recipe found in the database.");
-                // Fetch additional related data as needed, e.g., average rating
+                // Fetch additional related data as needed, e.g., average newRating
                 var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
                 averageRating = result.AverageRating;
             }
@@ -311,71 +311,6 @@
 
     private async Task SubmitRatingAndReview(Recipe recipe)
     {
-        using var _context = _contextFactory.CreateDbContext();
-
-        if (recipe == null)
-        {
-            throw new ArgumentNullException(nameof(recipe));
-        }
-
-        try
-        {
-            if (_context == null)
-            {
-                throw new InvalidOperationException("DbContext is null");
-            }
-
-            var user = await _dataService.GetAuthenticatedUserAsync();
-            if (user.User == null)
-            {
-                throw new InvalidOperationException("Authenticated user is null");
-            }
-
-            // Check if the recipe exists in the database
-            var existingRecipe = await _context.Recipes
-                .Include(r => r.Ratings)
-                .Include(r => r.Reviews)
-                .FirstOrDefaultAsync(r => r.Id == recipe.Id);
-            _context.Recipes.Update(recipe);
-
-            if (existingRecipe == null)
-            {
-                throw new InvalidOperationException("The specified recipe does not exist in the database.");
-            }
-
-            // Create a new review
-            var review = new Review
-                {
-                    ReviewText = newReview.ReviewText,
-                    TimeStam = DateTime.Now,
-                    RecipeId = existingRecipe.Id, // Ensure it's using the correct existing RecipeId
-                    Profile = user.User
-                };
-
-            // Create a new rating
-            var rating = new Rating
-                {
-                    Value = newRating.Value,
-                    TimeStam = DateTime.Now,
-                    RecipeId = existingRecipe.Id, // Ensure it's using the correct existing RecipeId
-                    Profile = user.User
-                };
-
-                
-            // Add the review and rating to the database
-            _context.Reviews.Add(review);
-            _context.Ratings.Add(rating);
-
-            // Save changes to the database
-            await _context.SaveChangesAsync();
-
-            // Clear the form fields
-            newReview.ReviewText = string.Empty;
-            newRating.Value = 0;
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Error submitting review and rating: {ex.Message}");
-        }
+        await _dataService.SubmitRatingAndReview(recipe);
     }
 }

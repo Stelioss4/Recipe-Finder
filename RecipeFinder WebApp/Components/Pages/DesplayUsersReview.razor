@@ -64,7 +64,7 @@ else
                 if (recipe != null)
                 {
                     Console.WriteLine("Recipe found in the database.");
-                    // Fetch additional related data as needed, e.g., average rating
+                    // Fetch additional related data as needed, e.g., average newRating
                     var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
                     reviews = result.Reviews;
 
