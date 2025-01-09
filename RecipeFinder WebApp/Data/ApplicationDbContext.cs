@@ -8,8 +8,8 @@ namespace RecipeFinder_WebApp.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Recipe> Recipes { get; set; }
-        public DbSet<Review> Reviews { get; set; } 
-        public DbSet<Rating> Ratings { get; set; }
+      //  public DbSet<Review> Reviews { get; set; } 
+      //  public DbSet<Rating> Ratings { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -31,15 +31,6 @@ namespace RecipeFinder_WebApp.Data
                 .HasMany(u => u.ShoppingList)
                 .WithMany(i => i.UserId);
 
-            builder.Entity<Review>()
-                .HasOne(r => r.Recipe)
-                .WithMany(r => r.Reviews);
-
-            builder.Entity<Rating>()
-                .HasOne(r => r.Recipe)
-                .WithMany(r => r.Ratings);
-
-
             // AutoInclude the User navigation property in ApplicationUser
             builder.Entity<ApplicationUser>()
                 .Navigation(e => e.User)
@@ -53,11 +44,6 @@ namespace RecipeFinder_WebApp.Data
             builder.Entity<User>()
                 .Navigation(u => u.WeeklyPlan)
                 .AutoInclude();
-
-            //builder.Entity<Recipe>()
-            //    .Navigation(r => r.ListOfIngredients)
-            //    .AutoInclude(); 
-
         }
     }
 }

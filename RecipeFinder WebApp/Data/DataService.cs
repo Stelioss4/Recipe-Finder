@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Org.BouncyCastle.Security;
 using Recipe_Finder;
+using RecipeFinder_WebApp.Components.Pages;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 
@@ -11,6 +13,7 @@ namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
+        private ApplicationUser appUser { get; set; } = new();
         private Recipe recipe { get; set; } = new();
         private User UserProfile { get; set; } = new User();
         private List<Recipe> Recipes { get; set; } = new List<Recipe>();
@@ -305,8 +308,10 @@ namespace RecipeFinder_WebApp.Data
             return (averageRating, reviews);
         }
 
-        public async Task SubmitRatingAndReview(Recipe recipe)
+        public async Task SubmitRatingAndReview(Recipe recipe, Rating newRating, Review newReview)
         {
+
+            
             using var _context = _contextFactory.CreateDbContext();
 
             if (recipe == null)
@@ -324,44 +329,18 @@ namespace RecipeFinder_WebApp.Data
 
                 // Check if the recipe exists in the database
                 var existingRecipe = await _context.Recipes
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(r => r.Id == recipe.Id);
+                   .FirstOrDefaultAsync(r => r.Id == recipe.Id);
 
                 if (existingRecipe == null)
                 {
                     throw new InvalidOperationException("The specified recipe does not exist in the database.");
                 }
 
-                // Attach the existing recipe to the context to prevent EF Core from treating it as new
-                _context.Recipes.Attach(existingRecipe);
-                // Create a new review
-                var review = new Review
-                {
-                    ReviewText = newReview.ReviewText,
-                    TimeStam = DateTime.Now,
-                    RecipeId = recipe.Id, // Use only the RecipeId
-                    Profile = user.User // Use ProfileId directly
-                };
+                // Add the new rating and review to the existing recipe
+                existingRecipe.Ratings.Add(newRating);
+                existingRecipe.Reviews.Add(newReview);
 
-                // Create a new rating
-                var rating = new Rating
-                {
-                    Value = newRating.Value,
-                    TimeStam = DateTime.Now,
-                    RecipeId = recipe.Id, // Use only the RecipeId
-                    Profile = user.User // Use ProfileId directly
-                };
-
-                // Add the review and rating to the database
-                await _context.Reviews.AddAsync(review);
-                await _context.Ratings.AddAsync(rating);
-
-                // Save changes to the database
                 await _context.SaveChangesAsync();
-
-                // Clear the form fields
-                newReview.ReviewText = string.Empty;
-                newRating.Value = 0;
             }
             catch (Exception ex)
             {

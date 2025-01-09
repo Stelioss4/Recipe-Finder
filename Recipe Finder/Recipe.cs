@@ -110,13 +110,6 @@
             set { _linksForDrinkPairing = value; }
         }
 
-        private List<Rating> _ratings = new();
-        public virtual List<Rating> Ratings
-        {
-            get { return _ratings; }
-            set { _ratings = value; }
-        }
-
         public virtual double Rating
         {
             get
@@ -131,6 +124,13 @@
                 }
             }
             set { }
+        }
+
+        private List<Rating> _ratings = new();
+        public virtual List<Rating> Ratings
+        {
+            get { return _ratings; }
+            set { _ratings = value; }
         }
 
         private List<Review> _reviews = new();

@@ -10,12 +10,12 @@
             set { _reviewText = value; }
         }
 
-        private DateTime _timeStam;
+        private DateTime _timeStamp;
 
-        public DateTime TimeStam
+        public DateTime TimeStamp
         {
-            get { return _timeStam; }
-            set { _timeStam = value; }
+            get { return _timeStamp; }
+            set { _timeStamp = value; }
         }
 
         private User _profile;
@@ -26,22 +26,22 @@
             set { _profile = value; }
         }
 
-        private Recipe _recipe;
+        // private Recipe _recipe;
 
-        public virtual Recipe Recipe
-        {
-            get { return _recipe; }
-            set { _recipe = value; }
-        }
+        //public virtual Recipe Recipe
+        //{
+        //    get { return _recipe; }
+        //    set { _recipe = value; }
+        //}
 
 
-        private int _recipeId;
+        //private int _recipeId;
 
-        public int RecipeId
-        {
-            get { return _recipeId; }
-            set { _recipeId = value; }
-        }
+        //public int RecipeId
+        //{
+        //    get { return _recipeId; }
+        //    set { _recipeId = value; }
+        //}
 
 
         private int _id;

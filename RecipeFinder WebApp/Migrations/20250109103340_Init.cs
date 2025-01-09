@@ -205,27 +205,26 @@ namespace RecipeFinderWebApp.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Ratings",
+                name: "Rating",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Value = table.Column<double>(type: "double", nullable: false),
-                    TimeStam = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ProfileId = table.Column<int>(type: "int", nullable: true),
-                    RecipeId = table.Column<int>(type: "int", nullable: false)
+                    RecipeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                    table.PrimaryKey("PK_Rating", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ratings_Recipes_RecipeId",
+                        name: "FK_Rating_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Ratings_User_ProfileId",
+                        name: "FK_Rating_User_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "User",
                         principalColumn: "Id");
@@ -283,28 +282,27 @@ namespace RecipeFinderWebApp.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Reviews",
+                name: "Review",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ReviewText = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TimeStam = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ProfileId = table.Column<int>(type: "int", nullable: true),
-                    RecipeId = table.Column<int>(type: "int", nullable: false)
+                    RecipeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.PrimaryKey("PK_Review", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Recipes_RecipeId",
+                        name: "FK_Review_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Reviews_User_ProfileId",
+                        name: "FK_Review_User_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "User",
                         principalColumn: "Id");
@@ -491,13 +489,13 @@ namespace RecipeFinderWebApp.Migrations
                 column: "UserIdId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ratings_ProfileId",
-                table: "Ratings",
+                name: "IX_Rating_ProfileId",
+                table: "Rating",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ratings_RecipeId",
-                table: "Ratings",
+                name: "IX_Rating_RecipeId",
+                table: "Rating",
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
@@ -516,13 +514,13 @@ namespace RecipeFinderWebApp.Migrations
                 column: "WeeklyPlanUsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ProfileId",
-                table: "Reviews",
+                name: "IX_Review_ProfileId",
+                table: "Review",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_RecipeId",
-                table: "Reviews",
+                name: "IX_Review_RecipeId",
+                table: "Review",
                 column: "RecipeId");
         }
 
@@ -548,7 +546,7 @@ namespace RecipeFinderWebApp.Migrations
                 name: "IngredientUser");
 
             migrationBuilder.DropTable(
-                name: "Ratings");
+                name: "Rating");
 
             migrationBuilder.DropTable(
                 name: "RecipeSearchTerm");
@@ -560,7 +558,7 @@ namespace RecipeFinderWebApp.Migrations
                 name: "RecipeUser1");
 
             migrationBuilder.DropTable(
-                name: "Reviews");
+                name: "Review");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
