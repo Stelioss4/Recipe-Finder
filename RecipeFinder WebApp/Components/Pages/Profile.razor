@@ -31,7 +31,7 @@
                 <div class="popup-content">
                     @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
                     {
-                        <RecipeOutput recipes="userProfile.FavoriteRecipes" AddRecipeButton="false"></RecipeOutput>
+                        <RecipeOutput recipes="userProfile.FavoriteRecipes" AddRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
                     }
                     else
                     {
@@ -77,8 +77,8 @@
 
                         <p>Your weekly plan was created on @userProfile.LastWeeklyPlanDate!</p>
 
-@*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
- *@                    }
+                        @*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
+            *@      }
                     else if (userProfile.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
                         <p>You need more favorite recipes to generate a weekly plan.</p>
@@ -120,6 +120,8 @@
 
         if (appUser != null)
         {
+            _favorite.OnFavoritesChanged += UpdateFavorites;
+            base.OnInitialized();
             if (appUser.User.LastWeeklyPlanDate.HasValue &&
           (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
             {
@@ -140,6 +142,11 @@
 
         userProfile = appUser.User;
 
+
+    }
+    private void UpdateFavorites()
+    {
+        InvokeAsync(StateHasChanged);
     }
 
     private void TogglePopupFavorites()
@@ -182,5 +189,15 @@
     private void NavigateToHome()
     {
         Navigation.NavigateTo("/");
+    }
+    private async Task OnRecipeAdded(Recipe recipe)
+    {
+        userProfile.FavoriteRecipes.Add(recipe);
+        StateHasChanged();
+    }
+    private async Task OnRecipeRemoved(Recipe recipe)
+    {
+        userProfile.FavoriteRecipes.Remove(recipe);
+        StateHasChanged();
     }
 }

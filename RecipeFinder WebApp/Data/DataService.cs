@@ -2,12 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Org.BouncyCastle.Security;
 using Recipe_Finder;
-using RecipeFinder_WebApp.Components.Pages;
-using System.Security.Cryptography;
-using System.Xml.Serialization;
 
 namespace RecipeFinder_WebApp.Data
 {
@@ -38,7 +33,7 @@ namespace RecipeFinder_WebApp.Data
         }
 
         ///// <summary>
-        ///// Add Ingredient from user's recipes to a shopping list
+        ///// Add Ingredient from appUser's recipes to a shopping list
         ///// </summary>
         ///// <returns></returns>
         //public async Task AddIngredientsToShoppingList(Ingredient ingredient)
@@ -121,7 +116,7 @@ namespace RecipeFinder_WebApp.Data
 
         //    if (appUser?.User != null)
         //    {
-        //        // Access the user's favorite recipes directly due to AutoInclude
+        //        // Access the appUser's favorite recipes directly due to AutoInclude
         //        if (appUser.User.FavoriteRecipes.Any(r => r.Id == recipe.Id))
         //        {
         //            Console.WriteLine("Recipe is already in your favorites.");
@@ -150,7 +145,7 @@ namespace RecipeFinder_WebApp.Data
         //}
 
         ///// <summary>
-        ///// Removes a recipe from the authenticated user's list of favorite recipes.
+        ///// Removes a recipe from the authenticated appUser's list of favorite recipes.
         ///// </summary>
         //public async Task RemoveFavoriteRecipeAsync(Recipe recipe)
         //{
@@ -260,7 +255,7 @@ namespace RecipeFinder_WebApp.Data
 
                     if (appUser != null)
                     {
-                        return appUser; // Return the authenticated user
+                        return appUser; // Return the authenticated appUser
                     }
                     else
                     {
@@ -271,12 +266,12 @@ namespace RecipeFinder_WebApp.Data
                 {
                     Console.WriteLine("User is not authenticated.");
                     _navigation.NavigateTo("account/login");
-                    return null; // No authenticated user, return null
+                    return null; // No authenticated appUser, return null
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error retrieving authenticated user: {ex.Message}");
+                Console.WriteLine($"Error retrieving authenticated appUser: {ex.Message}");
                 // Handle the error (you might want to log or display an error message)
                 return null; // Return null in case of an error
             }
@@ -311,43 +306,50 @@ namespace RecipeFinder_WebApp.Data
         public async Task SubmitRatingAndReview(Recipe recipe, Rating newRating, Review newReview)
         {
 
-            
             using var _context = _contextFactory.CreateDbContext();
 
-            if (recipe == null)
+            var appUser = await GetAuthenticatedUserAsync();
+            if (appUser != null)
             {
-                throw new ArgumentNullException(nameof(recipe));
-            }
-
-            try
-            {
-                var user = await GetAuthenticatedUserAsync();
-                if (user.User == null)
+                if (recipe == null)
                 {
-                    throw new InvalidOperationException("Authenticated user is null");
+                    throw new ArgumentNullException(nameof(recipe));
                 }
 
-                // Check if the recipe exists in the database
-                var existingRecipe = await _context.Recipes
-                   .FirstOrDefaultAsync(r => r.Id == recipe.Id);
-
-                if (existingRecipe == null)
+                try
                 {
-                    throw new InvalidOperationException("The specified recipe does not exist in the database.");
+
+
+
+                    // Check if the recipe exists in the database
+                    var existingRecipe = await _context.Recipes
+                       .FirstOrDefaultAsync(r => r.Id == recipe.Id);
+
+                    if (existingRecipe == null)
+                    {
+                        throw new InvalidOperationException("The specified recipe does not exist in the database.");
+                    }
+
+                    // Add the new rating and review to the existing recipe
+                    existingRecipe.Ratings.Add(newRating);
+                    existingRecipe.Reviews.Add(newReview);
+
+
+                    await _context.SaveChangesAsync();
                 }
-
-                // Add the new rating and review to the existing recipe
-                existingRecipe.Ratings.Add(newRating);
-                existingRecipe.Reviews.Add(newReview);
-
-                await _context.SaveChangesAsync();
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error submitting review and rating: {ex.Message}");
+                    throw;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Console.Error.WriteLine($"Error submitting review and rating: {ex.Message}");
-                throw;
+                _navigation.NavigateTo("Account/Login");
             }
+
         }
-
     }
+
 }
+    

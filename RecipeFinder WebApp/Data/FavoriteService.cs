@@ -8,7 +8,7 @@ namespace RecipeFinder_WebApp.Data
     {
         private User UserProfile { get; set; } = new User();
 
-        //private readonly ApplicationDbContext _context;
+        public event Action OnFavoritesChanged;
         private readonly NavigationManager _navigation;
         private readonly DataService _dataService;
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
@@ -113,26 +113,38 @@ namespace RecipeFinder_WebApp.Data
             if (appUser != null)
             {
                 appUser = await _context.Users
-                  .Include(u => u.User.FavoriteRecipes)
-                  .FirstOrDefaultAsync(u => u.Id == appUser.Id);
+                    .Include(u => u.User.FavoriteRecipes)
+                    .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
                 if (appUser.User != null)
                 {
+                    // Manually check if the recipe is already in the favorites list
+                    var existingRecipe = appUser.User.FavoriteRecipes
+                        .FirstOrDefault(r => r.Id == recipe.Id);
 
-                    if (appUser.User.FavoriteRecipes.Contains(recipe))
+                    if (existingRecipe != null)
                     {
                         // Notify the user that the recipe is already in their favorites
                         Console.WriteLine("Recipe is already in your favorites.");
                     }
                     else
                     {
-                        // Add the recipe to the user's favorite list
+                        // Check for already tracked entity to avoid duplicate tracking
+                        var trackedRecipe = _context.Recipes.Local
+                            .FirstOrDefault(r => r.Id == recipe.Id);
+
+                        if (trackedRecipe == null)
+                        {
+                            _context.Recipes.Attach(recipe);
+                        }
+                        else
+                        {
+                            recipe = trackedRecipe;
+                        }
+
                         appUser.User.FavoriteRecipes.Add(recipe);
-
-                        // Save changes to the database
                         await _context.SaveChangesAsync();
-
-                        // Notify the user that the recipe was successfully added
+                        OnFavoritesChanged?.Invoke();
                         Console.WriteLine("Recipe added to your favorites successfully.");
                     }
                 }
@@ -142,7 +154,6 @@ namespace RecipeFinder_WebApp.Data
                 Console.WriteLine("User is not authenticated.");
                 _navigation.NavigateTo("account/login");
             }
-
         }
 
         /// <summary>
@@ -177,9 +188,6 @@ namespace RecipeFinder_WebApp.Data
                      //        recipe.SearchTerms.OrderBy(t => t.Term).Select(t => t.Term)
                      );
 
-
-
-
                     if (recipeToRemove != null)
                     {
                         // Remove the recipe from the list
@@ -187,6 +195,8 @@ namespace RecipeFinder_WebApp.Data
 
                         // Save changes to the database
                         await _context.SaveChangesAsync();
+
+                        OnFavoritesChanged?.Invoke();
 
                         Console.WriteLine("Recipe removed from favorites successfully.");
                     }

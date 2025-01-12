@@ -47,6 +47,8 @@
     [Parameter] public ApplicationUser appUser { get; set; } = new();
     [Parameter] public bool RemoveRecipeButton { get; set; } = true;
     [Parameter] public bool AddRecipeButton { get; set; } = true;
+    [Parameter] public EventCallback<Recipe> OnRecipeAdded { get; set; }
+    [Parameter] public EventCallback<Recipe> OnRecipeRemoved { get; set; }
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {
@@ -55,22 +57,15 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        if(appUser != null)
-        {
-            await _favorite.AddFavoriteRecipeAsync(recipe);
-            StateHasChanged();
 
-        }
-        else
-        {
-            Navigation.NavigateTo("Account/LogIn");
-        }
+        await _favorite.AddFavoriteRecipeAsync(recipe);
+        await OnRecipeAdded.InvokeAsync(recipe);
+
     }
 
-    private async Task RemoveRecipeFromFavorite(Recipe rec)
+    private async Task RemoveRecipeFromFavorite(Recipe recipe)
     {
-        await _favorite.RemoveFavoriteRecipeAsync(rec);
-        // Refresh the user's profile after removing the recipe
-        StateHasChanged();
+        await _favorite.RemoveFavoriteRecipeAsync(recipe);
+        await OnRecipeRemoved.InvokeAsync(recipe);
     }
 }

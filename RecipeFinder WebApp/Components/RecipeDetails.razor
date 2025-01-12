@@ -124,6 +124,8 @@
     [Parameter]
     public string Url { get; set; }
 
+    private ApplicationUser appUser { get; set; } = new();
+
     private Recipe recipe { get; set; } = new();
 
     private Review newReview { get; set; } = new Review();
@@ -313,9 +315,18 @@
 
     private async Task SubmitRatingAndReview(Recipe recipe)
     {
-        await _dataService.SubmitRatingAndReview(recipe, newRating, newReview);
-        // Clear the form fields
-        newReview.ReviewText = string.Empty;
-        newRating.Value = 0;
+        // appUser = await _dataService.GetAuthenticatedUserAsync();
+
+        // if (appUser != null)
+        // {
+            await _dataService.SubmitRatingAndReview(recipe, newRating, newReview);
+            // Clear the form fields
+            newReview.ReviewText = string.Empty;
+            newRating.Value = 0;
+        // }
+        // else
+        // {
+        //    Navigation.NavigateTo("Account/Login");
+        // }
     }
 }

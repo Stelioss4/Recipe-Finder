@@ -41,7 +41,7 @@
 
     @if (recipes.Count > 0)
     {
-        <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
+        <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
     }
    
 </div>
@@ -84,7 +84,18 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await favorite.AddFavoriteRecipeAsync(recipe);
+        await favorite.AddFavoriteRecipeAsync(recipe); // This method adds the recipe to the database
+        userProfile.FavoriteRecipes.Add(recipe); // Update the local list
+        StateHasChanged(); // Refresh the UI
+    }
+
+    private async Task OnRecipeAdded(Recipe recipe)
+    {
+        await AddRecipeToFavorite(recipe); // Use the new method to handle UI updates
+    }
+    private async Task OnRecipeRemoved(Recipe recipe)
+    {
+        userProfile.FavoriteRecipes.Remove(recipe);
         StateHasChanged();
     }
-    }
+}
