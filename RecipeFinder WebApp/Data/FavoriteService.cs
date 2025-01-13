@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Recipe_Finder;
 
 namespace RecipeFinder_WebApp.Data
@@ -217,5 +218,30 @@ namespace RecipeFinder_WebApp.Data
                 // Handle the error appropriately (e.g., display an error message)
             }
         }
+        public async Task ReloadFavorites()
+        {
+            using var _context = _contextFactory.CreateDbContext();
+
+            var appUser = await _dataService.GetAuthenticatedUserAsync();
+
+            if (appUser != null)
+            {
+                // Reload the user's favorite recipes from the database
+                var updatedUser = await _context.Users
+                     .Include(u => u.User.FavoriteRecipes)
+                     .FirstOrDefaultAsync(u => u.Id == appUser.Id);
+
+                if (updatedUser != null)
+                {
+                    appUser.User.FavoriteRecipes = updatedUser.User.FavoriteRecipes;
+                }
+            }
+            else
+            {
+                Console.WriteLine("User is not authenticated.");
+                _navigation.NavigateTo("account/login");
+            }
+        }
+
     }
 }
