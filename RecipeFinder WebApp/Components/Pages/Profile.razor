@@ -16,22 +16,22 @@
 
 <h3>User Profile</h3>
 <div class="container mt-5">
-    @if (userProfile != null)
+    @if (User != null)
     {
         <p>Welcome, @appUser.UserName!</p>
         <br />
 
         <!-- Button for Favorite Recipes Popup -->
-        <button class="btn btn-secondary mt-3" @onclick="TogglePopupFavorites">Favorite Recipes</button>
+        <button class="btn btn-primary mt-3" @onclick="TogglePopupFavorites">Favorite Recipes</button>
 
         <!-- Popup for Favorite Recipes -->
         @if (showFavoritesPopup)
         {
             <div class="popup">
                 <div class="popup-content">
-                    @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
+                    @if (User.FavoriteRecipes != null && User.FavoriteRecipes.Count > 0)
                     {
-                        <RecipeOutput recipes="userProfile.FavoriteRecipes" AddRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
+                        <RecipeOutput recipes="User.FavoriteRecipes" AddRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
                     }
                     else
                     {
@@ -41,9 +41,24 @@
                 </div>
             </div>
         }
+        <!-- Button for ShoppingList Popup -->
+@*         <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
+ *@
+        @if (showShoppingListPopup)
+        {
+
+            if (appUser.User.ShoppingList != null && appUser.User.ShoppingList.Count > 0)
+            {
+                <ShoppingListOutput ShoppingList="appUser.User.ShoppingList" OnShoppingListAdded="OnShoppingListAdded" OnShoppingListRemoved="OnShoppingListRemoved"></ShoppingListOutput>
+            }
+            else
+            {
+                <p>Your Shopping list is empty!</p>
+            }
+        }
 
         <!-- Button for Weekly Plan Popup -->
-        <button class="btn btn-primary mt-3" @onclick="TogglePopupWeeklyPlan">Weekly Meal Plan</button>
+        <button class="btn btn-secondary mt-3" @onclick="TogglePopupWeeklyPlan">Weekly Meal Plan</button>
 
         <!-- Popup for Weekly Plan -->
         @if (showWeeklyPlanPopup)
@@ -75,11 +90,11 @@
                             </div>
                         }
 
-                        <p>Your weekly plan was created on @userProfile.LastWeeklyPlanDate!</p>
+                        <p>Your weekly plan was created on @User.LastWeeklyPlanDate!</p>
 
                         @*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
             *@      }
-                    else if (userProfile.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
+                    else if (User.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
                         <p>You need more favorite recipes to generate a weekly plan.</p>
                         <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
@@ -100,7 +115,7 @@
 </div>
 
 @code {
-    public User userProfile { get; set; } = new User();
+    public User User { get; set; } = new User();
 
     private ApplicationUser appUser { get; set; } = new();
 
@@ -109,6 +124,8 @@
     private bool showWeeklyPlanPopup { get; set; } = false;
 
     private bool showFavoritesPopup { get; set; } = false;
+
+    private bool showShoppingListPopup { get; set; } = false;
 
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
@@ -120,10 +137,9 @@
 
         if (appUser != null)
         {
-            _favorite.OnFavoritesChanged += UpdateFavorites;
-            base.OnInitialized();
+
             if (appUser.User.LastWeeklyPlanDate.HasValue &&
-          (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
+            (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
             {
                 // Delete weekly plan after 7 days
                 appUser.User.WeeklyPlan.Clear();
@@ -140,7 +156,7 @@
             return;
         }
 
-        userProfile = appUser.User;
+        User = appUser.User;
 
 
     }
@@ -158,7 +174,10 @@
     {
         showWeeklyPlanPopup = !showWeeklyPlanPopup;
     }
-
+    private void TogglePopupShoppingList()
+    {
+        showShoppingListPopup = !showShoppingListPopup;
+    }
     public async Task CreateNewPlan()
     {
         using var context = DbContextFactory.CreateDbContext();
@@ -177,7 +196,7 @@
     {
         // Logic to generate a weekly meal plan based on favorite recipes
         weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
-        userProfile.WeeklyPlan = weeklyPlan;
+        User.WeeklyPlan = weeklyPlan;
         StateHasChanged();
     }
 
@@ -192,12 +211,22 @@
     }
     private async Task OnRecipeAdded(Recipe recipe)
     {
-        userProfile.FavoriteRecipes.Add(recipe);
+        User.FavoriteRecipes.Add(recipe);
         StateHasChanged();
     }
     private async Task OnRecipeRemoved(Recipe recipe)
     {
-        userProfile.FavoriteRecipes.Remove(recipe);
+        User.FavoriteRecipes.Remove(recipe);
         StateHasChanged();
     }
-}
+    private async Task OnShoppingListAdded(Ingredient ingredient)
+    {
+        User.ShoppingList.Add(ingredient);
+        StateHasChanged();
+    }
+    private async Task OnShoppingListRemoved(Ingredient ingredient)
+    {
+        User.ShoppingList.Remove(ingredient);
+        StateHasChanged();
+    }
+        }

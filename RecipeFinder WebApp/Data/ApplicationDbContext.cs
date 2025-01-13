@@ -8,9 +8,9 @@ namespace RecipeFinder_WebApp.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Recipe> Recipes { get; set; }
-      //  public DbSet<Review> Reviews { get; set; } 
-      //  public DbSet<Rating> Ratings { get; set; }
+
         public DbSet<Ingredient> Ingredients { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
            

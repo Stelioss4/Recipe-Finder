@@ -7,7 +7,7 @@ namespace RecipeFinder_WebApp.Data
 {
     public class FavoriteService
     {
-        private User UserProfile { get; set; } = new User();
+        private User User { get; set; } = new User();
 
         public event Action OnFavoritesChanged;
         private readonly NavigationManager _navigation;
@@ -38,24 +38,31 @@ namespace RecipeFinder_WebApp.Data
                .Include(u => u.User.ShoppingList)
                .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
-            UserProfile = appUser.User;
+            //User = appUser.User;
 
-            if (UserProfile != null)
+            if (appUser != null)
             {
-                if (UserProfile.ShoppingList.Contains(ingredient))
+                if (appUser.User.ShoppingList.Contains(ingredient))
                 {
                     Console.WriteLine("ingredient already in shopping list");
                 }
                 else
                 {
-                    UserProfile.ShoppingList.Add(ingredient);
+                    appUser.User.ShoppingList.Add(ingredient);
 
                     await _context.SaveChangesAsync();
+                    OnFavoritesChanged?.Invoke();
 
                     Console.WriteLine("Ingredient is successfully added to shopping list");
 
                 }
             }
+            else
+            {
+                Console.WriteLine("User is not authenticated.");
+                _navigation.NavigateTo("account/login");
+            }
+
         }
 
         /// <summary>
@@ -75,18 +82,18 @@ namespace RecipeFinder_WebApp.Data
                 .Include(u => u.User.ShoppingList)
                 .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
-                UserProfile = appUser.User;
+                User = appUser.User;
 
-                if (UserProfile != null)
+                if (User != null)
                 {
-                    var ingredientToRemove = UserProfile.ShoppingList
+                    var ingredientToRemove = User.ShoppingList
                         .FirstOrDefault(i =>
                          i.Id == ingredient.Id && i.UserId == ingredient.UserId);
 
                     if (ingredientToRemove != null)
                     {
                         // Remove the recipe from the list
-                        UserProfile.ShoppingList.Remove(ingredientToRemove);
+                        User.ShoppingList.Remove(ingredientToRemove);
 
                         // Save changes to the database
                         await _context.SaveChangesAsync();

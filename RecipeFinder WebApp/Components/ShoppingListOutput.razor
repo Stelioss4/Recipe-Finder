@@ -46,11 +46,14 @@
 
 @code {
     [Parameter] public List<Ingredient> ShoppingList { get; set; } = new List<Ingredient>();
-
+    [Parameter] public EventCallback<Ingredient> OnShoppingListAdded { get; set; }
+    [Parameter] public EventCallback<Ingredient> OnShoppingListRemoved { get; set; }
+    [Parameter] public ApplicationUser appUser { get; set; } = new();
 
 
     private async Task RemoveIngredient(Ingredient ingredient)
     {
         await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
+        await OnShoppingListRemoved.InvokeAsync(ingredient);
     }
 }

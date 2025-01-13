@@ -42,17 +42,17 @@ namespace RecipeFinder_WebApp.Data
 
         //    var appUser = await GetAuthenticatedUserAsync();
 
-        //    UserProfile = appUser.User;
+        //    User = appUser.User;
 
-        //    if (UserProfile != null)
+        //    if (User != null)
         //    {
-        //        if (UserProfile.ShoppingList.Contains(ingredient))
+        //        if (User.ShoppingList.Contains(ingredient))
         //        {
         //            Console.WriteLine("ingredient already in shopping list");
         //        }
         //        else
         //        {
-        //            UserProfile.ShoppingList.Add(ingredient);
+        //            User.ShoppingList.Add(ingredient);
 
         //            await context.SaveChangesAsync();
 
@@ -76,18 +76,18 @@ namespace RecipeFinder_WebApp.Data
         //        var appUser = await GetAuthenticatedUserAsync();
 
 
-        //        UserProfile = appUser.User;
+        //        User = appUser.User;
 
-        //        if (UserProfile != null)
+        //        if (User != null)
         //        {
-        //            var ingredientToRemove = UserProfile.ShoppingList
+        //            var ingredientToRemove = User.ShoppingList
         //                .FirstOrDefault(i =>
         //                 i.Id == ingredient.Id && i.UserId == ingredient.UserId);
 
         //            if (ingredientToRemove != null)
         //            {
         //                // Remove the recipe from the list
-        //                UserProfile.ShoppingList.Remove(ingredientToRemove);
+        //                User.ShoppingList.Remove(ingredientToRemove);
 
         //                // Save changes to the database
         //                await context.SaveChangesAsync();
