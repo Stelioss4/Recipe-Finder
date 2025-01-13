@@ -36,7 +36,8 @@
                 }
                 <p class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</p>
                 <p class="alert-primary text-center">Total time needed: @recipe.Time</p>
-                <p class="alert-primary text-center">Average Rating: @recipe.Rating.ToString("F2") <button class="btn btn-secondary" @onclick="NavigateToReviews">See recipe's reviews</button></p>
+                <p class="alert-primary text-center">Average Rating: @recipe.Rating.ToString("F2") </p>
+                <p class="alert-primary text-center"> <button class="btn btn-secondary" @onclick="NavigateToReviews">See recipe's reviews</button></p>
 
                 <!-- Popup button for user input -->
                 <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
@@ -92,8 +93,8 @@
     <br />
     <br />
 
-    <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
-
+@*     <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
+ *@
     @if (ReviewAndRatingShowPopup)
     {
         <div class="popup">
@@ -114,8 +115,8 @@
         </div>
     }
 
-    <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
-
+@*     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
+ *@
 </div>
 <br />
 
