@@ -71,8 +71,8 @@
                                 <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
                                     REWE
                                 </a>
-@*                                 <button class="btn btn-secondary" @onclick="AddIngredientToShoppingList">Add to shopping list</button>
- *@ 
+                                @*                                 <button class="btn btn-secondary" @onclick="AddIngredientToShoppingList">Add to shopping list</button>
+                        *@
                             </li>
 
                         }
@@ -93,8 +93,8 @@
     <br />
     <br />
 
-@*     <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
- *@
+    @*     <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
+    *@
     @if (ReviewAndRatingShowPopup)
     {
         <div class="popup">
@@ -115,8 +115,9 @@
         </div>
     }
 
-@*     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
- *@
+    @*     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
+    *@
+    <button class="btn btn-primary fixed-bottom-right" @onclick="()=>AddRecipeToFavorite(recipe)">AddRecipeToFavorite</button>
 </div>
 <br />
 
@@ -320,14 +321,20 @@
 
         // if (appUser != null)
         // {
-            await _dataService.SubmitRatingAndReview(recipe, newRating, newReview);
-            // Clear the form fields
-            newReview.ReviewText = string.Empty;
-            newRating.Value = 0;
+        await _dataService.SubmitRatingAndReview(recipe, newRating, newReview);
+        // Clear the form fields
+        newReview.ReviewText = string.Empty;
+        newRating.Value = 0;
         // }
         // else
         // {
         //    Navigation.NavigateTo("Account/Login");
         // }
+    }
+    private async Task AddRecipeToFavorite(Recipe recipe)
+    {
+
+        await _favorite.AddFavoriteRecipeAsync(recipe);
+        await _favorite.ReloadFavorites();
     }
 }
