@@ -16,7 +16,7 @@
 
 <h3>User Profile</h3>
 <div class="container mt-5">
-    @if (User != null)
+    @if (user != null)
     {
         <p>Welcome, @appUser.UserName!</p>
         <br />
@@ -29,9 +29,9 @@
         {
             <div class="popup">
                 <div class="popup-content">
-                    @if (User.FavoriteRecipes != null && User.FavoriteRecipes.Count > 0)
+                    @if (user.FavoriteRecipes != null && user.FavoriteRecipes.Count > 0)
                     {
-                        <RecipeOutput recipes="User.FavoriteRecipes" AddRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
+                        <RecipeOutput recipes="user.FavoriteRecipes" AddRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
                     }
                     else
                     {
@@ -90,11 +90,11 @@
                             </div>
                         }
 
-                        <p>Your weekly plan was created on @User.LastWeeklyPlanDate!</p>
+                        <p>Your weekly plan was created on @user.LastWeeklyPlanDate!</p>
 
                         @*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
             *@      }
-                    else if (User.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
+                    else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
                         <p>You need more favorite recipes to generate a weekly plan.</p>
                         <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
@@ -115,7 +115,7 @@
 </div>
 
 @code {
-    public User User { get; set; } = new User();
+    public User user { get; set; } = new User();
 
     private ApplicationUser appUser { get; set; } = new();
 
@@ -156,7 +156,7 @@
             return;
         }
 
-        User = appUser.User;
+        user = appUser.User;
 
 
     }
@@ -196,7 +196,7 @@
     {
         // Logic to generate a weekly meal plan based on favorite recipes
         weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
-        User.WeeklyPlan = weeklyPlan;
+        user.WeeklyPlan = weeklyPlan;
         StateHasChanged();
     }
 
@@ -211,22 +211,22 @@
     }
     private async Task OnRecipeAdded(Recipe recipe)
     {
-        User.FavoriteRecipes.Add(recipe);
+        user.FavoriteRecipes.Add(recipe);
         StateHasChanged();
     }
     private async Task OnRecipeRemoved(Recipe recipe)
     {
-        User.FavoriteRecipes.Remove(recipe);
+        user.FavoriteRecipes.Remove(recipe);
         StateHasChanged();
     }
     private async Task OnShoppingListAdded(Ingredient ingredient)
     {
-        User.ShoppingList.Add(ingredient);
+        user.ShoppingList.Add(ingredient);
         StateHasChanged();
     }
     private async Task OnShoppingListRemoved(Ingredient ingredient)
     {
-        User.ShoppingList.Remove(ingredient);
+        user.ShoppingList.Remove(ingredient);
         StateHasChanged();
     }
         }
