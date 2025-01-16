@@ -80,9 +80,9 @@
 
         if (result.Succeeded)
         {
-            myUser.Name = user.UserName;
+            myUser = user.User;
 
-            user.User = myUser;
+            myUser.Name = user.UserName;
 
             context.Update(user);
             await context.SaveChangesAsync();
