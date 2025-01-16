@@ -209,22 +209,22 @@
     {
         Navigation.NavigateTo("/");
     }
-    private async Task OnRecipeAdded(Recipe recipe)
+    private void OnRecipeAdded(Recipe recipe)
     {
         user.FavoriteRecipes.Add(recipe);
         StateHasChanged();
     }
-    private async Task OnRecipeRemoved(Recipe recipe)
+    private void OnRecipeRemoved(Recipe recipe)
     {
         user.FavoriteRecipes.Remove(recipe);
         StateHasChanged();
     }
-    private async Task OnShoppingListAdded(Ingredient ingredient)
+    private void OnShoppingListAdded(Ingredient ingredient)
     {
         user.ShoppingList.Add(ingredient);
         StateHasChanged();
     }
-    private async Task OnShoppingListRemoved(Ingredient ingredient)
+    private void OnShoppingListRemoved(Ingredient ingredient)
     {
         user.ShoppingList.Remove(ingredient);
         StateHasChanged();

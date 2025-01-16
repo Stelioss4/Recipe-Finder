@@ -82,13 +82,6 @@
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 
-    // private async Task AddRecipeToFavorite(Recipe recipe)
-    // {
-    //     await favorite.AddFavoriteRecipeAsync(recipe); // This method adds the recipe to the database
-    //     userProfile.FavoriteRecipes.Add(recipe); // Update the local list
-    //     StateHasChanged(); // Refresh the UI
-    // }
-
     private async Task OnRecipeAdded(Recipe recipe)
     {
         // await AddRecipeToFavorite(recipe); // Use the new method to handle UI updates
@@ -97,7 +90,7 @@
 
         StateHasChanged();
     }
-    private async Task OnRecipeRemoved(Recipe recipe)
+    private void OnRecipeRemoved(Recipe recipe)
     {
         userProfile.FavoriteRecipes.Remove(recipe);
         // StateHasChanged();
