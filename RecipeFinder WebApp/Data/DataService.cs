@@ -144,8 +144,6 @@ namespace RecipeFinder_WebApp.Data
                 try
                 {
 
-
-
                     // Check if the recipe exists in the database
                     var existingRecipe = await _context.Recipes
                        .FirstOrDefaultAsync(r => r.Id == recipe.Id);
@@ -155,12 +153,13 @@ namespace RecipeFinder_WebApp.Data
                         throw new InvalidOperationException("The specified recipe does not exist in the database.");
                     }
 
+                    //newRating.Profile = appUser.User;
+                    //newReview.Profile = appUser.User;
+
                     // Add the new rating and review to the existing recipe
                     existingRecipe.Ratings.Add(newRating);
                     existingRecipe.Reviews.Add(newReview);
 
-                    newRating.Profile = appUser.User;
-                    newReview.Profile = appUser.User;
 
                     await _context.SaveChangesAsync();
                 }

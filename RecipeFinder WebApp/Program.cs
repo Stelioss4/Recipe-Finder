@@ -25,7 +25,6 @@ builder.Services.AddAuthentication(options =>
 })
     .AddIdentityCookies();
 
-
 // Register DbContext with AddDbContextFactory
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseMySql(
@@ -52,17 +51,7 @@ builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<ScrapperService>();
 builder.Services.AddScoped<WeeklyPlanService>();
 builder.Services.AddScoped<FavoriteService>();
-builder.Services.AddHttpClient<SpoonacularService>();
 builder.Services.AddHttpClient<GroceryService>();
-
-// Add MealDbService with API key injection
-//builder.Services.AddScoped<MealDbService>(provider =>
-//{
-//    var httpClient = provider.GetRequiredService<HttpClient>();
-//    var apiKey = builder.Configuration["MealDb:ApiKey"]; // Read API key from appsettings.json
-//    var dbContext = provider.GetRequiredService<ApplicationDbContext>(); // Get DbContext
-//    return new MealDbService(httpClient, apiKey, dbContext);
-//}); builder.Services.AddScoped<MealDbResponse>();
 
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();

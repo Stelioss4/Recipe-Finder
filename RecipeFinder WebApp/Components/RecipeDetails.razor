@@ -13,10 +13,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
 @inject IDbContextFactory<ApplicationDbContext> _contextFactory
-@inject SpoonacularService spoonacular
 @inject FavoriteService _favorite
-
-
 
 
 <PageTitle>Recipe Details</PageTitle>
@@ -238,6 +235,7 @@
         // Try to parse to double; if fails, return 0
         return double.TryParse(cleanedAmount, out var result) ? result : 0;
     }
+
     private string ParseUnit(string amount)
     {
         // Check if amount is null or empty
@@ -255,7 +253,6 @@
         return amountUnit;
     }
 
-
     private double ConvertToDouble(object amount)
     {
         if (amount is double) return (double)amount;
@@ -264,20 +261,6 @@
         return result;
     }
 
-    private async Task GetIngredientsForRecipePopUp()
-    {
-        if (recipe != null)
-        {
-            await GetIngredientsForRecipe();
-        }
-        showIngredientStorePopup = !showIngredientStorePopup;
-    }
-    private async Task GetIngredientsForRecipe()
-    {
-        recipe.ListOfIngredients = await spoonacular.GetIngredientsForRecipe(recipe);
-    }
-
-    // Method to update ingredient amounts based on peopleCount
     private void UpdateIngredients()
     {
         showPopup = false;
@@ -294,6 +277,7 @@
     {
         await _favorite.AddIngredientsToShoppingList(ingredient);
     }
+
     private void NavigateToReviews()
     {
         if (!string.IsNullOrEmpty(recipe?.Url))
@@ -317,23 +301,16 @@
 
     private async Task SubmitRatingAndReview(Recipe recipe)
     {
-        // appUser = await _dataService.GetAuthenticatedUserAsync();
-
-        // if (appUser != null)
-        // {
         await _dataService.SubmitRatingAndReview(recipe, newRating, newReview);
         // Clear the form fields
         newReview.ReviewText = string.Empty;
         newRating.Value = 0;
-        // }
-        // else
-        // {
-        //    Navigation.NavigateTo("Account/Login");
-        // }
+        StateHasChanged();
+
     }
+
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-
         await _favorite.AddFavoriteRecipeAsync(recipe);
         await _favorite.ReloadFavorites();
     }
