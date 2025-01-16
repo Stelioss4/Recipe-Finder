@@ -34,7 +34,7 @@
                 <p class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</p>
                 <p class="alert-primary text-center">Total time needed: @recipe.Time</p>
                 <p class="alert-primary text-center">Average Rating: @recipe.Rating.ToString("F2") </p>
-                <p class="alert-primary text-center"> <button class="btn btn-secondary" @onclick="NavigateToReviews">See recipe's reviews</button></p>
+                <p class="alert-primary text-center"> <button class="btn btn-secondary" @onclick="NavigateToReviews" hidden="@(!isAuthenticated ? "hidden" : null)">See recipe's reviews</button></p>
 
                 <!-- Popup button for user input -->
                 <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
@@ -90,9 +90,9 @@
     <br />
     <br />
 
-        <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
-    
-    @if (ReviewAndRatingShowPopup)
+    <button class="btn btn-primary" @onclick="RatingShowPopup" hidden="@(!isAuthenticated ? "hidden" : null)">Tell us your opinion</button>
+
+    @if (ReviewAndRatingShowPopup && isAuthenticated)
     {
         <div class="popup">
             <div class="popup-content">
@@ -114,7 +114,7 @@
 
     @*     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
     *@
-    <button class="btn btn-primary fixed-bottom-right" @onclick="()=>AddRecipeToFavorite(recipe)">AddRecipeToFavorite</button>
+    <button class="btn btn-primary fixed-bottom-right" @onclick="()=>AddRecipeToFavorite(recipe)" hidden="@(!isAuthenticated ? "hidden" : null)">Add To Fav</button>
 </div>
 <br />
 
@@ -145,12 +145,16 @@
 
     private bool ReviewAndRatingShowPopup { get; set; } = false;
 
+    private bool isAuthenticated { get; set; }
+
 
 
     protected override async Task OnInitializedAsync()
     {
         using var _context = _contextFactory.CreateDbContext();
 
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity.IsAuthenticated;
         var uri = new Uri(Navigation.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
