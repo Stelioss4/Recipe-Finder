@@ -42,8 +42,8 @@
             </div>
         }
         <!-- Button for ShoppingList Popup -->
-@*         <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
- *@
+        @*         <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
+    *@
         @if (showShoppingListPopup)
         {
 
@@ -229,4 +229,4 @@
         user.ShoppingList.Remove(ingredient);
         StateHasChanged();
     }
-        }
+}

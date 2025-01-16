@@ -12,7 +12,7 @@ using RecipeFinder_WebApp.Data;
 namespace RecipeFinderWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250109103340_Init")]
+    [Migration("20250116105243_Init")]
     partial class Init
     {
         /// <inheritdoc />
