@@ -31,7 +31,7 @@
                 <div class="popup-content">
                     @if (user.FavoriteRecipes != null && user.FavoriteRecipes.Count > 0)
                     {
-                        <RecipeOutput recipes="user.FavoriteRecipes" AddRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
+                        <RecipeOutput recipes="user.FavoriteRecipes" AddRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
                     }
                     else
                     {
@@ -92,8 +92,7 @@
 
                         <p>Your weekly plan was created on @user.LastWeeklyPlanDate!</p>
 
-                        @*                         <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate New Plan</button>
-            *@      }
+                    }
                     else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
                         <p>You need more favorite recipes to generate a weekly plan.</p>
@@ -131,6 +130,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        //     await Init();
+        // }
+        // protected async Task Init()
+        // {
         using var context = DbContextFactory.CreateDbContext();
 
         appUser = await DataService.GetAuthenticatedUserAsync();
@@ -209,16 +212,7 @@
     {
         Navigation.NavigateTo("/");
     }
-    private void OnRecipeAdded(Recipe recipe)
-    {
-        user.FavoriteRecipes.Add(recipe);
-        StateHasChanged();
-    }
-    private void OnRecipeRemoved(Recipe recipe)
-    {
-        user.FavoriteRecipes.Remove(recipe);
-        StateHasChanged();
-    }
+
     private void OnShoppingListAdded(Ingredient ingredient)
     {
         user.ShoppingList.Add(ingredient);

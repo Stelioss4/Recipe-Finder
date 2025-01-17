@@ -41,7 +41,7 @@
 
     @if (recipes.Count > 0)
     {
-        <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnRecipeAdded="OnRecipeAdded" OnRecipeRemoved="OnRecipeRemoved"></RecipeOutput>
+        <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
     }
    
 </div>
@@ -82,17 +82,14 @@
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 
-    private async Task OnRecipeAdded(Recipe recipe)
+     private void UpdateFavorites()
     {
-        // await AddRecipeToFavorite(recipe); // Use the new method to handle UI updates
-        userProfile.FavoriteRecipes.Add(recipe);
-        await favorite.ReloadFavorites();
+        InvokeAsync(StateHasChanged);
+    }
 
-        StateHasChanged();
-    }
-    private void OnRecipeRemoved(Recipe recipe)
-    {
-        userProfile.FavoriteRecipes.Remove(recipe);
-        // StateHasChanged();
-    }
+    // private async Task OnRecipeAdded(Recipe recipe)
+    // {
+    //     // await AddRecipeToFavorite(recipe); // Use the new method to handle UI updates
+    //     StateHasChanged();
+    // }
 }

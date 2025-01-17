@@ -114,6 +114,7 @@ namespace RecipeFinder_WebApp.Data
 
             recipe = await _context.Recipes
                .Include(r => r.Reviews)
+               .ThenInclude(review => review.Profile)
                .Include(r => r.Ratings)
                .FirstOrDefaultAsync(r => r.Id == recipe.Id);
 
@@ -153,8 +154,10 @@ namespace RecipeFinder_WebApp.Data
                         throw new InvalidOperationException("The specified recipe does not exist in the database.");
                     }
 
-                    //newRating.Profile = appUser.User;
-                    //newReview.Profile = appUser.User;
+                    var user = _context.User.Find(appUser.User.Id);
+
+                    newRating.Profile = user;
+                    newReview.Profile = user;
 
                     // Add the new rating and review to the existing recipe
                     existingRecipe.Ratings.Add(newRating);
@@ -173,9 +176,8 @@ namespace RecipeFinder_WebApp.Data
             {
                 _navigation.NavigateTo("Account/Login");
             }
-
         }
     }
-
 }
-    
+
+

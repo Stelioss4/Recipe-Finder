@@ -11,6 +11,8 @@ namespace RecipeFinder_WebApp.Data
 
         public DbSet<Ingredient> Ingredients { get; set; }
 
+        public DbSet<User> User { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
            
