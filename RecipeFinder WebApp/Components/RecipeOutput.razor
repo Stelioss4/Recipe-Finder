@@ -57,7 +57,7 @@
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
         await _favorite.AddFavoriteRecipeAsync(recipe);
-        // await _favorite.ReloadFavorites();
+        await _favorite.ReloadFavorites();
         await OnFavoritesChanged.InvokeAsync(recipe);
 
     }
