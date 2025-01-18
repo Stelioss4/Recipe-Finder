@@ -51,7 +51,6 @@ namespace RecipeFinder_WebApp.Data
                     appUser.User.ShoppingList.Add(ingredient);
 
                     await _context.SaveChangesAsync();
-         //           OnFavoritesChanged?.Invoke();
 
                     Console.WriteLine("Ingredient is successfully added to shopping list");
 
@@ -152,7 +151,6 @@ namespace RecipeFinder_WebApp.Data
 
                         appUser.User.FavoriteRecipes.Add(recipe);
                         await _context.SaveChangesAsync();
-         //               OnFavoritesChanged?.Invoke();
                         Console.WriteLine("Recipe added to your favorites successfully.");
                     }
                 }
@@ -203,8 +201,6 @@ namespace RecipeFinder_WebApp.Data
 
                         // Save changes to the database
                         await _context.SaveChangesAsync();
-
-               //         OnFavoritesChanged?.Invoke();
 
                         Console.WriteLine("Recipe removed from favorites successfully.");
                     }

@@ -151,6 +151,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await Init();
+    }
+
+    protected async Task Init()
+    {
         using var _context = _contextFactory.CreateDbContext();
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -167,7 +172,7 @@
             recipe = await _context.Recipes
                 .Include(r => r.ListOfIngredients) // Include the related ingredients
                 .Include(r => r.Ratings)
-                .Include(r => r.Reviews)
+                // .Include(r => r.Reviews)
                 .FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
             if (recipe != null && recipe.CookingInstructions != null)
@@ -177,46 +182,46 @@
                 var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
                 averageRating = result.AverageRating;
             }
-            else
-            {
-                // 2. If not in the database, proceed with scraping
-                Console.WriteLine("Recipe not found in database; starting online scrape.");
+            // else
+            // {
+            //     // 2. If not in the database, proceed with scraping
+            //     Console.WriteLine("Recipe not found in database; starting online scrape.");
 
-                try
-                {
-                    if (decodedUrl.Contains(Constants.CHEFKOCH_URL) || decodedUrl.Contains(Constants.ALLRECIPE_URL))
-                    {
-                        if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
-                        {
-                            recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                        }
-                        if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
-                        {
-                            recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Unknown source domain");
-                    }
+            //     try
+            //     {
+            //         if (decodedUrl.Contains(Constants.CHEFKOCH_URL) || decodedUrl.Contains(Constants.ALLRECIPE_URL))
+            //         {
+            //             if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
+            //             {
+            //                 recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+            //             }
+            //             if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
+            //             {
+            //                 recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+            //             }
+            //         }
+            //         else
+            //         {
+            //             Console.WriteLine("Unknown source domain");
+            //         }
 
-                    // 3. Save the newly scraped recipe to the database
-                    if (recipe != null)
-                    {
-                        _context.Recipes.Add(recipe);
-                        await _context.SaveChangesAsync();
-                        Console.WriteLine($"Scraped and saved recipe: {recipe.RecipeName}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Recipe object is null after scraping.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error during scraping: {ex.Message}");
-                }
-            }
+            //         // 3. Save the newly scraped recipe to the database
+            //         if (recipe != null)
+            //         {
+            //             _context.Recipes.Add(recipe);
+            //             await _context.SaveChangesAsync();
+            //             Console.WriteLine($"Scraped and saved recipe: {recipe.RecipeName}");
+            //         }
+            //         else
+            //         {
+            //             Console.WriteLine("Recipe object is null after scraping.");
+            //         }
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         Console.WriteLine($"Error during scraping: {ex.Message}");
+            //     }
+            // }
         }
         else
         {
@@ -309,6 +314,7 @@
         // Clear the form fields
         newReview.ReviewText = string.Empty;
         newRating.Value = 0;
+        await Init();
         StateHasChanged();
 
     }
@@ -316,6 +322,6 @@
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
         await _favorite.AddFavoriteRecipeAsync(recipe);
-        await _favorite.ReloadFavorites();
+        await InvokeAsync(StateHasChanged);
     }
 }

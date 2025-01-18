@@ -8,12 +8,12 @@ namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
-        private ApplicationUser appUser { get; set; } = new();
-        private Recipe recipe { get; set; } = new();
-        private User UserProfile { get; set; } = new User();
-        private List<Recipe> Recipes { get; set; } = new List<Recipe>();
-        private Review newReview { get; set; } = new();
-        private Rating newRating { get; set; } = new();
+        //private ApplicationUser appUser { get; set; } = new();
+        ////private Recipe recipe { get; set; } = new();
+        //private User UserProfile { get; set; } = new User();
+        //private List<Recipe> Recipes { get; set; } = new List<Recipe>();
+        //private Review newReview { get; set; } = new();
+        //private Rating newRating { get; set; } = new();
 
         private readonly IHttpClientFactory _clientFactory;
         //        private readonly ApplicationDbContext context;

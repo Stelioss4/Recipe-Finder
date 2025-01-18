@@ -130,10 +130,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //     await Init();
-        // }
-        // protected async Task Init()
-        // {
+        await Init();
+    }
+    protected async Task Init()
+    {
         using var context = DbContextFactory.CreateDbContext();
 
         appUser = await DataService.GetAuthenticatedUserAsync();
@@ -159,13 +159,16 @@
             return;
         }
 
+
+        await _favorite.ReloadFavorites();
         user = appUser.User;
 
 
     }
-    private void UpdateFavorites()
+    private async Task UpdateFavorites()
     {
-        InvokeAsync(StateHasChanged);
+        await Init();
+        await InvokeAsync(StateHasChanged);
     }
 
     private void TogglePopupFavorites()
