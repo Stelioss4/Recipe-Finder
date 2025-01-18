@@ -2,197 +2,33 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Recipe_Finder;
-using System.Security.Cryptography;
-using System.Xml.Serialization;
 
 namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
-        private Recipe recipe { get; set; } = new();
-        private User? UserProfile { get; set; } = new User();
-        private List<Recipe> Recipes { get; set; } = new List<Recipe>();
-        private Review review { get; set; } = new();
-        private Rating rating { get; set; } = new();
+        //private ApplicationUser appUser { get; set; } = new();
+        ////private Recipe recipe { get; set; } = new();
+        //private User UserProfile { get; set; } = new User();
+        //private List<Recipe> Recipes { get; set; } = new List<Recipe>();
+        //private Review newReview { get; set; } = new();
+        //private Rating newRating { get; set; } = new();
 
         private readonly IHttpClientFactory _clientFactory;
-        private readonly ApplicationDbContext _context;
+        //        private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly NavigationManager _navigation;
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
 
-        public DataService(NavigationManager Navigation, IHttpClientFactory clientFactory, ApplicationDbContext context, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
+        public DataService(NavigationManager Navigation, IHttpClientFactory clientFactory, IDbContextFactory<ApplicationDbContext> contextFactory, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
         {
             _clientFactory = clientFactory;
-            _context = context ?? throw new ArgumentNullException(nameof(context));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             AuthenticationStateProvider = authenticationStateProvider;
             _navigation = Navigation;
-        }
-
-        /// <summary>
-        /// Add Ingredient from user's recipes to a shopping list
-        /// </summary>
-        /// <returns></returns>
-        public async Task AddIngredientsToShoppingList(Ingredient ingredient)
-        {
-            var appUser = await GetAuthenticatedUserAsync();
-
-            UserProfile = appUser.User;
-
-            if (UserProfile != null)
-            {
-                if (UserProfile.ShoppingList.Contains(ingredient))
-                {
-                    Console.WriteLine("ingredient already in shopping list");
-                }
-                else
-                {
-                    UserProfile.ShoppingList.Add(ingredient);
-
-                    await _context.SaveChangesAsync();
-
-                    Console.WriteLine("Ingredient is successfully added to shopping list");
-
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes Ingredient from shopping list
-        /// </summary>
-        /// <param name="ingredient"></param>
-        /// <returns></returns>
-        public async Task RemoveIngredientFromShoppingListAsync(Ingredient ingredient)
-        {
-            try
-            {
-                var appUser = await GetAuthenticatedUserAsync();
-
-                UserProfile = appUser.User;
-
-                if (UserProfile != null)
-                {
-                    var ingredientToRemove = UserProfile.ShoppingList
-                        .FirstOrDefault(i =>
-                         i.Id == ingredient.Id && i.UserId == ingredient.UserId);
-
-                    if (ingredientToRemove != null)
-                    {
-                        // Remove the recipe from the list
-                        UserProfile.ShoppingList.Remove(ingredientToRemove);
-
-                        // Save changes to the database
-                        await _context.SaveChangesAsync();
-
-                        Console.WriteLine("Ingredient removed from ShoppingList successfully.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error removing ingredient from Shopping list: {ex.Message}");
-                // Handle the error appropriately (e.g., display an error message)
-            }
-        }
-
-
-        /// <summary>
-        /// Adds a recipe to the ClaimUser's favorites and saves the changes to the database.
-        /// </summary>
-        public async Task AddFavoriteRecipeAsync(Recipe recipe)
-        {
-
-            var appUser = await GetAuthenticatedUserAsync();
-
-
-            if (appUser.User != null)
-            {
-
-                if (appUser.User.FavoriteRecipes.Contains(recipe))
-                {
-                    // Notify the user that the recipe is already in their favorites
-                    Console.WriteLine("Recipe is already in your favorites.");
-                }
-                else
-                {
-                    // Add the recipe to the user's favorite list
-                    appUser.User.FavoriteRecipes.Add(recipe);
-
-                    // Save changes to the database
-                    await _context.SaveChangesAsync();
-
-                    // Notify the user that the recipe was successfully added
-                    Console.WriteLine("Recipe added to your favorites successfully.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("User is not authenticated.");
-                _navigation.NavigateTo("account/login");
-            }
-
-        }
-
-        /// <summary>
-        /// Removes a recipe from the authenticated user's list of favorite recipes.
-        /// </summary>
-        public async Task RemoveFavoriteRecipeAsync(Recipe recipe)
-        {
-            try
-            {
-                var appUser = await GetAuthenticatedUserAsync();
-
-
-
-                if (appUser.User != null)
-                {
-
-                    // Use SourceDomain and SearchTerms as additional criteria
-                    var recipeToRemove = appUser.User.FavoriteRecipes
-                     .FirstOrDefault(r =>
-                         string.Equals(r.RecipeName, recipe.RecipeName, StringComparison.OrdinalIgnoreCase) &&
-                         string.Equals(r.SourceDomain, recipe.SourceDomain, StringComparison.OrdinalIgnoreCase) 
-                         //r.SearchTerms != null &&
-                         //recipe.SearchTerms != null &&
-                         //r.SearchTerms
-                         //    .OrderBy(t => t.Term) 
-                         //    .Select(t => t.Term) 
-                         //    .SequenceEqual(
-                         //        recipe.SearchTerms.OrderBy(t => t.Term).Select(t => t.Term)
-                     );
-
-
-
-
-                    if (recipeToRemove != null)
-                    {
-                        // Remove the recipe from the list
-                        appUser.User.FavoriteRecipes.Remove(recipeToRemove);
-
-                        // Save changes to the database
-                        await _context.SaveChangesAsync();
-
-                        Console.WriteLine("Recipe removed from favorites successfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Recipe not found in favorites.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("User is not authenticated.");
-                    _navigation.NavigateTo("account/login");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error removing recipe from favorites: {ex.Message}");
-                // Handle the error appropriately (e.g., display an error message)
-            }
+            _contextFactory = contextFactory;
         }
 
         /// <summary>
@@ -202,6 +38,9 @@ namespace RecipeFinder_WebApp.Data
         /// <returns></returns>
         public async Task<List<Recipe>> GetRecipesFromDatabaseAsync(string searchQuery, string source)
         {
+
+            using var _context = _contextFactory.CreateDbContext();
+
             // Normalize the search query
             searchQuery = searchQuery.Trim().ToLowerInvariant();
 
@@ -241,7 +80,7 @@ namespace RecipeFinder_WebApp.Data
 
                     if (appUser != null)
                     {
-                        return appUser; // Return the authenticated user
+                        return appUser; // Return the authenticated appUser
                     }
                     else
                     {
@@ -252,21 +91,30 @@ namespace RecipeFinder_WebApp.Data
                 {
                     Console.WriteLine("User is not authenticated.");
                     _navigation.NavigateTo("account/login");
-                    return null; // No authenticated user, return null
+                    return null; // No authenticated appUser, return null
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error retrieving authenticated user: {ex.Message}");
+                Console.WriteLine($"Error retrieving authenticated appUser: {ex.Message}");
                 // Handle the error (you might want to log or display an error message)
                 return null; // Return null in case of an error
             }
         }
 
+
+        /// <summary>
+        /// Returns recipe's reviews and ratings average
+        /// </summary>
+        /// <param name="recipe"></param>
+        /// <returns></returns>
         public async Task<(double AverageRating, List<Review> Reviews)> ShowRecipesReviewsAndRatings(Recipe recipe)
         {
+            using var _context = _contextFactory.CreateDbContext();
+
             recipe = await _context.Recipes
                .Include(r => r.Reviews)
+               .ThenInclude(review => review.Profile)
                .Include(r => r.Ratings)
                .FirstOrDefaultAsync(r => r.Id == recipe.Id);
 
@@ -280,5 +128,56 @@ namespace RecipeFinder_WebApp.Data
 
             return (averageRating, reviews);
         }
+
+        public async Task SubmitRatingAndReview(Recipe recipe, Rating newRating, Review newReview)
+        {
+
+            using var _context = _contextFactory.CreateDbContext();
+
+            var appUser = await GetAuthenticatedUserAsync();
+            if (appUser != null)
+            {
+                if (recipe == null)
+                {
+                    throw new ArgumentNullException(nameof(recipe));
+                }
+
+                try
+                {
+
+                    // Check if the recipe exists in the database
+                    var existingRecipe = await _context.Recipes
+                       .FirstOrDefaultAsync(r => r.Id == recipe.Id);
+
+                    if (existingRecipe == null)
+                    {
+                        throw new InvalidOperationException("The specified recipe does not exist in the database.");
+                    }
+
+                    var user = _context.User.Find(appUser.User.Id);
+
+                    newRating.Profile = user;
+                    newReview.Profile = user;
+
+                    // Add the new rating and review to the existing recipe
+                    existingRecipe.Ratings.Add(newRating);
+                    existingRecipe.Reviews.Add(newReview);
+
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error submitting review and rating: {ex.Message}");
+                    throw;
+                }
+            }
+            else
+            {
+                _navigation.NavigateTo("Account/Login");
+            }
+        }
     }
 }
+
+

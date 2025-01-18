@@ -25,12 +25,20 @@ builder.Services.AddAuthentication(options =>
 })
     .AddIdentityCookies();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// Register DbContext with AddDbContextFactory
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 40))
     ));
+
+//// Register ApplicationDbContext for normal scoped usage
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseMySql(
+//        builder.Configuration.GetConnectionString("DefaultConnection"),
+//        new MySqlServerVersion(new Version(8, 0, 40))
+//    ));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -42,17 +50,8 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<ScrapperService>();
 builder.Services.AddScoped<WeeklyPlanService>();
-builder.Services.AddHttpClient<SpoonacularService>();
+builder.Services.AddScoped<FavoriteService>();
 builder.Services.AddHttpClient<GroceryService>();
-
-// Add MealDbService with API key injection
-builder.Services.AddScoped<MealDbService>(provider =>
-{
-    var httpClient = provider.GetRequiredService<HttpClient>();
-    var apiKey = builder.Configuration["MealDb:ApiKey"]; // Read API key from appsettings.json
-    var dbContext = provider.GetRequiredService<ApplicationDbContext>(); // Get DbContext
-    return new MealDbService(httpClient, apiKey, dbContext);
-}); builder.Services.AddScoped<MealDbResponse>();
 
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();

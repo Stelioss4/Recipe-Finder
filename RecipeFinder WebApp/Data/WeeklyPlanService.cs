@@ -1,23 +1,27 @@
-﻿using Recipe_Finder;
+﻿using Microsoft.EntityFrameworkCore;
+using Recipe_Finder;
 
 namespace RecipeFinder_WebApp.Data
 {
     public class WeeklyPlanService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+        //private readonly ApplicationDbContext context;
         private readonly DataService _dataService;
         private DateTime? lastPlanDate = null;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
-        public WeeklyPlanService(DataService dataService, ApplicationDbContext context)
+        public WeeklyPlanService(DataService dataService, IDbContextFactory<ApplicationDbContext> contextFactory /* ApplicationDbContext _context*/)
         {
             _dataService = dataService;
-            _context = context;
+            //context = _context;
+            _contextFactory = contextFactory;
         }
 
         // Generates a weekly plan based on the user's favorite recipes
         public async Task<List<Recipe>> GenerateWeeklyPlanAsync()
         {
+            using var context = _contextFactory.CreateDbContext();
             // Fetch the authenticated user
             var userProfile = await _dataService.GetAuthenticatedUserAsync();
 
@@ -25,6 +29,11 @@ namespace RecipeFinder_WebApp.Data
             {
                 throw new Exception("User not authenticated.");
             }
+
+            userProfile = await context.Users
+            .Include(u => u.User.WeeklyPlan)
+            .Include(u => u.User.FavoriteRecipes)
+            .FirstOrDefaultAsync(u => u.Id == userProfile.Id);
 
             // Check if the user already has a weekly plan and the date of the last plan
             if (userProfile.User.WeeklyPlan != null && userProfile.User.WeeklyPlan.Any() && userProfile.User.LastWeeklyPlanDate.HasValue)
@@ -53,8 +62,8 @@ namespace RecipeFinder_WebApp.Data
                 userProfile.User.LastWeeklyPlanDate = DateTime.Now;
 
                 // Save changes to the database
-                _context.Update(userProfile); // Make sure the user is tracked by the context
-                await _context.SaveChangesAsync();
+                context.Update(userProfile); // Make sure the user is tracked by the context
+                await context.SaveChangesAsync();
 
                 // Return the new weekly plan
                 return newWeeklyPlan;
@@ -84,6 +93,38 @@ namespace RecipeFinder_WebApp.Data
         {
             return lastPlanDate;
         }
-    }
 
+        //public async Task RemoveWeeklyPlanAsync()
+        //{
+        //    try
+        //    {
+        //        using var context = _contextFactory.CreateDbContext();
+        //        // Fetch the authenticated user
+        //        var userProfile = await _dataService.GetAuthenticatedUserAsync();
+        //        // Fetch all weekly plans
+        //        var weeklyPlans = userProfile.User.WeeklyPlan.ToList();
+
+        //        if (weeklyPlans.Any())
+        //        {
+        //            // Remove all weekly plans
+        //            context.WeeklyPlans.RemoveRange(weeklyPlans);
+
+        //            // Save changes to the database
+        //            await context.SaveChangesAsync();
+        //            Console.WriteLine("All weekly plans have been deleted.");
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("No weekly plans found to delete.");
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"An error occurred while deleting weekly plans: {ex.Message}");
+        //    }
+        //}
+    }
 }
+
+

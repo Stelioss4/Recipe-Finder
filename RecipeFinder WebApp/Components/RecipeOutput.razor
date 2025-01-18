@@ -3,6 +3,8 @@
 
 @inject NavigationManager Navigation
 @inject DataService DataService
+@inject FavoriteService _favorite
+
 
 <div class="row mt-5">
     @if (recipes?.Count > 0)
@@ -18,17 +20,19 @@
                     <div class="btn-group">
                         <div class="card-body">
                             <h5 class="card-title">@rec.RecipeName</h5>
-                          
+
                             <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
-
-                            @if (AddRecipeButton)
+                            @if (appUser != null)
                             {
-                                <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
-                            }
+                                @if (AddRecipeButton)
+                                {
+                                    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)">Add to Fav!</button>
+                                }
 
-                            @if (RemoveRecipeButton)
-                            {
-                                <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove</button>
+                                @if (RemoveRecipeButton)
+                                {
+                                    <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove</button>
+                                }
                             }
                         </div>
                     </div>
@@ -40,8 +44,10 @@
 
 @code {
     [Parameter] public List<Recipe> recipes { get; set; } = new List<Recipe>();
+    [Parameter] public ApplicationUser appUser { get; set; } = new();
     [Parameter] public bool RemoveRecipeButton { get; set; } = true;
     [Parameter] public bool AddRecipeButton { get; set; } = true;
+    [Parameter] public EventCallback<Recipe> OnFavoritesChanged { get; set; }
 
     private void NavigateToRecipeDetails(string recipeUrl)
     {
@@ -50,13 +56,14 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
-        await DataService.AddFavoriteRecipeAsync(recipe);
+        await _favorite.AddFavoriteRecipeAsync(recipe);
+        await OnFavoritesChanged.InvokeAsync(recipe);
+
     }
 
-    private async Task RemoveRecipeFromFavorite(Recipe rec)
+    private async Task RemoveRecipeFromFavorite(Recipe recipe)
     {
-        await DataService.RemoveFavoriteRecipeAsync(rec);
-        // Refresh the user's profile after removing the recipe
-        StateHasChanged();
+        await _favorite.RemoveFavoriteRecipeAsync(recipe);
+        await OnFavoritesChanged.InvokeAsync(recipe);
     }
 }

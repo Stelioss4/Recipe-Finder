@@ -24,27 +24,27 @@
             Review review2 = new Review();
 
             review.ReviewText = "very good and easy";
-            review.TimeStam = rating.TimeStam;
+            review.TimeStamp = rating.TimeStamp;
             review.Profile = rating.Profile;
 
             rating.Value = 4.8;
-            rating.TimeStam = DateTime.Now; //new DateTime(2024, 4, 11, 12, 30, 0);
+            rating.TimeStamp = DateTime.Now; //new DateTime(2024, 4, 11, 12, 30, 0);
             rating.Profile = users[0];
 
             review1.ReviewText = "Nice and easy";
-            review1.TimeStam = rating1.TimeStam;
+            review1.TimeStamp = rating1.TimeStamp;
             review1.Profile = rating1.Profile;
 
             rating1.Value = 4.2;
-            rating1.TimeStam = new DateTime(2024, 4, 15, 18, 28, 0);
+            rating1.TimeStamp = new DateTime(2024, 4, 15, 18, 28, 0);
             rating1.Profile = users[1];
 
             review2.ReviewText = "easy for everyone to do, but not so good";
-            review2.TimeStam = rating2.TimeStam;
+            review2.TimeStamp = rating2.TimeStamp;
             review2.Profile = rating2.Profile;
 
             rating2.Value = 3.9;
-            rating2.TimeStam = new DateTime(2024, 2, 19, 17, 30, 0);
+            rating2.TimeStamp = new DateTime(2024, 2, 19, 17, 30, 0);
             rating2.Profile = users[2];
 
             Ingredient ingredient = new Ingredient();

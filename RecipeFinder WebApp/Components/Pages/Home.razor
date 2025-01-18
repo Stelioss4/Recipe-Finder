@@ -12,8 +12,8 @@
 @inject DataService DataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
-@inject ApplicationDbContext _context
-@inject MealDbService _mealDbService
+@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
+@inject FavoriteService favorite
 
 <PageTitle>Home</PageTitle>
 
@@ -41,7 +41,7 @@
 
     @if (recipes.Count > 0)
     {
-        <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
+        <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
     }
    
 </div>
@@ -52,23 +52,23 @@
     private string searchQuery { get; set; } = string.Empty;
     private ApplicationUser appUser { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        appUser = await DataService.GetAuthenticatedUserAsync();
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     // appUser = await DataService.GetAuthenticatedUserAsync();
 
-        userProfile = appUser?.User;
+    //     // userProfile = appUser?.User;
 
-        if (userProfile == null)
-        {
-            // User profile not found, force logout and redirect to login
-            await SignInManager.SignOutAsync();
-            Navigation.NavigateTo("Account/Register");
-            return;
-        }
-    }
+    //     // if (userProfile == null)
+    //     // {
+    //     //     // User profile not found, force logout and redirect to login
+    //     //     await SignInManager.SignOutAsync();
+    //     //     Navigation.NavigateTo("Account/Register");
+    //     //     return;
+    //     // }
+    // }
 
     private async Task SearchForRecipeFromCK()
-    {
+    {   
         recipes = await Scrap.ScrapeCKRecipes(searchQuery);
     }
 
@@ -77,19 +77,19 @@
         recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
     }
 
-    private async Task SearchRecipes()
-    {
-        recipes = await Scrap.ScrapeCantinaRecipes(searchQuery);
-    }
-
     private void NavigateToRecipeDetails(string recipeUrl)
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 
-    private async Task AddRecipeToFavorite(Recipe recipe)
+     private void UpdateFavorites()
     {
-        await DataService.AddFavoriteRecipeAsync(recipe);
-        StateHasChanged();
+        InvokeAsync(StateHasChanged);
     }
-    }
+
+    // private async Task OnRecipeAdded(Recipe recipe)
+    // {
+    //     // await AddRecipeToFavorite(recipe); // Use the new method to handle UI updates
+    //     StateHasChanged();
+    // }
+}

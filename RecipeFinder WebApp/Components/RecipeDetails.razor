@@ -12,9 +12,8 @@
 @inject DataService _dataService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> _userManager
-@inject ApplicationDbContext _context
-@inject SpoonacularService spoonacular
-
+@inject IDbContextFactory<ApplicationDbContext> _contextFactory
+@inject FavoriteService _favorite
 
 
 <PageTitle>Recipe Details</PageTitle>
@@ -34,7 +33,8 @@
                 }
                 <p class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</p>
                 <p class="alert-primary text-center">Total time needed: @recipe.Time</p>
-                <p class="alert-primary text-center">Average Rating: @averageRating.ToString("F2") <button class="btn btn-secondary" @onclick="NavigateToReviews">See recipe's reviews</button></p>
+                <p class="alert-primary text-center">Average Rating: @recipe.Rating.ToString("F2") </p>
+                <p class="alert-primary text-center"> <button class="btn btn-secondary" @onclick="NavigateToReviews" hidden="@(!isAuthenticated ? "hidden" : null)">See recipe's reviews</button></p>
 
                 <!-- Popup button for user input -->
                 <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
@@ -64,12 +64,13 @@
                                 <label for="@ingredient.IngredientsName">
                                     (@GetAmountForPeople(ParseAmount(ingredient.Amount))@ParseUnit(ingredient.Amount)) @ingredient.IngredientsName
                                 </label>
-                                <br/>
+                                <br />
                                 <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
                                     REWE
                                 </a>
-@*                                 <button class="btn btn-secondary" @onclick="AddIngredientToShoppingList">Add to shopping list</button>
- *@                            </li>
+                                @* <button class="btn btn-secondary" @onclick="AddIngredientToShoppingList">Add to shopping list</button>
+                        *@
+                            </li>
 
                         }
                     </ul>
@@ -89,9 +90,9 @@
     <br />
     <br />
 
-    <button class="btn btn-primary" @onclick="RatingShowPopup">Tell us your opinion</button>
+    <button class="btn btn-primary" @onclick="RatingShowPopup" hidden="@(!isAuthenticated ? "hidden" : null)">Tell us your opinion</button>
 
-    @if (ReviewAndRatingShowPopup)
+    @if (ReviewAndRatingShowPopup && isAuthenticated)
     {
         <div class="popup">
             <div class="popup-content">
@@ -111,8 +112,9 @@
         </div>
     }
 
-    <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
-
+    @*     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
+    *@
+    <button class="btn btn-primary fixed-bottom-right" @onclick="()=>AddRecipeToFavorite(recipe)" hidden="@(!isAuthenticated ? "hidden" : null)">Add To Fav</button>
 </div>
 <br />
 
@@ -120,6 +122,8 @@
 @code {
     [Parameter]
     public string Url { get; set; }
+
+    private ApplicationUser appUser { get; set; } = new();
 
     private Recipe recipe { get; set; } = new();
 
@@ -141,10 +145,21 @@
 
     private bool ReviewAndRatingShowPopup { get; set; } = false;
 
+    private bool isAuthenticated { get; set; }
+
 
 
     protected override async Task OnInitializedAsync()
     {
+        await Init();
+    }
+
+    protected async Task Init()
+    {
+        using var _context = _contextFactory.CreateDbContext();
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity.IsAuthenticated;
         var uri = new Uri(Navigation.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
@@ -153,65 +168,60 @@
             Console.WriteLine($"Found url parameter: {urlValue}");
             var decodedUrl = Uri.UnescapeDataString(urlValue);
 
-            // 1. Check if the recipe is already in the database
-            recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Url == decodedUrl);
+            // 1. Check if the recipe is already in the database, including ingredients
+            recipe = await _context.Recipes
+                .Include(r => r.ListOfIngredients) // Include the related ingredients
+                .Include(r => r.Ratings)
+                // .Include(r => r.Reviews)
+                .FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
-            if (recipe.CookingInstructions != null)
-            {   
+            if (recipe != null && recipe.CookingInstructions != null)
+            {
                 Console.WriteLine("Recipe found in the database.");
-                // Fetch additional related data as needed, e.g., average rating
+                // Fetch additional related data as needed, e.g., average newRating
                 var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
                 averageRating = result.AverageRating;
             }
-            else
-            {
-                // 2. If not in the database, proceed with scraping
-                Console.WriteLine("Recipe not found in database; starting online scrape.");
+            // else
+            // {
+            //     // 2. If not in the database, proceed with scraping
+            //     Console.WriteLine("Recipe not found in database; starting online scrape.");
 
-                try
-                {
-                    if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
-                    {
-                        recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
-                    else if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
-                    {
-                        recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
-                    // else if (decodedUrl.Contains(Constants.SERIOUSEATS_URL))
-                    // {
-                    //     recipe = await Scrap.ScrapeSeriousEatsDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    // }
-                    else if (decodedUrl.Contains(Constants.DELISH_URL))
-                    {
-                        recipe = await Scrap.ScrapeDelishDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
-                    else if (decodedUrl.Contains(Constants.CANTINA_URL))
-                    {
-                        recipe = await Scrap.ScrapeCantinaDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-                    }
-                    else
-                    {
-                        Console.WriteLine("Unknown source domain");
-                    }
+            //     try
+            //     {
+            //         if (decodedUrl.Contains(Constants.CHEFKOCH_URL) || decodedUrl.Contains(Constants.ALLRECIPE_URL))
+            //         {
+            //             if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
+            //             {
+            //                 recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+            //             }
+            //             if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
+            //             {
+            //                 recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
+            //             }
+            //         }
+            //         else
+            //         {
+            //             Console.WriteLine("Unknown source domain");
+            //         }
 
-                    // 3. Save the newly scraped recipe to the database
-                    if (recipe != null)
-                    {
-                        _context.Recipes.Add(recipe);
-                        await _context.SaveChangesAsync();
-                        Console.WriteLine($"Scraped and saved recipe: {recipe.RecipeName}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Recipe object is null after scraping.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error during scraping: {ex.Message}");
-                }
-            }
+            //         // 3. Save the newly scraped recipe to the database
+            //         if (recipe != null)
+            //         {
+            //             _context.Recipes.Add(recipe);
+            //             await _context.SaveChangesAsync();
+            //             Console.WriteLine($"Scraped and saved recipe: {recipe.RecipeName}");
+            //         }
+            //         else
+            //         {
+            //             Console.WriteLine("Recipe object is null after scraping.");
+            //         }
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         Console.WriteLine($"Error during scraping: {ex.Message}");
+            //     }
+            // }
         }
         else
         {
@@ -234,6 +244,7 @@
         // Try to parse to double; if fails, return 0
         return double.TryParse(cleanedAmount, out var result) ? result : 0;
     }
+
     private string ParseUnit(string amount)
     {
         // Check if amount is null or empty
@@ -251,7 +262,6 @@
         return amountUnit;
     }
 
-
     private double ConvertToDouble(object amount)
     {
         if (amount is double) return (double)amount;
@@ -260,20 +270,6 @@
         return result;
     }
 
-    private async Task GetIngredientsForRecipePopUp()
-    {
-        if (recipe != null)
-        {
-            await GetIngredientsForRecipe();
-        }
-        showIngredientStorePopup = !showIngredientStorePopup;
-    }
-    private async Task GetIngredientsForRecipe()
-    {
-        recipe.ListOfIngredients = await spoonacular.GetIngredientsForRecipe(recipe);
-    }
-
-    // Method to update ingredient amounts based on peopleCount
     private void UpdateIngredients()
     {
         showPopup = false;
@@ -288,8 +284,9 @@
 
     private async Task AddIngredientToShoppingList()
     {
-        await _dataService.AddIngredientsToShoppingList(ingredient);
+        await _favorite.AddIngredientsToShoppingList(ingredient);
     }
+
     private void NavigateToReviews()
     {
         if (!string.IsNullOrEmpty(recipe?.Url))
@@ -313,64 +310,18 @@
 
     private async Task SubmitRatingAndReview(Recipe recipe)
     {
-        if (recipe is null)
-        {
-            throw new ArgumentNullException(nameof(recipe));
-        }
+        await _dataService.SubmitRatingAndReview(recipe, newRating, newReview);
+        // Clear the form fields
+        newReview.ReviewText = string.Empty;
+        newRating.Value = 0;
+        await Init();
+        StateHasChanged();
 
-        try
-        {
-            if (_context == null)
-            {
-                throw new InvalidOperationException("DbContext is null");
-            }
+    }
 
-            var user = await _dataService.GetAuthenticatedUserAsync();
-            if (user.User == null)
-            {
-                throw new InvalidOperationException("Authenticated user is null");
-            }
-
-            if (recipe != null)
-            {
-                var recipeExists = await _context.Recipes.AnyAsync(r => r.Id == recipe.Id);
-                if (!recipeExists)
-                {
-                    throw new InvalidOperationException("The specified recipe does not exist in the database.");
-                }
-
-                // Create a new review
-                var review = new Review
-                    {
-                        ReviewText = newReview.ReviewText,
-                        TimeStam = DateTime.Now,
-                        RecipeId = recipe.Id,
-                        Profile = user.User
-                    };
-
-                // Create a new rating
-                var rating = new Rating
-                    {
-                        Value = newRating.Value,
-                        TimeStam = DateTime.Now,
-                        RecipeId = recipe.Id,
-                        Profile = user.User
-                    };
-
-                // Add the review and rating to the database
-                _context.Reviews.Add(review);
-                _context.Ratings.Add(rating);
-
-                await _context.SaveChangesAsync();
-
-                // Clear the form fields
-                newReview.ReviewText = string.Empty;
-                newRating.Value = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Error submitting review and rating: {ex.Message}");
-        }
+    private async Task AddRecipeToFavorite(Recipe recipe)
+    {
+        await _favorite.AddFavoriteRecipeAsync(recipe);
+        await InvokeAsync(StateHasChanged);
     }
 }

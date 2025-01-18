@@ -34,7 +34,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("UserIdId");
 
-                    b.ToTable("IngredientUser");
+                    b.ToTable("IngredientUser", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -250,7 +250,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("FavoriteRecipesId");
 
-                    b.ToTable("RecipeUser");
+                    b.ToTable("RecipeUser", (string)null);
                 });
 
             modelBuilder.Entity("RecipeUser1", b =>
@@ -265,7 +265,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("WeeklyPlanUsersId");
 
-                    b.ToTable("RecipeUser1");
+                    b.ToTable("RecipeUser1", (string)null);
                 });
 
             modelBuilder.Entity("Recipe_Finder.Ingredient", b =>
@@ -310,7 +310,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("Recipe_Finder.Rating", b =>
@@ -324,10 +324,10 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<int?>("ProfileId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RecipeId")
+                    b.Property<int?>("RecipeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("TimeStam")
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime(6)");
 
                     b.Property<double>("Value")
@@ -339,7 +339,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Rating", (string)null);
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>
@@ -388,7 +388,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("Recipe_Finder.RecipeSearchTerm", b =>
@@ -409,7 +409,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeSearchTerm");
+                    b.ToTable("RecipeSearchTerm", (string)null);
                 });
 
             modelBuilder.Entity("Recipe_Finder.Review", b =>
@@ -423,13 +423,13 @@ namespace RecipeFinderWebApp.Migrations
                     b.Property<int?>("ProfileId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RecipeId")
+                    b.Property<int?>("RecipeId")
                         .HasColumnType("int");
 
                     b.Property<string>("ReviewText")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("TimeStam")
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -438,7 +438,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Review", (string)null);
                 });
 
             modelBuilder.Entity("Recipe_Finder.User", b =>
@@ -460,7 +460,7 @@ namespace RecipeFinderWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("IngredientUser", b =>
@@ -581,15 +581,11 @@ namespace RecipeFinderWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
-                    b.HasOne("Recipe_Finder.Recipe", "Recipe")
+                    b.HasOne("Recipe_Finder.Recipe", null)
                         .WithMany("Ratings")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RecipeId");
 
                     b.Navigation("Profile");
-
-                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.RecipeSearchTerm", b =>
@@ -609,15 +605,11 @@ namespace RecipeFinderWebApp.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
-                    b.HasOne("Recipe_Finder.Recipe", "Recipe")
+                    b.HasOne("Recipe_Finder.Recipe", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RecipeId");
 
                     b.Navigation("Profile");
-
-                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Recipe_Finder.Recipe", b =>

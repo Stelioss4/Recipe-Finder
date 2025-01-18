@@ -11,26 +11,27 @@
 @inject DataService DataService
 @inject UserManager<ApplicationUser> _userManager
 @inject WeeklyPlanService _weeklyPlan
-@inject ApplicationDbContext _context
+@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
+@inject FavoriteService _favorite
 
 <h3>User Profile</h3>
 <div class="container mt-5">
-    @if (userProfile != null)
+    @if (user != null)
     {
-        <p>Welcome, @appUser.UserName!</p>
+        <p>Welcome, @user.Name!</p>
         <br />
 
         <!-- Button for Favorite Recipes Popup -->
-        <button class="btn btn-secondary mt-3" @onclick="TogglePopupFavorites">Favorite Recipes</button>
+        <button class="btn btn-primary mt-3" @onclick="TogglePopupFavorites">Favorite Recipes</button>
 
         <!-- Popup for Favorite Recipes -->
         @if (showFavoritesPopup)
         {
             <div class="popup">
                 <div class="popup-content">
-                    @if (userProfile.FavoriteRecipes != null && userProfile.FavoriteRecipes.Count > 0)
+                    @if (user.FavoriteRecipes != null && user.FavoriteRecipes.Count > 0)
                     {
-                        <RecipeOutput recipes="userProfile.FavoriteRecipes" AddRecipeButton="false"></RecipeOutput>
+                        <RecipeOutput recipes="user.FavoriteRecipes" AddRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
                     }
                     else
                     {
@@ -40,21 +41,35 @@
                 </div>
             </div>
         }
+        <!-- Button for ShoppingList Popup -->
+        @*         <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
+    *@
+        @if (showShoppingListPopup)
+        {
+
+            if (appUser.User.ShoppingList != null && appUser.User.ShoppingList.Count > 0)
+            {
+                <ShoppingListOutput ShoppingList="appUser.User.ShoppingList" OnShoppingListAdded="OnShoppingListAdded" OnShoppingListRemoved="OnShoppingListRemoved"></ShoppingListOutput>
+            }
+            else
+            {
+                <p>Your Shopping list is empty!</p>
+            }
+        }
 
         <!-- Button for Weekly Plan Popup -->
-        <button class="btn btn-primary mt-3" @onclick="TogglePopupWeeklyPlan">Weekly Meal Plan</button>
+        <button class="btn btn-secondary mt-3" @onclick="TogglePopupWeeklyPlan">Weekly Meal Plan</button>
 
         <!-- Popup for Weekly Plan -->
         @if (showWeeklyPlanPopup)
         {
             <div class="popup">
                 <div class="popup-content">
-                    @if (weeklyPlan != null && weeklyPlan.Count > 0)
+                    @if (appUser.User.WeeklyPlan != null && appUser.User.WeeklyPlan.Count > 0)
                     {
-
-                        @for (int i = 0; i < weeklyPlan.Count; i++)
+                        @for (int i = 0; i < appUser.User.WeeklyPlan.Count; i++)
                         {
-                            var rec = weeklyPlan[i];
+                            var rec = appUser.User.WeeklyPlan[i];
                             var day = daysOfWeek[i];
 
                             <div>
@@ -75,32 +90,22 @@
                             </div>
                         }
 
-                        <p>your weekly plan made on @userProfile.LastWeeklyPlanDate!</p>
-                        <button class="btn btn-outline-secondary" @onclick="CreateNewPlan">Generate new plan</button>
+                        <p>Your weekly plan was created on @user.LastWeeklyPlanDate!</p>
+
                     }
-                    else if (userProfile.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
+                    else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
-                        <p>You don't have any favorite recipes yet.</p>
+                        <p>You need more favorite recipes to generate a weekly plan.</p>
                         <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
                     }
                     else
                     {
                         <p>No weekly plan generated yet.</p>
-                        <button class="btn btn-outline-primary" @onclick="GenerateWeeklyPlan">Generate Weekly Plan</button>
+                        <button class="btn btn-outline-primary" @onclick="CreateWeeklyPlan">Generate Weekly Plan</button>
                     }
                 </div>
             </div>
         }
-
-     @*    <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">Shopping List</button>
-        @if (showShoppingListPopup)
-        {
-            <ShoppingListOutput ShoppingList="userProfile.ShoppingList"></ShoppingListOutput>
-        } *@
-
-
-
-        <div class="col-md-6 col-md-offset-2"></div>
     }
     else
     {
@@ -108,17 +113,14 @@
     }
 </div>
 
-
 @code {
-    public User? userProfile { get; set; } = new User();
+    public User user { get; set; } = new User();
 
     private ApplicationUser appUser { get; set; } = new();
 
-    private bool showWeeklyPlanPopup = false;
-
     private List<Recipe> weeklyPlan { get; set; } = new();
 
-    private DateTime weeklyPlanGeneratedDate;
+    private bool showWeeklyPlanPopup { get; set; } = false;
 
     private bool showFavoritesPopup { get; set; } = false;
 
@@ -126,55 +128,82 @@
 
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
-    private void TogglePopupFavorites()
-    {
-        showFavoritesPopup = !showFavoritesPopup; // Toggle the popup
-    }
-    private void TogglePopupShoppingList()
-    {
-        showShoppingListPopup = !showShoppingListPopup; // Toggle the popup
-    }
-
     protected override async Task OnInitializedAsync()
     {
+        await Init();
+    }
+    protected async Task Init()
+    {
+        using var context = DbContextFactory.CreateDbContext();
+
         appUser = await DataService.GetAuthenticatedUserAsync();
 
-        userProfile = appUser?.User;
-        // using ApplicationDbContext dbContext = new(new DbContextOptions<ApplicationDbContext> ());
+        if (appUser != null)
+        {
 
-        // var x = dbContext.Users.Include(x => x.User).Where(u => u.Email == "stelios.boursanidis@gmail.com").First();
+            if (appUser.User.LastWeeklyPlanDate.HasValue &&
+            (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
+            {
+                // Delete weekly plan after 7 days
+                appUser.User.WeeklyPlan.Clear();
 
-
-        if (userProfile == null)
+                // Save changes to the database
+                await context.SaveChangesAsync();
+            }
+        }
+        else
         {
             // User profile not found, force logout and redirect to login
             await SignInManager.SignOutAsync();
-            Navigation.NavigateTo("Account/Register");
+            Navigation.NavigateTo("Account/LogIn");
             return;
         }
+
+
+        await _favorite.ReloadFavorites();
+        user = appUser.User;
+
+
+    }
+    private async Task UpdateFavorites()
+    {
+        await Init();
+        await InvokeAsync(StateHasChanged);
     }
 
-    public async Task CreateNewPlan()
+    private void TogglePopupFavorites()
     {
-        await _weeklyPlan.ForceNewPlanAsync();
+        showFavoritesPopup = !showFavoritesPopup;
     }
 
     private void TogglePopupWeeklyPlan()
     {
-        // If a weekly plan was generated more than 7 days ago, regenerate it
-        if (weeklyPlan == null || (DateTime.Now - weeklyPlanGeneratedDate).TotalDays > Constants.WEEK_DAY_NUM)
-        {
-            GenerateWeeklyPlan();
-        }
         showWeeklyPlanPopup = !showWeeklyPlanPopup;
     }
+    private void TogglePopupShoppingList()
+    {
+        showShoppingListPopup = !showShoppingListPopup;
+    }
+    public async Task CreateNewPlan()
+    {
+        using var context = DbContextFactory.CreateDbContext();
+        await _weeklyPlan.ForceNewPlanAsync();
+        await context.Entry(appUser.User).Collection(u => u.WeeklyPlan).LoadAsync();
+        StateHasChanged();
+    }
+
+    private async Task CreateWeeklyPlan()
+    {
+        await GenerateWeeklyPlan();
+        StateHasChanged();
+    }
+
     private async Task GenerateWeeklyPlan()
     {
-
         // Logic to generate a weekly meal plan based on favorite recipes
         weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
-        weeklyPlanGeneratedDate = DateTime.Now;
-        showWeeklyPlanPopup = true;
+        user.WeeklyPlan = weeklyPlan;
+        StateHasChanged();
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)
@@ -182,16 +211,19 @@
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
     }
 
-    private async Task RemoveRecipeFromFavorite(Recipe rec)
-    {
-        await DataService.RemoveFavoriteRecipeAsync(rec);
-        // Refresh the user's profile after removing the recipe
-        userProfile.FavoriteRecipes.Remove(rec);
-        StateHasChanged();
-    }
-
     private void NavigateToHome()
     {
         Navigation.NavigateTo("/");
+    }
+
+    private void OnShoppingListAdded(Ingredient ingredient)
+    {
+        user.ShoppingList.Add(ingredient);
+        StateHasChanged();
+    }
+    private void OnShoppingListRemoved(Ingredient ingredient)
+    {
+        user.ShoppingList.Remove(ingredient);
+        StateHasChanged();
     }
 }

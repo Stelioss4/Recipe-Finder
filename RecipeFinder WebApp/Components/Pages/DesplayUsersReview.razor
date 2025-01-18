@@ -21,7 +21,11 @@
             <li class="list-group-item mb-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h5 class="mb-1">@appUser.Email</h5>
+                        @if (review.Profile != null)
+                        {
+                            <h5 class="mb-1">@review.Profile.Name</h5>
+                        }
+                        <hr />
                         <p class="mb-1">@review.ReviewText</p>
                     </div>
                 </div>
@@ -46,32 +50,44 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("OnInitializedAsync called");
-        var uri = new Uri(Navigation.Uri);
-        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-        appUser = await _dataService.GetAuthenticatedUserAsync();
-
-        if (query.TryGetValue("url", out var urlValue))
+        if (appUser != null)
         {
-            Console.WriteLine($"Found url parameter: {urlValue}");
-            var decodedUrl = Uri.UnescapeDataString(urlValue);
+            Console.WriteLine("OnInitializedAsync called");
+            var uri = new Uri(Navigation.Uri);
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+            appUser = await _dataService.GetAuthenticatedUserAsync();
 
-            // 1. Check if the recipe is already in the database
-            recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Url == decodedUrl);
-
-            if (recipe != null)
+            if (query.TryGetValue("url", out var urlValue))
             {
-                Console.WriteLine("Recipe found in the database.");
-                // Fetch additional related data as needed, e.g., average rating
-                var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
-                reviews = result.Reviews;
+                Console.WriteLine($"Found url parameter: {urlValue}");
+                var decodedUrl = Uri.UnescapeDataString(urlValue);
 
+                // 1. Check if the recipe is already in the database
+                recipe = await _context.Recipes
+                 .Include(r => r.Reviews)
+                 .ThenInclude(review => review.Profile)
+                 .Include(r => r.Ratings)
+                 .FirstOrDefaultAsync(r => r.Url == decodedUrl);
+
+                if (recipe != null)
+                {
+                    Console.WriteLine("Recipe found in the database.");
+                    // Fetch additional related data as needed, e.g., average newRating
+                    var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
+                    reviews = result.Reviews;
+
+                }
+                else
+                {
+                    // 2. If not in the database, proceed with scraping
+                    Console.WriteLine("Recipe not found in database; starting online scrape.");
+                }
             }
-            else
-            {
-                // 2. If not in the database, proceed with scraping
-                Console.WriteLine("Recipe not found in database; starting online scrape.");
-            }
+        }
+        else
+        {
+            Console.WriteLine("User is not authenticated.");
+            Navigation.NavigateTo("account/login");
         }
     }
 }
