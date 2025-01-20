@@ -158,6 +158,8 @@ namespace RecipeFinder_WebApp.Data
 
                     newRating.Profile = user;
                     newReview.Profile = user;
+                    newRating.TimeStamp = DateTime.Now;
+                    newReview.TimeStamp = DateTime.Now;
 
                     // Add the new rating and review to the existing recipe
                     existingRecipe.Ratings.Add(newRating);
