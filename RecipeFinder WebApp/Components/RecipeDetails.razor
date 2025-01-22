@@ -65,9 +65,9 @@
                                     (@GetAmountForPeople(ParseAmount(ingredient.Amount))@ParseUnit(ingredient.Amount)) @ingredient.IngredientsName
                                 </label>
                                 <br />
-                              @*   <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
+                                  <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)" hidden="@(isAuthenticated ? "hidden" : null)">
                                     REWE
-                                </a> *@
+                                </a>
                                 <button class="btn btn-outline-primary" @onclick="()=>AddIngredientToShoppingList(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">Add to shopping list</button>
                        
                             </li>
