@@ -42,14 +42,14 @@
             </div>
         }
         <!-- Button for ShoppingList Popup -->
-        @*         <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
-    *@
+                <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
+   
         @if (showShoppingListPopup)
         {
 
             if (appUser.User.ShoppingList != null && appUser.User.ShoppingList.Count > 0)
             {
-                <ShoppingListOutput ShoppingList="appUser.User.ShoppingList" OnShoppingListAdded="OnShoppingListAdded" OnShoppingListRemoved="OnShoppingListRemoved"></ShoppingListOutput>
+                <ShoppingListOutput ShoppingList="user.ShoppingList" OnFavoritesChanged="UpdateFavorites"></ShoppingListOutput>
             }
             else
             {
@@ -58,7 +58,7 @@
         }
 
         <!-- Button for Weekly Plan Popup -->
-        <button class="btn btn-secondary mt-3" @onclick="TogglePopupWeeklyPlan">Weekly Meal Plan</button>
+        <button class="btn btn-primary mt-3" @onclick="TogglePopupWeeklyPlan">Weekly Meal Plan</button>
 
         <!-- Popup for Weekly Plan -->
         @if (showWeeklyPlanPopup)
@@ -138,6 +138,8 @@
 
         appUser = await DataService.GetAuthenticatedUserAsync();
 
+        appUser.User.ShoppingList = await _favorite.GetShoppingListAsync();
+
         if (appUser != null)
         {
 
@@ -150,6 +152,11 @@
                 // Save changes to the database
                 await context.SaveChangesAsync();
             }
+            if (appUser.User.ShoppingList == null)
+            {
+                appUser.User.ShoppingList = new List<Ingredient>();
+            }
+
         }
         else
         {

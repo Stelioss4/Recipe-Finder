@@ -9,7 +9,7 @@ namespace RecipeFinder_WebApp.Data
     {
         private User User { get; set; } = new User();
 
-     //   public event Action OnFavoritesChanged;
+        //   public event Action OnFavoritesChanged;
         private readonly NavigationManager _navigation;
         private readonly DataService _dataService;
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
@@ -42,9 +42,13 @@ namespace RecipeFinder_WebApp.Data
 
             if (appUser != null)
             {
-                if (appUser.User.ShoppingList.Contains(ingredient))
+                var existingIngredient = appUser.User.ShoppingList
+                     .FirstOrDefault(s => s.IngredientsName == ingredient.IngredientsName);
+
+                if (existingIngredient != null)
                 {
-                    Console.WriteLine("ingredient already in shopping list");
+                    // Notify the user that the recipe is already in their favorites
+                    Console.WriteLine("Ingredient is already in your shopping list.");
                 }
                 else
                 {
@@ -52,7 +56,7 @@ namespace RecipeFinder_WebApp.Data
 
                     await _context.SaveChangesAsync();
 
-                    Console.WriteLine("Ingredient is successfully added to shopping list");
+                    Console.WriteLine("Ingredient added to your shopping list successfully.");
 
                 }
             }
@@ -85,9 +89,8 @@ namespace RecipeFinder_WebApp.Data
 
                 if (User != null)
                 {
-                    var ingredientToRemove = User.ShoppingList
-                        .FirstOrDefault(i =>
-                         i.Id == ingredient.Id && i.UserId == ingredient.UserId);
+                    var ingredientToRemove = appUser.User.ShoppingList
+                         .FirstOrDefault(s => s.IngredientsName == ingredient.IngredientsName);
 
                     if (ingredientToRemove != null)
                     {
@@ -106,6 +109,33 @@ namespace RecipeFinder_WebApp.Data
                 Console.WriteLine($"Error removing ingredient from Shopping list: {ex.Message}");
                 // Handle the error appropriately (e.g., display an error message)
             }
+        }
+
+        public async Task<List<Ingredient>> GetShoppingListAsync()
+        {
+            using var context = _contextFactory.CreateDbContext();
+
+            // Get the authenticated user
+            var appUser = await _dataService.GetAuthenticatedUserAsync();
+
+            if (appUser == null)
+            {
+                Console.WriteLine("User is not authenticated.");
+                _navigation.NavigateTo("account/login");
+                return new List<Ingredient>();
+            }
+
+            // Reload the user's data to ensure we have the latest state
+            var userWithShoppingList = await context.Users
+                .Include(u => u.User.ShoppingList) // Include the shopping list
+                .FirstOrDefaultAsync(u => u.Id == appUser.Id);
+
+            if (userWithShoppingList?.User.ShoppingList == null)
+            {
+                return new List<Ingredient>();
+            }
+
+            return userWithShoppingList.User.ShoppingList.ToList();
         }
 
         /// <summary>

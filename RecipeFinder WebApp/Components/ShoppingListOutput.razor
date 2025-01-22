@@ -10,27 +10,37 @@
     @if (ShoppingList != null && ShoppingList.Count > 0)
     {
         <div class="col-12">
-            <h3>Shopping List</h3>
-            <ul class="list-group">
+            <h3 class="text-center mb-4">Shopping List</h3>
+            <ul class="list-group list-group-flush">
                 @foreach (var ingredient in ShoppingList)
                 {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @if (!string.IsNullOrEmpty(ingredient.IngredientsName))
-                        {
-                            @ingredient.IngredientsName
-                            <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
-                                REWE
+                    <li class="list-group-item d-flex justify-content-between align-items-center shadow-sm mb-2 rounded">
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(ingredient.IngredientsName))
+                            {
+                                @* Display ingredient name up to the first punctuation mark *@
+                                <span class="fw-bold me-2">@GetIngredientNameBeforePunctuation(ingredient.IngredientsName)</span>
+
+                            }
+                            else
+                            {
+                                <span class="text-muted">Unknown Ingredient..</span>
+                            }
+                        </div>
+
+                        @* Place both buttons in a flex container to align them on the right side *@
+                        <div class="d-flex justify-content-end align-items-center">
+
+                            @* Rewe button (already added above, placed in the flex container) *@
+                            <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(GetIngredientNameBeforePunctuation(ingredient.IngredientsName))">
+                                <i class="bi bi-search"></i> REWE
                             </a>
-                            <button class="btn btn-secondary" @onclick="() =>RemoveIngredient(ingredient)">Remove</button>
 
-                        }
-
-                        else
-                        {
-                            <span>Unknown Ingredient..</span>
-                            <button class="btn btn-secondary" @onclick="() =>RemoveIngredient(ingredient)">Remove</button>
-
-                        }
+                            @* Remove button *@
+                            <button class="btn btn-outline-secondary btn-sm me-2" @onclick="() => RemoveIngredient(ingredient)">
+                                <i class="bi bi-x-circle"></i> Remove
+                            </button>
+                        </div>
                     </li>
                 }
             </ul>
@@ -39,21 +49,31 @@
     else
     {
         <div class="col-12">
-            <p>Your shopping list is empty.</p>
+            <p class="text-center text-muted">Your shopping list is empty.</p>
         </div>
     }
 </div>
 
 @code {
     [Parameter] public List<Ingredient> ShoppingList { get; set; } = new List<Ingredient>();
-    [Parameter] public EventCallback<Ingredient> OnShoppingListAdded { get; set; }
-    [Parameter] public EventCallback<Ingredient> OnShoppingListRemoved { get; set; }
+    [Parameter] public EventCallback<Ingredient> OnFavoritesChanged { get; set; }
     [Parameter] public ApplicationUser appUser { get; set; } = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        ShoppingList = await _favorite.GetShoppingListAsync();
+    }
+
+    private string GetIngredientNameBeforePunctuation(string name)
+    {
+        // Regular expression to get everything before the first punctuation mark.
+        var match = System.Text.RegularExpressions.Regex.Match(name, @"^[^.,!?;()]+");
+        return match.Success ? match.Value : name; // Return the matched part or the full name if no punctuation is found.
+    }
 
     private async Task RemoveIngredient(Ingredient ingredient)
     {
         await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
-        await OnShoppingListRemoved.InvokeAsync(ingredient);
+        await OnFavoritesChanged.InvokeAsync(ingredient);
     }
 }

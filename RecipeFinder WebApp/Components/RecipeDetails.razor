@@ -65,11 +65,11 @@
                                     (@GetAmountForPeople(ParseAmount(ingredient.Amount))@ParseUnit(ingredient.Amount)) @ingredient.IngredientsName
                                 </label>
                                 <br />
-                                <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
+                              @*   <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)">
                                     REWE
-                                </a>
-                                @* <button class="btn btn-secondary" @onclick="AddIngredientToShoppingList">Add to shopping list</button>
-                        *@
+                                </a> *@
+                                <button class="btn btn-outline-primary" @onclick ="()=>AddIngredientToShoppingList(ingredient)">Add to shopping list</button>
+                       
                             </li>
 
                         }
@@ -282,7 +282,7 @@
         return adjustedAmount.ToString("0.##"); // Format to two decimal places
     }
 
-    private async Task AddIngredientToShoppingList()
+    private async Task AddIngredientToShoppingList(Ingredient ingredient)
     {
         await _favorite.AddIngredientsToShoppingList(ingredient);
     }
