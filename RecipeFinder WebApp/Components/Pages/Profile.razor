@@ -42,8 +42,8 @@
             </div>
         }
         <!-- Button for ShoppingList Popup -->
-                <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
-   
+        <button class="btn btn-secondary mt-3" @onclick="TogglePopupShoppingList">ShoppingList</button>
+
         @if (showShoppingListPopup)
         {
 
@@ -138,11 +138,11 @@
 
         appUser = await DataService.GetAuthenticatedUserAsync();
 
-        appUser.User.ShoppingList = await _favorite.GetShoppingListAsync();
 
         if (appUser != null)
         {
 
+            appUser.User.ShoppingList = await _favorite.GetShoppingListAsync();
             if (appUser.User.LastWeeklyPlanDate.HasValue &&
             (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
             {
