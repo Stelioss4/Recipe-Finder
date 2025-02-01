@@ -8,15 +8,9 @@ namespace RecipeFinder_WebApp.Data
 {
     public class DataService
     {
-        //private ApplicationUser appUser { get; set; } = new();
-        ////private Recipe recipe { get; set; } = new();
-        //private User UserProfile { get; set; } = new User();
-        //private List<Recipe> Recipes { get; set; } = new List<Recipe>();
-        //private Review newReview { get; set; } = new();
-        //private Rating newRating { get; set; } = new();
+
 
         private readonly IHttpClientFactory _clientFactory;
-        //        private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly NavigationManager _navigation;
@@ -69,29 +63,20 @@ namespace RecipeFinder_WebApp.Data
                 var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
                 var user = authState.User;
 
-                if (user.Identity.IsAuthenticated)
+                var appUser = await _userManager.GetUserAsync(user);
+
+                if (appUser == null)
                 {
-                    var appUser = await _userManager.GetUserAsync(user);
+                    throw new NullReferenceException("ApplicationUser is null.");
+                }
 
-                    if (appUser == null)
-                    {
-                        throw new NullReferenceException("ApplicationUser is null.");
-                    }
-
-                    if (appUser != null)
-                    {
-                        return appUser; // Return the authenticated appUser
-                    }
-                    else
-                    {
-                        throw new NullReferenceException("User associated with ApplicationUser is null.");
-                    }
+                if (appUser != null)
+                {
+                    return appUser; // Return the authenticated appUser
                 }
                 else
                 {
-                    Console.WriteLine("User is not authenticated.");
-                    _navigation.NavigateTo("account/login");
-                    return null; // No authenticated appUser, return null
+                    throw new NullReferenceException("User associated with ApplicationUser is null.");
                 }
             }
             catch (Exception ex)

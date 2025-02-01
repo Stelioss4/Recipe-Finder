@@ -1,0 +1,56 @@
+﻿@page "/Account/DemoLogin"
+
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+@using RecipeFinder_WebApp.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ILogger<Login> Logger
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Log in</PageTitle>
+
+<h1>Logging in...</h1>
+
+@code {
+    private string errorMessage;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            // Clear any external login cookies
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
+
+        await LoginUser();
+    }
+
+    private async Task LoginUser()
+    {
+        var result = await SignInManager.PasswordSignInAsync("demo@recipefinder.com", "DemoPass123!", false, false);
+
+        if (result.Succeeded)
+        {
+            Logger.LogInformation("User logged in.");
+            RedirectManager.RedirectTo("/profile");
+        }
+        else if (result.RequiresTwoFactor)
+        {
+            RedirectManager.RedirectTo("Account/LoginWith2fa");
+        }
+        else if (result.IsLockedOut)
+        {
+            Logger.LogWarning("User account locked out.");
+            RedirectManager.RedirectTo("Account/Lockout");
+        }
+        else
+        {
+            errorMessage = "Error: Invalid login attempt.";
+        }
+    }
+}

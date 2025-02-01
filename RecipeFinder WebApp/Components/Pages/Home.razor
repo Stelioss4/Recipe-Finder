@@ -1,95 +1,182 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Logging
+@using RecipeFinder_WebApp.Components.Account.Pages
 @using RecipeFinder_WebApp.Data
 @using Recipe_Finder
-@using HtmlAgilityPack
-@using System.Security.Claims
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authentication
 
+@inject IHttpContextAccessor HttpContextAccessor
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ScrapperService Scrap
-@inject NavigationManager Navigation
 @inject DataService DataService
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject UserManager<ApplicationUser> _userManager
-@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
-@inject FavoriteService favorite
+@inject ILogger<Login> Logger
 
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-5">
     <div class="text-center">
-        <h1 class="display-4">Recipe Finder</h1>
-        <p class="lead">Discover delicious recipes</p>
+        <h1 class="display-4">Welcome to Recipe Finder</h1>
+        <p class="lead">Find delicious recipes, plan your meals, and shop for ingredients effortlessly!</p>
+        @if (appUser == null)
+        {
+        <div class="mt-4">
+            <h3>Why Use Recipe Finder?</h3>
+            <p>With Recipe Finder, you can:</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>🔍 Search</strong> for thousands of delicious recipes.</li>
+                <li class="list-group-item"><strong>📋 Plan</strong> your weekly meals effortlessly.</li>
+                <li class="list-group-item"><strong>🛒 Shop</strong> for ingredients with integrated market options.</li>
+                <li class="list-group-item"><strong>❤️ Save</strong> your favorite recipes for quick access.</li>
+            </ul>
+        </div>
 
+       
+            <div class="mt-4">
+                <p>Want to try it out? Use our demo account!</p>
+                <button class="btn btn-success" @onclick="LoginAsDemoAsync" disabled="@isDemoLoggingIn">
+                    @if (isDemoLoggingIn)
+                    {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span> Logging in...</span>
+                    }
+                    else
+                    {
+                        <span>Try the Demo Experience</span>
+                    }
+                </button>
+            </div>
+
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <EditForm Model="@searchQuery" FormName="RecipeForm">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
+                                @if (isSearching)
+                                {
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span> Searching...</span>
+                                }
+                                else
+                                {
+                                    <span>Search</span>
+                                }
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        }
+        else
+        {
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
                 <EditForm Model="@searchQuery" FormName="RecipeForm">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
 
-                    <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe here..." /><br />
+                    <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
                     <div class="input-group-append">
-                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCK">Search</button>
-                        @* <button class="btn btn-primary" @onclick="SearchRecipes">Search CANTINA's Recipes</button> 
-                          <button class="btn btn-secondary" @onclick="SearchForRecipeFromAR">Search AllRecipes</button> *@
+                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
+                            @if (isSearching)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span> Searching...</span>
+                            }
+                            else
+                            {
+                                <span>Search</span>
+                            }
+                        </button>
                     </div>
                 </EditForm>
             </div>
         </div>
+        }
     </div>
 
     @if (recipes.Count > 0)
     {
         <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
     }
-   
 </div>
 
 @code {
+    private string errorMessage;
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
-    private User userProfile { get; set; } = new User();
     private string searchQuery { get; set; } = string.Empty;
-    private ApplicationUser appUser { get; set; } = new();
+    private ApplicationUser appUser { get; set; }
+    private bool isSearching = false;
+    private bool isDemoLoggingIn = false;
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     // appUser = await DataService.GetAuthenticatedUserAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        appUser = await DataService.GetAuthenticatedUserAsync();
+    }
 
-    //     // userProfile = appUser?.User;
+    private void LoginAsDemoAsync()
+    {
+        isDemoLoggingIn = true;
+        // // // try
+        // // // {
 
-    //     // if (userProfile == null)
-    //     // {
-    //     //     // User profile not found, force logout and redirect to login
-    //     //     await SignInManager.SignOutAsync();
-    //     //     Navigation.NavigateTo("Account/Register");
-    //     //     return;
-    //     // }
-    // }
+
+        // // //     var result = SignInManager.PasswordSignInAsync("demo@recipefinder.com", "DemoPass123!", false, false);
+
+        // // //     if (result.IsCompletedSuccessfully)
+        // // //     {
+        // // //         Logger.LogInformation("Demo user logged in.");
+        // // //         Navigation.NavigateTo("/");
+        // // //     }
+        // // //     else
+        // // //     {
+        // // //         Logger.LogWarning("Invalid login attempt.");
+        // // //     }
+        // // // }
+        // // // catch(Exception)
+        // // // {
+        // // //     Console.WriteLine("Invalid login attempt.");
+        // // // }
+        // var demoEmail = "demo@recipefinder.com";
+        // var demoPassword = "DemoPass123!";
+
+        // if (HttpContextAccessor.HttpContext == null)
+        // {
+        //     errorMessage = "Error: HttpContext is null.";
+        //     return;
+        // }
+
+        // var result = await SignInManager.PasswordSignInAsync(demoEmail, demoPassword, false, false);
+
+        // if (result.Succeeded)
+        // {
+       Navigation.NavigateTo("/Account/DemoLogin");
+        // }
+        // else
+        // {
+        //     errorMessage = "Error: Invalid login attempt.";
+        // }
+
+        isDemoLoggingIn = false;
+    }
 
     private async Task SearchForRecipeFromCK()
-    {   
+    {
+        isSearching = true;
         recipes = await Scrap.ScrapeCKRecipes(searchQuery);
+        isSearching = false;
     }
 
-    private async Task SearchForRecipeFromAR()
-    {
-        recipes = await Scrap.ScrapeFromAllRecipe(searchQuery);
-    }
-
-    private void NavigateToRecipeDetails(string recipeUrl)
-    {
-        Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
-    }
-
-     private void UpdateFavorites()
+    private void UpdateFavorites()
     {
         InvokeAsync(StateHasChanged);
     }
-
-    // private async Task OnRecipeAdded(Recipe recipe)
-    // {
-    //     // await AddRecipeToFavorite(recipe); // Use the new method to handle UI updates
-    //     StateHasChanged();
-    // }
 }
