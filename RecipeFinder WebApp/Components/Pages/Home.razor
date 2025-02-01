@@ -125,6 +125,11 @@
     private void LoginAsDemoAsync()
     {
         isDemoLoggingIn = true;
+
+        Navigation.NavigateTo("/Account/DemoLogin");
+
+        isDemoLoggingIn = false;
+
         // // // try
         // // // {
 
@@ -158,14 +163,12 @@
 
         // if (result.Succeeded)
         // {
-       Navigation.NavigateTo("/Account/DemoLogin");
         // }
         // else
         // {
         //     errorMessage = "Error: Invalid login attempt.";
         // }
 
-        isDemoLoggingIn = false;
     }
 
     private async Task SearchForRecipeFromCK()
