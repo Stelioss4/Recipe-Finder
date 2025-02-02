@@ -22,85 +22,85 @@
     <div class="text-center">
         <h1 class="display-4">Welcome to Recipe Finder</h1>
         <p class="lead">Find delicious recipes, plan your meals, and shop for ingredients effortlessly!</p>
-        @if (appUser == null)
-        {
-        <div class="mt-4">
-            <h3>Why Use Recipe Finder?</h3>
-            <p>With Recipe Finder, you can:</p>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>🔍 Search</strong> for thousands of delicious recipes.</li>
-                <li class="list-group-item"><strong>📋 Plan</strong> your weekly meals effortlessly.</li>
-                <li class="list-group-item"><strong>🛒 Shop</strong> for ingredients with integrated market options.</li>
-                <li class="list-group-item"><strong>❤️ Save</strong> your favorite recipes for quick access.</li>
-            </ul>
-        </div>
-
-       
-            <div class="mt-4">
-                <p>Want to try it out? Use our demo account!</p>
-                <button class="btn btn-success" @onclick="LoginAsDemoAsync" disabled="@isDemoLoggingIn">
-                    @if (isDemoLoggingIn)
-                    {
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span> Logging in...</span>
-                    }
-                    else
-                    {
-                        <span>Try the Demo Experience</span>
-                    }
-                </button>
-            </div>
-
-            <div class="row justify-content-center mt-4">
-                <div class="col-md-8">
-                    <EditForm Model="@searchQuery" FormName="RecipeForm">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-
-                        <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
-                                @if (isSearching)
-                                {
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    <span> Searching...</span>
-                                }
-                                else
-                                {
-                                    <span>Search</span>
-                                }
-                            </button>
-                        </div>
-                    </EditForm>
+        <AuthorizeView>
+            <NotAuthorized Context="unauthorizedContext">
+                <div class="mt-4">
+                    <h3>Why Use Recipe Finder?</h3>
+                    <p>With Recipe Finder, you can:</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>🔍 Search</strong> for thousands of delicious recipes.</li>
+                        <li class="list-group-item"><strong>📋 Plan</strong> your weekly meals effortlessly.</li>
+                        <li class="list-group-item"><strong>🛒 Shop</strong> for ingredients with integrated market options.</li>
+                        <li class="list-group-item"><strong>❤️ Save</strong> your favorite recipes for quick access.</li>
+                    </ul>
                 </div>
-            </div>
-        }
-        else
-        {
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-8">
-                <EditForm Model="@searchQuery" FormName="RecipeForm">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
 
-                    <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
-                            @if (isSearching)
-                            {
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                <span> Searching...</span>
-                            }
-                            else
-                            {
-                                <span>Search</span>
-                            }
-                        </button>
+
+                <div class="mt-4">
+                    <p>Want to try it out? Use our demo account!</p>
+                    <button class="btn btn-success" @onclick="LoginAsDemoAsync" disabled="@isDemoLoggingIn">
+                        @if (isDemoLoggingIn)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span> Logging in...</span>
+                        }
+                        else
+                        {
+                            <span>Try the Demo Experience</span>
+                        }
+                    </button>
+                </div>
+
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-8">
+                        <EditForm Model="@searchQuery" FormName="RecipeForm">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
+                                    @if (isSearching)
+                                    {
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        <span> Searching...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Search</span>
+                                    }
+                                </button>
+                            </div>
+                        </EditForm>
                     </div>
-                </EditForm>
-            </div>
-        </div>
-        }
+                </div>
+            </NotAuthorized>
+            <Authorized Context="authorizedContext">
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-8">
+                        <EditForm Model="@searchQuery" FormName="RecipeForm">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
+                                    @if (isSearching)
+                                    {
+                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        <span> Searching...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Search</span>
+                                    }
+                                </button>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            </Authorized>
+        </AuthorizeView>
     </div>
 
     @if (recipes.Count > 0)
@@ -117,10 +117,10 @@
     private bool isSearching = false;
     private bool isDemoLoggingIn = false;
 
-    protected override async Task OnInitializedAsync()
-    {
-        appUser = await DataService.GetAuthenticatedUserAsync();
-    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     appUser = await DataService.GetAuthenticatedUserAsync();
+    // }
 
     private void LoginAsDemoAsync()
     {
