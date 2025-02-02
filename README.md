@@ -1,4 +1,4 @@
-Recipe Finder 🍽️
+##Recipe Finder 🍽️
 
 About the Project
 
