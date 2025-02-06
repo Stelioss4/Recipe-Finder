@@ -18,47 +18,53 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="container mt-5">
-    <div class="text-center">
-        <h1 class="display-4">Welcome to Recipe Finder</h1>
-        <p class="lead">Find delicious recipes, plan your meals, and shop for ingredients effortlessly!</p>
+<div class="container mt-2">
+    <div class="row">
+        <div class="text-center">
+            <h1 class="display-4">Welcome to Recipe Finder</h1>
+            <p class="lead">Find delicious recipes, plan your meals, and shop for ingredients effortlessly!</p>
+        </div>
+
         <AuthorizeView>
-            <NotAuthorized Context="unauthorizedContext">
-                <div class="mt-4">
-                    <h3>Why Use Recipe Finder?</h3>
-                    <p>With Recipe Finder, you can:</p>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>🔍 Search</strong> for thousands of delicious recipes.</li>
-                        <li class="list-group-item"><strong>📋 Plan</strong> your weekly meals effortlessly.</li>
-                        <li class="list-group-item"><strong>🛒 Shop</strong> for ingredients with integrated market options.</li>
-                        <li class="list-group-item"><strong>❤️ Save</strong> your favorite recipes for quick access.</li>
-                    </ul>
+            <NotAuthorized>
+                <!-- Left Side: Introduction -->
+                <div class="col-md-6 d-flex flex-column justify-content-center text-start">
+                    <div class="mt-4">
+                        <h3>Why Use Recipe Finder?</h3>
+                        <p>With Recipe Finder, you can:</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>🔍 Search</strong> for thousands of delicious recipes.</li>
+                            <li class="list-group-item"><strong>📋 Plan</strong> your weekly meals effortlessly.</li>
+                            <li class="list-group-item"><strong>🛒 Shop</strong> for ingredients with integrated market options.</li>
+                            <li class="list-group-item"><strong>❤️ Save</strong> your favorite recipes for quick access.</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <p>Want to try it out? Use our demo account!</p>
+                        <button class="btn btn-success" @onclick="LoginAsDemoAsync" disabled="@isDemoLoggingIn">
+                            @if (isDemoLoggingIn)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span> Logging in...</span>
+                            }
+                            else
+                            {
+                                <span>Try the Demo Experience</span>
+                            }
+                        </button>
+                    </div>
                 </div>
 
-
-                <div class="mt-4">
-                    <p>Want to try it out? Use our demo account!</p>
-                    <button class="btn btn-success" @onclick="LoginAsDemoAsync" disabled="@isDemoLoggingIn">
-                        @if (isDemoLoggingIn)
-                        {
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            <span> Logging in...</span>
-                        }
-                        else
-                        {
-                            <span>Try the Demo Experience</span>
-                        }
-                    </button>
-                </div>
-
-                <div class="row justify-content-center mt-4">
-                    <div class="col-md-8">
+                <!-- Right Side: Search Bar -->
+                <div class="col-md-6 d-flex flex-column justify-content-center">
+                    <div class="card p-4 shadow-sm">
                         <EditForm Model="@searchQuery" FormName="RecipeForm">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
 
                             <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
-                            <div class="input-group-append">
+                            <div class="text-center">
                                 <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
                                     @if (isSearching)
                                     {
@@ -75,15 +81,17 @@
                     </div>
                 </div>
             </NotAuthorized>
-            <Authorized Context="authorizedContext">
-                <div class="row justify-content-center mt-4">
-                    <div class="col-md-8">
+
+            <Authorized>
+                <!-- Centered Search Bar without too much empty space -->
+                <div class="d-flex justify-content-center mt-5">
+                    <div class="card p-4 shadow-sm w-50">
+                        <p class="text-center">Search for your favorite recipes below:</p>
                         <EditForm Model="@searchQuery" FormName="RecipeForm">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
-
                             <InputText id="RecipeName" class="form-control" @bind-Value="searchQuery" placeholder="Search for any recipe..." /><br />
-                            <div class="input-group-append">
+                            <div class="text-center">
                                 <button class="btn btn-primary" @onclick="SearchForRecipeFromCK" disabled="@isSearching">
                                     @if (isSearching)
                                     {
@@ -108,6 +116,7 @@
         <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
     }
 </div>
+
 
 @code {
     private string errorMessage;
