@@ -3,11 +3,17 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using RecipeFinder_WebApp.Data
+@using Recipe_Finder
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext context
+
+
+
 
 <PageTitle>Log in</PageTitle>
 
@@ -15,6 +21,11 @@
 
 @code {
     private string errorMessage;
+    private readonly string DemoEmail = "demo@recipefinder.com";
+    private readonly string DemoPassword = "DemoPass123!";
+    private User myUser { get; set; } = new();
+
+
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -27,12 +38,12 @@
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
 
-        await LoginUser();
+        await RegisterDemoUser();
     }
 
     private async Task LoginUser()
     {
-        var result = await SignInManager.PasswordSignInAsync("demo@recipefinder.com", "DemoPass123!", false, false);
+        var result = await SignInManager.PasswordSignInAsync(DemoEmail, DemoPassword, false, false);
 
         if (result.Succeeded)
         {
@@ -51,6 +62,35 @@
         else
         {
             errorMessage = "Error: Invalid login attempt.";
+        }
+    }
+    private async Task RegisterDemoUser()
+    {
+        var existingUser = await UserManager.FindByEmailAsync(DemoEmail);
+        if (existingUser != null)
+        {
+            errorMessage = "Demo user already exists. Please log in.";
+            await LoginUser();
+            return;
+        }
+
+        var user = new ApplicationUser { UserName = DemoEmail, Email = DemoEmail };
+        var result = await UserManager.CreateAsync(user, DemoPassword);
+
+        if (result.Succeeded)
+        {
+            myUser = user.User;
+
+            myUser.Name = user.UserName;
+
+            context.Update(user);
+            await context.SaveChangesAsync();
+            await SignInManager.SignInAsync(user, isPersistent: false);
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = string.Join("<br>", result.Errors.Select(e => e.Description));
         }
     }
 }

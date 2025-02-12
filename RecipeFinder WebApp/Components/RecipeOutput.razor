@@ -27,12 +27,16 @@
                             {
                                 @if (AddRecipeButton)
                                 {
-                                    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)" hidden="@(!isAuthenticated ? "hidden" : null)">Add to Fav!</button>
+                                    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)" hidden="@(!isAuthenticated ? "hidden" : null)">
+                                        <i class="bi bi-heart"></i> Add to Fav!
+                                        </button>
                                 }
 
                                 @if (RemoveRecipeButton)
                                 {
-                                    <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">Remove</button>
+                                    <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">
+                                        <i class="bi bi-x-circle"></i> Remove
+                                        </button>
                                 }
                             }
                         </div>
