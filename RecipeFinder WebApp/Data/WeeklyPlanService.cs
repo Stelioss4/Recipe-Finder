@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 
 namespace RecipeFinder_WebApp.Data
@@ -6,16 +7,16 @@ namespace RecipeFinder_WebApp.Data
     public class WeeklyPlanService
     {
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
-        //private readonly ApplicationDbContext context;
+        private readonly NavigationManager _navigation;
         private readonly DataService _dataService;
         private DateTime? lastPlanDate = null;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
-        public WeeklyPlanService(DataService dataService, IDbContextFactory<ApplicationDbContext> contextFactory /* ApplicationDbContext _context*/)
+        public WeeklyPlanService(DataService dataService, NavigationManager navigation, IDbContextFactory<ApplicationDbContext> contextFactory /* ApplicationDbContext _context*/)
         {
             _dataService = dataService;
-            //context = _context;
             _contextFactory = contextFactory;
+            _navigation = navigation;
         }
 
         // Generates a weekly plan based on the user's favorite recipes
@@ -62,7 +63,7 @@ namespace RecipeFinder_WebApp.Data
                 userProfile.User.LastWeeklyPlanDate = DateTime.Now;
 
                 // Save changes to the database
-                context.Update(userProfile); // Make sure the user is tracked by the context
+                //context.Update(userProfile); // Make sure the user is tracked by the context
                 await context.SaveChangesAsync();
 
                 // Return the new weekly plan
@@ -89,39 +90,45 @@ namespace RecipeFinder_WebApp.Data
         }
 
         // Check when the last plan was generated
-        public DateTime? GetLastPlanDate()
+        public async Task<DateTime?> CheckWeeklyPlanDate()
         {
-            return lastPlanDate;
+            using var _context = _contextFactory.CreateDbContext();
+
+            var appUser = await _dataService.GetAuthenticatedUserAsync();
+
+            // Ensure appUser and User are not null before accessing properties
+            if (appUser.User == null)
+            {
+                throw new Exception("User not authenticated.");
+            }
+
+            return appUser.User.LastWeeklyPlanDate;
         }
 
-        //public async Task RemoveWeeklyPlanAsync()
+        //public async Task ReloadWeeklyPlan()
         //{
-        //    try
+        //    using var _context = _contextFactory.CreateDbContext();
+
+        //    var appUser = await _dataService.GetAuthenticatedUserAsync();
+
+        //    if (appUser != null)
         //    {
-        //        using var context = _contextFactory.CreateDbContext();
-        //        // Fetch the authenticated user
-        //        var userProfile = await _dataService.GetAuthenticatedUserAsync();
-        //        // Fetch all weekly plans
-        //        var weeklyPlans = userProfile.User.WeeklyPlan.ToList();
+        //        // Reload the user's favorite recipes from the database
+        //        var updatedUser = await _context.Users
+        //             .Include(u => u.User.WeeklyPlan)
+        //             .Include(u=>u.User.LastWeeklyPlanDate)
+        //             .FirstOrDefaultAsync(u => u.Id == appUser.Id);
 
-        //        if (weeklyPlans.Any())
+        //        if (updatedUser != null)
         //        {
-        //            // Remove all weekly plans
-        //            context.WeeklyPlans.RemoveRange(weeklyPlans);
-
-        //            // Save changes to the database
-        //            await context.SaveChangesAsync();
-        //            Console.WriteLine("All weekly plans have been deleted.");
+        //            appUser.User.WeeklyPlan = updatedUser.User.WeeklyPlan;
+        //            appUser.User.LastWeeklyPlanDate = updatedUser.User.LastWeeklyPlanDate;
         //        }
-        //        else
-        //        {
-        //            Console.WriteLine("No weekly plans found to delete.");
-        //        }
-
         //    }
-        //    catch (Exception ex)
+        //    else
         //    {
-        //        Console.WriteLine($"An error occurred while deleting weekly plans: {ex.Message}");
+        //        Console.WriteLine("User is not authenticated.");
+        //        _navigation.NavigateTo("account/login");
         //    }
         //}
     }

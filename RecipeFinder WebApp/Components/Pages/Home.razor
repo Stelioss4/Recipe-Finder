@@ -1,7 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
-@using Microsoft.Extensions.Logging
 @using RecipeFinder_WebApp.Components.Account.Pages
 @using RecipeFinder_WebApp.Data
 @using Recipe_Finder
@@ -119,7 +118,6 @@
 
 
 @code {
-    private string errorMessage;
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private string searchQuery { get; set; } = string.Empty;
     private ApplicationUser appUser { get; set; }
@@ -138,46 +136,6 @@
         Navigation.NavigateTo("/Account/DemoLogin");
 
         isDemoLoggingIn = false;
-
-        // // // try
-        // // // {
-
-
-        // // //     var result = SignInManager.PasswordSignInAsync("demo@recipefinder.com", "DemoPass123!", false, false);
-
-        // // //     if (result.IsCompletedSuccessfully)
-        // // //     {
-        // // //         Logger.LogInformation("Demo user logged in.");
-        // // //         Navigation.NavigateTo("/");
-        // // //     }
-        // // //     else
-        // // //     {
-        // // //         Logger.LogWarning("Invalid login attempt.");
-        // // //     }
-        // // // }
-        // // // catch(Exception)
-        // // // {
-        // // //     Console.WriteLine("Invalid login attempt.");
-        // // // }
-        // var demoEmail = "demo@recipefinder.com";
-        // var demoPassword = "DemoPass123!";
-
-        // if (HttpContextAccessor.HttpContext == null)
-        // {
-        //     errorMessage = "Error: HttpContext is null.";
-        //     return;
-        // }
-
-        // var result = await SignInManager.PasswordSignInAsync(demoEmail, demoPassword, false, false);
-
-        // if (result.Succeeded)
-        // {
-        // }
-        // else
-        // {
-        //     errorMessage = "Error: Invalid login attempt.";
-        // }
-
     }
 
     private async Task SearchForRecipeFromCK()

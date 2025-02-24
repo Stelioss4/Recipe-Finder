@@ -90,7 +90,7 @@
                             </div>
                         }
 
-                        <p>Your weekly plan was created on @user.LastWeeklyPlanDate!</p>
+                        <p>Your weekly plan was created on @appUser.User.LastWeeklyPlanDate!</p>
 
                     }
                     else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
@@ -132,6 +132,7 @@
     {
         await Init();
     }
+
     protected async Task Init()
     {
         using var context = DbContextFactory.CreateDbContext();
@@ -141,16 +142,22 @@
 
         if (appUser != null)
         {
-
             appUser.User.ShoppingList = await _favorite.GetShoppingListAsync();
-            if (appUser.User.LastWeeklyPlanDate.HasValue &&
-            (DateTime.UtcNow - appUser.User.LastWeeklyPlanDate.Value).TotalDays > 6)
-            {
-                // Delete weekly plan after 7 days
-                appUser.User.WeeklyPlan.Clear();
 
-                // Save changes to the database
-                await context.SaveChangesAsync();
+            if (appUser.User.LastWeeklyPlanDate != null)
+            {
+                appUser.User.LastWeeklyPlanDate = await _weeklyPlan.CheckWeeklyPlanDate();
+
+                var daysSinceLastPlan = (DateTime.Now - appUser.User.LastWeeklyPlanDate.Value).TotalDays;
+
+                if (appUser.User.LastWeeklyPlanDate.HasValue && daysSinceLastPlan >= Constants.WEEK_DAY_NUM)
+                {
+                    // Delete weekly plan after 7 days
+                    appUser.User.WeeklyPlan.Clear();
+
+                    // Save changes to the database
+                    await context.SaveChangesAsync();
+                }
             }
             if (appUser.User.ShoppingList == null)
             {
@@ -166,12 +173,10 @@
             return;
         }
 
-
         await _favorite.ReloadFavorites();
         user = appUser.User;
-
-
     }
+
     private async Task UpdateFavorites()
     {
         await Init();
@@ -187,30 +192,17 @@
     {
         showWeeklyPlanPopup = !showWeeklyPlanPopup;
     }
+
     private void TogglePopupShoppingList()
     {
         showShoppingListPopup = !showShoppingListPopup;
     }
-    public async Task CreateNewPlan()
-    {
-        using var context = DbContextFactory.CreateDbContext();
-        await _weeklyPlan.ForceNewPlanAsync();
-        await context.Entry(appUser.User).Collection(u => u.WeeklyPlan).LoadAsync();
-        StateHasChanged();
-    }
 
     private async Task CreateWeeklyPlan()
     {
-        await GenerateWeeklyPlan();
-        StateHasChanged();
-    }
-
-    private async Task GenerateWeeklyPlan()
-    {
-        // Logic to generate a weekly meal plan based on favorite recipes
-        weeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
-        user.WeeklyPlan = weeklyPlan;
-        StateHasChanged();
+        user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
+        await Init();
+        await InvokeAsync(StateHasChanged);
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)
@@ -228,6 +220,7 @@
         user.ShoppingList.Add(ingredient);
         StateHasChanged();
     }
+
     private void OnShoppingListRemoved(Ingredient ingredient)
     {
         user.ShoppingList.Remove(ingredient);
