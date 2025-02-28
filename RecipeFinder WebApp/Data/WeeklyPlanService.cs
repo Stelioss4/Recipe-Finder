@@ -19,7 +19,11 @@ namespace RecipeFinder_WebApp.Data
             _navigation = navigation;
         }
 
-        // Generates a weekly plan based on the user's favorite recipes
+        /// <summary>
+        /// Generates a weekly plan based on the user's favorite recipes
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<List<Recipe>> GenerateWeeklyPlanAsync()
         {
             using var context = _contextFactory.CreateDbContext();
@@ -76,7 +80,11 @@ namespace RecipeFinder_WebApp.Data
 
         }
 
-        // Allow the user to force a new plan manually
+        /// <summary>
+        /// Allow the user to force a new plan manually
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<List<Recipe>> ForceNewPlanAsync()
         {
             using var context = _contextFactory.CreateDbContext();
@@ -116,7 +124,12 @@ namespace RecipeFinder_WebApp.Data
                 throw new Exception("No favorite recipes found.");
             }
         }
-        // Check when the last plan was generated
+
+        /// <summary>
+        /// Check when the last plan was generated
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<DateTime?> CheckWeeklyPlanDate()
         {
             using var _context = _contextFactory.CreateDbContext();
@@ -131,33 +144,6 @@ namespace RecipeFinder_WebApp.Data
 
             return appUser.User.LastWeeklyPlanDate;
         }
-
-        //public async Task ReloadWeeklyPlan()
-        //{
-        //    using var _context = _contextFactory.CreateDbContext();
-
-        //    var appUser = await _dataService.GetAuthenticatedUserAsync();
-
-        //    if (appUser != null)
-        //    {
-        //        // Reload the user's favorite recipes from the database
-        //        var updatedUser = await _context.Users
-        //             .Include(u => u.User.WeeklyPlan)
-        //             .Include(u=>u.User.LastWeeklyPlanDate)
-        //             .FirstOrDefaultAsync(u => u.Id == appUser.Id);
-
-        //        if (updatedUser != null)
-        //        {
-        //            appUser.User.WeeklyPlan = updatedUser.User.WeeklyPlan;
-        //            appUser.User.LastWeeklyPlanDate = updatedUser.User.LastWeeklyPlanDate;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("User is not authenticated.");
-        //        _navigation.NavigateTo("account/login");
-        //    }
-        //}
     }
 }
 
