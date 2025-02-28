@@ -79,15 +79,43 @@ namespace RecipeFinder_WebApp.Data
         // Allow the user to force a new plan manually
         public async Task<List<Recipe>> ForceNewPlanAsync()
         {
+            using var context = _contextFactory.CreateDbContext();
+            // Fetch the authenticated user
             var userProfile = await _dataService.GetAuthenticatedUserAsync();
+
+            if (userProfile.User == null)
+            {
+                throw new Exception("User not authenticated.");
+            }
+
+            userProfile = await context.Users
+            .Include(u => u.User.FavoriteRecipes)
+            .FirstOrDefaultAsync(u => u.Id == userProfile.Id);
+
             var favoriteRecipes = userProfile.User.FavoriteRecipes;
-            var random = new Random();
-            currentWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(Constants.WEEK_DAY_NUM).ToList();
-            lastPlanDate = DateTime.Now;
 
-            return currentWeeklyPlan;
+            if (favoriteRecipes != null && favoriteRecipes.Count > Constants.LIMIT_DAYS)
+            {
+                // Randomly select 7 recipes for the weekly plan
+                var random = new Random();
+                var newWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(Constants.WEEK_DAY_NUM).ToList();
+
+                // Update the user's profile with the new weekly plan and the current date
+                userProfile.User.WeeklyPlan = newWeeklyPlan;
+                userProfile.User.LastWeeklyPlanDate = DateTime.Now;
+
+                // Save changes to the database
+                context.Update(userProfile); // Make sure the user is tracked by the context
+                await context.SaveChangesAsync();
+
+                // Return the new weekly plan
+                return newWeeklyPlan;
+            }
+            else
+            {
+                throw new Exception("No favorite recipes found.");
+            }
         }
-
         // Check when the last plan was generated
         public async Task<DateTime?> CheckWeeklyPlanDate()
         {

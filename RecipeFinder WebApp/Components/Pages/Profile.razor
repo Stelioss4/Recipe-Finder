@@ -91,6 +91,7 @@
                         }
 
                         <p>Your weekly plan was created on @appUser.User.LastWeeklyPlanDate!</p>
+                        <button class="btn btn-secondary" @onclick="ForceNewPlan">New Plan</button>
 
                     }
                     else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
@@ -200,6 +201,14 @@
     private async Task CreateWeeklyPlan()
     {
         user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
+        user.LastWeeklyPlanDate = DateTime.Now;
+        await Init();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ForceNewPlan()
+    {
+        user.WeeklyPlan = await _weeklyPlan.ForceNewPlanAsync();
         user.LastWeeklyPlanDate = DateTime.Now;
         await Init();
         await InvokeAsync(StateHasChanged);
