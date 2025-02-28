@@ -63,7 +63,7 @@ namespace RecipeFinder_WebApp.Data
                 userProfile.User.LastWeeklyPlanDate = DateTime.Now;
 
                 // Save changes to the database
-                //context.Update(userProfile); // Make sure the user is tracked by the context
+                context.Update(userProfile); // Make sure the user is tracked by the context
                 await context.SaveChangesAsync();
 
                 // Return the new weekly plan
@@ -75,7 +75,6 @@ namespace RecipeFinder_WebApp.Data
             }
 
         }
-
 
         // Allow the user to force a new plan manually
         public async Task<List<Recipe>> ForceNewPlanAsync()

@@ -87,6 +87,36 @@ namespace RecipeFinder_WebApp.Data
             }
         }
 
+        public async Task<User> GetUserByIdAsync()
+        {
+            try
+            {
+                using var _context = _contextFactory.CreateDbContext();
+
+                var appUser = await GetAuthenticatedUserAsync();
+                if (appUser == null || appUser.User == null)
+                {
+                    throw new NullReferenceException("Authenticated ApplicationUser or its User is null.");
+                }
+
+                // Fetch the user from the database
+                var user = await _context.User
+                    .FirstOrDefaultAsync(u => u.Id == appUser.User.Id);
+
+                if (user == null)
+                {
+                    throw new NullReferenceException("User not found in the database.");
+                }
+
+                return user; // Return the fetched user
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving authenticated User: {ex.Message}");
+                return null; // Handle error gracefully
+            }
+        }
+
 
         /// <summary>
         /// Returns recipe's reviews and ratings average
