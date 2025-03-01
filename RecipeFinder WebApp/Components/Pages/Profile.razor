@@ -91,7 +91,17 @@
                         }
 
                         <p>Your weekly plan was created on @appUser.User.LastWeeklyPlanDate!</p>
-                        <button class="btn btn-secondary" @onclick="ForceNewPlan">New Plan</button>
+                        <button class="btn btn-secondary" @onclick="ForceNewPlan" disabled="@Loading">
+                            @if (Loading)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span> New Plan...</span>
+                            }
+                            else
+                            {
+                                <span>New Plan</span>
+                            }
+                        </button>
 
                     }
                     else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
@@ -102,7 +112,17 @@
                     else
                     {
                         <p>No weekly plan generated yet.</p>
-                        <button class="btn btn-outline-primary" @onclick="CreateWeeklyPlan">Generate Weekly Plan</button>
+                        <button class="btn btn-outline-primary" @onclick="CreateWeeklyPlan" disabled="@Loading">
+                            @if (Loading)
+                            {
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span>Plan Generating...</span>
+                            }
+                            else
+                            {
+                                <span>Generate Weekly Plan</span>
+                            }
+                        </button>
                     }
                 </div>
             </div>
@@ -128,6 +148,8 @@
     private bool showShoppingListPopup { get; set; } = false;
 
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+    private bool Loading = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -202,16 +224,20 @@
 
     private async Task CreateWeeklyPlan()
     {
+        Loading = true;
         user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
         await Init();
         await InvokeAsync(StateHasChanged);
+        Loading = false;
     }
 
     private async Task ForceNewPlan()
     {
+        Loading = true;
         user.WeeklyPlan = await _weeklyPlan.ForceNewPlanAsync();
         await Init();
         await InvokeAsync(StateHasChanged);
+        Loading = false;
     }
 
     private void NavigateToRecipeDetails(string recipeUrl)
