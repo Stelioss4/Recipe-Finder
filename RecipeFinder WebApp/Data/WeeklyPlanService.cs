@@ -70,6 +70,8 @@ namespace RecipeFinder_WebApp.Data
                 context.Update(userProfile); // Make sure the user is tracked by the context
                 await context.SaveChangesAsync();
 
+                Console.WriteLine("Your weekly plan is up-to-date and saved!");
+
                 // Return the new weekly plan
                 return newWeeklyPlan;
             }

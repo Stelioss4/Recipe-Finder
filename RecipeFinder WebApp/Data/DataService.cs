@@ -101,6 +101,7 @@ namespace RecipeFinder_WebApp.Data
 
                 // Fetch the user from the database
                 var user = await _context.User
+                    .Include(u => u.ShoppingList)
                     .FirstOrDefaultAsync(u => u.Id == appUser.User.Id);
 
                 if (user == null)

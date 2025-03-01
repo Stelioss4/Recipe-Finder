@@ -142,6 +142,8 @@
 
         if (appUser != null)
         {
+            appUser.User = await DataService.GetUserByIdAsync();
+
             appUser.User.ShoppingList = await _favorite.GetShoppingListAsync();
 
             if (appUser.User.LastWeeklyPlanDate != null)
@@ -201,7 +203,6 @@
     private async Task CreateWeeklyPlan()
     {
         user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
-        user.LastWeeklyPlanDate = DateTime.Now;
         await Init();
         await InvokeAsync(StateHasChanged);
     }
@@ -209,7 +210,6 @@
     private async Task ForceNewPlan()
     {
         user.WeeklyPlan = await _weeklyPlan.ForceNewPlanAsync();
-        user.LastWeeklyPlanDate = DateTime.Now;
         await Init();
         await InvokeAsync(StateHasChanged);
     }
