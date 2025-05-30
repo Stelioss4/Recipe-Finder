@@ -13,6 +13,8 @@
 @inject WeeklyPlanService _weeklyPlan
 @inject IDbContextFactory<ApplicationDbContext> DbContextFactory
 @inject FavoriteService _favorite
+@inject Blazored.Toast.Services.IToastService ToastService
+
 
 <h3>User Profile</h3>
 <div class="container mt-5">
@@ -181,6 +183,8 @@
                     appUser.User.LastWeeklyPlanDate = null;
                     // Save changes to the database
                     await context.SaveChangesAsync();
+
+                    ToastService.ShowInfo("Your weekly plan has expired. You can now create a new one.");
                 }
             }
             if (appUser.User.ShoppingList == null)

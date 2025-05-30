@@ -1,3 +1,4 @@
+using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddBlazoredToast();
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
@@ -32,13 +35,6 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 40))
     ));
 
-//// Register ApplicationDbContext for normal scoped usage
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseMySql(
-//        builder.Configuration.GetConnectionString("DefaultConnection"),
-//        new MySqlServerVersion(new Version(8, 0, 40))
-//    ));
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -52,6 +48,7 @@ builder.Services.AddScoped<ScrapperService>();
 builder.Services.AddScoped<WeeklyPlanService>();
 builder.Services.AddScoped<FavoriteService>();
 builder.Services.AddHttpClient<GroceryService>();
+
 
 // Register HttpClient for dependency injection
 builder.Services.AddHttpClient();
