@@ -16,11 +16,11 @@
                 <div class="card h-100">
                     @if (rec.Image != null && rec.Image.Length > 0)
                     {
-                        <img src="data:image/png;base64,@Convert.ToBase64String(rec.Image)" class="card-img-top" alt="Recipe Image" style="height: 200px; object-fit: cover;" />
+                        <img src="data:image/png;base64,@Convert.ToBase64String(rec.Image)" class="card-img-top" alt="Recipe Image" style="height: 200px; object-fit: cover;" href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" />
                     }
                     <div class="btn-group">
                         <div class="card-body">
-                            <h5 class="card-title">@rec.RecipeName</h5>
+                            <h5 class="card-title" href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)">@rec.RecipeName</h5>
 
                             <a href="#" @onclick="() => NavigateToRecipeDetails(rec.Url)" class="btn btn-outline-primary">View Recipe</a>
                             @if (appUser != null)
@@ -29,14 +29,14 @@
                                 {
                                     <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)" hidden="@(!isAuthenticated ? "hidden" : null)">
                                         <i class="bi bi-heart"></i> Add to Fav!
-                                        </button>
+                                    </button>
                                 }
 
                                 @if (RemoveRecipeButton)
                                 {
                                     <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">
                                         <i class="bi bi-x-circle"></i> Remove
-                                        </button>
+                                    </button>
                                 }
                             }
                         </div>
