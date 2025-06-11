@@ -1,5 +1,25 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager Navigation
+@using Blazored.Toast.Configuration
+
+
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="10"
+                IconType="IconType.Material"
+                ErrorIcon="error_outline"
+                InfoIcon="info"
+                SuccessIcon="done_outline"
+                WarningIcon="warning"
+                ShowProgressBar="@true"
+                ShowCloseButton="@true"
+                MaxToastCount="3">
+    <CloseButtonContent>
+        <div>
+            <span class="myCloseButtonStyleClass">&times;</span>
+        </div>
+    </CloseButtonContent>
+</BlazoredToasts>
 
 <div class="page">
     <div class="sidebar">
@@ -39,9 +59,6 @@
             @Body
 
         </article>
-
-       @*  <!-- ✅ Toast notifications appear here -->
-        <BlazoredToast /> *@
     </main>
 </div>
 

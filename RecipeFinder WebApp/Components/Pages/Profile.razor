@@ -184,7 +184,7 @@
                     // Save changes to the database
                     await context.SaveChangesAsync();
 
-                    ToastService.ShowInfo("Your weekly plan has expired. You can now create a new one.");
+                    ToastService.ShowInfo("Your weekly plan has expired. You can now create a new one!");
                 }
             }
             if (appUser.User.ShoppingList == null)
