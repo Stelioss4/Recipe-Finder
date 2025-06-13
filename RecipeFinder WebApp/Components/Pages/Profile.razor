@@ -153,6 +153,9 @@
 
     private bool Loading = false;
 
+    private bool _weeklyPlanExpiredToastShown = false;
+
+
     protected override async Task OnInitializedAsync()
     {
         await Init();
@@ -184,7 +187,11 @@
                     // Save changes to the database
                     await context.SaveChangesAsync();
 
-                    ToastService.ShowSuccess("Your weekly plan has expired. You can now create a new one!");
+                    if (!_weeklyPlanExpiredToastShown)
+                    {
+                        ToastService.ShowSuccess("Your weekly plan has expired. You can now create a new one!");
+                        _weeklyPlanExpiredToastShown = true;
+                    }
                 }
             }
             if (appUser.User.ShoppingList == null)
