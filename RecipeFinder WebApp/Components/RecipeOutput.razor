@@ -5,6 +5,8 @@
 @inject DataService DataService
 @inject FavoriteService _favorite
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject Blazored.Toast.Services.IToastService ToastService
+
 
 
 <div class="row mt-5">
@@ -27,15 +29,32 @@
                             {
                                 @if (AddRecipeButton)
                                 {
-                                    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)" hidden="@(!isAuthenticated ? "hidden" : null)">
-                                        <i class="bi bi-heart"></i> Add to Fav!
+                                    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)" disabled="@(loadingRecipe == rec && loadingAction == "add")"
+                                            hidden="@(!isAuthenticated ? "hidden" : null)">
+                                        @if (loadingRecipe == rec)
+                                        {
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            <span>add to favorites...</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="bi bi-heart">Add to Fav!</span>
+                                        }
                                     </button>
                                 }
 
                                 @if (RemoveRecipeButton)
                                 {
-                                    <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)">
-                                        <i class="bi bi-x-circle"></i> Remove
+                                    <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)" disabled="@(loadingRecipe == rec && loadingAction == "remove")">
+                                        @if (loadingRecipe == rec)
+                                        {
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            <span>removing from favorites...</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="bi bi-x-circle">Remove</span>
+                                        }
                                     </button>
                                 }
                             }
@@ -53,8 +72,10 @@
     [Parameter] public bool RemoveRecipeButton { get; set; } = true;
     [Parameter] public bool AddRecipeButton { get; set; } = true;
     [Parameter] public EventCallback<Recipe> OnFavoritesChanged { get; set; }
+    private Recipe? loadingRecipe = null;
+    private string? loadingAction = null; // "add" or "remove"
     private bool isAuthenticated { get; set; }
-
+    private bool favoriteAddAndRemoveToastShown = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,14 +89,34 @@
 
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
+        loadingRecipe = recipe;
+        loadingAction = "add";
         await _favorite.AddFavoriteRecipeAsync(recipe);
         await OnFavoritesChanged.InvokeAsync(recipe);
-
+        if (!favoriteAddAndRemoveToastShown)
+        {
+            ToastService.ShowSuccess($"Recipe '{recipe.RecipeName}' added to favorites!");
+            favoriteAddAndRemoveToastShown = true;
+            Console.WriteLine($"Recipe '{recipe.RecipeName}' added to favorites!");
+        }
+        loadingRecipe = null;
+        loadingAction = null;
     }
 
     private async Task RemoveRecipeFromFavorite(Recipe recipe)
     {
+        loadingRecipe = recipe;
+        loadingAction = "remove";
         await _favorite.RemoveFavoriteRecipeAsync(recipe);
         await OnFavoritesChanged.InvokeAsync(recipe);
+        if (!favoriteAddAndRemoveToastShown)
+        {
+            ToastService.ShowSuccess($"Recipe '{recipe.RecipeName}' removed from favorites!");
+            favoriteAddAndRemoveToastShown = true;
+            Console.WriteLine($"Recipe '{recipe.RecipeName}' removed from favorites!");
+        }
+        loadingRecipe = null;
+        loadingAction = null;
+
     }
 }

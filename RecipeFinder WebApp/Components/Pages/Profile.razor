@@ -153,7 +153,7 @@
     private bool showSearchBoxPopup { get; set; } = false;
     private readonly string[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
     private bool Loading = false;
-    private bool _weeklyPlanExpiredToastShown = false;
+    private bool weeklyPlanExpiredToastShown = false;
     private List<Recipe> recipes { get; set; } = new List<Recipe>();
     private string searchQuery { get; set; } = string.Empty;
     private bool isSearching = false;
@@ -184,10 +184,10 @@
                     appUser.User.LastWeeklyPlanDate = null;
                     await context.SaveChangesAsync();
 
-                    if (!_weeklyPlanExpiredToastShown)
+                    if (!weeklyPlanExpiredToastShown)
                     {
                         ToastService.ShowSuccess("Your weekly plan has expired. You can now create a new one!");
-                        _weeklyPlanExpiredToastShown = true;
+                        weeklyPlanExpiredToastShown = true;
                     }
                 }
             }
