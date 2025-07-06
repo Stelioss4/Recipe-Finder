@@ -56,9 +56,9 @@
                 </div>
 
                 <!-- Right Side: Search Bar -->
-                <div class="col-md-6 d-flex flex-column justify-content-center">
-                    <div class="card p-4 shadow-sm">
-                        <EditForm Model="@searchQuery" FormName="RecipeForm">
+                 <div class="col-md-6 d-flex flex-column justify-content-center">
+                  <div class="card p-4 shadow-sm">
+                     @*     <EditForm Model="@searchQuery" FormName="RecipeForm">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
 
@@ -76,8 +76,9 @@
                                     }
                                 </button>
                             </div>
-                        </EditForm>
-                    </div>
+                        </EditForm>*@
+                    <SearchBox searchQuery="@searchQuery" OnSearch="HandleSearch" />
+                    </div> 
                 </div>
             </NotAuthorized>
 
@@ -149,4 +150,10 @@
     {
         InvokeAsync(StateHasChanged);
     }
+    private async Task HandleSearch(string term)
+{
+    searchQuery = term;
+    recipes = await Scrap.ScrapeCKRecipes(term);
+}
+
 }
