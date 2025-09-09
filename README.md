@@ -66,6 +66,10 @@ dotnet run
 
 Feel free to submit pull requests or report issues. Contributions are always welcome!
 
+## Check out the demo video
+
+You can watch a demo of **Recipe Finder** on YouTube: [Watch on YouTube](https://www.youtube.com/@stylianosboursanidis5247)
+
 ## Contact 📬
 
 - LinkedIn: [My LinkedIn Profile
