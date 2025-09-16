@@ -94,15 +94,15 @@ namespace RecipeFinder_WebApp.Data
                                 // Create a new Recipe object
                                 var recipe = new Recipe
                                 {
-                                   RecipeName = titleNode.InnerText.Trim(),
-                                   Url = linkNode.GetAttributeValue("href", string.Empty),
-                                   Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
-                                   SearchTerms = new List<RecipeSearchTerm>
+                                    RecipeName = titleNode.InnerText.Trim(),
+                                    Url = linkNode.GetAttributeValue("href", string.Empty),
+                                    Image = !string.IsNullOrEmpty(imageUrl) ? await DownloadImageAsByteArray(imageUrl) : null, // Convert image URL to byte[]
+                                    SearchTerms = new List<RecipeSearchTerm>
                                    {
                                        new RecipeSearchTerm { Term = searchQuery }
                                    },
-                                   SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
-                                   };
+                                    SourceDomain = new Uri(Constants.ALLRECIPE_URL).Host.ToLowerInvariant() // Set SourceDomain and normalize
+                                };
 
                                 recipes.Add(recipe);
                             }
@@ -409,22 +409,23 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse Cooking Instructions
-                var instructionsNodes = new List<HtmlNode>
-        {
-            document.DocumentNode.SelectSingleNode("/html/body/main/article[3]/div[1]"),
-            document.DocumentNode.SelectSingleNode("/html/body/main/article[4]/div[1]")
-        };
-
-                HtmlNode correctInstructionsNode = instructionsNodes.FirstOrDefault(node => node != null && IsValidInstructionsNode(node));
-
-                if (correctInstructionsNode != null)
+                // Try to select the instructions node directly with the new XPath
+                for (int i = 2; ; i++) // start from 2 because position() > 1
                 {
-                    searchResultRecipe.CookingInstructions = correctInstructionsNode.InnerHtml.Trim();
+                    var node = document.DocumentNode
+                        .SelectSingleNode($"//section[position()=2 or position()=3]/div[{i}]\r\n");
+
+                    if (node == null) // stop when no more divs are found
+                        break;
+
+                    if (IsValidInstructionsNode(node))
+                    {
+                        searchResultRecipe.CookingInstructions += node.InnerText.Trim();
+                    }
+
                 }
-                else
-                {
-                    Console.WriteLine("Valid instructions node not found");
-                }
+
+
 
                 // Parse Video URL if available
                 var videoNode = document.DocumentNode.SelectSingleNode("//video/source");
@@ -463,7 +464,7 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse Cooking Time
-                var cookingTimeNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[1]/div/div[2]/small/span[1]");
+                var cookingTimeNode = document.DocumentNode.SelectSingleNode("//section[position()=2 or position()=3]/div[1]");
                 if (cookingTimeNode != null)
                 {
                     searchResultRecipe.Time = cookingTimeNode.InnerText.Trim();
@@ -488,7 +489,7 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse List of Ingredients
-                var ingredientsNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[2]/table/tbody");
+                var ingredientsNode = document.DocumentNode.SelectSingleNode("//table[contains(@class, 'ingredients')]//tbody\r\n");
                 if (ingredientsNode != null)
                 {
                     var ingredientRows = ingredientsNode.SelectNodes("tr");
