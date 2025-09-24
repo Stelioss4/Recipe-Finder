@@ -72,8 +72,8 @@
     [Parameter] public bool RemoveRecipeButton { get; set; } = true;
     [Parameter] public bool AddRecipeButton { get; set; } = true;
     [Parameter] public EventCallback<Recipe> OnFavoritesChanged { get; set; }
-    private Recipe? loadingRecipe = null;
-    private string? loadingAction = null; // "add" or "remove"
+    private Recipe loadingRecipe = null;
+    private string loadingAction = null; // "add" or "remove"
     private bool isAuthenticated { get; set; }
     private bool favoriteAddAndRemoveToastShown = false;
 

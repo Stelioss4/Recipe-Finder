@@ -9,7 +9,6 @@ namespace RecipeFinder_WebApp.Data
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
         private readonly NavigationManager _navigation;
         private readonly DataService _dataService;
-        private DateTime? lastPlanDate = null;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
         public WeeklyPlanService(DataService dataService, NavigationManager navigation, IDbContextFactory<ApplicationDbContext> contextFactory /* ApplicationDbContext _context*/)
