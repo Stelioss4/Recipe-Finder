@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 
@@ -9,13 +10,16 @@ namespace RecipeFinder_WebApp.Data
         private readonly HttpClient _httpClient;
         private DataService _dataService;
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+        private readonly IEmailSender _emailSender; 
 
 
-        public ScrapperService(HttpClient httpClient, DataService ds, IDbContextFactory<ApplicationDbContext> contextFactory)
+
+        public ScrapperService(HttpClient httpClient, DataService ds, IDbContextFactory<ApplicationDbContext> contextFactory, IEmailSender emailSender)
         {
             _httpClient = httpClient;
             _dataService = ds;
             _contextFactory = contextFactory;
+            _emailSender = emailSender;
         }
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
@@ -530,6 +534,8 @@ namespace RecipeFinder_WebApp.Data
                 Console.WriteLine($"Error scraping searchResultRecipe details: {ex.Message}");
             }
 
+            await CheckScrapingResultAsync(searchResultRecipe);
+
             return searchResultRecipe;
         }
 
@@ -581,6 +587,50 @@ namespace RecipeFinder_WebApp.Data
 
             return false;
         }
+
+        public async Task SendScrapingAlertAsync(string subject, string message)
+        {
+            try
+            {
+                // Replace with your real email
+               
+                await _emailSender.SendEmailAsync(Constants.ADMIN_EMAIL, subject, message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to send email: {ex.Message}");
+            }
+        }
+
+        private async Task CheckScrapingResultAsync(Recipe recipe)
+        {
+            bool missingIngredients = recipe.ListOfIngredients == null || !recipe.ListOfIngredients.Any();
+            bool missingInstructions = string.IsNullOrWhiteSpace(recipe.CookingInstructions);
+            string message = null;
+            string subject = null;
+
+            if (missingIngredients || missingInstructions)
+            {
+                subject = $"Scraping Alert: Issue with recipe {recipe.RecipeName ?? "Unknown"}";
+                message = $"The scraping for recipe at URL: {recipe.Url} might be broken.\n\n" +
+                          $"Missing Ingredients: {missingIngredients}\n" +
+                          $"Missing Instructions: {missingInstructions}\n\n" +
+                          $"Please check the HTML structure on Chefkoch.";
+
+                await SendScrapingAlertAsync(subject, message);
+            }
+            else
+            {
+                subject = "✅ Scraping Successful";
+                message = $"Hello,\n\nScraping worked correctly:\n\n" +
+                          $"- Recipe URL: {recipe.Url}\n" +
+                          $"No issues detected.";
+
+                await SendScrapingAlertAsync(subject, message);
+            }
+        }
+
+
     }
 }
 
