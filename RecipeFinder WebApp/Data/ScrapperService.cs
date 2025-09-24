@@ -10,8 +10,9 @@ namespace RecipeFinder_WebApp.Data
         private readonly HttpClient _httpClient;
         private DataService _dataService;
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
-        private readonly IEmailSender _emailSender; 
+        private readonly IEmailSender _emailSender;
 
+        List<ScrapeCheckResult> scrapeResults = new List<ScrapeCheckResult>();
 
 
         public ScrapperService(HttpClient httpClient, DataService ds, IDbContextFactory<ApplicationDbContext> contextFactory, IEmailSender emailSender)
@@ -303,6 +304,35 @@ namespace RecipeFinder_WebApp.Data
                 }
             }
 
+            // Get all checks
+            var failed = scrapeResults.Where(r => !r.IsSuccess).ToList();
+            var success = scrapeResults.Where(r => r.IsSuccess).ToList();
+            if (failed.Any())
+            {
+                var message = "Scraping completed but some nodes failed:\n\n";
+
+                foreach (var fail in failed)
+                {
+                    message += $"- Recipe: {fail.RecipeName} ({fail.RecipeUrl}), Missing: {fail.FailedNode}\n";
+                }
+
+                await _emailSender.SendEmailAsync(Constants.ADMIN_EMAIL, "Scraping Issues Detected", message);
+            }
+            else
+            {
+                if (success.Any())
+                {
+                    var message = "Scraping completed successfully for all recipes:\n\n";
+                    foreach (var suc in success)
+                    {
+                        message += $"- Recipe: {suc.RecipeName} ({suc.RecipeUrl})\n";
+                    }
+                }
+                // Optionally, send a success email or log success
+                await _emailSender.SendEmailAsync(Constants.ADMIN_EMAIL, "✅ Scraping Successful", "All recipes scraped successfully with no issues detected.");
+            }
+
+
             // Add new recipes to the database
             if (detailedRecipes.Count > 0)
             {
@@ -383,6 +413,7 @@ namespace RecipeFinder_WebApp.Data
 
         public async Task<Recipe> ScrapeCKDetailsAndUpdateRecipe(Recipe searchResultRecipe)
         {
+
             try
             {
                 var html = await _httpClient.GetStringAsync(searchResultRecipe.Url);
@@ -427,6 +458,28 @@ namespace RecipeFinder_WebApp.Data
                         searchResultRecipe.CookingInstructions += node.InnerText.Trim();
                     }
 
+                }
+                if (!string.IsNullOrWhiteSpace(searchResultRecipe.CookingInstructions))
+                {
+                    scrapeResults.Add(new ScrapeCheckResult
+                    {
+                        RecipeUrl = searchResultRecipe.Url,
+                        RecipeName = searchResultRecipe.RecipeName,
+                        FailedNode = "CookingInstructions",
+                        IsSuccess = true
+                    });
+                }
+                else
+                {
+                    Console.WriteLine("Cooking instructions are null or empty");
+
+                    scrapeResults.Add(new ScrapeCheckResult
+                    {
+                        RecipeUrl = searchResultRecipe.Url,
+                        RecipeName = searchResultRecipe.RecipeName,
+                        FailedNode = "CookingInstructions",
+                        IsSuccess = false
+                    });
                 }
 
 
@@ -516,17 +569,36 @@ namespace RecipeFinder_WebApp.Data
                                 };
                             })
                             .ToList();
+
+                        scrapeResults.Add(new ScrapeCheckResult
+                        {
+                            RecipeUrl = searchResultRecipe.Url,
+                            RecipeName = searchResultRecipe.RecipeName,
+                            FailedNode = "Ingredients",
+                            IsSuccess = true
+                        });
                     }
                     else
                     {
-                        Console.WriteLine("Ingredient rows are null");
+                        scrapeResults.Add(new ScrapeCheckResult
+                        {
+                            RecipeUrl = searchResultRecipe.Url,
+                            RecipeName = searchResultRecipe.RecipeName,
+                            FailedNode = "Ingredients",
+                            IsSuccess = false
+                        });
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Ingredients node is null");
+                    scrapeResults.Add(new ScrapeCheckResult
+                    {
+                        RecipeUrl = searchResultRecipe.Url,
+                        RecipeName = searchResultRecipe.RecipeName,
+                        FailedNode = "Ingredients",
+                        IsSuccess = false
+                    });
                 }
-
 
             }
             catch (Exception ex)
@@ -534,9 +606,8 @@ namespace RecipeFinder_WebApp.Data
                 Console.WriteLine($"Error scraping searchResultRecipe details: {ex.Message}");
             }
 
-            await CheckScrapingResultAsync(searchResultRecipe);
-
             return searchResultRecipe;
+
         }
 
         public async Task<byte[]> DownloadImageAsByteArray(string imageUrl, string baseUrl = null)
@@ -587,50 +658,6 @@ namespace RecipeFinder_WebApp.Data
 
             return false;
         }
-
-        public async Task SendScrapingAlertAsync(string subject, string message)
-        {
-            try
-            {
-                // Replace with your real email
-               
-                await _emailSender.SendEmailAsync(Constants.ADMIN_EMAIL, subject, message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Failed to send email: {ex.Message}");
-            }
-        }
-
-        private async Task CheckScrapingResultAsync(Recipe recipe)
-        {
-            bool missingIngredients = recipe.ListOfIngredients == null || !recipe.ListOfIngredients.Any();
-            bool missingInstructions = string.IsNullOrWhiteSpace(recipe.CookingInstructions);
-            string message = null;
-            string subject = null;
-
-            if (missingIngredients || missingInstructions)
-            {
-                subject = $"Scraping Alert: Issue with recipe {recipe.RecipeName ?? "Unknown"}";
-                message = $"The scraping for recipe at URL: {recipe.Url} might be broken.\n\n" +
-                          $"Missing Ingredients: {missingIngredients}\n" +
-                          $"Missing Instructions: {missingInstructions}\n\n" +
-                          $"Please check the HTML structure on Chefkoch.";
-
-                await SendScrapingAlertAsync(subject, message);
-            }
-            else
-            {
-                subject = "✅ Scraping Successful";
-                message = $"Hello,\n\nScraping worked correctly:\n\n" +
-                          $"- Recipe URL: {recipe.Url}\n" +
-                          $"No issues detected.";
-
-                await SendScrapingAlertAsync(subject, message);
-            }
-        }
-
-
     }
 }
 
