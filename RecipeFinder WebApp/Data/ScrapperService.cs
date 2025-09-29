@@ -298,7 +298,7 @@ namespace RecipeFinder_WebApp.Data
                 recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
                 recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
                 Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
-                if (detailedRecipe != null) // Ensure detailedRecipe is not null before adding
+                if (detailedRecipe != null && detailedRecipe.CookingInstructions != null) // Ensure detailedRecipe is not null before adding
                 {
                     detailedRecipes.Add(detailedRecipe);
                 }
