@@ -367,3 +367,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /RecipeFinder WebApp/wwwroot/lib
 /RecipeFinder WebApp/appsettings.json
+/RecipeFinder WebApp/appsettings.Development.json
