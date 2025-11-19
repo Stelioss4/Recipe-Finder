@@ -16,6 +16,8 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject ThemeService ThemeService
+
 
 <PageTitle>Register</PageTitle>
 
@@ -68,7 +70,14 @@
     private User myUser { get; set; } = new();
 
     private string Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
-
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender)
+    //     {
+    //         await ThemeService.Initialize();
+    //         StateHasChanged();
+    //     }
+    // }
     public async Task RegisterUser(EditContext editContext)
     {
         var user = CreateUser();
