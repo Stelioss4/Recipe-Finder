@@ -27,10 +27,10 @@
         <AuthorizeView>
             <NotAuthorized Context="unauthorizedContext">
                 <!-- Left Side: Introduction -->
-                <div class="col-md-6 d-flex flex-column justify-content-center text-start">
+                <h3>Why Use Recipe Finder?</h3>
+                <p>With Recipe Finder, you can:</p>
+                <div class="col-md-6 d-flex flex-column justify-content-center text-start why-box">
                     <div class="mt-4">
-                        <h3>Why Use Recipe Finder?</h3>
-                        <p>With Recipe Finder, you can:</p>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>🔍 Search</strong> for thousands of delicious recipes.</li>
                             <li class="list-group-item"><strong>📋 Plan</strong> your weekly meals effortlessly.</li>
@@ -38,6 +38,7 @@
                             <li class="list-group-item"><strong>❤️ Save</strong> your favorite recipes for quick access.</li>
                         </ul>
                     </div>
+
 
                     <div class="mt-4 text-center">
                         <p>Want to try it out? Use our demo account!</p>
@@ -56,9 +57,9 @@
                 </div>
 
                 <!-- Right Side: Search Bar -->
-                 <div class="col-md-6 d-flex flex-column justify-content-center">
-                  <div class="card p-4 shadow-sm">
-                     @*     <EditForm Model="@searchQuery" FormName="RecipeForm">
+                <div class="col-md-6 d-flex flex-column justify-content-center">
+                    <div class="card p-4 shadow-sm">
+                        @*     <EditForm Model="@searchQuery" FormName="RecipeForm">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
 
@@ -77,8 +78,8 @@
                                 </button>
                             </div>
                         </EditForm>*@
-                    <SearchBox searchQuery="@searchQuery" OnSearch="HandleSearch" />
-                    </div> 
+                        <SearchBox searchQuery="@searchQuery" OnSearch="HandleSearch" />
+                    </div>
                 </div>
             </NotAuthorized>
 
@@ -151,9 +152,9 @@
         InvokeAsync(StateHasChanged);
     }
     private async Task HandleSearch(string term)
-{
-    searchQuery = term;
-    recipes = await Scrap.ScrapeCKRecipes(term);
-}
+    {
+        searchQuery = term;
+        recipes = await Scrap.ScrapeCKRecipes(term);
+    }
 
 }

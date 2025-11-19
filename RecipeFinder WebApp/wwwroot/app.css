@@ -168,3 +168,29 @@ a, .btn-link {
 .validation-message {
     color: #e50000;
 }
+.themeLight .why-box {
+    background-color: transparent;
+}
+
+.themeDark .why-box {
+    background-color: #1e1e1e; 
+    border: 1px solid #3c3c3c; 
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(147, 112, 219, 0.2); 
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+    .themeDark .why-box .list-group-item {
+        background-color: transparent;
+        color: #d4d4d4;
+        border-color: #3c3c3c;
+    }
+.why-box-center {
+    text-align: center;
+}
+
+    .why-box-center .list-group-item {
+        text-align: center;
+    }
+
