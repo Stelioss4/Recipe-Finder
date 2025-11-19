@@ -8,4 +8,8 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.JSInterop" Version="8.0.2" />
+  </ItemGroup>
+
 </Project>

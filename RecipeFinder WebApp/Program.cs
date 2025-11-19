@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Recipe_Finder;
 using RecipeFinder_WebApp.Components;
 using RecipeFinder_WebApp.Components.Account;
 using RecipeFinder_WebApp.Data;
@@ -49,6 +50,9 @@ builder.Services.AddScoped<ScrapperService>();
 builder.Services.AddScoped<WeeklyPlanService>();
 builder.Services.AddScoped<FavoriteService>();
 builder.Services.AddHttpClient<GroceryService>();
+builder.Services.AddScoped<ThemeService>();
+builder.Services.AddTransient<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
 
 
 // Register HttpClient for dependency injection

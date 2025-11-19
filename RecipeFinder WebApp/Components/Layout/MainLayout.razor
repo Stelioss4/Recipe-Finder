@@ -1,79 +1,95 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager Navigation
+@inject ThemeService ThemeService
+@inject IJSRuntime JS
 @using Blazored.Toast.Configuration
+@using Microsoft.CodeAnalysis
+@using Recipe_Finder
 
 
+<div class="@ThemeClass">
 
-<BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="10"
-                IconType="IconType.Blazored"
-                ErrorIcon="error_outline"
-                InfoIcon="info"
-                SuccessIcon="done_outline"
-                WarningIcon="warning"
-                ShowProgressBar="@true"
-                ShowCloseButton="@true"
-                MaxToastCount="3">
-    <CloseButtonContent>
-        <div>
-            <span class="myCloseButtonStyleClass">&times;</span>
+    <BlazoredToasts Position="ToastPosition.BottomRight"
+                    Timeout="10"
+                    IconType="IconType.Blazored"
+                    ErrorIcon="error_outline"
+                    InfoIcon="info"
+                    SuccessIcon="done_outline"
+                    WarningIcon="warning"
+                    ShowProgressBar="@true"
+                    ShowCloseButton="@true"
+                    MaxToastCount="3">
+        <CloseButtonContent>
+            <div>
+                <span class="myCloseButtonStyleClass">&times;</span>
+            </div>
+        </CloseButtonContent>
+    </BlazoredToasts>
+
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
         </div>
-    </CloseButtonContent>
-</BlazoredToasts>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+        <main>
+            <div class="top-row px-4">
+                <a href="https://www.linkedin.com/in/stylianos-boursanidis/" target="_blank" class="btn btn-border">
+                    <i class="bi bi-linkedin"></i> LinkedIn
+                </a>
+                <a href="https://github.com/Stelioss4" target="_blank" class="btn btn-border">
+                    <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://www.youtube.com/@@stylianosboursanidis5247"
+                   target="_blank"
+                   class="btn btn-border">
+                    <i class="bi bi-youtube"></i> Youtube
+                </a>
+                <div class="form-check form-switch">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           id="themeSwitch"
+                           @onchange="ToggleTheme" />
+                    <label class="form-check-label" for="themeSwitch">
+                        @(IsDark ? "Dark" : "Light")
+                    </label>
+                </div>
+                <AuthorizeView>
+                    <Authorized>
+
+                        <button class="btn btn-primary" @onclick="NavigateToProfile">Profile</button>
+                    </Authorized>
+                    <NotAuthorized>
+
+                        <div class="d-flex align-items-center">
+                            <NavLink class="nav-link p-0" href="Account/LogIn">
+                                <button class="btn btn-primary">Log in</button>
+                            </NavLink>
+                            <NavLink class="nav-link p-0" href="Account/Register">
+                                <button class="btn btn-secondary">Register</button>
+                            </NavLink>
+                        </div>
+                    </NotAuthorized>
+
+
+                </AuthorizeView>
+            </div>
+
+            <article class="content px-4">
+                @Body
+
+            </article>
+        </main>
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://www.linkedin.com/in/stylianos-boursanidis/" target="_blank" class="btn btn-border">
-                <i class="bi bi-linkedin"></i> LinkedIn
-            </a>
-            <a href="https://github.com/Stelioss4" target="_blank" class="btn btn-border">
-                <i class="bi bi-github"></i> GitHub
-            </a>
-            <a href="https://www.youtube.com/@@stylianosboursanidis5247"
-               target="_blank"
-               class="btn btn-border">
-                <i class="bi bi-youtube"></i> Youtube
-            </a>
-            <AuthorizeView>
-                <Authorized>
-
-                    <button class="btn btn-primary" @onclick="NavigateToProfile">Profile</button>
-                </Authorized>
-                <NotAuthorized>
-
-                    <div class="d-flex align-items-center">
-                        <NavLink class="nav-link p-0" href="Account/LogIn">
-                            <button class="btn btn-primary">Log in</button>
-                        </NavLink>
-                        <NavLink class="nav-link p-0" href="Account/Register">
-                            <button class="btn btn-secondary">Register</button>
-                        </NavLink>
-                    </div>
-                </NotAuthorized>
-
-
-            </AuthorizeView>
-        </div>
-
-        <article class="content px-4">
-            @Body
-
-        </article>
-    </main>
-</div>
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
 </div>
 
 @code {
+
     private void NavigateToUserAccount()
     {
         Navigation.NavigateTo("/Account/LogIn");
@@ -88,4 +104,32 @@
     {
         Navigation.NavigateTo("/profile");
     }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var saved = await JS.InvokeAsync<string>("theme.load");
+
+            if (saved == "Dark")
+                ThemeService.SetTheme(AppTheme.Dark);
+            else
+                ThemeService.SetTheme(AppTheme.Light);
+
+            StateHasChanged();
+        }
+    }
+
+    private bool IsDark => ThemeService.CurrentTheme == AppTheme.Dark;
+
+    private string ThemeClass => ThemeService.CurrentTheme == AppTheme.Dark
+     ? "themeDark"
+     : "themeLight";
+
+    private async Task ToggleTheme()
+    {
+        ThemeService.ToggleTheme();
+        await JS.InvokeVoidAsync("theme.save", ThemeService.CurrentTheme.ToString());
+    }
+
 }
+
