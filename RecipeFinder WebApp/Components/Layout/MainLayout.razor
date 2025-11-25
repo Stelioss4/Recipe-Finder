@@ -48,6 +48,7 @@
                     <input class="form-check-input"
                            type="checkbox"
                            id="themeSwitch"
+                           onclick="window.theme.jsSwitchTheme()"
                            @onchange="ToggleTheme" />
                     <label class="form-check-label" for="themeSwitch">
                         @(IsDark ? "Dark" : "Light")
