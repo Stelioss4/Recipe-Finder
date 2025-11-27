@@ -29,18 +29,35 @@
                             {
                                 @if (AddRecipeButton)
                                 {
-                                    <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)" disabled="@(loadingRecipe == rec && loadingAction == "add")"
-                                            hidden="@(!isAuthenticated ? "hidden" : null)">
-                                        @if (loadingRecipe == rec)
-                                        {
-                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            <span>add to favorites...</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="bi bi-heart">Add to Fav!</span>
-                                        }
-                                    </button>
+                                    @if (!CheckIfRecipeInFavorites(rec))
+                                    {
+                                        <button class="btn btn-primary" @onclick="() => AddRecipeToFavorite(rec)" disabled="@(loadingRecipe == rec && loadingAction == "add")"
+                                                hidden="@(!isAuthenticated ? "hidden" : null)">
+                                            @if (loadingRecipe == rec)
+                                            {
+                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                <span>add to favorites...</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="bi bi-heart">Add to Fav!</span>
+                                            }
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-danger" @onclick="() => RemoveRecipeFromFavorite(rec)" disabled="@(loadingRecipe == rec && loadingAction == "remove")">
+                                            @if (loadingRecipe == rec)
+                                            {
+                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                <span>removing from favorites...</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="bi bi-x-circle">Remove</span>
+                                            }
+                                        </button>
+                                    }
                                 }
 
                                 @if (RemoveRecipeButton)
@@ -76,11 +93,21 @@
     private string loadingAction = null; // "add" or "remove"
     private bool isAuthenticated { get; set; }
     private bool favoriteAddAndRemoveToastShown = false;
+    private bool isRecipeInFavorites { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
+        await Init();
+    }
+    public async Task Init()
+    {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isAuthenticated = authState.User.Identity.IsAuthenticated;
+
+        appUser = await FindUserFromDatabase();
+
+
     }
     private void NavigateToRecipeDetails(string recipeUrl)
     {
@@ -101,6 +128,7 @@
         }
         loadingRecipe = null;
         loadingAction = null;
+        await Init();
     }
 
     private async Task RemoveRecipeFromFavorite(Recipe recipe)
@@ -117,6 +145,20 @@
         }
         loadingRecipe = null;
         loadingAction = null;
+        await Init();
+    }
+    private async Task<ApplicationUser> FindUserFromDatabase()
+    {
+        if (appUser != null)
+        {
+            appUser.User = await DataService.GetUserByIdAsync();
+        }
+        return appUser;
 
     }
+    private bool CheckIfRecipeInFavorites(Recipe recipe)
+    {
+        return appUser.User.FavoriteRecipes.Any(r => r.Id == recipe.Id);
+    }
+
 }

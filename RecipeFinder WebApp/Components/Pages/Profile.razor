@@ -35,11 +35,12 @@
 
         @if(showSearchBoxPopup)
         {
-                                <SearchBox searchQuery="@searchQuery" OnSearch="HandleSearch" />
-                                  @if (recipes.Count > 0)
-{
-    <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
-}
+            <SearchBox searchQuery="@searchQuery" OnSearch="HandleSearch" />
+
+            @if (recipes.Count > 0)
+            {
+                 <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
+            }
             
         }
 
