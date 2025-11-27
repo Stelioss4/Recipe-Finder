@@ -16,6 +16,7 @@
 @inject FavoriteService _favorite
 
 
+
 <PageTitle>Recipe Details</PageTitle>
 
 <div class="container mt-4">
@@ -64,13 +65,13 @@
                                     (@GetAmountForPeople(ParseAmount(ingredient.Amount))@ParseUnit(ingredient.Amount)) @ingredient.IngredientsName
                                 </label>
                                 <br />
-                                  <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)" hidden="@(isAuthenticated ? "hidden" : null)">
+                                <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/suche/produkte?search=@Uri.EscapeDataString(ingredient.IngredientsName)" hidden="@(isAuthenticated ? "hidden" : null)">
                                     REWE
                                 </a>
-                                <button class="btn btn-secondary" @onclick="()=>AddIngredientToShoppingList(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">
+                                <button class="btn btn-secondary" @onclick="() => AddIngredientToShoppingList(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">
                                     <i class="bi bi-bag-plus-fill"></i> Add to shopping list
                                 </button>
-                       
+
                             </li>
 
                         }
@@ -108,14 +109,19 @@
                         <textarea class="form-control" @bind="newReview.ReviewText"></textarea>
                     </div>
                 </div>
-                <button class="btn btn-primary" @onclick="()=>SubmitRatingAndReview(recipe)">Confirm your review and/or rating</button>
+                <button class="btn btn-primary" @onclick="() => SubmitRatingAndReview(recipe)">Confirm your review and/or rating</button>
             </div>
         </div>
     }
 
     @*     <a class="btn btn-danger" target="_blank" href="https://www.rewe.de/suche/produkte?search">REWE</a>
     *@
-    <button class="btn btn-primary fixed-bottom-right" @onclick="()=>AddRecipeToFavorite(recipe)" hidden="@(!isAuthenticated ? "hidden" : null)">Add To Fav</button>
+
+    @if (!isRecipeInFavorites)
+    {
+        <button class="btn btn-primary fixed-bottom-right" @onclick="() => AddRecipeToFavorite(recipe)" hidden="@(!isAuthenticated ? "hidden" : null)">Add To Fav</button>
+    }
+
 </div>
 <br />
 
@@ -148,6 +154,7 @@
 
     private bool isAuthenticated { get; set; }
 
+    private bool isRecipeInFavorites { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -163,7 +170,6 @@
         isAuthenticated = authState.User.Identity.IsAuthenticated;
         var uri = new Uri(Navigation.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-
         if (query.TryGetValue("url", out var urlValue))
         {
             Console.WriteLine($"Found url parameter: {urlValue}");
@@ -229,6 +235,8 @@
             Console.WriteLine("URL parameter not found; navigating to home.");
             Navigation.NavigateTo("/");
         }
+        await CheckIfRecipeInFavorites(recipe);
+
     }
 
     private double ParseAmount(string amount)
@@ -299,7 +307,7 @@
         else
         {
             Console.WriteLine("Recipe URL is null or empty."); // Log the issue
-                                                               // Handle accordingly, e.g., show a message to the user or fallback navigation
+            // Handle accordingly, e.g., show a message to the user or fallback navigation
         }
     }
 
@@ -324,5 +332,32 @@
     {
         await _favorite.AddFavoriteRecipeAsync(recipe);
         await InvokeAsync(StateHasChanged);
+        await Init();
+
+    }
+
+    private async Task<ApplicationUser> FindUserFromDatabase()
+    {
+        if (appUser != null)
+        {
+            appUser.User = await _dataService.GetUserByIdAsync();
+        }
+        return appUser;
+
+    }
+    private async Task CheckIfRecipeInFavorites(Recipe actualRecipe)
+    {
+        appUser = await FindUserFromDatabase();
+
+        if (appUser.User.FavoriteRecipes.Any(r => r.Id == actualRecipe.Id))
+        {
+            isRecipeInFavorites = true;
+        }
+        else
+        {
+            isRecipeInFavorites = false;
+        }
+        
+
     }
 }
