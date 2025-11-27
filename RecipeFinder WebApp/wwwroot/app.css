@@ -74,7 +74,7 @@
         border-bottom: 1px solid #4a3560 !important;
     }
 
-    /* Buttons dark */
+    /* Buttons dark (GLOBAL purple style) */
     .themeDark button,
     .themeDark .btn,
     .themeDark .btn-primary {
@@ -87,6 +87,22 @@
         .themeDark .btn:hover {
             background-color: #b987ff !important;
         }
+
+        /* ===========================================================
+       FIX: MAKE btn-danger RED IN DARK THEME (overrides global)
+       =========================================================== */
+        .themeDark button.btn.btn-danger,
+        .themeDark .btn.btn-danger {
+            background-color: #b30000 !important;
+            border-color: #ff4d4d !important;
+            color: #fff !important;
+        }
+
+            .themeDark button.btn.btn-danger:hover,
+            .themeDark .btn.btn-danger:hover {
+                background-color: #cc0000 !important;
+                border-color: #ff6666 !important;
+            }
 
     /* Search box / cards */
     .themeDark .card,
@@ -168,16 +184,17 @@ a, .btn-link {
 .validation-message {
     color: #e50000;
 }
+
 .themeLight .why-box {
     background-color: transparent;
 }
 
 .themeDark .why-box {
-    background-color: #1e1e1e; 
-    border: 1px solid #3c3c3c; 
+    background-color: #1e1e1e;
+    border: 1px solid #3c3c3c;
     border-radius: 10px;
     padding: 25px;
-    box-shadow: 0 0 20px rgba(147, 112, 219, 0.2); 
+    box-shadow: 0 0 20px rgba(147, 112, 219, 0.2);
     transition: background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -186,6 +203,7 @@ a, .btn-link {
         color: #d4d4d4;
         border-color: #3c3c3c;
     }
+
 .why-box-center {
     text-align: center;
 }
@@ -193,4 +211,3 @@ a, .btn-link {
     .why-box-center .list-group-item {
         text-align: center;
     }
-
