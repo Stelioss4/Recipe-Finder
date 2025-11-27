@@ -158,6 +158,11 @@
     }
     private bool CheckIfRecipeInFavorites(Recipe recipe)
     {
+        if(appUser == null || appUser.User == null || appUser.User.FavoriteRecipes == null)
+        {
+            return false;
+        }
+
         return appUser.User.FavoriteRecipes.Any(r => r.Id == recipe.Id);
     }
 

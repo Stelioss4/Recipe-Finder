@@ -347,17 +347,21 @@
     }
     private async Task CheckIfRecipeInFavorites(Recipe actualRecipe)
     {
-        appUser = await FindUserFromDatabase();
-
-        if (appUser.User.FavoriteRecipes.Any(r => r.Id == actualRecipe.Id))
-        {
-            isRecipeInFavorites = true;
-        }
-        else
+        if (!isAuthenticated)
         {
             isRecipeInFavorites = false;
+            return;
         }
-        
 
+        appUser = await FindUserFromDatabase();
+
+        if (appUser?.User?.FavoriteRecipes == null || actualRecipe == null)
+        {
+            isRecipeInFavorites = false;
+            return;
+        }
+
+        isRecipeInFavorites = appUser.User.FavoriteRecipes.Any(r => r.Id == actualRecipe.Id);
     }
+
 }
