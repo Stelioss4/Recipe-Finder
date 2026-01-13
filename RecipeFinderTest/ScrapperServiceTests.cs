@@ -7,31 +7,34 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-public class SaveScrapedRecipesTests
+namespace RecipeFinderTest
 {
-   
-    [Fact]
-    public async Task SaveScrapedRecipesAsync_PersistsRecipesInDatabase()
+    public class SaveScrapedRecipesTests
     {
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
 
-        var factory = new TestDbContextFactory(options);
-        var service = new RecipePersistenceService(factory);
-
-
-        using var context = factory.CreateDbContext();
-
-        var recipes = new List<Recipe>
+        [Fact]
+        public async Task SaveScrapedRecipesAsync_PersistsRecipesInDatabase()
         {
-            new Recipe { RecipeName = "Test1", CookingInstructions = "do it" },
-            new Recipe { RecipeName = "Test2", CookingInstructions = "do it again" }
-        };
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
 
-        await service.SaveScrapedRecipesAsync(recipes);
+            var factory = new TestDbContextFactory(options);
+            var service = new RecipePersistenceService(factory);
 
-        var saved = await context.Recipes.ToListAsync();
-        Assert.Equal(2, saved.Count);
+
+            using var context = factory.CreateDbContext();
+
+            var recipes = new List<Recipe>
+            {
+                new Recipe { RecipeName = "Test1", CookingInstructions = "do it" },
+                new Recipe { RecipeName = "Test2", CookingInstructions = "do it again" }
+            };
+
+            await service.SaveScrapedRecipesAsync(recipes);
+
+            var saved = await context.Recipes.ToListAsync();
+            Assert.Equal(2, saved.Count);
+        }
     }
 }
