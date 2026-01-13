@@ -52,6 +52,7 @@ builder.Services.AddScoped<FavoriteService>();
 builder.Services.AddHttpClient<GroceryService>();
 builder.Services.AddSingleton<ThemeService>();
 builder.Services.AddTransient<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddScoped<ScrapeReportService>();
 
 
 

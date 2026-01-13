@@ -51,6 +51,15 @@ namespace RecipeFinder_WebApp.Data
             return new List<Recipe>();
         }
 
+        public async Task SaveScrapedRecipesAsync(ApplicationDbContext context, List<Recipe> detailedRecipes)
+        {
+            if (detailedRecipes == null || detailedRecipes.Count == 0)
+                return;
+
+            context.Recipes.AddRange(detailedRecipes);
+            await context.SaveChangesAsync();
+        }
+
         /// <summary>
         /// Get an Authenticate User with all of their properties.
         /// </summary>

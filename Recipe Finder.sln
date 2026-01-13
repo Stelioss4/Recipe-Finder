@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipe Finder", "Recipe Fin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeFinder WebApp", "RecipeFinder WebApp\RecipeFinder WebApp.csproj", "{511A457B-1EA3-4A0D-9757-D45C3D37AD3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeFinderTest", "RecipeFinderTest\RecipeFinderTest.csproj", "{FA4AF01D-96C6-44AE-8856-CC9874AB171E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{511A457B-1EA3-4A0D-9757-D45C3D37AD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{511A457B-1EA3-4A0D-9757-D45C3D37AD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{511A457B-1EA3-4A0D-9757-D45C3D37AD3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA4AF01D-96C6-44AE-8856-CC9874AB171E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA4AF01D-96C6-44AE-8856-CC9874AB171E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA4AF01D-96C6-44AE-8856-CC9874AB171E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA4AF01D-96C6-44AE-8856-CC9874AB171E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
+using RecipeFinder_WebApp.Services;
 
 namespace RecipeFinder_WebApp.Data
 {
@@ -11,16 +12,18 @@ namespace RecipeFinder_WebApp.Data
         private DataService _dataService;
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
         private readonly IEmailSender _emailSender;
+        private readonly ScrapeReportService _scrapeReportService;
 
         List<ScrapeCheckResult> scrapeResults = new List<ScrapeCheckResult>();
 
 
-        public ScrapperService(HttpClient httpClient, DataService ds, IDbContextFactory<ApplicationDbContext> contextFactory, IEmailSender emailSender)
+        public ScrapperService(HttpClient httpClient, DataService ds, IDbContextFactory<ApplicationDbContext> contextFactory, IEmailSender emailSender, ScrapeReportService scrapeReportService)
         {
             _httpClient = httpClient;
             _dataService = ds;
             _contextFactory = contextFactory;
             _emailSender = emailSender;
+            _scrapeReportService = scrapeReportService;
         }
 
         public async Task<List<Recipe>> ScrapeFromAllRecipe(string searchQuery)
@@ -284,61 +287,11 @@ namespace RecipeFinder_WebApp.Data
                 return new List<Recipe>(); // Return an empty list if no search results are found
             }
 
-            List<Recipe> detailedRecipes = new List<Recipe>();
+            List<Recipe> detailedRecipes = await ScrapeDetailsForSearchResults(searchQuery, Constants.CHEFKOCH_URL, searchResults, existingRecipes);
 
-            foreach (var recipe in searchResults)
-            {
-                // Skip recipes that are already in the database
-                if (existingRecipes.Any(r => r.Url == recipe.Url))
-                {
-                    continue;
-                }
+            await _scrapeReportService.SendScrapeReportEmailAsync(scrapeResults);
 
-                // Scrape details and add new recipes
-                recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } }; // Set the search terms
-                recipe.SourceDomain = Constants.CHEFKOCH_URL; // Set the SourceDomain
-                Recipe detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
-                if (detailedRecipe != null && detailedRecipe.CookingInstructions != null) // Ensure detailedRecipe is not null before adding
-                {
-                    detailedRecipes.Add(detailedRecipe);
-                }
-            }
-
-            // Get all checks
-            var failed = scrapeResults.Where(r => !r.IsSuccess).ToList();
-            var success = scrapeResults.Where(r => r.IsSuccess).ToList();
-            if (failed.Any())
-            {
-                var message = "Scraping completed but some nodes failed:\n\n";
-
-                foreach (var fail in failed)
-                {
-                    message += $"- Recipe: {fail.RecipeName} ({fail.RecipeUrl}), Missing: {fail.FailedNode}\n";
-                }
-
-                await _emailSender.SendEmailAsync(Constants.ADMIN_EMAIL, "Scraping Issues Detected", message);
-            }
-            else
-            {
-                if (success.Any())
-                {
-                    var message = "Scraping completed successfully for all recipes:\n\n";
-                    foreach (var suc in success)
-                    {
-                        message += $"- Recipe: {suc.RecipeName} ({suc.RecipeUrl})\n";
-                    }
-                }
-                // Optionally, send a success email or log success
-                await _emailSender.SendEmailAsync(Constants.ADMIN_EMAIL, "✅ Scraping Successful", "All recipes scraped successfully with no issues detected.");
-            }
-
-
-            // Add new recipes to the database
-            if (detailedRecipes.Count > 0)
-            {
-                _context.Recipes.AddRange(detailedRecipes);
-                await _context.SaveChangesAsync();
-            }
+            await _dataService.SaveScrapedRecipesAsync(_context, detailedRecipes);
 
             return detailedRecipes;
         }
@@ -657,6 +610,48 @@ namespace RecipeFinder_WebApp.Data
             }
 
             return false;
+        }
+
+        public async Task<List<Recipe>> ScrapeDetailsForSearchResults(string searchQuery, string sourceDomain, List<Recipe> searchResults, List<Recipe> existingRecipes)
+        {
+
+            List<Recipe> detailedRecipes = new List<Recipe>();
+
+            foreach (var recipe in searchResults)
+            {
+                // Skip recipes that are already in the database
+                if (existingRecipes.Any(r => r.Url == recipe.Url))
+                {
+                    continue;
+                }
+
+                // Scrape details and add new recipes
+                recipe.SearchTerms = new List<RecipeSearchTerm> { new RecipeSearchTerm { Term = searchQuery } };
+                // Set the search terms
+                recipe.SourceDomain = sourceDomain;
+
+                Recipe detailedRecipe = null;
+
+                if (sourceDomain == Constants.CHEFKOCH_URL)
+                {
+                    detailedRecipe = await ScrapeCKDetailsAndUpdateRecipe(recipe);
+                }
+                else if (sourceDomain == Constants.ALLRECIPE_URL)
+                {
+                    detailedRecipe = await ScrapeAllRecipesDetailsAndUpdateRecipe(recipe);
+                }
+                else
+                {
+                    continue;
+                }
+
+                if (detailedRecipe != null && detailedRecipe.CookingInstructions != null)
+                {
+                    detailedRecipes.Add(detailedRecipe);
+                }
+            }
+
+            return detailedRecipes;
         }
     }
 }
