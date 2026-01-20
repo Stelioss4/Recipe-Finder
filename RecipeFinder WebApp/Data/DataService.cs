@@ -51,6 +51,15 @@ namespace RecipeFinder_WebApp.Data
             return new List<Recipe>();
         }
 
+        /// <summary>
+        /// Saves a collection of detailed recipes to the database asynchronously.
+        /// </summary>
+        /// <remarks>If the <paramref name="detailedRecipes"/> list is <see langword="null"/> or empty,
+        /// the method will return without performing any operation.</remarks>
+        /// <param name="context">The database context used to save the recipes. Cannot be <see langword="null"/>.</param>
+        /// <param name="detailedRecipes">A list of <see cref="Recipe"/> objects to be saved. The list must not be <see langword="null"/> and must
+        /// contain at least one recipe.</param>
+        /// <returns>A task that represents the asynchronous save operation.</returns>
         public async Task SaveScrapedRecipesAsync(ApplicationDbContext context, List<Recipe> detailedRecipes)
         {
             if (detailedRecipes == null || detailedRecipes.Count == 0)
@@ -96,6 +105,11 @@ namespace RecipeFinder_WebApp.Data
             }
         }
 
+        /// <summary>
+        /// Get an Authenticate User's User with all of their properties.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
         public async Task<User> GetUserByIdAsync()
         {
             try
@@ -154,6 +168,15 @@ namespace RecipeFinder_WebApp.Data
             return (averageRating, reviews);
         }
 
+        /// <summary>
+        /// Submits a new rating and review for a specified recipe by the authenticated user.
+        /// </summary>
+        /// <param name="recipe"></param>
+        /// <param name="newRating"></param>
+        /// <param name="newReview"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task SubmitRatingAndReview(Recipe recipe, Rating newRating, Review newReview)
         {
 
