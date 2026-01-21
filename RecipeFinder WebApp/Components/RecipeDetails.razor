@@ -65,13 +65,21 @@
                                     (@GetAmountForPeople(ParseAmount(ingredient.Amount))@ParseUnit(ingredient.Amount)) @ingredient.IngredientsName
                                 </label>
                                 <br />
-                                <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/shop/productList?search=@Uri.EscapeDataString(ingredient.IngredientsName)" hidden="@(isAuthenticated ? "hidden" : null)">
-                                    REWE
-                                </a>
-                                <button class="btn btn-secondary" @onclick="() => AddIngredientToShoppingList(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">
-                                    <i class="bi bi-bag-plus-fill"></i> Add to shopping list
-                                </button>
-
+                                @if (!CheckIfIngredientInShoppingList(ingredient))
+                                {
+                                    <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/shop/productList?search=@Uri.EscapeDataString(ingredient.IngredientsName)" hidden="@(isAuthenticated ? "hidden" : null)">
+                                        REWE
+                                    </a>
+                                    <button class="btn btn-secondary" @onclick="() => AddIngredientToShoppingList(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">
+                                        <i class="bi bi-bag-plus-fill"></i> Add to shopping list
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary" @onclick="() => RemoveIngredient(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">
+                                        <i class="bi bi-bag-plus-fill"></i> Remove from shopping list
+                                    </button>
+                                }
                             </li>
 
                         }
@@ -294,7 +302,17 @@
     private async Task AddIngredientToShoppingList(Ingredient ingredient)
     {
         await _favorite.AddIngredientsToShoppingList(ingredient);
+        await InvokeAsync(StateHasChanged);
+        await Init();
     }
+
+    private async Task RemoveIngredient(Ingredient ingredient)
+    {
+        await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
+        await InvokeAsync(StateHasChanged);
+        await Init();
+    }
+
 
     private void NavigateToReviews()
     {
@@ -362,6 +380,15 @@
         }
 
         isRecipeInFavorites = appUser.User.FavoriteRecipes.Any(r => r.Id == actualRecipe.Id);
+    }
+
+    private bool CheckIfIngredientInShoppingList(Ingredient ingredient)
+    {
+        if (appUser == null || appUser.User == null || appUser.User.ShoppingList == null)
+        {
+            return false;
+        }
+        return appUser.User.ShoppingList.Any(i => i.Id == ingredient.Id);
     }
 
 }
