@@ -70,14 +70,36 @@
                                     <a class="btn btn-danger btn-sm" target="_blank" href="https://www.rewe.de/shop/productList?search=@Uri.EscapeDataString(ingredient.IngredientsName)" hidden="@(isAuthenticated ? "hidden" : null)">
                                         REWE
                                     </a>
-                                    <button class="btn btn-secondary" @onclick="() => AddIngredientToShoppingList(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">
-                                        <i class="bi bi-bag-plus-fill"></i> Add to shopping list
+                                    <button class="btn btn-secondary"
+                                          @onclick="() => AddIngredientToShoppingList(ingredient)"
+                                          disabled="@(Loading && LoadingIngredientId == ingredient.Id)"
+                                          hidden="@(!isAuthenticated ? "hidden" : null)">
+                                     @if (Loading && LoadingIngredientId == ingredient.Id)
+                                     {
+                                          <span class="spinner-border spinner-border-sm me-2"></span>
+                                          <span>Adding...</span>
+                                     }
+                                     else
+                                     {
+                                          <i class="bi bi-bag-plus-fill"></i> <span>Add to shopping list</span>
+                                     }
                                     </button>
                                 }
                                 else
                                 {
-                                    <button class="btn btn-secondary" @onclick="() => RemoveIngredient(ingredient)" hidden="@(!isAuthenticated ? "hidden" : null)">
-                                        <i class="bi bi-bag-plus-fill"></i> Remove from shopping list
+                                    <button class="btn btn-secondary"
+                                          @onclick="() => RemoveIngredient(ingredient)"
+                                          disabled="@(Loading && LoadingIngredientId == ingredient.Id)"
+                                          hidden="@(!isAuthenticated ? "hidden" : null)">
+                                      @if (Loading && LoadingIngredientId == ingredient.Id)
+                                      {
+                                          <span class="spinner-border spinner-border-sm me-2"></span>
+                                          <span>Removing...</span>
+                                      }
+                                      else
+                                      {
+                                          <i class="bi bi-bag-plus-fill"></i> <span>Remove from shopping list</span>
+                                      }
                                     </button>
                                 }
                             </li>
@@ -163,6 +185,11 @@
     private bool isAuthenticated { get; set; }
 
     private bool isRecipeInFavorites { get; set; }
+
+    private bool Loading = false;
+
+    private int LoadingIngredientId = 0;
+
 
 
     protected override async Task OnInitializedAsync()
@@ -301,15 +328,24 @@
 
     private async Task AddIngredientToShoppingList(Ingredient ingredient)
     {
+        Loading = true;
+        LoadingIngredientId = ingredient.Id;
+
         await _favorite.AddIngredientsToShoppingList(ingredient);
-        await InvokeAsync(StateHasChanged);
+        Loading = false;
+        LoadingIngredientId = 0;
         await Init();
     }
 
     private async Task RemoveIngredient(Ingredient ingredient)
     {
+        Loading = true;
+        LoadingIngredientId = ingredient.Id;
+
         await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
-        await InvokeAsync(StateHasChanged);
+
+        Loading = false;
+        LoadingIngredientId = 0;
         await Init();
     }
 
