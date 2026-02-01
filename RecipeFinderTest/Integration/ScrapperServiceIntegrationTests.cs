@@ -2,6 +2,7 @@
 using Recipe_Finder;
 using RecipeFinder_WebApp.Data;
 using RecipeFinderTest;
+using RecipeFinderTest.Integration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,8 +28,8 @@ namespace RecipeFinderTest
 
             var recipes = new List<Recipe>
             {
-                new Recipe { RecipeName = "Test1", CookingInstructions = "do it" },
-                new Recipe { RecipeName = "Test2", CookingInstructions = "do it again" }
+                new Recipe { RecipeName = "Test1", CookingInstructions = "do it" , Id = 1 , Rating = 4.4 , ListOfIngredients = new List<Ingredient>{new Ingredient { IngredientsName = "something" },new Ingredient { IngredientsName = "something more" }}},
+                new Recipe { RecipeName = "Test2", CookingInstructions = "do it again" , Id = 2 , Rating = 4.4 ,  ListOfIngredients = new List<Ingredient>{new Ingredient { IngredientsName = "something1" },new Ingredient { IngredientsName = "something more1" }}}
             };
 
             await service.SaveScrapedRecipesAsync(recipes);

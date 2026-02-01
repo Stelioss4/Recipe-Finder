@@ -1,4 +1,4 @@
-namespace RecipeFinderTest
+namespace RecipeFinderTest.Unit
 {
     public class UnitTest1
     {

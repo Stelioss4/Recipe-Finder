@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecipeFinderTest
+namespace RecipeFinderTest.Integration
 {
     public class TestDbContextFactory : IDbContextFactory<ApplicationDbContext>
     {
