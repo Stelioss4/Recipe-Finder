@@ -44,7 +44,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddTransient<IEmailSender, RecipeFinder_WebApp.Services.EmailSender>();
+builder.Services.AddTransient<IEmailSender,EmailSender>();
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<ScrapperService>();
 builder.Services.AddScoped<WeeklyPlanService>();

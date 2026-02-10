@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
-using RecipeFinder_WebApp.Services;
 
 namespace RecipeFinder_WebApp.Data
 {

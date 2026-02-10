@@ -4,7 +4,9 @@
 @using System.Security.Claims
 @using Recipe_Finder
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity.UI.Services
 
+@inject IEmailSender EmailSender
 @inject SignInManager<ApplicationUser> SignInManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ScrapperService Scrap
@@ -188,6 +190,9 @@
                     {
                         ToastService.ShowSuccess("Your weekly plan has expired. You can now create a new one!");
                         weeklyPlanExpiredToastShown = true;
+
+                        await  EmailSender.SendEmailAsync(appUser.Email, "Weekly Plan Expired", "Your weekly meal plan has expired. Please log in to your profile to create a new one.");
+
                     }
                 }
             }

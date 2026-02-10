@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace RecipeFinder_WebApp.Services
+namespace RecipeFinder_WebApp.Data
 {
     public class EmailSender : IEmailSender
     {
