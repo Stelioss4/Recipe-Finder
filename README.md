@@ -1,82 +1,137 @@
 # Recipe Finder 🍽️
 
-About the Project
+## Overview
 
-Recipe Finder is a web application designed to help users search, save, and manage their favorite recipes. With an intuitive user interface and powerful features, users can explore various recipes, generate meal plans, and even add ingredients to their shopping list.
+RecipeFinder is a full-stack web application built with ASP.NET Core and Blazor.
 
-### Features ✨
+The application aggregates recipes from external sources, stores them in a structured relational database and generates a personalized weekly meal plan for each user.
+The focus of the project is not simple content display but real application logic such as data processing, background tasks and user specific functionality.
 
-- 🔍 Recipe Search: Find delicious recipes from various sources.
+Live application:
+https://www.recipefinderwebapp.com/
 
-- ❤️ Favorite Recipes: Save and manage a list of your favorite dishes.
+---
 
-- 📅 Weekly Meal Planner: Generate a structured meal plan with your favorite recipes.
+## Main Features ✨
 
-- 🛒 Shopping List: Add ingredients to a shopping list and link to online stores for purchasing.
+* Recipe collection and storage from external sources
+* Favorite recipes management
+* Personalized weekly meal plan generation
+* Ingredient handling and shopping list creation
+* User authentication and accounts
+* Ratings and reviews
+* Automatic weekly plan expiration handling
+* Email notification when a new weekly plan can be created
 
-- 📊 User Ratings & Reviews: Rate recipes and leave reviews to share your experience.
+---
 
-- 👤 User Authentication: Secure login and demo account for new users.
+## Tech Stack 🛠️
 
-### Live Demo 🌍
+**Backend:** ASP.NET Core (.NET, C#)
+**Frontend:** Blazor
+**Database:** MySQL with Entity Framework Core
+**Authentication:** ASP.NET Core Identity
+**Version Control:** Git / GitHub
+**Hosting:** Remote Linux server
 
-🔗 [Visit Recipe Finder](https://www.recipefinderwebapp.com/)
+---
 
-Getting Started 🚀
+## Architecture
 
+The application follows a service-based structure with separation of concerns.
+
+Business logic is implemented in services instead of UI components to keep components lightweight and maintainable.
+
+Core services:
+
+`DataService`
+Handles database communication and user related data retrieval.
+
+`ScrapperService`
+Collects and parses recipe data from external websites and converts it into structured entities.
+
+`WeeklyPlanService`
+Creates, stores and manages weekly meal plans per user.
+
+`FavoriteService`
+Manages favorite recipes and user selections.
+
+This structure allows the UI to remain simple while most logic is handled in reusable backend services.
+
+---
+
+## Challenges & Technical Decisions
+
+During development several non-trivial problems had to be solved:
+
+* Preventing duplicate recipes when scraping from different sources
+* Designing a consistent ingredient and amount structure
+* Deciding between caching and database queries for performance
+* Persisting user specific weekly plans over time
+* Handling expiration of weekly plans
+* Triggering user notifications when a new plan becomes available
+
+The project required repeated refactoring, debugging and data model changes while features were added.
+
+---
+
+## Getting Started 🚀
 
 ### Prerequisites
 
-- .NET 7.0+ (for backend services)
+* .NET 8 SDK
+* MySQL Server
+* Visual Studio (recommended)
 
-- Blazor (frontend framework)
+### Setup
 
-- MySQL (database)
+1. Clone the repository
 
-- Visual Studio (recommended for development)
+```
+git clone https://github.com/Stelioss4/Recipe-Finder.git
+cd Recipe-Finder
+```
 
-- Installation
+2. Configure the database connection string inside:
 
-### Clone the repository:
+```
+appsettings.json
+```
 
-[git clone https://github.com/your-username/recipe-finder.git
-cd recipe-finder](https://github.com/Stelioss4/Recipe-Finder.git)
+3. Apply database migrations
 
-### Set up the database:
-
+```
 dotnet ef database update
+```
 
-### Run the application:
+4. Run the application
 
+```
 dotnet run
+```
 
-## Technologies Used 🛠️
+The database will be created automatically after migrations are applied.
 
-- Frontend: Blazor WebAssembly
+---
 
-- Backend: ASP.NET Core
+## Purpose of the Project
 
-- Database: MySQL
+This project was created as a hands-on learning project to simulate real world software development.
+The goal was to gain practical experience in database design, debugging, background logic, user management and maintaining a growing codebase.
 
-- Authentication: ASP.NET Identity
+Instead of focusing on tutorials, the project was built by solving actual problems that appeared during development.
 
-- Hosting: Published via a remote server
+---
 
-## Contribution 🤝
+## Demo Video
 
-Feel free to submit pull requests or report issues. Contributions are always welcome!
+You can watch a demonstration of the application here:
+https://www.youtube.com/@stylianosboursanidis5247
 
-## Check out the demo video
+---
 
-You can watch a demo of **Recipe Finder** on YouTube: [Watch on YouTube](https://www.youtube.com/@stylianosboursanidis5247)
+## Contact
 
-## Contact 📬
-
-- LinkedIn: [My LinkedIn Profile
-](https://www.linkedin.com/in/stylianos-boursanidis-1502b32aa/)
-
-- GitHub: [My GitHub](https://github.com/Stelioss4)
-
-- Portfolio: [Stelios Boursanidis](https://www.steliosboursanidis.com/)
-
-- Application: [Recipe-Finder](https://www.recipefinderwebapp.com/)
+LinkedIn: https://www.linkedin.com/in/stylianos-boursanidis-1502b32aa/
+GitHub: https://github.com/Stelioss4
+Portfolio: https://www.steliosboursanidis.com/
