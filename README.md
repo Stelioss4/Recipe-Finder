@@ -95,7 +95,13 @@ cd Recipe-Finder
 2. Configure the database connection string inside:
 
 ```
-appsettings.json
+Create a local configuration file
+
+Copy the example configuration and adjust it to your environment:
+
+copy appsettings.example.json appsettings.json
+
+After that update the database connection string and (optionally) SMTP settings.
 ```
 
 3. Apply database migrations
