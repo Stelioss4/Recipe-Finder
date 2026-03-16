@@ -1,44 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Recipe_Finder
+﻿namespace Recipe_Finder
 {
     public class ScrapeCheckResult
     {
-		private string _recipeURL;
+        private string _recipeURL;
 
-		public string RecipeUrl
+        public string RecipeUrl
         {
-			get { return _recipeURL; }
-			set { _recipeURL = value; }
-		}
+            get { return _recipeURL; }
+            set { _recipeURL = value; }
+        }
 
-		private string _recipeName;
+        private string _recipeName;
 
-		public string RecipeName
+        public string RecipeName
         {
-			get { return _recipeName; }
-			set { _recipeName = value; }
-		}
+            get { return _recipeName; }
+            set { _recipeName = value; }
+        }
 
-		private string _failedNode;
+        private string _checkedNode;
 
-		public string FailedNode
-		{
-			get { return _failedNode; }
-			set { _failedNode = value; }
-		}
+        public string CheckedNode
+        {
+            get { return _checkedNode; }
+            set { _checkedNode = value; }
+        }
 
-		private bool _IsSuccess;
+        private bool _isSuccess;
 
-		public bool IsSuccess
-		{
-			get { return _IsSuccess; }
-			set { _IsSuccess = value; }
-		}
+        public bool IsSuccess
+        {
+            get { return _isSuccess; }
+            set { _isSuccess = value; }
+        }
 
-	}
+        private string _message;
+
+        public string Message
+        {
+            get { return _message; }
+            set { _message = value; }
+        }
+
+        private string _extractedValue;
+
+        public string ExtractedValue
+        {
+            get { return _extractedValue; }
+            set { _extractedValue = value; }
+        }
+    }
 }

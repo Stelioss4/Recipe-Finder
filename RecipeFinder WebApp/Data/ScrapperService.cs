@@ -417,7 +417,7 @@ namespace RecipeFinder_WebApp.Data
                     {
                         RecipeUrl = searchResultRecipe.Url,
                         RecipeName = searchResultRecipe.RecipeName,
-                        FailedNode = "CookingInstructions",
+                        CheckedNode = "CookingInstructions",
                         IsSuccess = true
                     });
                 }
@@ -429,7 +429,7 @@ namespace RecipeFinder_WebApp.Data
                     {
                         RecipeUrl = searchResultRecipe.Url,
                         RecipeName = searchResultRecipe.RecipeName,
-                        FailedNode = "CookingInstructions",
+                        CheckedNode = "CookingInstructions",
                         IsSuccess = false
                     });
                 }
@@ -526,7 +526,7 @@ namespace RecipeFinder_WebApp.Data
                         {
                             RecipeUrl = searchResultRecipe.Url,
                             RecipeName = searchResultRecipe.RecipeName,
-                            FailedNode = "Ingredients",
+                            CheckedNode = "Ingredients",
                             IsSuccess = true
                         });
                     }
@@ -536,7 +536,7 @@ namespace RecipeFinder_WebApp.Data
                         {
                             RecipeUrl = searchResultRecipe.Url,
                             RecipeName = searchResultRecipe.RecipeName,
-                            FailedNode = "Ingredients",
+                            CheckedNode = "Ingredients",
                             IsSuccess = false
                         });
                     }
@@ -547,7 +547,7 @@ namespace RecipeFinder_WebApp.Data
                     {
                         RecipeUrl = searchResultRecipe.Url,
                         RecipeName = searchResultRecipe.RecipeName,
-                        FailedNode = "Ingredients",
+                        CheckedNode = "Ingredients",
                         IsSuccess = false
                     });
                 }

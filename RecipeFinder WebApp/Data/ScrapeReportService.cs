@@ -27,7 +27,7 @@ namespace RecipeFinder_WebApp.Data
 
                 foreach (var fail in failed)
                 {
-                    message += $"- Recipe: {fail.RecipeName} ({fail.RecipeUrl}), Missing: {fail.FailedNode}\n";
+                    message += $"- Recipe: {fail.RecipeName} ({fail.RecipeUrl}), Missing: {fail.CheckedNode}\n";
                 }
 
                 await _emailSender.SendEmailAsync(Constants.ADMIN_EMAIL, "Scraping Issues Detected", message);
