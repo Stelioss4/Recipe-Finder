@@ -446,6 +446,44 @@ namespace RecipeFinder_WebApp.Data
                     });
                 }
 
+                // Parse Nutrition Information
+                for (int sectionIndex = 2; sectionIndex <= 4; sectionIndex++)
+                {
+                    var candidateSection = document.DocumentNode.SelectSingleNode(
+                        $"//*[@id='__nuxt']/main/div[1]/section[{sectionIndex}]");
+
+                    if (candidateSection == null)
+                        continue;
+
+                    var divNodes = candidateSection.SelectNodes(".//div");
+
+                    if (divNodes == null)
+                        continue;
+
+                    foreach (var node in divNodes)
+                    {
+                        var text = HtmlEntity.DeEntitize(node.InnerText).Trim();
+
+                        if (IsProbablyNutritionText(text))
+                        {
+                            searchResultRecipe.NutritionValue = new NutritionValue
+                            {
+                                Calories = ExtractNutritionValue(text, "kcal"),
+                                Protein = ExtractNutritionValue(text, "eiweiß")
+                                          ?? ExtractNutritionValue(text, "eiweiss")
+                                          ?? ExtractNutritionValue(text, "protein"),
+                                Fat = ExtractNutritionValue(text, "fett"),
+                                Carbohydrates = ExtractNutritionValue(text, "kohlenhydrate"),
+                                RawText = text
+                            };
+
+                            break;
+                        }
+                    }
+
+                    if (searchResultRecipe.NutritionValue != null)
+                        break;
+                }
 
 
                 // Parse Video URL if available
@@ -594,6 +632,10 @@ namespace RecipeFinder_WebApp.Data
             return false;
         }
 
+
+        // =====================
+        // NUTRITION HELPERS
+        // =====================
         private bool IsProbablyNutritionText(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -609,7 +651,44 @@ namespace RecipeFinder_WebApp.Data
                 || lower.Contains("kohlenhydrate")
                 || lower.Contains("protein");
         }
+        private double? ExtractNutritionValue(string text, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(keyword))
+                return null;
 
+            var lowerText = text.ToLowerInvariant();
+            keyword = keyword.ToLowerInvariant();
+
+            if (!lowerText.Contains(keyword))
+                return null;
+
+            int index = lowerText.IndexOf(keyword);
+
+            // Take a chunk before keyword (last ~20 chars is enough)
+            int start = Math.Max(0, index - 20);
+            var snippet = lowerText.Substring(start, index - start);
+
+            // Replace comma with dot (German → invariant)
+            snippet = snippet.Replace(",", ".");
+
+            // Extract number using regex
+            var match = System.Text.RegularExpressions.Regex.Match(snippet, @"\d+(\.\d+)?");
+
+            if (match.Success)
+            {
+                if (double.TryParse(match.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double value))
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+
+        // =====================
+        // INSTRUCTION HELPERS
+        // =====================
         private bool IsValidInstructionsNode(HtmlNode node)
         {
             // Define the criteria for a valid instructions node
@@ -726,6 +805,8 @@ namespace RecipeFinder_WebApp.Data
 
             return detailedRecipes;
         }
+
+       
     }
 }
 
