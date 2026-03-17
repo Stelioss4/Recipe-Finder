@@ -279,7 +279,7 @@ namespace RecipeFinder_WebApp.Data
             {
                 return existingRecipes;
             }
-            // If not found, scrape new recipes
+           // If not found, scrape new recipes
             var searchResults = await ScrapeSearchResultsFromChefKoch(searchQuery);
             if (searchResults == null || !searchResults.Any())
             {
@@ -399,18 +399,24 @@ namespace RecipeFinder_WebApp.Data
                 // Try to select the instructions node directly with the new XPath
                 for (int i = 2; ; i++) // start from 2 because position() > 1
                 {
-                    var node = document.DocumentNode
-                        .SelectSingleNode($"//section[position()=2 or position()=3]/div[{i}]\r\n");
+                    var divNodes = document.DocumentNode
+                        .SelectNodes($"//section[position()=2 or position()=3]/div[{i}]\r\n");
 
-                    if (node == null) // stop when no more divs are found
-                        break;
+                    if (divNodes == null) // stop when no more divs are found
+                            break;
 
-                    if (IsValidInstructionsNode(node))
+                    if (divNodes != null)
                     {
-                        searchResultRecipe.CookingInstructions += node.InnerText.Trim();
+                        foreach (var node in divNodes)
+                        {
+                            if (IsValidInstructionsNode(node))
+                            {
+                                searchResultRecipe.CookingInstructions += HtmlEntity.DeEntitize(node.InnerText).Trim() + Environment.NewLine;
+                            }
+                        }
                     }
-
                 }
+
                 if (!string.IsNullOrWhiteSpace(searchResultRecipe.CookingInstructions))
                 {
                     scrapeResults.Add(new ScrapeCheckResult
@@ -418,7 +424,11 @@ namespace RecipeFinder_WebApp.Data
                         RecipeUrl = searchResultRecipe.Url,
                         RecipeName = searchResultRecipe.RecipeName,
                         CheckedNode = "CookingInstructions",
-                        IsSuccess = true
+                        IsSuccess = true,
+                        Message = "Cooking instructions extracted successfully.",
+                        ExtractedValue = searchResultRecipe.CookingInstructions.Length > 200
+                            ? searchResultRecipe.CookingInstructions.Substring(0, 200) + "..."
+                            : searchResultRecipe.CookingInstructions
                     });
                 }
                 else
@@ -430,7 +440,9 @@ namespace RecipeFinder_WebApp.Data
                         RecipeUrl = searchResultRecipe.Url,
                         RecipeName = searchResultRecipe.RecipeName,
                         CheckedNode = "CookingInstructions",
-                        IsSuccess = false
+                        IsSuccess = false,
+                        Message = "No valid instructions section could be identified.",
+                        ExtractedValue = string.Empty
                     });
                 }
 
@@ -560,6 +572,80 @@ namespace RecipeFinder_WebApp.Data
 
             return searchResultRecipe;
 
+            }
+
+
+        private bool IsProbablyPreparationTime(string text)
+        {
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                var lowerText = text.ToLower().Trim();
+
+                if (lowerText.Contains("arbeitszeit") ||
+                    lowerText.Contains("kochzeit") ||
+                    lowerText.Contains("zubereitungszeit") ||
+                    lowerText.Contains("min.") ||
+                    lowerText.Contains("std."))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsProbablyNutritionText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            var lower = text.ToLowerInvariant();
+
+            return lower.Contains("kcal")
+                || lower.Contains("energie")
+                || lower.Contains("eiweiß")
+                || lower.Contains("eiweiss")
+                || lower.Contains("fett")
+                || lower.Contains("kohlenhydrate")
+                || lower.Contains("protein");
+        }
+
+        private bool IsValidInstructionsNode(HtmlNode node)
+        {
+            // Define the criteria for a valid instructions node
+            // For example, check if the node contains a specific class or id, or contains a certain amount of text
+            if (node != null)
+            {
+                var text = HtmlEntity.DeEntitize(node.InnerText).Trim();
+
+                // Check if the text is empty
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    return false;
+                }
+
+                // Reject preparation time or similar metadata
+                if (IsProbablyPreparationTime(text))
+                {
+                    return false;
+                }
+
+                // Reject nutrition related text
+                if (IsProbablyNutritionText(text))
+                {
+                    return false;
+                }
+
+                // Example criteria: node must contain a minimum amount of text
+                if (text.Length < 20)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<byte[]> DownloadImageAsByteArray(string imageUrl, string baseUrl = null)
@@ -598,18 +684,6 @@ namespace RecipeFinder_WebApp.Data
                     .ToList();
         }
 
-        private bool IsValidInstructionsNode(HtmlNode node)
-        {
-            // Define the criteria for a valid instructions node
-            // For example, check if the node contains a specific class or id, or contains a certain amount of text
-            if (node != null)
-            {
-                // Example criteria: node must contain a minimum amount of text
-                return node.InnerText.Trim().Length > 150;
-            }
-
-            return false;
-        }
 
         public async Task<List<Recipe>> ScrapeDetailsForSearchResults(string searchQuery, string sourceDomain, List<Recipe> searchResults, List<Recipe> existingRecipes)
         {
