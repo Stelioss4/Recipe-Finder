@@ -147,5 +147,14 @@
             get { return _url; }
             set { _url = value; }
         }
+
+        private NutritionValue nutritionValue;
+
+        public virtual NutritionValue NutritionValue
+        {
+            get { return nutritionValue; }
+            set { nutritionValue = value; }
+        }
+
     }
 }

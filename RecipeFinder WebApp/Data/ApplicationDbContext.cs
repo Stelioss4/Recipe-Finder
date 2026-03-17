@@ -13,9 +13,11 @@ namespace RecipeFinder_WebApp.Data
 
         public DbSet<User> User { get; set; }
 
+        public DbSet<NutritionValue> NutritionValues { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-           
+
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -46,6 +48,10 @@ namespace RecipeFinder_WebApp.Data
             builder.Entity<User>()
                 .Navigation(u => u.WeeklyPlan)
                 .AutoInclude();
+
+            builder.Entity<Recipe>()
+               .HasOne(r => r.NutritionValue)
+               .WithOne(n => n.Recipe);
         }
     }
 }
