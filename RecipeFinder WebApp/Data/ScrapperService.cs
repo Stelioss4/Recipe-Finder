@@ -466,18 +466,13 @@ namespace RecipeFinder_WebApp.Data
 
                         if (IsProbablyNutritionText(text))
                         {
-                            searchResultRecipe.NutritionValue = new NutritionValue
-                            {
-                                Calories = ExtractNutritionValue(text, "kcal"),
-                                Protein = ExtractNutritionValue(text, "eiweiß")
-                                          ?? ExtractNutritionValue(text, "eiweiss")
-                                          ?? ExtractNutritionValue(text, "protein"),
-                                Fat = ExtractNutritionValue(text, "fett"),
-                                Carbohydrates = ExtractNutritionValue(text, "kohlenhydrate"),
-                                RawText = text
-                            };
+                            var extractedNutrition = ExtractNutritionValuesFromText(text);
 
-                            break;
+                            if (extractedNutrition != null)
+                            {
+                                searchResultRecipe.NutritionValue = extractedNutrition;
+                                break;
+                            }
                         }
                     }
 
@@ -651,34 +646,58 @@ namespace RecipeFinder_WebApp.Data
                 || lower.Contains("kohlenhydrate")
                 || lower.Contains("protein");
         }
-        private double? ExtractNutritionValue(string text, string keyword)
+
+        private NutritionValue ExtractNutritionValuesFromText(string text)
         {
-            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(keyword))
+            if (string.IsNullOrWhiteSpace(text))
                 return null;
 
-            var lowerText = text.ToLowerInvariant();
-            keyword = keyword.ToLowerInvariant();
+            var cleanedText = HtmlEntity.DeEntitize(text).Trim();
 
-            if (!lowerText.Contains(keyword))
-                return null;
-
-            int index = lowerText.IndexOf(keyword);
-
-            // Take a chunk before keyword (last ~20 chars is enough)
-            int start = Math.Max(0, index - 20);
-            var snippet = lowerText.Substring(start, index - start);
-
-            // Replace comma with dot (German → invariant)
-            snippet = snippet.Replace(",", ".");
-
-            // Extract number using regex
-            var match = System.Text.RegularExpressions.Regex.Match(snippet, @"\d+(\.\d+)?");
-
-            if (match.Success)
+            var nutritionValue = new NutritionValue
             {
-                if (double.TryParse(match.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double value))
+                Calories = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*kcal"),
+                Protein = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*gEiweiß|(\d+[.,]?\d*)\s*gEiweiss|(\d+[.,]?\d*)\s*gProtein"),
+                Fat = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*gFett"),
+                Carbohydrates = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*gKohlenhydrate"),
+                RawText = cleanedText
+            };
+
+            if (nutritionValue.Calories == null &&
+                nutritionValue.Protein == null &&
+                nutritionValue.Fat == null &&
+                nutritionValue.Carbohydrates == null)
+            {
+                return null;
+            }
+
+            return nutritionValue;
+        }
+
+        private double? ExtractNutritionValue(string text, string pattern)
+        {
+            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(pattern))
+                return null;
+
+            var match = System.Text.RegularExpressions.Regex.Match(text, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            if (!match.Success)
+                return null;
+
+            for (int i = 1; i < match.Groups.Count; i++)
+            {
+                if (!string.IsNullOrWhiteSpace(match.Groups[i].Value))
                 {
-                    return value;
+                    var valueText = match.Groups[i].Value.Replace(",", ".");
+
+                    if (double.TryParse(
+                        valueText,
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out double value))
+                    {
+                        return value;
+                    }
                 }
             }
 
