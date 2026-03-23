@@ -518,16 +518,38 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse Cooking Time
-                var cookingTimeNode = document.DocumentNode.SelectSingleNode("//section[position()=2 or position()=3]/div[1]");
-                if (cookingTimeNode != null)
+                HtmlNode cookingTimeNode = null;
+
+                var sectionNode2 = document.DocumentNode.SelectSingleNode("//section[position()=2]/div[1]");
+
+                if (sectionNode2 != null)
                 {
-                    var text = HtmlEntity.DeEntitize(cookingTimeNode.InnerText).Trim();
+                    var text = HtmlEntity.DeEntitize(sectionNode2.InnerText).Trim();
 
                     if (IsProbablyTextForCookingTime(text))
                     {
-                        searchResultRecipe.Time = cookingTimeNode.InnerText.Trim();
+                        cookingTimeNode = sectionNode2;
                     }
                 }
+
+                if(cookingTimeNode == null)
+                {
+                    var sectionNode3 = document.DocumentNode.SelectSingleNode("//section[position()=3]/div[1]");
+                    if (sectionNode3 != null)
+                    {
+                        var text = HtmlEntity.DeEntitize(sectionNode3.InnerText).Trim();
+                        if (IsProbablyTextForCookingTime(text))
+                        {
+                            cookingTimeNode = sectionNode3;
+                        }
+                    }
+                }
+
+                if(cookingTimeNode != null)
+                {
+                    searchResultRecipe.Time = cookingTimeNode.InnerText.Trim();
+                }
+
                 else
                 {
                     Console.WriteLine("Cooking time node is null");
