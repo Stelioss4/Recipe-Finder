@@ -521,7 +521,12 @@ namespace RecipeFinder_WebApp.Data
                 var cookingTimeNode = document.DocumentNode.SelectSingleNode("//section[position()=2 or position()=3]/div[1]");
                 if (cookingTimeNode != null)
                 {
-                    searchResultRecipe.Time = cookingTimeNode.InnerText.Trim();
+                    var text = HtmlEntity.DeEntitize(cookingTimeNode.InnerText).Trim();
+
+                    if (IsProbablyTextForCookingTime(text))
+                    {
+                        searchResultRecipe.Time = cookingTimeNode.InnerText.Trim();
+                    }
                 }
                 else
                 {
@@ -647,6 +652,19 @@ namespace RecipeFinder_WebApp.Data
                 || lower.Contains("protein");
         }
 
+        private bool IsProbablyTextForCookingTime(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+            var lower = text.ToLowerInvariant();
+            return lower.Contains("min.")
+                || lower.Contains("std.")
+                || lower.Contains("arbeitszeit")
+                || lower.Contains("kochzeit")
+                || lower.Contains("zubereitungszeit")
+                || lower.Contains("gesamtzeit");
+        }   
+
         private NutritionValue ExtractNutritionValuesFromText(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -707,7 +725,7 @@ namespace RecipeFinder_WebApp.Data
 
         // =====================
         // INSTRUCTION HELPERS
-        // =====================
+        
         private bool IsValidInstructionsNode(HtmlNode node)
         {
             // Define the criteria for a valid instructions node
@@ -745,6 +763,9 @@ namespace RecipeFinder_WebApp.Data
 
             return false;
         }
+      
+        // =====================
+
 
         public async Task<byte[]> DownloadImageAsByteArray(string imageUrl, string baseUrl = null)
         {
