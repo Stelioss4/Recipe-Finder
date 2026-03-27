@@ -277,7 +277,7 @@ namespace RecipeFinder_WebApp.Data
             var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CHEFKOCH_URL);
             if (existingRecipes.Count > 0)
             {
-                return existingRecipes;
+               return existingRecipes;
             }
            // If not found, scrape new recipes
             var searchResults = await ScrapeSearchResultsFromChefKoch(searchQuery);
@@ -308,7 +308,7 @@ namespace RecipeFinder_WebApp.Data
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(html);
 
-                var listNode = document.DocumentNode.SelectSingleNode("//*[@id=\"__layout\"]/div/div[1]/main/section/div[5]/div");
+                var listNode = document.DocumentNode.SelectSingleNode("//*[@id='__nuxt']//div[contains(@class, 'recipe-list')]");
 
                 if (listNode != null)
                 {
@@ -507,7 +507,7 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse Difficulty Level                                         
-                var difficultyLevelNode = document.DocumentNode.SelectSingleNode("/html/body/main/article[1]/div/div[2]/small/span[2]");
+                var difficultyLevelNode = document.DocumentNode.SelectSingleNode("//*[@id='__nuxt']//div[contains(@class,'recipe-meta-property-group__title') and normalize-space()='Schwierigkeit']/parent::div/div[contains(@class,'recipe-meta-property-group__value')]");
                 if (difficultyLevelNode != null)
                 {
                     searchResultRecipe.DifficultyLevel = difficultyLevelNode.InnerText.Trim();
@@ -654,10 +654,22 @@ namespace RecipeFinder_WebApp.Data
             return false;
         }
 
+        private bool IsProbablyTextForCookingTime(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+            var lower = text.ToLowerInvariant();
+            return lower.Contains("min.")
+                || lower.Contains("std.")
+                || lower.Contains("arbeitszeit")
+                || lower.Contains("kochzeit")
+                || lower.Contains("zubereitungszeit")
+                || lower.Contains("gesamtzeit");
+        }
 
         // =====================
         // NUTRITION HELPERS
-        // =====================
+        
         private bool IsProbablyNutritionText(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -673,19 +685,6 @@ namespace RecipeFinder_WebApp.Data
                 || lower.Contains("kohlenhydrate")
                 || lower.Contains("protein");
         }
-
-        private bool IsProbablyTextForCookingTime(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return false;
-            var lower = text.ToLowerInvariant();
-            return lower.Contains("min.")
-                || lower.Contains("std.")
-                || lower.Contains("arbeitszeit")
-                || lower.Contains("kochzeit")
-                || lower.Contains("zubereitungszeit")
-                || lower.Contains("gesamtzeit");
-        }   
 
         private NutritionValue ExtractNutritionValuesFromText(string text)
         {
@@ -743,11 +742,12 @@ namespace RecipeFinder_WebApp.Data
 
             return null;
         }
+        // =====================
 
 
         // =====================
         // INSTRUCTION HELPERS
-        
+
         private bool IsValidInstructionsNode(HtmlNode node)
         {
             // Define the criteria for a valid instructions node
