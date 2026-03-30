@@ -52,7 +52,8 @@ namespace RecipeFinder_WebApp.Data
         }
 
         /// <summary>
-        /// Saves a collection of detailed recipes to the database asynchronously.
+        /// Saves a collection of detailed recipes to the database asynchronously,
+        /// filtering out duplicates based on Recipe.Url and skipping recipes that already exist in the database.
         /// </summary>
         /// <remarks>If the <paramref name="detailedRecipes"/> list is <see langword="null"/> or empty,
         /// the method will return without performing any operation.</remarks>
@@ -65,7 +66,30 @@ namespace RecipeFinder_WebApp.Data
             if (detailedRecipes == null || detailedRecipes.Count == 0)
                 return;
 
-            context.Recipes.AddRange(detailedRecipes);
+            var uniqueRecipes = detailedRecipes
+                .Where(r => r != null && !string.IsNullOrWhiteSpace(r.Url))
+                .GroupBy(r => r.Url.Trim())
+                .Select(g => g.First())
+                .ToList();
+
+             var urls = uniqueRecipes
+                .Select(r => r.Url.Trim())
+                .ToList();
+
+            var existingUrls = await context.Recipes
+                .Where(r => urls.Contains(r.Url))
+                .Select(r => r.Url)
+                .ToListAsync();
+
+            var newRecipes = uniqueRecipes
+                .Where(r => !existingUrls.Contains(r.Url.Trim()))
+                .ToList();
+
+            if (newRecipes.Count == 0)
+                return;
+
+            context.Recipes.AddRange(newRecipes);
+
             await context.SaveChangesAsync();
         }
 
