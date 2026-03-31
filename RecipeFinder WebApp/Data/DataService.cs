@@ -72,9 +72,9 @@ namespace RecipeFinder_WebApp.Data
                 .Select(g => g.First())
                 .ToList();
 
-             var urls = uniqueRecipes
-                .Select(r => r.Url.Trim())
-                .ToList();
+            var urls = uniqueRecipes
+               .Select(r => r.Url.Trim())
+               .ToList();
 
             var existingUrls = await context.Recipes
                 .Where(r => urls.Contains(r.Url))
@@ -90,7 +90,15 @@ namespace RecipeFinder_WebApp.Data
 
             context.Recipes.AddRange(newRecipes);
 
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine($"Database update error while saving recipes: {ex.Message}");
+                throw;
+            }
         }
 
         /// <summary>
