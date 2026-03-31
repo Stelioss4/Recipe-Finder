@@ -52,6 +52,14 @@ namespace RecipeFinder_WebApp.Data
             builder.Entity<Recipe>()
                .HasOne(r => r.NutritionValue)
                .WithOne(n => n.Recipe);
+
+            builder.Entity<Recipe>()
+               .Property(r => r.Url)
+               .HasMaxLength(500);
+
+            builder.Entity<Recipe>()
+                .HasIndex(r => r.Url)
+                .IsUnique();
         }
     }
 }
