@@ -32,12 +32,27 @@
                 {
                     <img src="data:image/png;base64,@Convert.ToBase64String(recipe.Image)" class="card-img-top" alt="Recipe Image" style="width: 100%; max-width: 400px; height: auto;" />
                 }
-                <p class="alert-primary text-center">difficulty level: @recipe.DifficultyLevel</p>
-                <p class="alert-primary text-center">Total time needed: @recipe.Time</p>
-                <p class="alert-primary text-center">Average Rating: @recipe.Rating.ToString("F2") </p>
-                <p class="alert-primary text-center"> <button class="btn btn-secondary" @onclick="NavigateToReviews" hidden="@(!isAuthenticated ? "hidden" : null)">See recipe's reviews</button></p>
+                <p class="alert alert-primary text-center mx-auto mb-3 rounded shadow-sm w-75 py-2"><strong>Difficulty Level:</strong> @recipe.DifficultyLevel</p>
+                <p class="alert alert-primary text-center mx-auto mb-3 rounded shadow-sm w-75 py-2"><strong>Time:</strong> <br/> @recipe.Time</p>
 
-                <!-- Popup button for user input -->
+                @if(recipe.Rating != 0.0)
+                {
+                    <p class="alert alert-primary text-center mx-auto mb-3 rounded shadow-sm w-75 py-2"><strong>Average Rating:</strong> @recipe.Rating.ToString("F2") </p>
+                }
+
+                @if(recipe.NutritionValue != null)
+                {
+                    <p class="alert alert-primary text-center mx-auto mb-3 rounded shadow-sm w-75 py-2">
+                      <strong>Calories:</strong> @recipe.NutritionValue.Calories |
+                      <strong>Carbohydrates:</strong> @recipe.NutritionValue.Carbohydrates |
+                      <strong>Fat:</strong> @recipe.NutritionValue.Fat |
+                      <strong>Protein:</strong> @recipe.NutritionValue.Protein
+                    </p>
+                }
+
+                <p class=""text-center mb-3""> <button class="btn btn-secondary" @onclick="NavigateToReviews" hidden="@(!isAuthenticated ? "hidden" : null)">See recipe's reviews</button></p>
+
+                
                 <br /> <button class="btn btn-secondary mt-3" @onclick="() => showPopup = true">Cooking for @peopleCount People</button>
 
                 <!-- Popup box -->
@@ -214,7 +229,7 @@
             recipe = await _context.Recipes
                 .Include(r => r.ListOfIngredients) // Include the related ingredients
                 .Include(r => r.Ratings)
-                // .Include(r => r.Reviews)
+                .Include(r => r.NutritionValue)
                 .FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
             if (recipe != null && recipe.CookingInstructions != null)

@@ -677,13 +677,21 @@ namespace RecipeFinder_WebApp.Data
 
             var lower = text.ToLowerInvariant();
 
-            return lower.Contains("kcal")
+            if( lower.Contains("kcal")
                 || lower.Contains("energie")
                 || lower.Contains("eiweiß")
                 || lower.Contains("eiweiss")
                 || lower.Contains("fett")
                 || lower.Contains("kohlenhydrate")
-                || lower.Contains("protein");
+                || lower.Contains("protein"))
+            {
+                return true;
+            }
+
+            return System.Text.RegularExpressions.Regex.IsMatch(
+                text,
+                @"\b\d+[.,]?\d*\s*g\s*(?:E|F|KH)\b",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
 
         private NutritionValue ExtractNutritionValuesFromText(string text)
@@ -696,9 +704,10 @@ namespace RecipeFinder_WebApp.Data
             var nutritionValue = new NutritionValue
             {
                 Calories = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*kcal"),
-                Protein = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*gEiweiß|(\d+[.,]?\d*)\s*gEiweiss|(\d+[.,]?\d*)\s*gProtein"),
-                Fat = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*gFett"),
-                Carbohydrates = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*gKohlenhydrate"),
+
+                Protein = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*g\s*Eiweiß|(\d+[.,]?\d*)\s*g\s*Eiweiss|(\d+[.,]?\d*)\s*g\s*Protein|(\d+[.,]?\d*)\s*g\s*E\b"),
+                Fat = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*g\s*Fett|(\d+[.,]?\d*)\s*g\s*F\b"),
+                Carbohydrates = ExtractNutritionValue(cleanedText, @"(\d+[.,]?\d*)\s*g\s*Kohlenhydrate|(\d+[.,]?\d*)\s*g\s*KH\b"),
                 RawText = cleanedText
             };
 
