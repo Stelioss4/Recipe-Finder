@@ -15,6 +15,8 @@ namespace RecipeFinder_WebApp.Data
 
         public DbSet<NutritionValue> NutritionValues { get; set; }
 
+        public DbSet<UserPreferences> UserPreferences { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -60,6 +62,11 @@ namespace RecipeFinder_WebApp.Data
             builder.Entity<Recipe>()
                 .HasIndex(r => r.Url)
                 .IsUnique();
+
+            builder.Entity<User>()
+               .HasOne(u => u.UserPreferences)
+               .WithOne(up => up.User)
+               .HasForeignKey<UserPreferences>(up => up.UserId);
         }
     }
 }

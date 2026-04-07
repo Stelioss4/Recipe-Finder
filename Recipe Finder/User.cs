@@ -56,6 +56,16 @@ namespace Recipe_Finder
             get { return _shoppingList; }
             set { _shoppingList = value; }
         }
+
+        private UserPreferences userPreferences;
+
+        public virtual UserPreferences UserPreferences
+        {
+            get { return userPreferences; }
+            set { userPreferences = value; }
+        }
+
+
     }
 }
 
