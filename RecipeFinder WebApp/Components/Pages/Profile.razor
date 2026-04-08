@@ -81,7 +81,10 @@
         @if (showWeeklyPlanPopup)
         {
             <div class="popup">
-                <div class="popup-content">
+                <div class="popup-content shadow rounded p-4">
+
+                    <h4 class="text-center mb-4">Weekly Plan</h4>
+
                     @if (appUser.User.WeeklyPlan != null && appUser.User.WeeklyPlan.Count > 0)
                     {
                         @for (int i = 0; i < appUser.User.WeeklyPlan.Count; i++)
@@ -89,52 +92,93 @@
                             var rec = appUser.User.WeeklyPlan[i];
                             var day = daysOfWeek[i];
 
-                            <div class="why-box">
-                                <h5>@day</h5>
+                            <div class="why-box border rounded shadow-sm p-3 mb-3">
+                                <h5 class="mb-3 text-primary">@day</h5>
+
                                 <div class="d-flex align-items-center">
-                                    <input type="checkbox" class="me-2" />
+                                    <input type="checkbox" class="form-check-input me-3" />
+
                                     @if (rec.Image != null && rec.Image.Length > 0)
                                     {
-                                        <img src="data:image/png;base64,@Convert.ToBase64String(rec.Image)" style="width: 50px; height: 50px; object-fit: cover;" class="me-3" />
+                                        <img src="data:image/png;base64,@Convert.ToBase64String(rec.Image)"
+                                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px;"
+                                             class="me-3 shadow-sm" />
                                     }
-                                    <div>
-                                        <h6>@rec.RecipeName</h6>
-                                        <a href="#" class="btn btn-outline-primary btn-sm" @onclick="() => NavigateToRecipeDetails(rec.Url)">View Recipe</a>
+
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-2">@rec.RecipeName</h6>
+                                        <a href="#" class="btn btn-outline-primary btn-sm rounded-pill px-3" @onclick="() => NavigateToRecipeDetails(rec.Url)">
+                                            View Recipe
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         }
 
-                        <p class="mt-3">Your weekly plan was created on @appUser.User.LastWeeklyPlanDate!</p>
-                        <button class="btn btn-secondary" @onclick="ForceNewPlan" disabled="@Loading">
-                            @if (Loading)
-                            {
-                                <span class="spinner-border spinner-border-sm"></span> <span>New Plan...</span>
-                            }
-                            else
-                            {
-                                <span>New Plan</span>
-                            }
-                        </button>
+                        <p class="mt-4 text-center text-muted">
+                            Your weekly plan was created on <strong>@appUser.User.LastWeeklyPlanDate</strong>
+                        </p>
+
+                        <div class="text-center mt-3">
+                            <button class="btn btn-secondary px-4 rounded-pill shadow-sm" @onclick="ForceNewPlan" disabled="@Loading">
+                                @if (Loading)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                        
+                                    <span>New Plan...</span>
+                                }
+                                else
+                                {
+                                    <span>New Plan</span>
+                                }
+                            </button>
+                        </div>
                     }
                     else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
-                        <p>You need more favorite recipes to generate a weekly plan.</p>
-                        <button class="btn btn-outline-primary" @onclick="NavigateToHome">Search recipes to Add!</button>
+                        <div class="text-center">
+                            <p class="mb-3">You need more favorite recipes to generate a weekly plan.</p>
+                            <button class="btn btn-outline-primary rounded-pill px-4 shadow-sm" @onclick="NavigateToHome">
+                                Search recipes to Add!
+                            </button>
+                        </div>
                     }
                     else
                     {
-                        <p>No weekly plan generated yet.</p>
-                        <button class="btn btn-outline-primary" @onclick="CreateWeeklyPlan" disabled="@Loading">
-                            @if (Loading)
-                            {
-                                <span class="spinner-border spinner-border-sm"></span> <span>Plan Generating...</span>
-                            }
-                            else
-                            {
-                                <span>Generate Weekly Plan</span>
-                            }
-                        </button>
+
+                        <div class="border rounded p-3 mb-4 shadow-sm">
+                            <h5 class="mb-3 text-center">Plan Preferences</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Maximum Calories per Recipe</strong></label>
+                                <input type="number" class="form-control" @bind="user.UserPreferences.MaxCaloriesPerRecipe" min="0" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Maximum Preparation Time in Minutes</strong></label>
+                                <input type="number" class="form-control" @bind="user.UserPreferences.MaxPreparationTimeInMinutes" min="0" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>Favorite Recipes in Weekly Plan</strong></label>
+                                <input type="number" class="form-control" @bind="user.UserPreferences.PreferredFavoriteRecipesPerWeek" min="0" max="7" />
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="mb-3">No weekly plan generated yet.</p>
+                            <button class="btn btn-outline-primary rounded-pill px-4 shadow-sm" @onclick="CreateWeeklyPlan" disabled="@Loading">
+                                @if (Loading)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                        
+                                    <span>Plan Generating...</span>
+                                }
+                                else
+                                {
+                                    <span>Generate Weekly Plan</span>
+                                }
+                            </button>
+                        </div>
                     }
                 </div>
             </div>
@@ -232,6 +276,7 @@ private void TogglePopupWeeklyPlan()
     showWeeklyPlanPopup = !showWeeklyPlanPopup;
     if (showWeeklyPlanPopup)
     {
+        EnsureUserPreferences();
         showFavoritesPopup = false;
         showShoppingListPopup = false;
         showSearchBoxPopup = false;
@@ -263,7 +308,7 @@ private void TogglePopupSearchBox()
     private async Task CreateWeeklyPlan()
     {
         Loading = true;
-        user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync();
+        user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync(appUser.User.UserPreferences.MaxCaloriesPerRecipe, appUser.User.UserPreferences.MaxPreparationTimeInMinutes, appUser.User.UserPreferences.PreferredFavoriteRecipesPerWeek);
         await Init();
         await InvokeAsync(StateHasChanged);
         Loading = false;
@@ -299,4 +344,15 @@ private void TogglePopupSearchBox()
         searchQuery = term;
         recipes = await Scrap.ScrapeCKRecipes(term);
     }
+
+    private void EnsureUserPreferences()
+{
+    if (user != null && user.UserPreferences == null)
+    {
+        user.UserPreferences = new UserPreferences
+        {
+            UserId = user.Id
+        };
+    }
+}
 }
