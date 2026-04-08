@@ -21,7 +21,9 @@ namespace RecipeFinder_WebApp.Data
         }
 
         /// <summary>
-        /// Generates a weekly plan based on the user's favorite recipes
+        /// Generates a weekly plan based on the user's favorite recipes & users preferences (max calories, max prep time, preferred number of favorite recipes in the plan) and saves it to the database.
+        /// It ensures that the same recipe root is not repeated within the same weekly plan and that all recipes in the plan meet the specified preferences.
+        /// If there are not enough valid recipes to fill the weekly plan, an exception is thrown. The method returns the generated weekly plan as a list of Recipe objects.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
@@ -122,30 +124,33 @@ namespace RecipeFinder_WebApp.Data
 
             if (favoriteRecipesToTake > 0 && validFavoriteRecipes.Any())
             {
-                var selectedFavoriteRecipes = validFavoriteRecipes
+                var shuffledFavoriteRecipes = validFavoriteRecipes
                     .OrderBy(x => random.Next())
-                    .Take(Math.Min(favoriteRecipesToTake, validFavoriteRecipes.Count))
                     .ToList();
 
-                newWeeklyPlan.AddRange(selectedFavoriteRecipes);
+                AddRecipesToWeeklyPlan(
+                    sourceRecipes: shuffledFavoriteRecipes,
+                    targetPlan: newWeeklyPlan,
+                    maxToAdd: favoriteRecipesToTake);
             }
 
             int remainingSlots = weeklyPlanDays - newWeeklyPlan.Count;
 
             if (remainingSlots > 0)
             {
-                var remainingRecipes = validRecipes
-                    .Where(r => newWeeklyPlan.All(wp => wp.Id != r.Id && NormalizeRecipeName(wp.RecipeName) != NormalizeRecipeName(r.RecipeName)))
+                var shuffledValidRecipes = validRecipes
                     .OrderBy(x => random.Next())
-                    .Take(remainingSlots)
                     .ToList();
 
-                newWeeklyPlan.AddRange(remainingRecipes);
+                AddRecipesToWeeklyPlan(
+                    sourceRecipes: shuffledValidRecipes,
+                    targetPlan: newWeeklyPlan,
+                    maxToAdd: remainingSlots);
             }
 
             if (newWeeklyPlan.Count < weeklyPlanDays)
             {
-                throw new Exception("Not enough recipes match the selected preferences to create a full weekly plan.");
+                throw new Exception("Not enough unique recipe roots match the selected preferences to create a full weekly plan.");
             }
 
             userProfile.User.WeeklyPlan = newWeeklyPlan;
@@ -157,6 +162,30 @@ namespace RecipeFinder_WebApp.Data
             Console.WriteLine("Your weekly plan is up-to-date and saved!");
 
             return newWeeklyPlan;
+        }
+
+        private void AddRecipesToWeeklyPlan(List<Recipe> sourceRecipes, List<Recipe> targetPlan, int maxToAdd)
+        {
+            var addedCount = 0;
+
+            foreach (var recipe in sourceRecipes)
+            {
+                if (addedCount >= maxToAdd)
+                    break;
+
+                if (recipe == null)
+                    continue;
+
+                if (targetPlan.Any(wp => wp.Id == recipe.Id))
+                    continue;
+
+                if (!string.IsNullOrWhiteSpace(recipe.RecipeRoot) &&
+                    targetPlan.Any(wp => wp.RecipeRoot == recipe.RecipeRoot))
+                    continue;
+
+                targetPlan.Add(recipe);
+                addedCount++;
+            }
         }
         private int? ExtractMinutesFromTimeText(string timeText)
         {
