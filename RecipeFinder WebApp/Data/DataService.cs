@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Recipe_Finder;
 
 namespace RecipeFinder_WebApp.Data
@@ -15,14 +16,16 @@ namespace RecipeFinder_WebApp.Data
         private readonly AuthenticationStateProvider AuthenticationStateProvider;
         private readonly NavigationManager _navigation;
         private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+        private readonly RecipeClassificationService _recipeClassificationService;
 
-        public DataService(NavigationManager Navigation, IHttpClientFactory clientFactory, IDbContextFactory<ApplicationDbContext> contextFactory, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider)
+        public DataService(NavigationManager Navigation, IHttpClientFactory clientFactory, IDbContextFactory<ApplicationDbContext> contextFactory, UserManager<ApplicationUser> userManager, AuthenticationStateProvider authenticationStateProvider, RecipeClassificationService recipeClassificationService)
         {
             _clientFactory = clientFactory;
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             AuthenticationStateProvider = authenticationStateProvider;
             _navigation = Navigation;
             _contextFactory = contextFactory;
+            _recipeClassificationService = recipeClassificationService;
         }
 
         /// <summary>
@@ -87,6 +90,11 @@ namespace RecipeFinder_WebApp.Data
 
             if (newRecipes.Count == 0)
                 return;
+
+            foreach (var recipe in newRecipes)
+            {
+                recipe.RecipeRoot = _recipeClassificationService.GetRecipeRoot(recipe.RecipeName);
+            }
 
             context.Recipes.AddRange(newRecipes);
 

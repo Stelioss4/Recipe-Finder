@@ -148,12 +148,20 @@
             set { _url = value; }
         }
 
-        private NutritionValue nutritionValue;
+        private NutritionValue _nutritionValue;
 
         public virtual NutritionValue NutritionValue
         {
-            get { return nutritionValue; }
-            set { nutritionValue = value; }
+            get { return _nutritionValue; }
+            set { _nutritionValue = value; }
+        }
+
+        private string _recipeRoot;
+
+        public string RecipeRoot
+        {
+            get { return _recipeRoot; }
+            set { _recipeRoot = value; }
         }
 
     }
