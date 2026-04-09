@@ -267,6 +267,26 @@ namespace RecipeFinder_WebApp.Data
                 _navigation.NavigateTo("Account/Login");
             }
         }
+
+        public async Task<UserPreferences> GetUsersPreferencesAsync()
+        {
+            using var _context = _contextFactory.CreateDbContext();
+
+            var appUser = await GetAuthenticatedUserAsync();
+            if (appUser.User != null)
+            {
+                var user = await _context.User
+                    .Include(u => u.UserPreferences)
+                    .FirstOrDefaultAsync(u => u.Id == appUser.User.Id);
+
+                return user?.UserPreferences;
+            }
+            else
+            {
+                _navigation.NavigateTo("Account/Login");
+                return null;
+            }
+        }
     }
 }
 

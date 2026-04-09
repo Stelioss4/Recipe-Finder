@@ -41,7 +41,7 @@
 
             @if (recipes.Count > 0)
             {
-                 <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
+                <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
             }
             
         }
@@ -120,20 +120,70 @@
                         </p>
 
                         <div class="text-center mt-3">
-                            <button class="btn btn-secondary px-4 rounded-pill shadow-sm" @onclick="ForceNewPlan" disabled="@Loading">
-                                @if (Loading)
-                                {
-                                    <span class="spinner-border spinner-border-sm me-2"></span>
-                        
-                                    <span>New Plan...</span>
-                                }
-                                else
-                                {
-                                    <span>New Plan</span>
-                                }
-                            </button>
+                            <div class="d-inline-flex" style="align-items:stretch; overflow:hidden; border-radius:50rem;">
+        
+                                <button class="btn btn-secondary px-4 shadow-sm"
+                                        style="border-radius:50rem 0 0 50rem;"
+                                        @onclick="ForceNewPlan" disabled="@Loading">
+                                    @if (Loading)
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                        <span>New Plan...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>New Plan</span>
+                                    }
+                                </button>
+
+                                <button class="btn btn-secondary"
+                                        style="border-radius:0 50rem 50rem 0; padding:0 12px;"
+                                        @onclick="ToggleDropdown">
+                                    ▼
+                                </button>
+
+                            </div>
                         </div>
-                    }
+
+                        @if (isDropdownOpen && user.UserPreferences != null)
+                        {
+                                <div>
+                                    <div class="border rounded p-3 mb-4 shadow-sm">
+                                        <h5 class="mb-3 text-center">Plan Preferences</h5>
+
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Maximum Calories per Recipe</strong></label>
+                                            <input type="number" class="form-control" @bind="user.UserPreferences.MaxCaloriesPerRecipe" min="0" />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Maximum Preparation Time in Minutes</strong></label>
+                                            <input type="number" class="form-control" @bind="user.UserPreferences.MaxPreparationTimeInMinutes" min="0" />
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Favorite Recipes in Weekly Plan</strong></label>
+                                            <input type="number" class="form-control" @bind="user.UserPreferences.PreferredFavoriteRecipesPerWeek" min="0" max="7" />
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="mb-3">No weekly plan generated yet.</p>
+                                        <button class="btn btn-outline-primary rounded-pill px-4 shadow-sm" @onclick="CreateWeeklyPlan" disabled="@Loading">
+                                            @if (Loading)
+                                            {
+                                                <span class="spinner-border spinner-border-sm me-2"></span>
+                        
+                                                <span>Plan Generating...</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Generate New Plan</span>
+                                            }
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        }
                     else if (user.FavoriteRecipes.Count <= Constants.LIMIT_DAYS)
                     {
                         <div class="text-center">
@@ -218,6 +268,7 @@
         {
             appUser.User = await DataService.GetUserByIdAsync();
             appUser.User.ShoppingList = await _favorite.GetShoppingListAsync();
+            appUser.User.UserPreferences = await DataService.GetUsersPreferencesAsync();
 
             if (appUser.User.LastWeeklyPlanDate != null)
             {
@@ -235,7 +286,7 @@
                         ToastService.ShowSuccess("Your weekly plan has expired. You can now create a new one!");
                         weeklyPlanExpiredToastShown = true;
 
-                        await  EmailSender.SendEmailAsync(appUser.Email, "Weekly Plan Expired", "Your weekly meal plan has expired. Please log in to your profile to create a new one.");
+                        await EmailSender.SendEmailAsync(appUser.Email, "Weekly Plan Expired", "Your weekly meal plan has expired. Please log in to your profile to create a new one.");
 
                     }
                 }
@@ -260,50 +311,50 @@
         await InvokeAsync(StateHasChanged);
     }
 
-private void TogglePopupFavorites()
-{
-    showFavoritesPopup = !showFavoritesPopup;
-    if (showFavoritesPopup)
+    private void TogglePopupFavorites()
     {
-        showWeeklyPlanPopup = false;
-        showShoppingListPopup = false;
-        showSearchBoxPopup = false;
+        showFavoritesPopup = !showFavoritesPopup;
+        if (showFavoritesPopup)
+        {
+            showWeeklyPlanPopup = false;
+            showShoppingListPopup = false;
+            showSearchBoxPopup = false;
+        }
     }
-}
 
-private void TogglePopupWeeklyPlan()
-{
-    showWeeklyPlanPopup = !showWeeklyPlanPopup;
-    if (showWeeklyPlanPopup)
+    private void TogglePopupWeeklyPlan()
     {
-        EnsureUserPreferences();
-        showFavoritesPopup = false;
-        showShoppingListPopup = false;
-        showSearchBoxPopup = false;
+        showWeeklyPlanPopup = !showWeeklyPlanPopup;
+        if (showWeeklyPlanPopup)
+        {
+            EnsureUserPreferences();
+            showFavoritesPopup = false;
+            showShoppingListPopup = false;
+            showSearchBoxPopup = false;
+        }
     }
-}
 
-private void TogglePopupShoppingList()
-{
-    showShoppingListPopup = !showShoppingListPopup;
-    if (showShoppingListPopup)
+    private void TogglePopupShoppingList()
     {
-        showFavoritesPopup = false;
-        showWeeklyPlanPopup = false;
-        showSearchBoxPopup = false;
+        showShoppingListPopup = !showShoppingListPopup;
+        if (showShoppingListPopup)
+        {
+            showFavoritesPopup = false;
+            showWeeklyPlanPopup = false;
+            showSearchBoxPopup = false;
+        }
     }
-}
 
-private void TogglePopupSearchBox()
-{
-    showSearchBoxPopup = !showSearchBoxPopup;
-    if (showSearchBoxPopup)
+    private void TogglePopupSearchBox()
     {
-        showFavoritesPopup = false;
-        showWeeklyPlanPopup = false;
-        showShoppingListPopup = false;
+        showSearchBoxPopup = !showSearchBoxPopup;
+        if (showSearchBoxPopup)
+        {
+            showFavoritesPopup = false;
+            showWeeklyPlanPopup = false;
+            showShoppingListPopup = false;
+        }
     }
-}
 
     private async Task CreateWeeklyPlan()
     {
@@ -317,7 +368,8 @@ private void TogglePopupSearchBox()
     private async Task ForceNewPlan()
     {
         Loading = true;
-        user.WeeklyPlan = await _weeklyPlan.ForceNewPlanAsync();
+        user.UserPreferences = await DataService.GetUsersPreferencesAsync();
+        user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync(user.UserPreferences.MaxCaloriesPerRecipe, user.UserPreferences.MaxPreparationTimeInMinutes, user.UserPreferences.PreferredFavoriteRecipesPerWeek);
         await Init();
         await InvokeAsync(StateHasChanged);
         Loading = false;
@@ -346,13 +398,20 @@ private void TogglePopupSearchBox()
     }
 
     private void EnsureUserPreferences()
-{
-    if (user != null && user.UserPreferences == null)
     {
-        user.UserPreferences = new UserPreferences
+        if (user != null && user.UserPreferences == null)
         {
-            UserId = user.Id
-        };
+            user.UserPreferences = new UserPreferences
+            {
+                UserId = user.Id
+            };
+        }
     }
-}
+    private bool isDropdownOpen = false;
+
+    private void ToggleDropdown()
+    {
+        EnsureUserPreferences();
+        isDropdownOpen = !isDropdownOpen;
+    }
 }

@@ -164,6 +164,17 @@ namespace RecipeFinder_WebApp.Data
             return newWeeklyPlan;
         }
 
+
+        /// <summary>
+        /// Adds unique recipes from the source collection to the weekly plan, up to the specified maximum number.
+        /// </summary>
+        /// <remarks>A recipe is considered a duplicate and will not be added if another recipe with the
+        /// same Id or, if specified, the same RecipeRoot already exists in the target plan.</remarks>
+        /// <param name="sourceRecipes">The list of recipes to consider for addition to the weekly plan. Recipes that are null or already present in
+        /// the target plan (by Id or RecipeRoot) are ignored.</param>
+        /// <param name="targetPlan">The list representing the current weekly plan. Recipes are added to this list if they are not already
+        /// present.</param>
+        /// <param name="maxToAdd">The maximum number of recipes to add from the source collection. Must be zero or greater.</param>
         private void AddRecipesToWeeklyPlan(List<Recipe> sourceRecipes, List<Recipe> targetPlan, int maxToAdd)
         {
             var addedCount = 0;
@@ -187,6 +198,15 @@ namespace RecipeFinder_WebApp.Data
                 addedCount++;
             }
         }
+
+        /// <summary>
+        /// Extracts the total number of minutes represented in a time string containing hours and/or minutes.
+        /// </summary>
+        /// <remarks>The method recognizes both 'h' and 'std' as hour indicators and 'min' as the minute
+        /// indicator. The input is case-insensitive and HTML entities are decoded before parsing.</remarks>
+        /// <param name="timeText">The input string containing a textual representation of time, such as hours and minutes. Can include formats
+        /// like '2h 30min', '1 std', or '45 min'.</param>
+        /// <returns>The total number of minutes parsed from the input string, or null if no valid time information is found.</returns>
         private int? ExtractMinutesFromTimeText(string timeText)
         {
             if (string.IsNullOrWhiteSpace(timeText))
@@ -219,64 +239,6 @@ namespace RecipeFinder_WebApp.Data
                 return null;
 
             return totalMinutes;
-        }
-
-        private string NormalizeRecipeName(string recipeName)
-        {
-            if (string.IsNullOrWhiteSpace(recipeName))
-                return string.Empty;
-
-            recipeName = recipeName.Trim().ToLowerInvariant();
-
-            recipeName = System.Text.RegularExpressions.Regex.Replace(recipeName, @"[^\w\s]", " ");
-            recipeName = System.Text.RegularExpressions.Regex.Replace(recipeName, @"\s+", " ");
-
-            return recipeName.Trim().ToLowerInvariant();
-        }
-
-        /// <summary>
-        /// Allow the user to force a new plan manually
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<List<Recipe>> ForceNewPlanAsync()
-        {
-            using var context = _contextFactory.CreateDbContext();
-            // Fetch the authenticated user
-            var userProfile = await _dataService.GetAuthenticatedUserAsync();
-
-            if (userProfile.User == null)
-            {
-                throw new Exception("User not authenticated.");
-            }
-
-            userProfile = await context.Users
-            .Include(u => u.User.FavoriteRecipes)
-            .FirstOrDefaultAsync(u => u.Id == userProfile.Id);
-
-            var favoriteRecipes = userProfile.User.FavoriteRecipes;
-
-            if (favoriteRecipes != null && favoriteRecipes.Count > Constants.LIMIT_DAYS)
-            {
-                // Randomly select 7 recipes for the weekly plan
-                var random = new Random();
-                var newWeeklyPlan = favoriteRecipes.OrderBy(x => random.Next()).Take(Constants.WEEK_DAY_NUM).ToList();
-
-                // Update the user's profile with the new weekly plan and the current date
-                userProfile.User.WeeklyPlan = newWeeklyPlan;
-                userProfile.User.LastWeeklyPlanDate = DateTime.Now;
-
-                // Save changes to the database
-                context.Update(userProfile); // Make sure the user is tracked by the context
-                await context.SaveChangesAsync();
-
-                // Return the new weekly plan
-                return newWeeklyPlan;
-            }
-            else
-            {
-                throw new Exception("No favorite recipes found.");
-            }
         }
 
         /// <summary>
