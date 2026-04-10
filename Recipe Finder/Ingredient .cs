@@ -10,12 +10,20 @@
             set { _iD = value; }
         }
 
-        private List<User> _userId;
+        private List<User> _shoppingListUsers;
 
-        public virtual List<User> UserId
+        public virtual List<User> ShoppingListUsers
         {
-            get { return _userId; }
-            set { _userId = value; }
+            get { return _shoppingListUsers; }
+            set { _shoppingListUsers = value; }
+        }
+
+        private List<User> _weeklyPlanShoppingListUsers;
+
+        public virtual List<User> WeeklyPlanShoppingListUsers
+        {
+            get { return _weeklyPlanShoppingListUsers; }
+            set { _weeklyPlanShoppingListUsers = value; }
         }
 
         private string _ingredientsName;

@@ -35,7 +35,11 @@ namespace RecipeFinder_WebApp.Data
 
             builder.Entity<User>()
                 .HasMany(u => u.ShoppingList)
-                .WithMany(i => i.UserId);
+                .WithMany(i => i.ShoppingListUsers);
+            
+            builder.Entity<User>()
+                .HasMany(u => u.WeeklyPlanShoppingList)
+                .WithMany(i => i.WeeklyPlanShoppingListUsers);
 
             // AutoInclude the User navigation property in ApplicationUser
             builder.Entity<ApplicationUser>()
