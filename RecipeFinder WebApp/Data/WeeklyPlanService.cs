@@ -164,6 +164,55 @@ namespace RecipeFinder_WebApp.Data
             return newWeeklyPlan;
         }
 
+        public async Task<List<Ingredient>> GetWeeklyPlanShoppingListAsync()
+        {
+            using var context = _contextFactory.CreateDbContext();
+
+            var userProfile = await _dataService.GetAuthenticatedUserAsync();
+
+            if (userProfile?.User == null)
+                throw new Exception("User not authenticated.");
+
+            userProfile = await context.Users
+                .Include(u => u.User.WeeklyPlan)
+                    .ThenInclude(r => r.ListOfIngredients)
+                .FirstOrDefaultAsync(u => u.Id == userProfile.Id);
+
+            if (userProfile?.User == null)
+                throw new Exception("User not found.");
+
+            var weeklyPlan = userProfile.User.WeeklyPlan;
+
+            if (weeklyPlan == null || !weeklyPlan.Any())
+                throw new Exception("No weekly plan found.");
+
+            List<Ingredient> weeklyPlanShoppingList = new List<Ingredient>();
+            var addedIngredientNames = new HashSet<string>();
+
+            foreach (var recipe in weeklyPlan)
+            {
+                if (recipe.ListOfIngredients == null)
+                    continue;
+
+                foreach (var ingredient in recipe.ListOfIngredients)
+                {
+                    if (string.IsNullOrWhiteSpace(ingredient.IngredientsName))
+                        continue;
+
+                    var normalizedName = ingredient.IngredientsName.Trim().ToLower();
+
+                    if (!addedIngredientNames.Contains(normalizedName))
+                    {
+                        weeklyPlanShoppingList.Add(ingredient);
+                        addedIngredientNames.Add(normalizedName);
+                    }
+                }
+            }
+
+            return weeklyPlanShoppingList;
+        }
+
+
 
         /// <summary>
         /// Adds unique recipes from the source collection to the weekly plan, up to the specified maximum number.

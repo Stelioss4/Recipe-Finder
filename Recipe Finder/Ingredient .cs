@@ -18,14 +18,6 @@
             set { _shoppingListUsers = value; }
         }
 
-        private List<User> _weeklyPlanShoppingListUsers;
-
-        public virtual List<User> WeeklyPlanShoppingListUsers
-        {
-            get { return _weeklyPlanShoppingListUsers; }
-            set { _weeklyPlanShoppingListUsers = value; }
-        }
-
         private string _ingredientsName;
 
         public string IngredientsName

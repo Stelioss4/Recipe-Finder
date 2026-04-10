@@ -57,14 +57,6 @@ namespace Recipe_Finder
             set { _shoppingList = value; }
         }
 
-        private List<Ingredient> _weeklyPlanShoppingList;
-
-        public List<Ingredient> WeeklyPlanShoppingList
-        {
-            get { return _weeklyPlanShoppingList; }
-            set { _weeklyPlanShoppingList = value; }
-        }
-
         private UserPreferences userPreferences;
 
         public virtual UserPreferences UserPreferences
