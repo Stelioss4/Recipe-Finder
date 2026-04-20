@@ -164,6 +164,15 @@ namespace RecipeFinder_WebApp.Data
             return newWeeklyPlan;
         }
 
+
+        /// <summary>
+        /// Create a weekly plan shopping list by aggregating the ingredients from all recipes in the user's current weekly plan, 
+        /// ensuring that each ingredient is listed only once, even if it appears in multiple recipes.
+        /// The method retrieves the user's weekly plan from the database, extracts the ingredients from each recipe, 
+        /// and compiles a unique list of ingredients to be used as a shopping list for the week.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<List<Ingredient>> GetWeeklyPlanShoppingListAsync()
         {
             using var context = _contextFactory.CreateDbContext();
