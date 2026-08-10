@@ -16,8 +16,6 @@ namespace RecipeFinder_WebApp.Data
         }
         public async Task SendScrapeReportEmailAsync(List<ScrapeCheckResult> scrapeResults)
         {
-            scrapeResults = new List<ScrapeCheckResult>();
-
             var failed = scrapeResults.Where(r => !r.IsSuccess).ToList();
             var success = scrapeResults.Where(r => r.IsSuccess).ToList();
 
@@ -34,9 +32,7 @@ namespace RecipeFinder_WebApp.Data
                 return;
             }
 
-            // If you want, you can include a detailed success message.
-            // Right now we keep it simple and always send the generic success email.
-            // (Your previous code built a message but didn't use it.)
+          
             await _emailSender.SendEmailAsync(
                 Constants.ADMIN_EMAIL,
                 "✅ Scraping Successful",
