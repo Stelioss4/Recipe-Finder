@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Data;
+using System.Security.Claims;
 
 namespace RecipeFinderTest.Helpers
 {
@@ -49,6 +52,29 @@ namespace RecipeFinderTest.Helpers
             {
                 return new ApplicationDbContext(_options);
             }
+        }
+
+        public static Mock<UserManager<ApplicationUser>> CreateUserManagerMock(
+       ApplicationUser applicationUser)
+        {
+            var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+
+            var userManagerMock = new Mock<UserManager<ApplicationUser>>(
+                userStoreMock.Object,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!,
+                null!);
+
+            userManagerMock
+                .Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                .ReturnsAsync(applicationUser);
+
+            return userManagerMock;
         }
     }
 }
