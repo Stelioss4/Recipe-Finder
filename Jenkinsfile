@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                bat 'dotnet restore "Recipe Finder.sln"'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'dotnet build "Recipe Finder.sln" --configuration Release --no-restore'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'dotnet test "RecipeFinderTest\RecipeFinderTest.csproj" --configuration Release --no-build'
+            }
+        }
+    }
+}
