@@ -22,7 +22,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'dotnet test "RecipeFinderTest\RecipeFinderTest.csproj" --configuration Release --no-build'
+                bat 'dotnet test "RecipeFinderTest/RecipeFinderTest.csproj" --configuration Release --no-build'
             }
         }
     }
