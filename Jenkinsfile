@@ -10,19 +10,19 @@ pipeline {
 
         stage('Restore') {
             steps {
-                bat 'dotnet restore "Recipe Finder.sln"'
+                sh 'dotnet restore "Recipe Finder.sln"'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'dotnet build "Recipe Finder.sln" --configuration Release --no-restore'
+                sh 'dotnet build "Recipe Finder.sln" --configuration Release --no-restore'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'dotnet test "RecipeFinderTest/RecipeFinderTest.csproj" --configuration Release --no-build'
+                sh 'dotnet test "RecipeFinderTest/RecipeFinderTest.csproj" --configuration Release --no-build'
             }
         }
     }
