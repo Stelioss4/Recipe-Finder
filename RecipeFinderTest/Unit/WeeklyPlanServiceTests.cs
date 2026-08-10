@@ -812,5 +812,140 @@ namespace RecipeFinderTest.Unit
                       .Distinct()
                       .Count());
         }
+
+        [Fact]
+        public async Task GetWeeklyPlanShoppingListAsync_ReturnsUniqueIngredients()
+        {
+            // Arrange
+            var factory = TestHelper.CreateDbContextFactory();
+
+            var recipe1 = TestHelper.CreateRecipe(
+                1,
+                "Chicken Pasta",
+                350,
+                "chicken pasta");
+
+            recipe1.ListOfIngredients = new List<Ingredient>
+    {
+        new Ingredient { IngredientsName = "Chicken" },
+        new Ingredient { IngredientsName = "Tomato" },
+        new Ingredient { IngredientsName = "Salt" }
+    };
+
+            var recipe2 = TestHelper.CreateRecipe(
+                2,
+                "Beef Rice",
+                420,
+                "beef rice");
+
+            recipe2.ListOfIngredients = new List<Ingredient>
+    {
+        new Ingredient { IngredientsName = "  chicken  " },
+        new Ingredient { IngredientsName = "Rice" },
+        new Ingredient { IngredientsName = "SALT" }
+    };
+
+            using (var context = factory.CreateDbContext())
+            {
+                context.Recipes.AddRange(recipe1, recipe2);
+                await context.SaveChangesAsync();
+            }
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
+        new Claim(ClaimTypes.Name, "testuser")
+    };
+
+            var identity = new ClaimsIdentity(claims, "TestAuth");
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            var authenticationStateProviderMock =
+                new Mock<AuthenticationStateProvider>();
+
+            authenticationStateProviderMock
+                .Setup(x => x.GetAuthenticationStateAsync())
+                .ReturnsAsync(new AuthenticationState(claimsPrincipal));
+
+            var user = new User
+            {
+                Id = 1,
+                Name = "Test User",
+                FavoriteRecipes = new List<Recipe>(),
+                WeeklyPlan = new List<Recipe>(),
+                ShoppingList = new List<Ingredient>(),
+                UserPreferences = new UserPreferences
+                {
+                    Id = 1,
+                    UserId = 1,
+                    WeeklyPlanDays = 7
+                }
+            };
+
+            var applicationUser = new ApplicationUser
+            {
+                Id = "test-user-id",
+                UserName = "testuser",
+                User = user
+            };
+
+            using (var context = factory.CreateDbContext())
+            {
+                var weeklyPlanRecipes = await context.Recipes
+                    .Where(r => r.Id == recipe1.Id || r.Id == recipe2.Id)
+                    .ToListAsync();
+
+                applicationUser.User.WeeklyPlan = weeklyPlanRecipes;
+
+                context.Users.Add(applicationUser);
+
+                await context.SaveChangesAsync();
+            }
+
+            var userManagerMock =
+                TestHelper.CreateUserManagerMock(applicationUser);
+
+            var navigationManagerMock =
+                new Mock<NavigationManager>();
+
+            var httpClientFactoryMock =
+                new Mock<IHttpClientFactory>();
+
+            var classificationService =
+                new RecipeClassificationService();
+
+            var dataService = new DataService(
+                navigationManagerMock.Object,
+                httpClientFactoryMock.Object,
+                factory,
+                userManagerMock.Object,
+                authenticationStateProviderMock.Object,
+                classificationService);
+
+            var weeklyPlanService = new WeeklyPlanService(
+                dataService,
+                navigationManagerMock.Object,
+                factory);
+
+            // Act
+            var result =
+                await weeklyPlanService.GetWeeklyPlanShoppingListAsync();
+
+            // Assert
+            Assert.Equal(4, result.Count);
+
+            var normalizedIngredients = result
+                .Select(i => i.IngredientsName.Trim().ToLowerInvariant())
+                .ToList();
+
+            Assert.Contains("chicken", normalizedIngredients);
+            Assert.Contains("tomato", normalizedIngredients);
+            Assert.Contains("salt", normalizedIngredients);
+            Assert.Contains("rice", normalizedIngredients);
+
+            Assert.Equal(
+                normalizedIngredients.Count,
+                normalizedIngredients.Distinct().Count());
+        }
     }
 }
