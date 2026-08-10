@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Data;
-using RecipeFinderTest;
-using RecipeFinderTest.Integration;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
+using RecipeFinderTest.Helpers;
 
 namespace RecipeFinderTest
 {
@@ -20,7 +15,7 @@ namespace RecipeFinderTest
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-            var factory = new TestDbContextFactory(options);
+            var factory = TestHelper.CreateDbContextFactory();
             var service = new RecipePersistenceService(factory);
 
 
