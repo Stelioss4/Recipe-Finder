@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Data;
 using RecipeFinderTest.Helpers;
 using System.Security.Claims;
-using Xunit;
 
 namespace RecipeFinderTest.Unit
 {
@@ -313,5 +313,245 @@ namespace RecipeFinderTest.Unit
                 result,
                 recipe => recipe.RecipeName == "Slow Roast");
         }
+
+        [Fact]
+        public async Task GenerateWeeklyPlanAsync_DoesNotIncludeRecipesWithDuplicateRoots()
+        {
+            // Arrange
+            var factory = TestHelper.CreateDbContextFactory();
+
+            var recipes = new List<Recipe>
+    {
+        TestHelper.CreateRecipe(1, "Chicken Burger", 400, "burger"),
+        TestHelper.CreateRecipe(2, "Cheeseburger", 450, "burger"),
+
+        TestHelper.CreateRecipe(3, "Chicken Pasta", 350, "chicken pasta"),
+        TestHelper.CreateRecipe(4, "Beef Rice", 420, "beef rice"),
+        TestHelper.CreateRecipe(5, "Greek Salad", 280, "greek salad"),
+        TestHelper.CreateRecipe(6, "Chicken Soup", 310, "chicken soup"),
+        TestHelper.CreateRecipe(7, "Vegetable Curry", 450, "vegetable curry"),
+        TestHelper.CreateRecipe(8, "Fish Tacos", 490, "fish tacos")
+    };
+
+            using (var context = factory.CreateDbContext())
+            {
+                context.Recipes.AddRange(recipes);
+                await context.SaveChangesAsync();
+            }
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
+        new Claim(ClaimTypes.Name, "testuser")
+    };
+
+            var identity = new ClaimsIdentity(claims, "TestAuth");
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            var authenticationStateProviderMock =
+                new Mock<AuthenticationStateProvider>();
+
+            authenticationStateProviderMock
+                .Setup(x => x.GetAuthenticationStateAsync())
+                .ReturnsAsync(new AuthenticationState(claimsPrincipal));
+
+            var user = new User
+            {
+                Id = 1,
+                Name = "Test User",
+                FavoriteRecipes = new List<Recipe>(),
+                WeeklyPlan = new List<Recipe>(),
+                ShoppingList = new List<Ingredient>(),
+                UserPreferences = new UserPreferences
+                {
+                    Id = 1,
+                    UserId = 1,
+                    WeeklyPlanDays = 7
+                }
+            };
+
+            var applicationUser = new ApplicationUser
+            {
+                Id = "test-user-id",
+                UserName = "testuser",
+                User = user
+            };
+
+            using (var context = factory.CreateDbContext())
+            {
+                context.Users.Add(applicationUser);
+                await context.SaveChangesAsync();
+            }
+
+            var userManagerMock =
+                TestHelper.CreateUserManagerMock(applicationUser);
+
+            var navigationManagerMock = new Mock<NavigationManager>();
+            var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+
+            var classificationService =
+                new RecipeClassificationService();
+
+            var dataService = new DataService(
+                navigationManagerMock.Object,
+                httpClientFactoryMock.Object,
+                factory,
+                userManagerMock.Object,
+                authenticationStateProviderMock.Object,
+                classificationService);
+
+            var weeklyPlanService = new WeeklyPlanService(
+                dataService,
+                navigationManagerMock.Object,
+                factory);
+
+            // Act
+            var result = await weeklyPlanService.GenerateWeeklyPlanAsync(
+                maxCalories: null,
+                maxPrepTime: null,
+                preferredFavoriteRecipes: 0);
+
+            // Assert
+            Assert.Equal(7, result.Count);
+
+            var roots = result
+                .Select(recipe => recipe.RecipeRoot)
+                .ToList();
+
+            Assert.Equal(
+                roots.Count,
+                roots.Distinct().Count());
+        }
+
+        [Fact]
+        public async Task GenerateWeeklyPlanAsync_IncludesPreferredNumberOfFavoriteRecipes()
+        {
+            // Arrange
+            var factory = TestHelper.CreateDbContextFactory();
+
+            var favorite1 = TestHelper.CreateRecipe(1, "Chicken Pasta", 350, "chicken pasta");
+            var favorite2 = TestHelper.CreateRecipe(2, "Beef Rice", 420, "beef rice");
+            var favorite3 = TestHelper.CreateRecipe(3, "Greek Salad", 280, "greek salad");
+
+            var recipes = new List<Recipe>
+    {
+        favorite1,
+        favorite2,
+        favorite3,
+        TestHelper.CreateRecipe(4, "Chicken Soup", 310, "chicken soup"),
+        TestHelper.CreateRecipe(5, "Vegetable Curry", 450, "vegetable curry"),
+        TestHelper.CreateRecipe(6, "Fish Tacos", 490, "fish tacos"),
+        TestHelper.CreateRecipe(7, "Turkey Wrap", 400, "turkey wrap"),
+        TestHelper.CreateRecipe(8, "Lentil Bowl", 380, "lentil bowl"),
+        TestHelper.CreateRecipe(9, "Salmon Plate", 430, "salmon plate")
+    };
+
+            using (var context = factory.CreateDbContext())
+            {
+                context.Recipes.AddRange(recipes);
+                await context.SaveChangesAsync();
+            }
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
+        new Claim(ClaimTypes.Name, "testuser")
+    };
+
+            var identity = new ClaimsIdentity(claims, "TestAuth");
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            var authenticationStateProviderMock =
+                new Mock<AuthenticationStateProvider>();
+
+            authenticationStateProviderMock
+                .Setup(x => x.GetAuthenticationStateAsync())
+                .ReturnsAsync(new AuthenticationState(claimsPrincipal));
+
+            var user = new User
+            {
+                Id = 1,
+                Name = "Test User",
+                FavoriteRecipes = new List<Recipe>
+        {
+            favorite1,
+            favorite2,
+            favorite3
+        },
+                WeeklyPlan = new List<Recipe>(),
+                ShoppingList = new List<Ingredient>(),
+                UserPreferences = new UserPreferences
+                {
+                    Id = 1,
+                    UserId = 1,
+                    WeeklyPlanDays = 7
+                }
+            };
+
+            var applicationUser = new ApplicationUser
+            {
+                Id = "test-user-id",
+                UserName = "testuser",
+                User = user
+            };
+
+            using (var context = factory.CreateDbContext())
+            {
+                var favoriteRecipes = await context.Recipes
+                    .Where(r =>
+                        r.Id == favorite1.Id ||
+                        r.Id == favorite2.Id ||
+                        r.Id == favorite3.Id)
+                    .ToListAsync();
+
+                applicationUser.User.FavoriteRecipes = favoriteRecipes;
+
+                context.Users.Add(applicationUser);
+
+                await context.SaveChangesAsync();
+            }
+
+            var userManagerMock =
+                TestHelper.CreateUserManagerMock(applicationUser);
+
+            var navigationManagerMock = new Mock<NavigationManager>();
+            var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+            var classificationService = new RecipeClassificationService();
+
+            var dataService = new DataService(
+                navigationManagerMock.Object,
+                httpClientFactoryMock.Object,
+                factory,
+                userManagerMock.Object,
+                authenticationStateProviderMock.Object,
+                classificationService);
+
+            var weeklyPlanService = new WeeklyPlanService(
+                dataService,
+                navigationManagerMock.Object,
+                factory);
+
+            // Act
+            var result = await weeklyPlanService.GenerateWeeklyPlanAsync(
+                maxCalories: null,
+                maxPrepTime: null,
+                preferredFavoriteRecipes: 2);
+
+            // Assert
+            Assert.Equal(7, result.Count);
+
+            var favoriteIds = new[]
+            {
+        favorite1.Id,
+        favorite2.Id,
+        favorite3.Id
+    };
+
+            var favoritesInPlan = result
+                .Count(recipe => favoriteIds.Contains(recipe.Id));
+
+            Assert.Equal(2, favoritesInPlan);
+        }
+
     }
 }

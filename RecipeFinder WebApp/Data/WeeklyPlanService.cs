@@ -139,8 +139,9 @@ namespace RecipeFinder_WebApp.Data
             if (remainingSlots > 0)
             {
                 var shuffledValidRecipes = validRecipes
-                    .OrderBy(x => random.Next())
-                    .ToList();
+                   .Where(r => !validFavoriteRecipes.Any(fr => fr.Id == r.Id))
+                   .OrderBy(x => random.Next())
+                   .ToList();
 
                 AddRecipesToWeeklyPlan(
                     sourceRecipes: shuffledValidRecipes,
