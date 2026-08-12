@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = 'steliosboursanidis/recipefinderwebapp'
+        DOCKER_BIN = '/snap/docker/current/bin/docker'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -29,9 +34,10 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh '''
-                    /snap/docker/current/bin/docker build \
+                    $DOCKER_BIN build \
                     -f "RecipeFinder WebApp/Dockerfile" \
-                    -t recipefinder-ci:${BUILD_NUMBER} \
+                    -t $DOCKER_IMAGE:${BUILD_NUMBER} \
+                    -t $DOCKER_IMAGE:latest \
                     .
                 '''
             }
@@ -39,7 +45,30 @@ pipeline {
 
         stage('Verify Docker Image') {
             steps {
-                sh '/snap/docker/current/bin/docker image inspect recipefinder-ci:${BUILD_NUMBER}'
+                sh '$DOCKER_BIN image inspect $DOCKER_IMAGE:${BUILD_NUMBER}'
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-credentials',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKER_TOKEN'
+                    )
+                ]) {
+                    sh '''
+                        echo "$DOCKER_TOKEN" | $DOCKER_BIN login \
+                            --username "$DOCKER_USERNAME" \
+                            --password-stdin
+
+                        $DOCKER_BIN push $DOCKER_IMAGE:${BUILD_NUMBER}
+                        $DOCKER_BIN push $DOCKER_IMAGE:latest
+
+                        $DOCKER_BIN logout
+                    '''
+                }
             }
         }
     }
