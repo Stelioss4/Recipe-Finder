@@ -25,5 +25,22 @@ pipeline {
                 sh 'dotnet test "RecipeFinderTest/RecipeFinderTest.csproj" --configuration Release --no-build'
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                sh '''
+                    /snap/docker/current/bin/docker build \
+                    -f "RecipeFinder WebApp/Dockerfile" \
+                    -t recipefinder-ci:${BUILD_NUMBER} \
+                    .
+                '''
+            }
+        }
+
+        stage('Verify Docker Image') {
+            steps {
+                sh '/snap/docker/current/bin/docker image inspect recipefinder-ci:${BUILD_NUMBER}'
+            }
+        }
     }
 }
