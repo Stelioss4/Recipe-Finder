@@ -95,8 +95,6 @@ pipeline {
                     echo "Previous production image: $PREVIOUS_IMAGE"
                     echo "Deploying: $DOCKER_IMAGE:${BUILD_NUMBER}"
 
-                    $DOCKER_BIN pull $DOCKER_IMAGE:${BUILD_NUMBER}
-
                     if $DOCKER_BIN inspect recipefinder >/dev/null 2>&1; then
                         $DOCKER_BIN stop recipefinder
                         $DOCKER_BIN rm recipefinder
