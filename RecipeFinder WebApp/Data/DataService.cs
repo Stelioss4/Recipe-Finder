@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Recipe_Finder;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RecipeFinder_WebApp.Data
 {
@@ -162,10 +163,17 @@ namespace RecipeFinder_WebApp.Data
                     throw new NullReferenceException("Authenticated ApplicationUser or its User is null.");
                 }
 
-                // Fetch the user from the database
-                var user = await _context.User
-                    .Include(u => u.ShoppingList)
-                    .FirstOrDefaultAsync(u => u.Id == appUser.User.Id);
+                var query = _context.User
+                     .Include(u => u.ShoppingList)
+                     .Where(u => u.Id == appUser.User.Id);
+
+
+                Console.WriteLine("======================================");
+                Console.WriteLine("PROFILE USER QUERY");
+                Console.WriteLine(query.ToQueryString());
+                Console.WriteLine("======================================");
+
+                var user = await query.FirstOrDefaultAsync();
 
                 if (user == null)
                 {

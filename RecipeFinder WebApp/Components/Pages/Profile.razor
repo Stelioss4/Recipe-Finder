@@ -261,48 +261,75 @@
 
     protected async Task Init()
     {
-        using var context = DbContextFactory.CreateDbContext();
         appUser = await DataService.GetAuthenticatedUserAsync();
 
-        if (appUser != null)
-        {
-            appUser.User = await DataService.GetUserByIdAsync();
-            appUser.User.ShoppingList = await _favorite.GetShoppingListAsync();
-            appUser.User.UserPreferences = await DataService.GetUsersPreferencesAsync();
-
-            if (appUser.User.LastWeeklyPlanDate != null)
-            {
-                appUser.User.LastWeeklyPlanDate = await _weeklyPlan.CheckWeeklyPlanDate();
-                var daysSinceLastPlan = (DateTime.Now - appUser.User.LastWeeklyPlanDate.Value).TotalDays;
-
-                if (daysSinceLastPlan >= Constants.WEEK_DAY_NUM)
-                {
-                    appUser.User.WeeklyPlan.Clear();
-                    appUser.User.LastWeeklyPlanDate = null;
-                    await context.SaveChangesAsync();
-
-                    if (!weeklyPlanExpiredToastShown)
-                    {
-                        ToastService.ShowSuccess("Your weekly plan has expired. You can now create a new one!");
-                        weeklyPlanExpiredToastShown = true;
-
-                        await EmailSender.SendEmailAsync(appUser.Email, "Weekly Plan Expired", "Your weekly meal plan has expired. Please log in to your profile to create a new one.");
-
-                    }
-                }
-            }
-
-            appUser.User.ShoppingList ??= new List<Ingredient>();
-        }
-        else
+        if (appUser == null)
         {
             await SignInManager.SignOutAsync();
             Navigation.NavigateTo("Account/LogIn");
             return;
         }
 
+        appUser.User = await DataService.GetUserByIdAsync();
+
+        if (appUser.User == null)
+        {
+            await SignInManager.SignOutAsync();
+            Navigation.NavigateTo("Account/LogIn");
+            return;
+        }
+
+        appUser.User.ShoppingList =
+            await _favorite.GetShoppingListAsync()
+            ?? new List<Ingredient>();
+
+        appUser.User.UserPreferences =
+            await DataService.GetUsersPreferencesAsync();
+
+        await CheckWeeklyPlanExpirationAsync();
+
         await _favorite.ReloadFavorites();
+
         user = appUser.User;
+    }
+
+    private async Task CheckWeeklyPlanExpirationAsync()
+    {
+        if (appUser?.User?.LastWeeklyPlanDate == null)
+            return;
+
+        var lastWeeklyPlanDate = await _weeklyPlan.CheckWeeklyPlanDate();
+
+        if (lastWeeklyPlanDate == null)
+            return;
+
+        appUser.User.LastWeeklyPlanDate = lastWeeklyPlanDate;
+
+        var daysSinceLastPlan =
+            (DateTime.Now - lastWeeklyPlanDate.Value).TotalDays;
+
+        if (daysSinceLastPlan < Constants.WEEK_DAY_NUM)
+            return;
+
+        appUser.User.WeeklyPlan ??= new List<Recipe>();
+
+        appUser.User.WeeklyPlan.Clear();
+        appUser.User.LastWeeklyPlanDate = null;
+
+        await _weeklyPlan.ClearExpiredWeeklyPlanAsync();
+
+        if (!weeklyPlanExpiredToastShown)
+        {
+            ToastService.ShowSuccess(
+                "Your weekly plan has expired. You can now create a new one!");
+
+            weeklyPlanExpiredToastShown = true;
+
+            await EmailSender.SendEmailAsync(
+                appUser.Email!,
+                "Weekly Plan Expired",
+                "Your weekly meal plan has expired. Please log in to your profile to create a new one.");
+        }
     }
 
     private async Task UpdateFavorites()
@@ -322,12 +349,16 @@
         }
     }
 
-    private void TogglePopupWeeklyPlan()
+    private async Task TogglePopupWeeklyPlan()
     {
         showWeeklyPlanPopup = !showWeeklyPlanPopup;
+
         if (showWeeklyPlanPopup)
         {
+            user.WeeklyPlan = await _weeklyPlan.GetWeeklyPlanAsync(user.Id);
+
             EnsureUserPreferences();
+
             showFavoritesPopup = false;
             showShoppingListPopup = false;
             showSearchBoxPopup = false;
@@ -359,10 +390,22 @@
     private async Task CreateWeeklyPlan()
     {
         Loading = true;
-        user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync(appUser.User.UserPreferences.MaxCaloriesPerRecipe, appUser.User.UserPreferences.MaxPreparationTimeInMinutes, appUser.User.UserPreferences.PreferredFavoriteRecipesPerWeek);
-        await Init();
-        await InvokeAsync(StateHasChanged);
-        Loading = false;
+
+        try
+        {
+            user.WeeklyPlan = await _weeklyPlan.GenerateWeeklyPlanAsync(
+                user.UserPreferences.MaxCaloriesPerRecipe,
+                user.UserPreferences.MaxPreparationTimeInMinutes,
+                user.UserPreferences.PreferredFavoriteRecipesPerWeek);
+
+            user.LastWeeklyPlanDate = DateTime.Now;
+
+            await InvokeAsync(StateHasChanged);
+        }
+        finally
+        {
+            Loading = false;
+        }
     }
 
     private async Task ForceNewPlan()
