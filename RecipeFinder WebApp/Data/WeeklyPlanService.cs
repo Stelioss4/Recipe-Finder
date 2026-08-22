@@ -324,6 +324,40 @@ namespace RecipeFinder_WebApp.Data
 
             return appUser.User.LastWeeklyPlanDate;
         }
+
+        public async Task<List<Recipe>> GetWeeklyPlanAsync(int userId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+
+            return await context.User
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.WeeklyPlan)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task ClearExpiredWeeklyPlanAsync()
+        {
+            using var context = _contextFactory.CreateDbContext();
+
+            var appUser = await _dataService.GetAuthenticatedUserAsync();
+
+            if (appUser?.User == null)
+                return;
+
+            var dbUser = await context.User
+                .Include(u => u.WeeklyPlan)
+                .FirstOrDefaultAsync(u => u.Id == appUser.User.Id);
+
+            if (dbUser == null)
+                return;
+
+            dbUser.WeeklyPlan.Clear();
+            dbUser.LastWeeklyPlanDate = null;
+
+            await context.SaveChangesAsync();
+        }
+
     }
 }
 
