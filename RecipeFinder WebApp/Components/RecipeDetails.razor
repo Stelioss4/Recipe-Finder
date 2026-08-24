@@ -400,37 +400,31 @@
     private async Task AddRecipeToFavorite(Recipe recipe)
     {
         await _favorite.AddFavoriteRecipeAsync(recipe);
-        await InvokeAsync(StateHasChanged);
-        await Init();
 
+        isRecipeInFavorites = true;
     }
 
-    private async Task<ApplicationUser> FindUserFromDatabase()
-    {
-        if (appUser != null)
-        {
-            appUser.User = await _dataService.GetUserByIdAsync();
-        }
-        return appUser;
-
-    }
     private async Task CheckIfRecipeInFavorites(Recipe actualRecipe)
     {
-        if (!isAuthenticated)
+        if (!isAuthenticated || actualRecipe == null)
         {
             isRecipeInFavorites = false;
             return;
         }
 
-        appUser = await FindUserFromDatabase();
+        appUser = await _dataService.GetAuthenticatedUserAsync();
 
-        if (appUser?.User?.FavoriteRecipes == null || actualRecipe == null)
+        if (appUser?.User == null)
         {
             isRecipeInFavorites = false;
             return;
         }
 
-        isRecipeInFavorites = appUser.User.FavoriteRecipes.Any(r => r.Id == actualRecipe.Id);
+        var favoriteRecipeIds =
+            await _favorite.GetFavoriteRecipeIdsAsync(appUser.User.Id);
+
+        isRecipeInFavorites =
+            favoriteRecipeIds.Contains(actualRecipe.Id);
     }
 
     private bool CheckIfIngredientInShoppingList(Ingredient ingredient)
