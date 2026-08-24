@@ -205,6 +205,8 @@
 
     private int LoadingIngredientId = 0;
 
+    private HashSet<int> shoppingListIngredientIds = new();
+
 
 
     protected override async Task OnInitializedAsync()
@@ -239,46 +241,7 @@
                 var result = await _dataService.ShowRecipesReviewsAndRatings(recipe);
                 averageRating = result.AverageRating;
             }
-            // else
-            // {
-            //     // 2. If not in the database, proceed with scraping
-            //     Console.WriteLine("Recipe not found in database; starting online scrape.");
-
-            //     try
-            //     {
-            //         if (decodedUrl.Contains(Constants.CHEFKOCH_URL) || decodedUrl.Contains(Constants.ALLRECIPE_URL))
-            //         {
-            //             if (decodedUrl.Contains(Constants.CHEFKOCH_URL))
-            //             {
-            //                 recipe = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-            //             }
-            //             if (decodedUrl.Contains(Constants.ALLRECIPE_URL))
-            //             {
-            //                 recipe = await Scrap.ScrapeAllRecipesDetailsAndUpdateRecipe(new Recipe { Url = decodedUrl });
-            //             }
-            //         }
-            //         else
-            //         {
-            //             Console.WriteLine("Unknown source domain");
-            //         }
-
-            //         // 3. Save the newly scraped recipe to the database
-            //         if (recipe != null)
-            //         {
-            //             _context.Recipes.Add(recipe);
-            //             await _context.SaveChangesAsync();
-            //             Console.WriteLine($"Scraped and saved recipe: {recipe.RecipeName}");
-            //         }
-            //         else
-            //         {
-            //             Console.WriteLine("Recipe object is null after scraping.");
-            //         }
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         Console.WriteLine($"Error during scraping: {ex.Message}");
-            //     }
-            // }
+           
         }
         else
         {
@@ -346,10 +309,17 @@
         Loading = true;
         LoadingIngredientId = ingredient.Id;
 
-        await _favorite.AddIngredientsToShoppingList(ingredient);
-        Loading = false;
-        LoadingIngredientId = 0;
-        await Init();
+        try
+        {
+            await _favorite.AddIngredientsToShoppingList(ingredient);
+
+            shoppingListIngredientIds.Add(ingredient.Id);
+        }
+        finally
+        {
+            Loading = false;
+            LoadingIngredientId = 0;
+        }
     }
 
     private async Task RemoveIngredient(Ingredient ingredient)
@@ -357,11 +327,17 @@
         Loading = true;
         LoadingIngredientId = ingredient.Id;
 
-        await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
+        try
+        {
+            await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
 
-        Loading = false;
-        LoadingIngredientId = 0;
-        await Init();
+            shoppingListIngredientIds.Remove(ingredient.Id);
+        }
+        finally
+        {
+            Loading = false;
+            LoadingIngredientId = 0;
+        }
     }
 
 
@@ -429,11 +405,12 @@
 
     private bool CheckIfIngredientInShoppingList(Ingredient ingredient)
     {
-        if (appUser == null || appUser.User == null || appUser.User.ShoppingList == null)
+        if (!isAuthenticated || ingredient == null)
         {
             return false;
         }
-        return appUser.User.ShoppingList.Any(i => i.Id == ingredient.Id);
+
+        return shoppingListIngredientIds.Contains(ingredient.Id);
     }
 
 }

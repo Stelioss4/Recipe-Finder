@@ -41,7 +41,7 @@
 
             @if (recipes.Count > 0)
             {
-                <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoriteAdded="UpdateFavorites" OnFavoriteRemoved="UpdateFavorites"></RecipeOutput>
+                <RecipeOutput recipes="recipes" RemoveRecipeButton="false"></RecipeOutput>
             }
             
         }
@@ -67,9 +67,9 @@
         <!-- Shopping List Popup -->
         @if (showShoppingListPopup)
         {
-            if (appUser.User.ShoppingList != null && appUser.User.ShoppingList.Count > 0)
+            if (user.ShoppingList != null && user.ShoppingList.Count > 0)
             {
-                <ShoppingListOutput ShoppingList="user.ShoppingList" OnFavoritesChanged="UpdateFavorites" />
+                <ShoppingListOutput ShoppingList="user.ShoppingList" OnShoppingListChanged="UpdateShoppingList" />
             }
             else
             {
@@ -332,10 +332,24 @@
         }
     }
 
-    private async Task UpdateFavorites()
+    private Task UpdateShoppingList(Ingredient ingredient)
     {
-        await Init();
-        await InvokeAsync(StateHasChanged);
+        if (user?.ShoppingList == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        var existingIngredient = user.ShoppingList
+            .FirstOrDefault(i => i.Id == ingredient.Id);
+
+        if (existingIngredient != null)
+        {
+            user.ShoppingList.Remove(existingIngredient);
+        }
+
+        StateHasChanged();
+
+        return Task.CompletedTask;
     }
 
     private void TogglePopupFavorites()
