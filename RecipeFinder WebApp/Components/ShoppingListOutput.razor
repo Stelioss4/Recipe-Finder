@@ -56,7 +56,7 @@
 
 @code {
     [Parameter] public List<Ingredient> ShoppingList { get; set; } = new List<Ingredient>();
-    [Parameter] public EventCallback<Ingredient> OnFavoritesChanged { get; set; }
+    [Parameter] public EventCallback<Ingredient> OnShoppingListChanged { get; set; }
     [Parameter] public ApplicationUser appUser { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
@@ -74,6 +74,7 @@
     private async Task RemoveIngredient(Ingredient ingredient)
     {
         await _favorite.RemoveIngredientFromShoppingListAsync(ingredient);
-        await OnFavoritesChanged.InvokeAsync(ingredient);
+
+        await OnShoppingListChanged.InvokeAsync(ingredient);
     }
 }

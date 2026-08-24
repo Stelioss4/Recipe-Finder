@@ -114,7 +114,7 @@
 
     @if (recipes.Count > 0)
     {
-        <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoritesChanged="UpdateFavorites"></RecipeOutput>
+        <RecipeOutput recipes="recipes" RemoveRecipeButton="false" OnFavoriteAdded="UpdateFavorites" OnFavoriteRemoved="UpdateFavorites"></RecipeOutput>
     }
 </div>
 
@@ -147,14 +147,16 @@
         isSearching = false;
     }
 
-    private void UpdateFavorites()
+    private Task UpdateFavorites(Recipe recipe)
     {
-        InvokeAsync(StateHasChanged);
+        StateHasChanged();
+
+        return Task.CompletedTask;
     }
+
     private async Task HandleSearch(string term)
     {
         searchQuery = term;
         recipes = await Scrap.ScrapeCKRecipes(term);
     }
-
 }
