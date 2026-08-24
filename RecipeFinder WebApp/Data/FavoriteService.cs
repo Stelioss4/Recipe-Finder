@@ -69,6 +69,27 @@ namespace RecipeFinder_WebApp.Data
         }
 
         /// <summary>
+        /// Retrieves the IDs of all recipes that are marked as favorites
+        /// by the specified user.
+        /// </summary>
+        /// <param name="userId">
+        /// The ID of the user whose favorite recipe IDs should be retrieved.
+        /// </param>
+        /// <returns>
+        /// A list containing the IDs of the user's favorite recipes.
+        /// </returns>
+        public async Task<List<int>> GetFavoriteRecipeIdsAsync(int userId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+
+            return await context.User
+                .Where(u => u.Id == userId)
+                .SelectMany(u => u.FavoriteRecipes)
+                .Select(r => r.Id)
+                .ToListAsync();
+        }
+
+        /// <summary>
         /// Removes Ingredient from shopping list
         /// </summary>
         /// <param name="ingredient"></param>

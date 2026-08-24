@@ -88,27 +88,50 @@
     [Parameter] public ApplicationUser appUser { get; set; } = new();
     [Parameter] public bool RemoveRecipeButton { get; set; } = true;
     [Parameter] public bool AddRecipeButton { get; set; } = true;
-    [Parameter] public EventCallback<Recipe> OnFavoritesChanged { get; set; }
+    [Parameter] public EventCallback<Recipe> OnFavoriteAdded { get; set; }
+    [Parameter] public EventCallback<Recipe> OnFavoriteRemoved { get; set; }
     private Recipe loadingRecipe = null;
     private string loadingAction = null; // "add" or "remove"
     private bool isAuthenticated { get; set; }
     private bool favoriteAddAndRemoveToastShown = false;
     private bool isRecipeInFavorites { get; set; }
+    private HashSet<int> favoriteRecipeIds = new();
 
-
+   
     protected override async Task OnInitializedAsync()
     {
         await Init();
     }
+
     public async Task Init()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        isAuthenticated = authState.User.Identity.IsAuthenticated;
+        var authState =
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
-        appUser = await FindUserFromDatabase();
+        isAuthenticated =
+            authState.User.Identity?.IsAuthenticated ?? false;
 
+        if (!isAuthenticated)
+        {
+            favoriteRecipeIds.Clear();
+            return;
+        }
 
+        appUser = await DataService.GetAuthenticatedUserAsync();
+
+        if (appUser?.User == null)
+        {
+            favoriteRecipeIds.Clear();
+            return;
+        }
+
+        var favoriteIds =
+            await _favorite.GetFavoriteRecipeIdsAsync(appUser.User.Id);
+
+        favoriteRecipeIds = favoriteIds.ToHashSet();
     }
+
+
     private void NavigateToRecipeDetails(string recipeUrl)
     {
         Navigation.NavigateTo($"/recipeDetails?url={Uri.EscapeDataString(recipeUrl)}");
@@ -118,52 +141,85 @@
     {
         loadingRecipe = recipe;
         loadingAction = "add";
-        await _favorite.AddFavoriteRecipeAsync(recipe);
-        await OnFavoritesChanged.InvokeAsync(recipe);
-        if (!favoriteAddAndRemoveToastShown)
+
+        try
         {
-            ToastService.ShowSuccess($"Recipe '{recipe.RecipeName}' added to favorites!");
-            favoriteAddAndRemoveToastShown = true;
-            Console.WriteLine($"Recipe '{recipe.RecipeName}' added to favorites!");
+            await _favorite.AddFavoriteRecipeAsync(recipe);
+
+            favoriteRecipeIds.Add(recipe.Id);
+
+            await OnFavoriteAdded.InvokeAsync(recipe);
+
+            ToastService.ShowSuccess(
+                $"Recipe '{recipe.RecipeName}' added to favorites!");
+
+            Console.WriteLine(
+                $"Recipe '{recipe.RecipeName}' added to favorites!");
+
+            Console.WriteLine($"Recipe ID after add: {recipe.Id}");
+
+            favoriteRecipeIds.Add(recipe.Id);
+
+            Console.WriteLine(
+                $"Favorite IDs contains {recipe.Id}: {favoriteRecipeIds.Contains(recipe.Id)}");
         }
-        loadingRecipe = null;
-        loadingAction = null;
-        await Init();
+        finally
+        {
+            loadingRecipe = null;
+            loadingAction = null;
+        }
     }
 
+   
     private async Task RemoveRecipeFromFavorite(Recipe recipe)
     {
         loadingRecipe = recipe;
         loadingAction = "remove";
-        await _favorite.RemoveFavoriteRecipeAsync(recipe);
-        await OnFavoritesChanged.InvokeAsync(recipe);
-        if (!favoriteAddAndRemoveToastShown)
+
+        try
         {
-            ToastService.ShowSuccess($"Recipe '{recipe.RecipeName}' removed from favorites!");
-            favoriteAddAndRemoveToastShown = true;
-            Console.WriteLine($"Recipe '{recipe.RecipeName}' removed from favorites!");
+            await _favorite.RemoveFavoriteRecipeAsync(recipe);
+
+            favoriteRecipeIds.Remove(recipe.Id);
+
+            await OnFavoriteRemoved.InvokeAsync(recipe);
+
+            ToastService.ShowSuccess(
+                $"Recipe '{recipe.RecipeName}' removed from favorites!");
+
+            Console.WriteLine(
+                $"Recipe '{recipe.RecipeName}' removed from favorites!");
         }
-        loadingRecipe = null;
-        loadingAction = null;
-        await Init();
+        finally
+        {
+            loadingRecipe = null;
+            loadingAction = null;
+        }
     }
+
+    private bool CheckIfRecipeInFavorites(Recipe recipe)
+    {
+        return favoriteRecipeIds.Contains(recipe.Id);
+    }
+
     private async Task<ApplicationUser> FindUserFromDatabase()
     {
-        if (appUser != null)
+        if (appUser?.User != null)
         {
-            appUser.User = await DataService.GetUserByIdAsync();
+            var ids = await _favorite.GetFavoriteRecipeIdsAsync(appUser.User.Id);
+            favoriteRecipeIds = ids.ToHashSet();
         }
         return appUser;
 
     }
-    private bool CheckIfRecipeInFavorites(Recipe recipe)
-    {
-        if(appUser == null || appUser.User == null || appUser.User.FavoriteRecipes == null)
-        {
-            return false;
-        }
+    // private bool CheckIfRecipeInFavorites(Recipe recipe)
+    // {
+    //     if(appUser == null || appUser.User == null || appUser.User.FavoriteRecipes == null)
+    //     {
+    //         return false;
+    //     }
 
-        return appUser.User.FavoriteRecipes.Any(r => r.Id == recipe.Id);
-    }
+    //     return appUser.User.FavoriteRecipes.Any(r => r.Id == recipe.Id);
+    // }
 
 }
