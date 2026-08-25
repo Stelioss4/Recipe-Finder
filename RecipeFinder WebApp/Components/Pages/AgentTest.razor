@@ -1,0 +1,53 @@
+﻿@page "/agent-test"
+@using RecipeFinder_WebApp.Data.AI
+@using RecipeFinder_WebApp.Data.AI.Models
+@inject RecipeAgentService RecipeAgentService
+
+<h3>Recipe Agent Test</h3>
+<p>Status: @_status</p>
+@if (_recipes.Count == 0)
+{
+    <p>No recipes found.</p>
+}
+else
+{
+    <p>Agent received @_recipes.Count recipes.</p>
+
+    @foreach (var recipe in _recipes.Take(5))
+    {
+        <div>
+            <strong>@recipe.RecipeName</strong>
+
+            <p>Id: @recipe.Id</p>
+            <p>Time: @recipe.Time</p>
+            <p>Difficulty: @recipe.DifficultyLevel</p>
+            <p>Cuisine: @recipe.CuisineType</p>
+            <p>Calories: @recipe.Calories</p>
+            <p>Favorite: @recipe.IsFavorite</p>
+            <p>Ingredients: @string.Join(", ", recipe.Ingredients)</p>
+
+            <hr />
+        </div>
+    }
+}
+
+
+@code {
+    private List<RecipeAgentDto> _recipes = new List<RecipeAgentDto>();
+    private string _status = "Not started";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _status = "Loading...";
+
+        try
+        {
+            _recipes = await RecipeAgentService.GetAvailableRecipesAsync();
+            _status = $"Loaded {_recipes.Count} recipes";
+        }
+        catch (Exception ex)
+        {
+            _status = ex.Message;
+        }
+    }
+}

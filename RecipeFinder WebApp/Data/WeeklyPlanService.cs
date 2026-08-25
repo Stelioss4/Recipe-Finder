@@ -13,7 +13,7 @@ namespace RecipeFinder_WebApp.Data
         private readonly DataService _dataService;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
-        public WeeklyPlanService(DataService dataService, NavigationManager navigation, IDbContextFactory<ApplicationDbContext> contextFactory /* ApplicationDbContext _context*/)
+        public WeeklyPlanService(DataService dataService, NavigationManager navigation, IDbContextFactory<ApplicationDbContext> contextFactory)
         {
             _dataService = dataService;
             _contextFactory = contextFactory;
@@ -358,6 +358,130 @@ namespace RecipeFinder_WebApp.Data
             await context.SaveChangesAsync();
         }
 
+
+        public async Task<List<Recipe>> GetCandidateRecipesAsync(UserPreferences preferences, HashSet<int> favoriteIds, int candidateCount = Constants.DEAFULT_CANDIDATE_COUNT)
+        {
+            if (preferences == null)
+            {
+                throw new ArgumentNullException(nameof(preferences));
+            }
+
+            if (favoriteIds == null)
+            {
+                throw new ArgumentNullException(nameof(favoriteIds));
+            }
+
+            if (candidateCount <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(candidateCount));
+            }
+
+            using var context = _contextFactory.CreateDbContext();
+
+            var query = context.Recipes
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (preferences.MaxCaloriesPerRecipe.HasValue)
+            {
+                query = query.Where(recipe =>
+                    recipe.NutritionValue != null &&
+                    recipe.NutritionValue.Calories.HasValue &&
+                    recipe.NutritionValue.Calories.Value <= preferences.MaxCaloriesPerRecipe.Value);
+            }
+
+            var filteredRecipes = await query
+                .Select(recipe => new Recipe
+                {
+                    Id = recipe.Id,
+                    RecipeName = recipe.RecipeName,
+                    RecipeRoot = recipe.RecipeRoot,
+                    Time = recipe.Time
+                })
+                .ToListAsync();
+
+            if (preferences.MaxPreparationTimeInMinutes.HasValue)
+            {
+                filteredRecipes = filteredRecipes
+                    .Where(recipe =>
+                    {
+                        var preparationTime = ExtractMinutesFromTimeText(recipe.Time);
+
+                        return preparationTime.HasValue &&
+                               preparationTime.Value <= preferences.MaxPreparationTimeInMinutes.Value;
+                    })
+                    .ToList();
+            }
+
+            var favoriteRecipes = filteredRecipes
+                .Where(recipe => favoriteIds.Contains(recipe.Id))
+                .ToList();
+
+            var nonFavoriteRecipes = filteredRecipes
+                .Where(recipe => !favoriteIds.Contains(recipe.Id))
+                .ToList();
+
+            int preferredFavorites = preferences.PreferredFavoriteRecipesPerWeek ?? 0;
+
+            int favoriteCandidateCount = Math.Min(
+                Math.Max(preferredFavorites * 3, preferredFavorites),
+                candidateCount / 2);
+
+            var random = new Random();
+
+            var selectedFavoriteCandidates = favoriteRecipes
+                .OrderBy(recipe => random.Next())
+                .Take(favoriteCandidateCount)
+                .ToList();
+
+            int remainingCandidateSlots =
+                candidateCount - selectedFavoriteCandidates.Count;
+
+            var selectedNonFavoriteCandidates = nonFavoriteRecipes
+                .OrderBy(recipe => random.Next())
+                .Take(remainingCandidateSlots)
+                .ToList();
+
+            var candidateRecipes = selectedFavoriteCandidates
+                .Concat(selectedNonFavoriteCandidates)
+                .ToList();
+
+            if (candidateRecipes.Count < candidateCount)
+            {
+                var selectedIds = candidateRecipes
+                    .Select(recipe => recipe.Id)
+                    .ToHashSet();
+
+                var additionalRecipes = filteredRecipes
+                    .Where(recipe => !selectedIds.Contains(recipe.Id))
+                    .OrderBy(recipe => random.Next())
+                    .Take(candidateCount - candidateRecipes.Count)
+                    .ToList();
+
+                candidateRecipes.AddRange(additionalRecipes);
+            }
+
+            var candidateIds = candidateRecipes
+                .Select(recipe => recipe.Id)
+                .ToList();
+
+            var fullCandidateRecipes = await context.Recipes
+                .AsNoTracking()
+                .Where(recipe => candidateIds.Contains(recipe.Id))
+                .Include(recipe => recipe.NutritionValue)
+                .Include(recipe => recipe.ListOfIngredients)
+                .ToListAsync();
+
+            var recipesById = fullCandidateRecipes
+                .ToDictionary(recipe => recipe.Id);
+
+            var orderedCandidateRecipes = candidateIds
+                .Where(id => recipesById.ContainsKey(id))
+                .Select(id => recipesById[id])
+                .ToList();
+
+            return orderedCandidateRecipes;
+        }
     }
 }
 
