@@ -79,79 +79,54 @@ namespace RecipeFinder_WebApp.Data
                 favoriteRecipesToTake = weeklyPlanDays;
             }
 
-            var allRecipes = await context.Recipes
-                .Include(r => r.NutritionValue)
-                .ToListAsync();
+            var favoriteIds = favoriteRecipes
+                .Select(recipe => recipe.Id)
+                .ToHashSet();
 
-            var validRecipes = allRecipes
-                .Where(r =>
-                {
-                    if (preferences.MaxCaloriesPerRecipe.HasValue)
-                    {
-                        if (r.NutritionValue == null || !r.NutritionValue.Calories.HasValue)
-                            return false;
-
-                        if (r.NutritionValue.Calories.Value > preferences.MaxCaloriesPerRecipe.Value)
-                            return false;
-                    }
-
-                    if (preferences.MaxPreparationTimeInMinutes.HasValue)
-                    {
-                        var prepMinutes = ExtractMinutesFromTimeText(r.Time);
-
-                        if (!prepMinutes.HasValue)
-                            return false;
-
-                        if (prepMinutes.Value > preferences.MaxPreparationTimeInMinutes.Value)
-                            return false;
-                    }
-
-                    return true;
-                })
-                .ToList();
+            var validRecipes = await GetCandidateRecipesAsync(
+                preferences,
+                favoriteIds,
+                Constants.DEAFULT_CANDIDATE_COUNT);
 
             if (!validRecipes.Any())
             {
-                throw new Exception("No recipes match the selected weekly plan preferences.");
+                throw new Exception(
+                    "No recipes match the selected weekly plan preferences.");
             }
 
-            var validFavoriteRecipes = favoriteRecipes?
-                .Where(fr => validRecipes.Any(vr => vr.Id == fr.Id))
-                .ToList() ?? new List<Recipe>();
+            var validFavoriteRecipes = validRecipes
+                .Where(recipe => favoriteIds.Contains(recipe.Id))
+                .ToList();
 
             var random = new Random();
+
             var newWeeklyPlan = new List<Recipe>();
 
             if (favoriteRecipesToTake > 0 && validFavoriteRecipes.Any())
             {
                 var shuffledFavoriteRecipes = validFavoriteRecipes
-                    .OrderBy(x => random.Next())
+                    .OrderBy(recipe => random.Next())
                     .ToList();
 
                 AddRecipesToWeeklyPlan(
-                    sourceRecipes: shuffledFavoriteRecipes,
-                    targetPlan: newWeeklyPlan,
-                    maxToAdd: favoriteRecipesToTake);
+                    shuffledFavoriteRecipes,
+                    newWeeklyPlan,
+                    favoriteRecipesToTake);
             }
 
-            int remainingSlots = weeklyPlanDays - newWeeklyPlan.Count;
+            int remainingSlots =
+                weeklyPlanDays - newWeeklyPlan.Count;
 
             if (remainingSlots > 0)
             {
-                var remainingRecipePool = favoriteRecipesToTake > 0
-                    ? validRecipes
-                        .Where(r => !validFavoriteRecipes.Any(fr => fr.Id == r.Id))
-                        .ToList()
-                    : validRecipes;
-
-                var shuffledValidRecipes = remainingRecipePool
-                    .OrderBy(x => random.Next())
+                var shuffledValidRecipes = validRecipes
+                    .OrderBy(recipe => random.Next())
                     .ToList();
 
                 AddRecipesToWeeklyPlan(
-                    sourceRecipes: shuffledValidRecipes,
-                    targetPlan: newWeeklyPlan,
-                    maxToAdd: remainingSlots);
+                    shuffledValidRecipes,
+                    newWeeklyPlan,
+                    remainingSlots);
             }
 
             if (newWeeklyPlan.Count < weeklyPlanDays)
@@ -159,15 +134,30 @@ namespace RecipeFinder_WebApp.Data
                 throw new Exception("Not enough unique recipe roots match the selected preferences to create a full weekly plan.");
             }
 
-            userProfile.User.WeeklyPlan = newWeeklyPlan;
+            var weeklyPlanIds = newWeeklyPlan
+                .Select(recipe => recipe.Id)
+                .ToList();
+
+            var trackedWeeklyPlan = await context.Recipes
+                .Where(recipe => weeklyPlanIds.Contains(recipe.Id))
+                .ToListAsync();
+
+            trackedWeeklyPlan = weeklyPlanIds
+                .Select(id => trackedWeeklyPlan
+                    .First(recipe => recipe.Id == id))
+                .ToList();
+
+            userProfile.User.WeeklyPlan = trackedWeeklyPlan;
             userProfile.User.LastWeeklyPlanDate = DateTime.Now;
 
             context.Update(userProfile);
+
             await context.SaveChangesAsync();
 
-            Console.WriteLine("Your weekly plan is up-to-date and saved!");
+            Console.WriteLine(
+                "Your weekly plan is up-to-date and saved!");
 
-            return newWeeklyPlan;
+            return trackedWeeklyPlan;
         }
 
 
