@@ -2,52 +2,26 @@
 @using RecipeFinder_WebApp.Data.AI
 @using RecipeFinder_WebApp.Data.AI.Models
 @inject RecipeAgentService RecipeAgentService
+@inject OpenRouterService OpenRouterService
 
-<h3>Recipe Agent Test</h3>
-<p>Status: @_status</p>
-@if (_recipes.Count == 0)
+<button class="btn btn-primary" @onclick="TestOpenRouter">
+    Test AI
+</button>
+
+@if (!string.IsNullOrWhiteSpace(_aiResponse))
 {
-    <p>No recipes found.</p>
-}
-else
-{
-    <p>Agent received @_recipes.Count recipes.</p>
-
-    @foreach (var recipe in _recipes.Take(5))
-    {
-        <div>
-            <strong>@recipe.RecipeName</strong>
-
-            <p>Id: @recipe.Id</p>
-            <p>Time: @recipe.Time</p>
-            <p>Difficulty: @recipe.DifficultyLevel</p>
-            <p>Cuisine: @recipe.CuisineType</p>
-            <p>Calories: @recipe.Calories</p>
-            <p>Favorite: @recipe.IsFavorite</p>
-            <p>Ingredients: @string.Join(", ", recipe.Ingredients)</p>
-
-            <hr />
-        </div>
-    }
+    <p>@_aiResponse</p>
 }
 
 
 @code {
     private List<RecipeAgentDto> _recipes = new List<RecipeAgentDto>();
     private string _status = "Not started";
+    private string _aiResponse = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    private async Task TestOpenRouter()
     {
-        _status = "Loading...";
-
-        try
-        {
-            _recipes = await RecipeAgentService.GetAvailableRecipesAsync();
-            _status = $"Loaded {_recipes.Count} recipes";
-        }
-        catch (Exception ex)
-        {
-            _status = ex.Message;
-        }
+        _aiResponse = await OpenRouterService.SendMessageAsync(
+            "Say hello from the Recipe Finder AI agent.");
     }
 }

@@ -56,7 +56,7 @@ builder.Services.AddTransient<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<ScrapeReportService>();
 builder.Services.AddScoped<RecipeClassificationService>();
 builder.Services.AddScoped<RecipeAgentService>();
-
+builder.Services.AddHttpClient<OpenRouterService>();
 
 
 // Register HttpClient for dependency injection
