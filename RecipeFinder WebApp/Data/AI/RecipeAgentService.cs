@@ -52,7 +52,7 @@ namespace RecipeFinder_WebApp.Data.AI
 
                 recipeDtos.Add(recipeDto);
             }
-            return recipeDtos;  
+            return recipeDtos;
         }
 
         private RecipeAgentDto MapRecipeToDto(Recipe recipe, HashSet<int> favoriteIds)
@@ -72,6 +72,20 @@ namespace RecipeFinder_WebApp.Data.AI
             };
 
             return recipeDto;
+        }
+
+        public List<RecipeAgentDto> MapRecipesToDtos(List<Recipe> recipes, HashSet<int> favoriteIds)
+        {
+            List<RecipeAgentDto> recipeDtos = new List<RecipeAgentDto>();
+
+            foreach (var recipe in recipes)
+            {
+                RecipeAgentDto recipeDto = MapRecipeToDto(recipe, favoriteIds);
+
+                recipeDtos.Add(recipeDto);
+            }
+
+            return recipeDtos;
         }
     }
 }

@@ -168,11 +168,7 @@ namespace RecipeFinderTest.Unit
                     classificationService);
 
             // Real WeeklyPlanService
-            var weeklyPlanService =
-                new WeeklyPlanService(
-                    dataService,
-                    navigationManagerMock.Object,
-                    factory);
+            var weeklyPlanService = TestHelper.CreateWeeklyPlanService(dataService, navigationManagerMock.Object, factory);
 
             // Act
             var result =
@@ -295,10 +291,7 @@ namespace RecipeFinderTest.Unit
                 authenticationStateProviderMock.Object,
                 classificationService);
 
-            var weeklyPlanService = new WeeklyPlanService(
-                dataService,
-                navigationManagerMock.Object,
-                factory);
+            var weeklyPlanService = TestHelper.CreateWeeklyPlanService(dataService, navigationManagerMock.Object, factory);
 
             // Act
             var result = await weeklyPlanService.GenerateWeeklyPlanAsync(
@@ -400,10 +393,7 @@ namespace RecipeFinderTest.Unit
                 authenticationStateProviderMock.Object,
                 classificationService);
 
-            var weeklyPlanService = new WeeklyPlanService(
-                dataService,
-                navigationManagerMock.Object,
-                factory);
+            var weeklyPlanService = TestHelper.CreateWeeklyPlanService(dataService, navigationManagerMock.Object, factory);
 
             // Act
             var result = await weeklyPlanService.GenerateWeeklyPlanAsync(
@@ -526,10 +516,7 @@ namespace RecipeFinderTest.Unit
                 authenticationStateProviderMock.Object,
                 classificationService);
 
-            var weeklyPlanService = new WeeklyPlanService(
-                dataService,
-                navigationManagerMock.Object,
-                factory);
+            var weeklyPlanService = TestHelper.CreateWeeklyPlanService(dataService, navigationManagerMock.Object, factory);
 
             // Act
             var result = await weeklyPlanService.GenerateWeeklyPlanAsync(
@@ -645,10 +632,10 @@ namespace RecipeFinderTest.Unit
                 authenticationStateProviderMock.Object,
                 classificationService);
 
-            var weeklyPlanService = new WeeklyPlanService(
-                dataService,
-                navigationManagerMock.Object,
-                factory);
+            var weeklyPlanService = TestHelper.CreateWeeklyPlanService(
+     dataService,
+     navigationManagerMock.Object,
+     factory);
 
             // Act
             var result = await weeklyPlanService.GenerateWeeklyPlanAsync(
@@ -791,10 +778,8 @@ namespace RecipeFinderTest.Unit
                 authenticationStateProviderMock.Object,
                 classificationService);
 
-            var weeklyPlanService = new WeeklyPlanService(
-                dataService,
-                navigationManagerMock.Object,
-                factory);
+            var weeklyPlanService = TestHelper.CreateWeeklyPlanService(dataService, navigationManagerMock.Object, factory);
+
 
             // Act
             var result =
@@ -922,10 +907,7 @@ namespace RecipeFinderTest.Unit
                 authenticationStateProviderMock.Object,
                 classificationService);
 
-            var weeklyPlanService = new WeeklyPlanService(
-                dataService,
-                navigationManagerMock.Object,
-                factory);
+            var weeklyPlanService = TestHelper.CreateWeeklyPlanService(dataService, navigationManagerMock.Object, factory);
 
             // Act
             var result =

@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using RecipeFinder_WebApp.Data.AI.Models;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -81,6 +82,58 @@ namespace RecipeFinder_WebApp.Data.AI
                 .GetString();
 
             return responseMessage ?? string.Empty;
+        }
+
+
+        public async Task<WeeklyPlanAgentResponseDto> GenerateWeeklyPlanAsync(WeeklyPlanAgentRequestDto agentRequest)
+        {
+            var requestJson = JsonSerializer.Serialize(agentRequest);
+
+            var prompt = """
+        You are the weekly meal planning agent for Recipe Finder.
+
+        Create a weekly meal plan using ONLY recipes from the candidate recipes provided below.
+
+        Rules:
+        - Select exactly {agentRequest.WeeklyPlanDays} unique recipes.
+        - Never invent recipe IDs.
+        - Use only recipe IDs contained in CandidateRecipes.
+        - Prefer variety across the week.
+        - Consider cuisine, ingredients, preparation time and calories.
+        - Prefer approximately {agentRequest.PreferredFavoriteRecipesPerWeek} favorite recipes when possible.
+        - All hard calorie and preparation-time filtering has already been handled by the application.
+        - Return ONLY valid JSON.
+        - Do not include markdown.
+        - Do not include explanations.
+
+        Required response format:
+
+        {{
+        
+                    "recipeIds": [1, 2, 3]
+        }}
+
+        Candidate data:
+
+        {requestJson}
+        """;
+
+            var response = await SendMessageAsync(prompt);
+
+            var result = JsonSerializer.Deserialize<WeeklyPlanAgentResponseDto>(
+                response,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            if (result == null)
+            {
+                throw new Exception(
+                    "AI weekly plan response could not be parsed.");
+            }
+
+            return result;
         }
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
+using RecipeFinder_WebApp.Data.AI;
+using RecipeFinder_WebApp.Data.AI.Models;
 using System.Reflection.Metadata.Ecma335;
 
 namespace RecipeFinder_WebApp.Data
@@ -13,11 +15,16 @@ namespace RecipeFinder_WebApp.Data
         private readonly DataService _dataService;
         private List<Recipe> currentWeeklyPlan = new List<Recipe>();
         private User userProfile = new();
-        public WeeklyPlanService(DataService dataService, NavigationManager navigation, IDbContextFactory<ApplicationDbContext> contextFactory)
+        private readonly RecipeAgentService _recipeAgentService;
+        private readonly OpenRouterService _openRouterService;
+
+        public WeeklyPlanService(DataService dataService, NavigationManager navigation, IDbContextFactory<ApplicationDbContext> contextFactory, RecipeAgentService recipeAgentService, OpenRouterService openRouterService)
         {
             _dataService = dataService;
             _contextFactory = contextFactory;
             _navigation = navigation;
+            _recipeAgentService = recipeAgentService;
+            _openRouterService = openRouterService;
         }
 
         /// <summary>
@@ -160,6 +167,147 @@ namespace RecipeFinder_WebApp.Data
             return trackedWeeklyPlan;
         }
 
+
+
+        public async Task<List<Recipe>> GenerateAiWeeklyPlanAsync(
+    int? maxCalories,
+    int? maxPrepTime,
+    int? preferredFavoriteRecipes)
+        {
+            using var context = _contextFactory.CreateDbContext();
+
+            var appUser = await _dataService.GetAuthenticatedUserAsync();
+
+            if (appUser == null || appUser.User == null)
+            {
+                throw new Exception("User not authenticated.");
+            }
+
+            var userProfile = await context.Users
+                .Include(u => u.User.WeeklyPlan)
+                .Include(u => u.User.FavoriteRecipes)
+                .Include(u => u.User.UserPreferences)
+                .FirstOrDefaultAsync(u => u.Id == appUser.Id);
+
+            if (userProfile == null || userProfile.User == null)
+            {
+                throw new Exception("Authenticated user could not be loaded.");
+            }
+
+            var preferences = userProfile.User.UserPreferences;
+
+            if (preferences == null)
+            {
+                preferences = new UserPreferences
+                {
+                    UserId = userProfile.User.Id
+                };
+
+                userProfile.User.UserPreferences = preferences;
+            }
+
+            preferences.MaxCaloriesPerRecipe = maxCalories;
+            preferences.MaxPreparationTimeInMinutes = maxPrepTime;
+            preferences.PreferredFavoriteRecipesPerWeek = preferredFavoriteRecipes;
+
+            int weeklyPlanDays =
+                preferences.WeeklyPlanDays ?? Constants.WEEK_DAY_NUM;
+
+            int preferredFavorites =
+                preferences.PreferredFavoriteRecipesPerWeek ?? 0;
+
+            var favoriteIds = userProfile.User.FavoriteRecipes
+                .Select(recipe => recipe.Id)
+                .ToHashSet();
+
+            var candidateRecipes = await GetCandidateRecipesAsync(
+                preferences,
+                favoriteIds,
+                Constants.DEAFULT_CANDIDATE_COUNT);
+
+            if (candidateRecipes.Count < weeklyPlanDays)
+            {
+                throw new Exception(
+                    "Not enough candidate recipes were found to generate a weekly plan.");
+            }
+
+            var candidateDtos = _recipeAgentService.MapRecipesToDtos(
+                candidateRecipes,
+                favoriteIds);
+
+            WeeklyPlanAgentRequestDto agentRequest =
+                new WeeklyPlanAgentRequestDto
+                {
+                    MaxCaloriesPerRecipe =
+                        preferences.MaxCaloriesPerRecipe,
+
+                    MaxPreparationTimeInMinutes =
+                        preferences.MaxPreparationTimeInMinutes,
+
+                    PreferredFavoriteRecipesPerWeek =
+                        preferredFavorites,
+
+                    WeeklyPlanDays =
+                        weeklyPlanDays,
+
+                    CandidateRecipes =
+                        candidateDtos
+                };
+
+            var aiResponse =
+                await _openRouterService.GenerateWeeklyPlanAsync(agentRequest);
+
+            var selectedIds = aiResponse.RecipeIds;
+
+            if (selectedIds == null)
+            {
+                throw new Exception("AI returned no recipe IDs.");
+            }
+
+            if (selectedIds.Count != weeklyPlanDays)
+            {
+                throw new Exception(
+                    $"AI returned {selectedIds.Count} recipes instead of {weeklyPlanDays}.");
+            }
+
+            if (selectedIds.Distinct().Count() != weeklyPlanDays)
+            {
+                throw new Exception(
+                    "AI returned duplicate recipe IDs.");
+            }
+
+            var candidateIds = candidateRecipes
+                .Select(recipe => recipe.Id)
+                .ToHashSet();
+
+            if (selectedIds.Any(id => !candidateIds.Contains(id)))
+            {
+                throw new Exception(
+                    "AI returned a recipe that was not part of the candidate recipes.");
+            }
+
+            var weeklyPlanRecipes = await context.Recipes
+                .Where(recipe => selectedIds.Contains(recipe.Id))
+                .ToListAsync();
+
+            if (weeklyPlanRecipes.Count != weeklyPlanDays)
+            {
+                throw new Exception(
+                    "One or more AI-selected recipes could not be loaded.");
+            }
+
+            weeklyPlanRecipes = selectedIds
+                .Select(id => weeklyPlanRecipes
+                    .First(recipe => recipe.Id == id))
+                .ToList();
+
+            userProfile.User.WeeklyPlan = weeklyPlanRecipes;
+            userProfile.User.LastWeeklyPlanDate = DateTime.Now;
+
+            await context.SaveChangesAsync();
+
+            return weeklyPlanRecipes;
+        }
 
         /// <summary>
         /// Create a weekly plan shopping list by aggregating the ingredients from all recipes in the user's current weekly plan, 
