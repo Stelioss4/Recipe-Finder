@@ -1,0 +1,274 @@
+﻿@using RecipeFinder_WebApp.Data
+@using Recipe_Finder
+
+@inject WeeklyPlanService WeeklyPlanService
+@inject DataService DataService
+
+@if (IsVisible)
+{
+    <div class="ai-popup-backdrop" @onclick="ClosePopup">
+        <div class="ai-popup-card shadow-lg" @onclick:stopPropagation="true">
+
+            <button class="ai-popup-close"
+                    type="button"
+                    @onclick="ClosePopup">
+                ×
+            </button>
+
+            <div class="text-center mb-4">
+                <div class="ai-icon mb-3">✨</div>
+
+                <h3 class="mb-2">AI Weekly Planner</h3>
+
+                <p class="text-muted mb-0">
+                    Let AI create a weekly meal plan based on your available
+                    recipes, favorites and preferences.
+                </p>
+            </div>
+
+            @if (!_generatedSuccessfully)
+            {
+                <div class="mb-3">
+                    <label class="form-label">
+                        <strong>Maximum Calories per Recipe</strong>
+                    </label>
+
+                    <input type="number"
+                           class="form-control"
+                           @bind="_maxCalories"
+                           min="0"
+                           disabled="@_loading" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <strong>Maximum Preparation Time</strong>
+                    </label>
+
+                    <div class="input-group">
+                        <input type="number"
+                               class="form-control"
+                               @bind="_maxPrepTime"
+                               min="0"
+                               disabled="@_loading" />
+
+                        <span class="input-group-text">
+                            minutes
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">
+                        <strong>Preferred Favorite Recipes</strong>
+                    </label>
+
+                    <input type="number"
+                           class="form-control"
+                           @bind="_preferredFavorites"
+                           min="0"
+                           max="7"
+                           disabled="@_loading" />
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(_errorMessage))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @_errorMessage
+                    </div>
+                }
+
+                <button class="btn btn-primary w-100 py-2"
+                        @onclick="GeneratePlan"
+                        disabled="@_loading">
+
+                    @if (_loading)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        <span>Creating your weekly plan...</span>
+                    }
+                    else
+                    {
+                        <span>✨ Generate with AI</span>
+                    }
+
+                </button>
+
+                <p class="small text-muted text-center mt-3 mb-0">
+                    Your weekly plan will only be replaced after a valid AI plan
+                    has been generated.
+                </p>
+            }
+            else
+            {
+                <div class="py-3">
+
+                    <div class="text-center mb-4">
+                        <div class="ai-success-icon mb-3">
+                            ✓
+                        </div>
+
+                        <h4>Your AI weekly plan is ready!</h4>
+
+                        <p class="text-muted">
+                            Here is your new weekly meal plan.
+                        </p>
+                    </div>
+
+                    @for (int i = 0; i < _generatedPlan.Count; i++)
+                    {
+                        var recipe = _generatedPlan[i];
+
+                        <div class="border rounded p-3 mb-3 shadow-sm">
+                            <div class="d-flex align-items-center">
+
+                                @if (recipe.Image != null && recipe.Image.Length > 0)
+                                {
+                                    <img src="data:image/png;base64,@Convert.ToBase64String(recipe.Image)"
+                                         class="me-3"
+                                         style="width:60px; height:60px; object-fit:cover; border-radius:10px;" />
+                                }
+
+                                <div class="flex-grow-1">
+                                    <div class="text-muted small mb-1">
+                                        @GetDayName(i)
+                                    </div>
+
+                                    <h6 class="mb-0">
+                                        @recipe.RecipeName
+                                    </h6>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-success px-4"
+                                @onclick="CloseAfterSuccess">
+                            Done
+                        </button>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> IsVisibleChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnPlanGenerated { get; set; }
+
+    private bool _loading;
+    private bool _generatedSuccessfully;
+
+    private string _errorMessage = string.Empty;
+
+    private int? _maxCalories;
+    private int? _maxPrepTime;
+    private int? _preferredFavorites = 2;
+    private List<Recipe> _generatedPlan = new();
+    private readonly string[] _daysOfWeek =
+{
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+};
+
+    private string GetDayName(int index)
+    {
+        return index >= 0 && index < _daysOfWeek.Length
+            ? _daysOfWeek[index]
+            : $"Day {index + 1}";
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!IsVisible)
+            return;
+
+        try
+        {
+            var preferences =
+                await DataService.GetUsersPreferencesAsync();
+
+            if (preferences != null)
+            {
+                _maxCalories =
+                    preferences.MaxCaloriesPerRecipe;
+
+                _maxPrepTime =
+                    preferences.MaxPreparationTimeInMinutes;
+
+                _preferredFavorites =
+                    preferences.PreferredFavoriteRecipesPerWeek ?? 2;
+            }
+        }
+        catch
+        {
+            // Preferences are optional.
+            // The planner can still be used with default values.
+        }
+    }
+
+    private async Task GeneratePlan()
+    {
+        if (_loading)
+            return;
+
+        _loading = true;
+        _errorMessage = string.Empty;
+        _generatedSuccessfully = false;
+
+        try
+        {
+            _generatedPlan = await WeeklyPlanService.GenerateSmartWeeklyPlanAsync(
+              _maxCalories,
+              _maxPrepTime,
+              _preferredFavorites);
+
+            _generatedSuccessfully = true;
+
+            await OnPlanGenerated.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task ClosePopup()
+    {
+        if (_loading)
+            return;
+
+        _errorMessage = string.Empty;
+        _generatedSuccessfully = false;
+
+        await IsVisibleChanged.InvokeAsync(false);
+    }
+
+    private async Task CloseAfterSuccess()
+    {
+        _generatedSuccessfully = false;
+
+        await IsVisibleChanged.InvokeAsync(false);
+    }
+}

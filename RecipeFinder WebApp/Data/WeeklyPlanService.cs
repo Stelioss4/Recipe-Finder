@@ -167,12 +167,45 @@ namespace RecipeFinder_WebApp.Data
             return trackedWeeklyPlan;
         }
 
+        public async Task<List<Recipe>> GenerateSmartWeeklyPlanAsync(int? maxCalories, int? maxPrepTime, int? preferredFavoriteRecipes)
+        {
+            try
+            {
+                Console.WriteLine(
+                    "Smart Weekly Planner: attempting AI generation.");
 
+                var aiPlan = await GenerateAiWeeklyPlanAsync(
+                    maxCalories,
+                    maxPrepTime,
+                    preferredFavoriteRecipes);
 
-        public async Task<List<Recipe>> GenerateAiWeeklyPlanAsync(
-    int? maxCalories,
-    int? maxPrepTime,
-    int? preferredFavoriteRecipes)
+                Console.WriteLine(
+                    "Smart Weekly Planner: AI generation successful.");
+
+                return aiPlan;
+            }
+            catch (AiServiceUnavailableException ex)
+            {
+                Console.WriteLine(
+                    "========== SMART PLANNER FALLBACK ==========");
+
+                Console.WriteLine(
+                    $"AI unavailable: {ex.Message}");
+
+                Console.WriteLine(
+                    "Falling back to standard weekly plan generator.");
+
+                Console.WriteLine(
+                    "============================================");
+
+                return await GenerateWeeklyPlanAsync(
+                    maxCalories,
+                    maxPrepTime,
+                    preferredFavoriteRecipes);
+            }
+        }
+
+        public async Task<List<Recipe>> GenerateAiWeeklyPlanAsync(int? maxCalories, int? maxPrepTime, int? preferredFavoriteRecipes)
         {
             using var context = _contextFactory.CreateDbContext();
 
