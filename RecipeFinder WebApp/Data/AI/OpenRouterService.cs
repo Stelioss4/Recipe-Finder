@@ -26,12 +26,14 @@ namespace RecipeFinder_WebApp.Data.AI
 
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new Exception("OpenRouter API key is missing.");
+                throw new AiServiceUnavailableException(
+                    "OpenRouter API key is missing.");
             }
 
             if (string.IsNullOrWhiteSpace(model))
             {
-                throw new Exception("OpenRouter model is missing.");
+                throw new AiServiceUnavailableException(
+                    "OpenRouter model is missing.");
             }
 
             Console.WriteLine($"========== OPENROUTER MODEL: {model} ==========");
