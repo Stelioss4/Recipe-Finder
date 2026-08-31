@@ -1,0 +1,62 @@
+﻿@page "/agent-test"
+@using RecipeFinder_WebApp.Data
+@using RecipeFinder_WebApp.Data.AI
+@using RecipeFinder_WebApp.Data.AI.Models
+@inject RecipeAgentService RecipeAgentService
+@inject OpenRouterService OpenRouterService
+@inject WeeklyPlanService WeeklyPlanService
+
+<button class="btn btn-primary" @onclick="TestOpenRouter">
+    Test AI
+</button>
+<br />
+<button class="btn btn-success" @onclick="GenerateAiWeeklyPlan">
+    Generate AI Weekly Plan
+</button>
+
+@if (!string.IsNullOrWhiteSpace(_aiWeeklyPlanStatus))
+{
+    <p>@_aiWeeklyPlanStatus</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(_aiResponse))
+{
+    <p>@_aiResponse</p>
+}
+
+
+@code {
+    private List<RecipeAgentDto> _recipes = new List<RecipeAgentDto>();
+    private string _status = "Not started";
+    private string _aiResponse = string.Empty;
+
+    private async Task TestOpenRouter()
+    {
+        _aiResponse = await OpenRouterService.SendMessageAsync(
+            "Say hello from the Recipe Finder AI agent.");
+    }
+
+    private string _aiWeeklyPlanStatus = string.Empty;
+
+    private async Task GenerateAiWeeklyPlan()
+    {
+        try
+        {
+            _aiWeeklyPlanStatus = "Generating AI weekly plan...";
+
+            var weeklyPlan = await WeeklyPlanService.GenerateAiWeeklyPlanAsync(
+                maxCalories: null,
+                maxPrepTime: null,
+                preferredFavoriteRecipes: 2);
+
+            _aiWeeklyPlanStatus =
+                $"AI created a weekly plan with {weeklyPlan.Count} recipes!";
+        }
+        catch (Exception ex)
+        {
+            _aiWeeklyPlanStatus =
+                $"AI weekly plan failed: {ex.Message}";
+        }
+    }
+
+}

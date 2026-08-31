@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Recipe_Finder;
 using RecipeFinder_WebApp.Data;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
+using RecipeFinder_WebApp.Data.AI;
 using System.Security.Claims;
 
 namespace RecipeFinderTest.Helpers
@@ -75,6 +78,30 @@ namespace RecipeFinderTest.Helpers
                 .ReturnsAsync(applicationUser);
 
             return userManagerMock;
+        }
+
+        public static WeeklyPlanService CreateWeeklyPlanService(DataService dataService, NavigationManager navigationManager, IDbContextFactory<ApplicationDbContext> contextFactory)
+        {
+            var recipeAgentService = new RecipeAgentService(
+                contextFactory,
+                dataService);
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection()
+                .Build();
+
+            var httpClient = new HttpClient();
+
+            var openRouterService = new OpenRouterService(
+                httpClient,
+                configuration);
+
+            return new WeeklyPlanService(
+                dataService,
+                navigationManager,
+                contextFactory,
+                recipeAgentService,
+                openRouterService);
         }
     }
 }

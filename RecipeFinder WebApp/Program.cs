@@ -8,6 +8,7 @@ using Recipe_Finder;
 using RecipeFinder_WebApp.Components;
 using RecipeFinder_WebApp.Components.Account;
 using RecipeFinder_WebApp.Data;
+using RecipeFinder_WebApp.Data.AI;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,7 +55,8 @@ builder.Services.AddSingleton<ThemeService>();
 builder.Services.AddTransient<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddScoped<ScrapeReportService>();
 builder.Services.AddScoped<RecipeClassificationService>();
-
+builder.Services.AddScoped<RecipeAgentService>();
+builder.Services.AddHttpClient<OpenRouterService>();
 
 
 // Register HttpClient for dependency injection

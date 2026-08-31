@@ -20,5 +20,7 @@ namespace Recipe_Finder
         public const string XML_FAVORITE_REC_PATH = "Favorite_recipes.xml";
         public const int LIMIT_DAYS = 6;
         public const int WEEK_DAY_NUM = 7;
+        public const int DEAFULT_CANDIDATE_COUNT = 50;
+
     }
 }
