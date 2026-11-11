@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Recipe_Finder;
@@ -396,26 +397,14 @@ namespace RecipeFinder_WebApp.Data
                 }
 
                 // Parse Cooking Instructions
-                // Try to select the instructions node directly with the new XPath
-                for (int i = 2; ; i++) // start from 2 because position() > 1
-                {
-                    var divNodes = document.DocumentNode
-                        .SelectNodes($"//section[position()=2 or position()=3]/div[{i}]\r\n");
+                var instructionNodes = document.DocumentNode
+                    .SelectNodes("//*[@data-testid='recipe-instruction']");
 
-                    if (divNodes == null) // stop when no more divs are found
-                            break;
-
-                    if (divNodes != null)
-                    {
-                        foreach (var node in divNodes)
-                        {
-                            if (IsValidInstructionsNode(node))
-                            {
-                                searchResultRecipe.CookingInstructions += HtmlEntity.DeEntitize(node.InnerText).Trim() + Environment.NewLine;
-                            }
-                        }
-                    }
-                }
+                searchResultRecipe.CookingInstructions = instructionNodes == null
+                    ? string.Empty
+                    : string.Join(Environment.NewLine, instructionNodes
+                        .Select(node => HtmlEntity.DeEntitize(node.InnerText).Trim())
+                        .Where(text => !string.IsNullOrWhiteSpace(text)));
 
                 if (!string.IsNullOrWhiteSpace(searchResultRecipe.CookingInstructions))
                 {
