@@ -77,7 +77,18 @@
                             <li class="list-group-item">
                                 <input type="checkbox" id="@ingredient.IngredientsName" class="mr-2" />
                                 <label for="@ingredient.IngredientsName">
-                                    (@GetAmountForPeople(ParseAmount(ingredient.Amount))@ParseUnit(ingredient.Amount)) @ingredient.IngredientsName
+                                    @if (!string.IsNullOrWhiteSpace(ingredient.Amount))
+                                    {
+                                        @if (char.IsDigit(ingredient.Amount.TrimStart()[0]))
+                                        {
+                                            <span>(@GetAmountForPeople(ParseAmount(ingredient.Amount)) @ParseUnit(ingredient.Amount))</span>
+                                        }
+                                        else
+                                        {
+                                            <span>(@ingredient.Amount.Trim())</span>
+                                        }
+                                    }
+                                    @ingredient.IngredientsName
                                 </label>
                                 <br />
                                 @if (!CheckIfIngredientInShoppingList(ingredient))
@@ -234,7 +245,12 @@
                 .Include(r => r.NutritionValue)
                 .FirstOrDefaultAsync(r => r.Url == decodedUrl);
 
-            if (recipe != null && recipe.CookingInstructions != null)
+            if (recipe != null)
+            {
+                await RepairMissingChefkochDetailsAsync(_context);
+            }
+
+            if (recipe != null)
             {
                 Console.WriteLine("Recipe found in the database.");
                 // Fetch additional related data as needed, e.g., average newRating
@@ -252,36 +268,77 @@
 
     }
 
+    private async Task RepairMissingChefkochDetailsAsync(ApplicationDbContext context)
+    {
+        var missingInstructions = string.IsNullOrWhiteSpace(recipe.CookingInstructions);
+        bool IsValidIngredient(Ingredient item) => item != null
+            && !string.IsNullOrWhiteSpace(item.IngredientsName)
+            && !System.Text.RegularExpressions.Regex.IsMatch(item.IngredientsName,
+                @"^\s*\d+(?:[.,]\d+)?\s*(?:g|kg|mg|ml|l|cl|dl|EL|TL|Pck\.?|Prise(?:\(n\))?|Stück|Blätter)?\s*$",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+        var missingIngredients = recipe.ListOfIngredients == null || recipe.ListOfIngredients.Count == 0
+            || recipe.ListOfIngredients.Any(item => !IsValidIngredient(item));
+        if ((!missingInstructions && !missingIngredients)
+            || !Uri.TryCreate(recipe.Url, UriKind.Absolute, out var sourceUrl)
+            || (sourceUrl.Scheme != Uri.UriSchemeHttps && sourceUrl.Scheme != Uri.UriSchemeHttp)
+            || (sourceUrl.Host != "www.chefkoch.de" && sourceUrl.Host != "chefkoch.de"))
+            return;
+
+        var previousInstructions = recipe.CookingInstructions;
+        var previousIngredients = recipe.ListOfIngredients;
+        try
+        {
+            // Scrape a detached object; never add another Recipe to the database.
+            var fresh = await Scrap.ScrapeCKDetailsAndUpdateRecipe(new Recipe { Url = recipe.Url });
+            var changed = false;
+            if (missingInstructions && !string.IsNullOrWhiteSpace(fresh.CookingInstructions))
+            {
+                recipe.CookingInstructions = fresh.CookingInstructions;
+                changed = true;
+            }
+            if (missingIngredients && fresh.ListOfIngredients?.Count > 0
+                && fresh.ListOfIngredients.All(IsValidIngredient))
+            {
+                recipe.ListOfIngredients = fresh.ListOfIngredients;
+                changed = true;
+            }
+            if (changed)
+                await context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            recipe.CookingInstructions = previousInstructions;
+            recipe.ListOfIngredients = previousIngredients;
+            Console.WriteLine($"Could not repair recipe {recipe.Id}: {ex.Message}");
+        }
+    }
+
     private double ParseAmount(string amount)
     {
         if (string.IsNullOrWhiteSpace(amount))
             return 0;
 
-        // Clean amount: remove non-numeric characters except for dots and commas
-        var cleanedAmount = new string(amount.Where(c => char.IsDigit(c) || c == '.' || c == ',').ToArray());
+        var numericPart = new string(amount.TrimStart()
+            .TakeWhile(c => char.IsDigit(c) || c == '.' || c == ',')
+            .ToArray())
+            .Replace(',', '.');
 
-        // Replace comma with dot for decimal consistency
-        cleanedAmount = cleanedAmount.Replace(",", ".");
-
-        // Try to parse to double; if fails, return 0
-        return double.TryParse(cleanedAmount, out var result) ? result : 0;
+        return double.TryParse(
+            numericPart,
+            System.Globalization.NumberStyles.AllowDecimalPoint,
+            System.Globalization.CultureInfo.InvariantCulture,
+            out var result) ? result : 0;
     }
 
     private string ParseUnit(string amount)
     {
-        // Check if amount is null or empty
-        if (string.IsNullOrEmpty(amount))
-        {
+        if (string.IsNullOrWhiteSpace(amount))
             return string.Empty;
-        }
 
-        // Parse the numeric part of the amount
-        var parsedAmount = ParseAmount(amount);
-
-        // Extract the unit by removing the numeric part from the amount
-        var amountUnit = amount.Replace(parsedAmount.ToString(), "").Trim();
-
-        return amountUnit;
+        return new string(amount.TrimStart()
+            .SkipWhile(c => char.IsDigit(c) || c == '.' || c == ',')
+            .ToArray())
+            .Trim();
     }
 
     private double ConvertToDouble(object amount)
