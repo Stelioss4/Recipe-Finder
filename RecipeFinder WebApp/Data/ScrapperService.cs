@@ -275,7 +275,7 @@ namespace RecipeFinder_WebApp.Data
         {
             using var _context = _contextFactory.CreateDbContext();
 
-            var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CHEFKOCH_URL);
+           var existingRecipes = await _dataService.GetRecipesFromDatabaseAsync(searchQuery, Constants.CHEFKOCH_URL);
             if (existingRecipes.Count > 0)
             {
                return existingRecipes;
@@ -562,18 +562,18 @@ namespace RecipeFinder_WebApp.Data
                 var ingredientsNode = document.DocumentNode.SelectSingleNode("//table[contains(@class, 'ingredients')]//tbody\r\n");
                 if (ingredientsNode != null)
                 {
-                    var ingredientRows = ingredientsNode.SelectNodes("tr");
+                    var ingredientRows = document.DocumentNode.SelectNodes("//table[contains(@class, 'ingredients')]//tbody/tr[td]");
                     if (ingredientRows != null)
                     {
                         searchResultRecipe.ListOfIngredients = ingredientRows
                             .Select(row =>
                             {
-                                // Extract the amount and name from specific td elements
-                                var amountNode = row.SelectSingleNode("td[1]");
-                                var nameNode = row.SelectSingleNode("td[2]");
+                                // Select by ingredient classes, since rows can include an image column
+                                var amountNode = row.SelectSingleNode("td[contains(@class, 'ds-ingredients-table__td--first')]/div");
+                                var nameNodes = row.SelectNodes("td//span[contains(@class, 'ds-ingredients-table__ingredient-name') or contains(@class, 'ds-ingredients-table__ingredient-properties')]");
 
-                                var amount = amountNode?.InnerText.Trim() ?? ""; // Get the amount or empty if null
-                                var ingredientName = nameNode?.InnerText.Trim() ?? ""; // Get the name or empty if null
+                                var amount = HtmlEntity.DeEntitize(amountNode?.InnerText ?? "").Trim();
+                                var ingredientName = nameNodes == null ? "" : string.Join(" ", nameNodes.Select(node => HtmlEntity.DeEntitize(node.InnerText).Trim()));
 
                                 return new Ingredient
                                 {

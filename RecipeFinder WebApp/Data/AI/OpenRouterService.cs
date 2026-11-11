@@ -198,7 +198,7 @@ namespace RecipeFinder_WebApp.Data.AI
                     "The AI returned an unexpected response.");
             }
 
-            WeeklyPlanAgentResponseDto? result;
+            WeeklyPlanAgentResponseDto result;
 
             try
             {
